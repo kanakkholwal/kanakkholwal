@@ -13,15 +13,15 @@
 
 - 👯 I’m looking to collaborate on [CodeGenX](https://github.com/GDSC-NITH/GenCodeX)
 
-- 👨‍💻 All of my projects are available at [https://kanakkholwal.eu.org](https://kanakkholwal.eu.org)
+- 👨‍💻 All of my projects are available at [Projects](https://kanakkholwal.eu.org)
 
-- 📝 I regularly write articles on [http://kkupgrader.eu.org/blog](http://kkupgrader.eu.org/blog)
+- 📝 I regularly write articles on [Blog](http://kkupgrader.eu.org/blog)
 
 - 💬 Ask me about **react, nextjs, Go Lang, Devops**
 
 - 📫 How to reach me **kanakkholwal@gmail.com**
 
-- 📄 Know about my experiences [https://docs.google.com/document/d/1WleBXhgUwDkRIfodJCvhPchoVBjaCf7Q/edit?usp=sharing&ouid=109800121336149113874&rtpof=true&sd=true](https://docs.google.com/document/d/1WleBXhgUwDkRIfodJCvhPchoVBjaCf7Q/edit?usp=sharing&ouid=109800121336149113874&rtpof=true&sd=true)
+- 📄 Know about my experiences [Resume](https://docs.google.com/document/d/1WleBXhgUwDkRIfodJCvhPchoVBjaCf7Q/edit?usp=sharing&ouid=109800121336149113874&rtpof=true&sd=true)
 
 - ⚡ Fun fact **I think I am *funny**
 
