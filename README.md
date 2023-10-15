@@ -1,5 +1,5 @@
 <h1 align="center">Hi 👋, I'm Kanak</h1>
-<h3 align="center">A passionate frontend developer from India .I am a ⚛️ React/Next.js Developer with a passion for creating high-conversion applications with cutting-edge UI and performance.</h3>
+<p align="center">A passionate frontend developer from India .I am a ⚛️ React/Next.js Developer with a passion for creating high-conversion applications with cutting-edge UI and performance.</p>
 
 <p align="left"> <img src="https://komarev.com/ghpvc/?username=kkupgrader&label=Profile%20views&color=0e75b6&style=flat" alt="kkupgrader" /> </p>
 
