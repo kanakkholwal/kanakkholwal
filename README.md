@@ -39,6 +39,6 @@
 
 <p><img align="left" src="https://github-readme-stats.vercel.app/api/top-langs?username=kkupgrader&show_icons=true&locale=en&layout=compact" alt="kkupgrader" /></p>
 
-<p>&nbsp;<img align="center" src="https://github-readme-stats.vercel.app/api?username=kkupgrader&show_icons=true&locale=en" alt="kkupgrader" /></p>
+<p>&nbsp;<img align="center" src="https://github-readme-stats.vercel.app/api?username=kkupgrader&show_icons=true&theme=onedark&title_color=fffafa&text_color=fffafa&bg_color=364445&hide_border=true&locale=en" alt="kkupgrader" /></p>
 
 <p><img align="center" src="https://github-readme-streak-stats.herokuapp.com/?user=kkupgrader&" alt="kkupgrader" /></p>
