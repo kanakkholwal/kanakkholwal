@@ -4,7 +4,7 @@
 
 <p align="left"> <a href="https://twitter.com/kanakkholwal" target="blank"><img src="https://img.shields.io/twitter/follow/kanakkholwal?logo=twitter&style=for-the-badge" alt="kanakkholwal" /></a> </p>
 
-- 🔭 I’m currently working on [NexoNauts](http://kkupgrader.eu.org/)
+- 🔭 I’m currently working on [NexoNauts](https://www.nexonauts.com/)
 
 - 🌱 I’m currently learning **Go Lang, DevOps**
 
