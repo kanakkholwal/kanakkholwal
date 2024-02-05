@@ -1,14 +1,14 @@
-# 💫 About Me:
-## Hi 👋, I'm Kanak
-<p align="center">A passionate frontend developer from India .I am a ⚛️ React/Next.js Developer with a passion for creating high-conversion applications with cutting-edge UI and performance.</p>
+<h1><img src="https://emojis.slackmojis.com/emojis/images/1531849430/4246/blob-sunglasses.gif?1531849430" width="30"/> Hey! Nice to see you.</h1>
+![visitors]([https://visitor-badge.laobi.icu/badge?page_id=zhenye-na.zhenye-na](https://visitor-badge.laobi.icu/badge?page_id=kanakkholwal.visitor-badge))
 
-<p align="left"> <a href="https://twitter.com/kanakkholwal" target="blank"><img src="https://img.shields.io/twitter/follow/kanakkholwal?logo=twitter&style=for-the-badge" alt="kanakkholwal" /></a> </p>
+<p>Welcome to my page! </br> I'm Kanak Kholwal, Fullstack developer from <b>India</b>. </p>
+<h3>Where to find me</h3>
+<p><a href="https://github.com/kanakkholwal" target="_blank"><img alt="Github" src="https://img.shields.io/badge/GitHub-%2312100E.svg?&style=for-the-badge&logo=Github&logoColor=white" /></a> <a href="https://twitter.com/kanakkholwal" target="_blank"><img alt="Twitter" src="https://img.shields.io/badge/twitter-%231DA1F2.svg?&style=for-the-badge&logo=twitter&logoColor=white" /></a> <a href="https://www.linkedin.com/in/kanak-kholwal" target="_blank"><img alt="LinkedIn" src="https://img.shields.io/badge/linkedin-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white" /></a> <a href="https://medium.com/@kanakkholwal" target="_blank"><img alt="Medium" src="https://img.shields.io/badge/medium-%2312100E.svg?&style=for-the-badge&logo=medium&logoColor=white" /></a>
+</p>
 
 - 🔭 I’m currently working on [NexoNauts](https://www.nexonauts.com/)
 
-- 🌱 I’m currently learning **Go Lang, DevOps**
-
-- 👯 I’m looking to collaborate on [CodeGenX](https://github.com/GDSC-NITH/GenCodeX)
+- 🌱 I’m currently learning **System Design, DevOps**
 
 - 👨‍💻 All of my projects are available at [Projects](https://kanakkholwal.eu.org)
 
@@ -21,17 +21,14 @@
 - 📄 Know about my experiences [Resume](https://docs.google.com/document/d/1WleBXhgUwDkRIfodJCvhPchoVBjaCf7Q/edit?usp=sharing&ouid=109800121336149113874&rtpof=true&sd=true)
 
 - ⚡ Fun fact **I think I am *funny**
+### 📔 Latest Blog posts
 
-<h3 align="left">Connect with me:</h3>
-<p align="left">
-<a href="https://twitter.com/kanakkholwal" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/twitter.svg" alt="kanakkholwal" height="30" width="40" /></a>
-<a href="https://linkedin.com/in/kanak-kholwal" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/linked-in-alt.svg" alt="kanak-kholwal" height="30" width="40" /></a>
-<a href="https://instagram.com/kanakkholwal" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/instagram.svg" alt="kanakkholwal" height="30" width="40" /></a>
-<a href="https://www.youtube.com/c/@kanakkholwal" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/youtube.svg" alt="@kanakkholwal" height="30" width="40" /></a>
-<a href="https://www.leetcode.com/kanakkholwal" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/leet-code.svg" alt="kanakkholwal" height="30" width="40" /></a>
-</p>
-
-
+<!-- BLOG-POST-LIST:START -->
+- [How to implement authentication across all subdomains using Next-Auth in Next.js](https://kanakkholwal.medium.com/how-to-implement-authentication-across-all-subdomains-using-next-auth-in-next-js-2ad8393c268d)
+- [Promise.all and Promise.allSettled -Unlocking JavaScript’s Hidden Secrets](https://kanakkholwal.medium.com/5-things-you-dont-know-about-promise-all-6ab469192b45)
+- [Guide to Recording Canvas Animations Using JavaScript](https://kanakkholwal.medium.com/guide-to-recording-canvas-animations-using-javascript-d2bb1b6e2523)
+- [10 JavaScript Tricks You Need To Know About](https://kanakkholwal.medium.com/25-javascript-tricks-you-need-to-know-about-c1979ea2ec2b)
+<!-- BLOG-POST-LIST:END -->
 
 <!-- Proudly created with GPRM ( https://gprm.itsvg.in ) -->
 <h3 align="left">Languages and Tools:</h3>
@@ -39,13 +36,4 @@
 
 <p><img align="left" src="https://github-readme-stats.vercel.app/api/top-langs?username=kanakkholwal&show_icons=true&locale=en&layout=compact" alt="kanakkholwal" /></p>
 
-<p>&nbsp;<img align="center" src="https://github-readme-stats.vercel.app/api?username=kanakkholwal&show_icons=true&theme=onedark&title_color=fffafa&text_color=fffafa&bg_color=364445&hide_border=true&locale=en" alt="kanakkholwal" /></p>
-
-<p><img align="center" src="https://github-readme-streak-stats.herokuapp.com/?user=kanakkholwal&" alt="kanakkholwal" /></p>
-
-
-### 😂 Random Dev Meme
-<img src='https://randommeme-five.vercel.app/' style="height: 400px;"/>
-
----
 [![](https://visitcount.itsvg.in/api?id=kanakkholwal&icon=5&color=8)](https://visitcount.itsvg.in)
