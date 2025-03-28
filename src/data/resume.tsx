@@ -7,7 +7,7 @@ export const DATA = {
   name: "Kanak Kholwal",
   initials: "KK",
   url: "https://kanakkholwal.eu.org",
-  location: "Rajasthan, India",
+  location: "India",
   locationLink: "https://www.google.com/maps/place/dausa",
   description: "Software Engineer passionate about building impactful digital solutions.",
   summary: `I thrive on solving real-world problems with code. Whether it's designing scalable systems, contributing to open-source, or architecting seamless user experiences, I love bringing ideas to life. Currently working on innovative projects that push boundaries. My resume is available for download [here](${resume_link}).`,
@@ -21,6 +21,9 @@ export const DATA = {
     "MongoDB",
     "PostgreSQL",
     "Docker",
+    "Google Cloud Platform",
+    "NPM",
+    "Firebase",
   ],
   navbar: [
     { href: "/", icon: HomeIcon, label: "Home" },
@@ -86,6 +89,7 @@ export const DATA = {
         { type: "Source", href: "https://github.com/kanakkholwal/nexonauts", icon: <Icons.github className="size-3" /> },
       ],
       image: "/nexonauts.png",
+      video: "",
     },
     {
       title: "College Ecosystem Monorepo",
@@ -100,6 +104,7 @@ export const DATA = {
         { type: "Source", href: "https://github.com/kanakkholwal/college-ecosystem", icon: <Icons.github className="size-3" /> },
       ],
       image: "/college-ecosystem.png",
+      video: "",
     },
     {
       title: "Markdown Editor React",
@@ -113,6 +118,8 @@ export const DATA = {
         { type: "Package", href: "https://www.npmjs.com/package/nexo-mdx", icon: <Icons.package className="size-3" /> },
         { type: "Source", href: "https://github.com/kanakkholwal/nexo-mdx", icon: <Icons.github className="size-3" /> },
       ],
+      image: "",
+      video: "",
     },
   ],
 };
