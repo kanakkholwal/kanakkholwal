@@ -1,28 +1,30 @@
 import { Icons } from "@/components/icons";
 import { CodeIcon, HomeIcon, NotebookIcon } from "lucide-react";
 
-const resume_link ="https://docs.google.com/document/d/1WleBXhgUwDkRIfodJCvhPchoVBjaCf7Q/edit?usp=sharing&ouid=109800121336149113874&rtpof=true&sd=true";
+const resume_link =
+  "https://docs.google.com/document/d/1WleBXhgUwDkRIfodJCvhPchoVBjaCf7Q/edit?usp=sharing&ouid=109800121336149113874&rtpof=true&sd=true";
 
 export const DATA = {
   name: "Kanak Kholwal",
   initials: "KK",
   url: "https://kanakkholwal.eu.org",
-  location: "Rajasthan,India",
+  location: "Rajasthan, India",
   locationLink: "https://www.google.com/maps/place/dausa",
   description:
-    "Software Engineer. I love building things and helping people.",
-  summary:
-    `My drive? Crafting practical tools for people's everyday use – there's nothing quite like that "aha" moment when a solution clicks.I'm always looking for new opportunities to learn and grow. I'm passionate about open source and love to contribute to projects that make a difference. I'm currently working on a few projects that I'm excited to share with you. My Resume is available for download [here](${resume_link}).`,
+    "Software Engineer | Passionate about building scalable solutions, automation, and AI-driven products.",
+  summary: `I thrive on solving complex problems and building impactful products. From developing scalable architectures to integrating AI solutions, my goal is to create software that makes a real difference. Always eager to learn, contribute to open source, and collaborate with like-minded developers. Check out my work below, and feel free to reach out. My resume is available for download [here](${resume_link}).`,
   avatarUrl: "/me.png",
   skills: [
     "React",
     "Next.js",
-    "Typescript",
+    "TypeScript",
     "Node.js",
     "Go",
     "MongoDB",
-    "Postgres",
+    "PostgreSQL",
     "Docker",
+    "Google Cloud Platform",
+    "AI/ML",
   ],
   navbar: [
     { href: "/", icon: HomeIcon, label: "Home" },
@@ -37,7 +39,6 @@ export const DATA = {
         name: "GitHub",
         url: "https://github.com/kanakkholwal",
         icon: Icons.github,
-
         navbar: true,
       },
       LinkedIn: {
@@ -52,22 +53,20 @@ export const DATA = {
         icon: Icons.x,
         navbar: true,
       },
-      instagram: {
+      Instagram: {
         name: "Instagram",
         url: "https://instagram.com/kanakkholwal",
         icon: Icons.instagram,
         navbar: true,
       },
-      email: {
+      Email: {
         name: "Send Email",
         url: "mailto:kanakkholwal@gmail.com",
         icon: Icons.email,
-
         navbar: false,
       },
     },
   },
-
   work: [
     {
       company: "Textify AI",
@@ -79,21 +78,20 @@ export const DATA = {
       start: "Dec 2022",
       end: "Jun 2024",
       description:
-        "Implemented the Bitcoin discreet log contract (DLC) protocol specifications as an open source Typescript SDK. Dockerized all microservices and setup production kubernetes cluster. Architected a data lake using AWS S3 and Athena for historical backtesting of bitcoin trading strategies. Built a mobile app using react native and typescript.",
+        "Developed a TypeScript SDK implementing Bitcoin DLC protocol. Led Dockerization and Kubernetes setup for production. Designed AWS S3-based data lake for historical backtesting of Bitcoin trading strategies. Built a cross-platform mobile app with React Native and TypeScript.",
     },
     {
       company: "KoinX",
-      badges: [],
       href: "https://koinx.com",
+      badges: [],
       location: "Remote",
       title: "Frontend Intern",
       logoUrl: "/koinx.png",
       start: "Mar 2024",
       end: "Jun 2024",
       description:
-        "Implemented a custom Kubernetes controller in Go to automate the deployment of MySQL and ProxySQL custom resources in order to enable 2,000+ internal developers to instantly deploy their app databases to production. Wrote several scripts in Go to automate MySQL database failovers while maintaining master-slave replication topologies and keeping Zookeeper nodes consistent with changes.",
+        "Developed a custom Kubernetes controller in Go, automating MySQL and ProxySQL deployments for 2,000+ developers. Implemented MySQL failover automation scripts ensuring seamless master-slave replication and Zookeeper consistency.",
     },
-
   ],
   education: [
     {
@@ -104,7 +102,6 @@ export const DATA = {
       start: "2021",
       end: "2026",
     },
-
   ],
   projects: [
     {
@@ -113,30 +110,14 @@ export const DATA = {
       dates: "Jan 2024 - Feb 2024",
       active: true,
       description:
-        "Designed and developed go-to platform for frontend developers and web designers. Nexonauts is an open-source project designed to empower developers and designers with curated themes, templates, and tools to streamline their projects and foster innovation in the digital space.",
-      technologies: [
-        "Next.js",
-        "Typescript",
-        "MongoDB",
-        "TailwindCSS",
-        "Stripe",
-        "Shadcn UI",
-      ],
+        "A platform for frontend developers and designers featuring curated themes, templates, and tools to accelerate web development.",
+      technologies: ["Next.js", "TypeScript", "MongoDB", "TailwindCSS", "Stripe", "Shadcn UI"],
       links: [
-        {
-          type: "Website",
-          href: "https://nexonauts.com",
-          icon: <Icons.globe className="size-3" />,
-        },
-        {
-          type: "Source",
-          href: "https://github.com/kanakkholwal/nexonauts",
-          icon: <Icons.github className="size-3" />,
-        },
+        { type: "Website", href: "https://nexonauts.com", icon: <Icons.globe className="size-3" /> },
+        { type: "Source", href: "https://github.com/kanakkholwal/nexonauts", icon: <Icons.github className="size-3" /> },
       ],
       image: "/nexonauts.png",
-      video:
-        "",
+      video: "",
     },
     {
       title: "College Ecosystem Monorepo",
@@ -144,28 +125,11 @@ export const DATA = {
       dates: "June 2024 - Present",
       active: true,
       description:
-        "Developed a centralized platform that is multifunctional, user-friendly for college students. Any educational institution may utilize this generic, open-source platform  _(not individuals)_",
-      technologies: [
-        "Next.js",
-        "Typescript",
-        "Turbopack",
-        "Github Actions",
-        "MongoDB",
-        "TailwindCSS",
-        "Shadcn UI",
-        "Magic UI",
-      ],
+        "A scalable, open-source monorepo built for college management, including student portals, dashboards, and more.",
+      technologies: ["Next.js", "TypeScript", "Turbopack", "GitHub Actions", "MongoDB", "TailwindCSS", "Shadcn UI"],
       links: [
-        {
-          type: "Website",
-          href: "https://nith.eu.org",
-          icon: <Icons.globe className="size-3" />,
-        },
-        {
-          type: "Source",
-          href: "https://github.com/kanakkholwal/college-ecosystem",
-          icon: <Icons.github className="size-3" />,
-        },
+        { type: "Website", href: "https://nith.eu.org", icon: <Icons.globe className="size-3" /> },
+        { type: "Source", href: "https://github.com/kanakkholwal/college-ecosystem", icon: <Icons.github className="size-3" /> },
       ],
       image: "/college-ecosystem.png",
       video: "",
@@ -176,109 +140,38 @@ export const DATA = {
       dates: "June 2024 - June 2024",
       active: true,
       description:
-        "Developed a user friendly and customisable and typesafe markdown solutions with native accessibility support",
-      technologies: [
-        "React.js",
-        "Typescript",
-        "TailwindCSS",
-        "Shadcn UI",
-        "NPM",
-        "Github Actions",
-      ],
+        "A highly customizable and accessible Markdown editor with native TypeScript support.",
+      technologies: ["React.js", "TypeScript", "TailwindCSS", "Shadcn UI", "NPM", "GitHub Actions"],
       links: [
-        {
-          type: "Package",
-          href: "https://www.npmjs.com/package/nexo-mdx",
-          icon: <Icons.package className="size-3" />,
-        },
-        {
-          type: "Source",
-          href: "https://github.com/kanakkholwal/nexo-mdx",
-          icon: <Icons.github className="size-3" />,
-        },
+        { type: "Package", href: "https://www.npmjs.com/package/nexo-mdx", icon: <Icons.package className="size-3" /> },
+        { type: "Source", href: "https://github.com/kanakkholwal/nexo-mdx", icon: <Icons.github className="size-3" /> },
       ],
       image: "",
       video: "",
     },
     {
-      title: "Remark Plugins",
-      href: "https://github.com/kanakkholwal/remark-plugins",
-      dates: "June 2024 - June 2024",
+      title: "Serverless Mailing System MVP",
+      href: "https://github.com/kanakkholwal/mail-system",
+      dates: "Feb 2025",
       active: true,
       description:
-        "Developed a collection of remark plugins for markdown processing.",
-      technologies: [
-        "Typescript",
-        "NPM",
-        "Github Actions",
-      ],
-      links: [
-        {
-          type: "Package",
-          href: "https://www.npmjs.com/package/remark-plugins",
-          icon: <Icons.package className="size-3" />,
-        },
-        {
-          type: "Source",
-          href: "https://github.com/kanakkholwal/remark-plugins",
-          icon: <Icons.github className="size-3" />,
-        },
-      ],
+        "A serverless mailing system built with Next.js and React Mail for scalable email automation.",
+      technologies: ["React Mail", "TypeScript", "TailwindCSS", "GitHub Actions", "Serverless"],
+      links: [{ type: "Source", href: "https://github.com/kanakkholwal/mail-system", icon: <Icons.github className="size-3" /> }],
       image: "",
       video: "",
     },
     {
-      title: "CodeGenX",
-      href: "https://github.com/GDSC-NITH/GenCodeX",
-      dates: "Oct 2023 - Oct 2023",
+      title: "Web Crawler for LLMs",
+      href: "https://github.com/kanakkholwal/crawler-for-llms",
+      dates: "Feb 2025",
       active: true,
       description:
-        "Developed a CLI tool designed to streamline project development by integrating popular features.",
-      technologies: [
-        "Go",
-        "MongoDB",
-      ],
-      links: [
-        {
-          type: "Source",
-          href: "https://github.com/GDSC-NITH/GenCodeX",
-          icon: <Icons.github className="size-3" />,
-        },
-      ],
+        "A high-performance web crawler designed for LLM fine-tuning and Retrieval-Augmented Generation (RAG) workflows.",
+      technologies: ["TypeScript", "Next.js", "Serverless", "Open Source"],
+      links: [{ type: "Source", href: "https://github.com/kanakkholwal/crawler-for-llms", icon: <Icons.github className="size-3" /> }],
       image: "",
-      video:
-        "",
+      video: "",
     },
-  ],
-  hackathons: [
-
-
-    // {
-    //   title: "Waterloo Equithon",
-    //   dates: "May 5th - 7th, 2017",
-    //   location: "Waterloo, Ontario",
-    //   description:
-    //     "Developed Pocketdoc, an app in which you take a picture of a physical wound, and the app returns common solutions or cures to the injuries or diseases.",
-    //   image:
-    //     "https://pub-83c5db439b40468498f97946200806f7.r2.dev/hackline/waterloo-equithon.png",
-    //   links: [
-    //     {
-    //       title: "Devpost",
-    //       icon: <Icons.globe className="h-4 w-4" />,
-    //       href: "https://devpost.com/software/pocketdoc-react-native",
-    //     },
-    //     {
-    //       title: "YouTube",
-    //       icon: <Icons.youtube className="h-4 w-4" />,
-    //       href: "https://www.youtube.com/watch?v=XwFdn5Rmx68",
-    //     },
-    //     {
-    //       title: "Source",
-    //       icon: <Icons.github className="h-4 w-4" />,
-    //       href: "https://github.com/dillionverma/pocketdoc-react-native",
-    //     },
-    //   ],
-    // },
-
   ],
 } as const;
