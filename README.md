@@ -32,7 +32,7 @@
 
 ### My Skills
 
-[![My Skills](https://skillicons.dev/icons?i=js,ts,go,tailwind,docker,postgres,mongodb,redis,firebase,npm,pnpm,git,github,python,gcp,svg,vercel,nextjs,vite,notion,react,express,nodejs,postman,figma,bootstrap,html,css,sass)](https://kanakkholwal.eu.org)
+[![My Skills](https://skillicons.dev/icons?i=js,ts,go,python,docker,postgres,mongodb,redis,firebase,npm,pnpm,git,github,gcp,svg,vercel,nextjs,vite,tailwind,notion,react,express,nodejs,postman,figma,bootstrap,html,css,sass)](https://kanakkholwal.eu.org)
 
 ### 📔 Latest Blog posts
 <!-- BLOG-POST-LIST:START -->
