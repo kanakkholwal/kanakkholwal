@@ -77,8 +77,13 @@ export const DATA = {
       logoUrl: "/textify-ai.png",
       start: "Dec 2022",
       end: "Jun 2024",
-      description:
-        "Developed a TypeScript SDK implementing Bitcoin DLC protocol. Led Dockerization and Kubernetes setup for production. Designed AWS S3-based data lake for historical backtesting of Bitcoin trading strategies. Built a cross-platform mobile app with React Native and TypeScript.",
+      description:`
+- Built and maintained core platform features, improving engagement by 220%.
+- Led the development of the initial design system and codebase structure.
+- Fortified platform security by integrating multi-factor authentication through AWS Cognito; reduced unauthorized access attempts and improved overall platform reliability, addressing top security vulnerabilities.
+- Developed RESTful APIs and microservices following Agile practices and CI/CD pipelines, enhancing system scalability on Azure and GCP, reducing deployment time by 30%.
+
+      `,
     },
     {
       company: "KoinX",
@@ -89,8 +94,11 @@ export const DATA = {
       logoUrl: "/koinx.png",
       start: "Mar 2024",
       end: "Jun 2024",
-      description:
-        "Developed a custom Kubernetes controller in Go, automating MySQL and ProxySQL deployments for 2,000+ developers. Implemented MySQL failover automation scripts ensuring seamless master-slave replication and Zookeeper consistency.",
+      description:`
+- Optimized SEO and page speed, boosting organic traffic by 150%.
+- Initiated and led the migration of multiple frontend repositories from CRA to VITE , significantly enhancing build times and performance by 60%.
+- Developed internal UI library, significantly enhancing development efficiency and consistency.
+`,
     },
   ],
   education: [
@@ -121,12 +129,12 @@ export const DATA = {
     },
     {
       title: "College Ecosystem Monorepo",
-      href: "https://nith.eu.org",
-      dates: "June 2024 - Present",
+      href: "https://app.nith.eu.org",
+      dates: "Jan 2025 - Present",
       active: true,
       description:
         "A scalable, open-source monorepo built for college management, including student portals, dashboards, and more.",
-      technologies: ["Next.js", "TypeScript", "Turbopack", "GitHub Actions", "MongoDB", "TailwindCSS", "Shadcn UI"],
+      technologies: ["Next.js", "TypeScript", "Turbopack", "GitHub Actions", "MongoDB","PostgresQL", "TailwindCSS", "Shadcn UI"],
       links: [
         { type: "Website", href: "https://nith.eu.org", icon: <Icons.globe className="size-3" /> },
         { type: "Source", href: "https://github.com/kanakkholwal/college-ecosystem", icon: <Icons.github className="size-3" /> },
