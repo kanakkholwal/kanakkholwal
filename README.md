@@ -23,7 +23,7 @@
 
 - 💬 Ask me about **react, nextjs, Go Lang, Devops**
 
-- 📫 How to reach me **kanak@nexonauts.com** or **kanakholwal@gmail.com**
+- 📫 How to reach me **me@kanak.eu.org**
 
 - 📄 Know about my experiences [Resume](https://docs.google.com/document/d/1WleBXhgUwDkRIfodJCvhPchoVBjaCf7Q/edit?usp=sharing&ouid=109800121336149113874&rtpof=true&sd=true)
 
