@@ -55,7 +55,7 @@ export const DATA = {
       },
       Instagram: {
         name: "Instagram",
-        url: "https://instagram.com/kanakkholwal",
+        url: "https://www.instagram.com/kanakkholwal",
         icon: Icons.instagram,
         navbar: true,
       },
@@ -139,7 +139,7 @@ export const DATA = {
         { type: "Website", href: "https://nith.eu.org", icon: <Icons.globe className="size-3" /> },
         { type: "Source", href: "https://github.com/kanakkholwal/college-ecosystem", icon: <Icons.github className="size-3" /> },
       ],
-      image: "/college-ecosystem.png",
+      image: "https://raw.githubusercontent.com/kanakkholwal/college-ecosystem/main/screenshot.png",
       video: "",
     },
     {
