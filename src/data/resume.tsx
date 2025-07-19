@@ -47,8 +47,8 @@ export const DATA = {
         icon: Icons.linkedin,
         navbar: true,
       },
-      X: {
-        name: "X",
+      Twitter: {
+        name: "Twitter",
         url: "https://twitter.com/kanakkholwal",
         icon: Icons.x,
         navbar: true,
@@ -139,7 +139,7 @@ export const DATA = {
         { type: "Website", href: "https://nith.eu.org", icon: <Icons.globe className="size-3" /> },
         { type: "Source", href: "https://github.com/kanakkholwal/college-ecosystem", icon: <Icons.github className="size-3" /> },
       ],
-      image: "./college-ecosystem.png",
+      image: "/college-ecosystem.png",
       video: "",
     },
     {

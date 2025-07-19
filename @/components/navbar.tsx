@@ -1,15 +1,14 @@
 import { Dock, DockIcon } from "@/components/magicui/dock";
 import { ModeToggle } from "@/components/mode-toggle";
-import { buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { DATA } from "@/data/resume";
-import { cn } from "@/lib/utils";
 import Link from "next/link";
+import { DATA } from "~/data/resume";
 
 export default function Navbar() {
   return (
@@ -20,15 +19,12 @@ export default function Navbar() {
           <DockIcon key={item.href}>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Link
-                  href={item.href}
-                  className={cn(
-                    buttonVariants({ variant: "ghost", size: "icon" }),
-                    "size-12"
-                  )}
-                >
-                  <item.icon className="size-4" />
-                </Link>
+
+                <Button asChild variant="raw" size="icon" className="size-12">
+                  <Link href={item.href} target="_blank">
+                    <item.icon className="size-4" />
+                  </Link>
+                </Button>
               </TooltipTrigger>
               <TooltipContent>
                 <p>{item.label}</p>
@@ -43,16 +39,11 @@ export default function Navbar() {
             <DockIcon key={name}>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Link
-                    href={social.url}
-                    className={cn(
-                      buttonVariants({ variant: "ghost", size: "icon" }),
-                      "size-12"
-                    )}
-                    target="_blank"
-                  >
-                    <social.icon className="size-4" />
-                  </Link>
+                  <Button asChild variant="raw" size="icon" className="size-12">
+                    <Link href={social.url} target="_blank">
+                      <social.icon className="size-4" />
+                    </Link>
+                  </Button>
                 </TooltipTrigger>
                 <TooltipContent>
                   <p>{name}</p>

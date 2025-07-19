@@ -1,18 +1,18 @@
 import BlurFade from "@/components/magicui/blur-fade";
 import BlurFadeText from "@/components/magicui/blur-fade-text";
-import { ProjectCard } from "@/components/project-card";
+import { ExpandableCardProps, ExpandableProjectCards } from "@/components/project-card";
 import { ResumeCard } from "@/components/resume-card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { DATA } from "@/data/resume";
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Markdown from "react-markdown";
+import { DATA } from "~/data/resume";
 
 const BLUR_FADE_DELAY = 0.04;
 
 export default function Page() {
   return (
-    <main className="flex flex-col min-h-[100dvh] space-y-10 w-full overflow-x-hidden">
+    <main className="flex flex-col min-h-screen space-y-10 w-full overflow-x-hidden">
       <section id="hero">
         <div className="mx-auto w-full max-w-2xl space-y-8">
           <div className="gap-2 flex justify-between">
@@ -38,16 +38,27 @@ export default function Page() {
           </div>
         </div>
       </section>
-      <section id="about">
-        <BlurFade delay={BLUR_FADE_DELAY * 3}>
-          <h2 className="text-xl font-bold">About</h2>
-        </BlurFade>
-        <BlurFade delay={BLUR_FADE_DELAY * 4}>
+      <BlurFade delay={BLUR_FADE_DELAY * 3} className="bg-card p-3 rounded-lg">
+          <h2 className="text-lg font-semibold">About me</h2>
           <Markdown className="prose max-w-full text-pretty font-sans text-sm text-muted-foreground dark:prose-invert">
             {DATA.summary}
           </Markdown>
+        <BlurFade delay={BLUR_FADE_DELAY * 4} className="mt-4 inline-flex flex-wrap gap-2">
+          {Object.entries(DATA.contact.social)
+            .filter(([_, social]) => social.navbar)
+            .map(([name, social]) => (
+
+              <Button key={name} variant="glass" size="sm" asChild>
+                <Link href={social.url} target="_blank">
+                  <social.icon  />
+                  {name}
+                </Link>
+              </Button>
+
+            ))}
         </BlurFade>
-      </section>
+
+      </BlurFade>
       <section id="work">
         <div className="flex min-h-0 flex-col gap-y-3">
           <BlurFade delay={BLUR_FADE_DELAY * 5}>
@@ -104,7 +115,7 @@ export default function Page() {
           <div className="flex flex-wrap gap-1">
             {DATA.skills.map((skill, id) => (
               <BlurFade key={skill} delay={BLUR_FADE_DELAY * 10 + id * 0.05}>
-                <Badge key={skill}>{skill}</Badge>
+                <Button key={skill} variant="outline" size="sm">{skill}</Button>
               </BlurFade>
             ))}
           </div>
@@ -129,26 +140,7 @@ export default function Page() {
               </div>
             </div>
           </BlurFade>
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 max-w-[800px] mx-auto">
-            {DATA.projects.map((project, id) => (
-              <BlurFade
-                key={project.title}
-                delay={BLUR_FADE_DELAY * 12 + id * 0.05}
-              >
-                <ProjectCard
-                  href={project.href}
-                  key={project.title}
-                  title={project.title}
-                  description={project.description}
-                  dates={project.dates}
-                  tags={project.technologies}
-                  image={project.image}
-                  video={project.video}
-                  links={project.links}
-                />
-              </BlurFade>
-            ))}
-          </div>
+          <ExpandableProjectCards cards={DATA.projects as unknown as ExpandableCardProps["cards"]} />
         </div>
       </section>
       {/* <section id="hackathons">
@@ -207,10 +199,10 @@ export default function Page() {
               <p className="mx-auto max-w-[600px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
                 Want to chat? Just shoot me a dm{" "}
                 <Link
-                  href={DATA.contact.social.X.url}
+                  href={DATA.contact.social.Twitter.url}
                   className="text-blue-500 hover:underline"
                 >
-                  with a direct question on twitter
+                  with a direct question on Twitter
                 </Link>{" "}
                 and I&apos;ll respond whenever I can. I will ignore all
                 soliciting.
