@@ -42,7 +42,7 @@
     "routes": [
       {
         "pattern": "kanakkholwal.eu.org",
-        "custom_domain": true   
+        "custom_domain": true,
       }
   
     ],
@@ -50,7 +50,7 @@
     // Vars that will be injected into the worker
     
     "vars": {
-      "NODE_ENV": "prodcution"
+      "NODE_ENV": "production"
     //   "MAIL_EMAIL": "${MAIL_EMAIL}",
     //   "MAIL_PASSWORD": "${MAIL_PASSWORD}",
     //   "SERVER_IDENTITY": "${SERVER_IDENTITY}"
