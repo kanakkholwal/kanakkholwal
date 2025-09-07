@@ -102,7 +102,7 @@ export const ResumeCard = ({
               className="mt-2 text-xs sm:text-sm"
             >
               <Markdown
-                className="prose max-w-full prose-sm text-pretty font-sans dark:prose-invert"
+                className="prose max-w-full prose-sm text-pretty font-sans dark:prose-invert text-muted-foreground"
               >
                 {description}
               </Markdown>

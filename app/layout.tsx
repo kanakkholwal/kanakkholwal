@@ -7,6 +7,7 @@ import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google";
 import { DATA } from "~/data/resume";
 import "./globals.css";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -27,6 +28,9 @@ export const metadata: Metadata = {
     siteName: `${DATA.name}`,
     locale: "en_US",
     type: "website",
+  },
+  icons: {
+    icon: "https://2hy7y2bvb4.ufs.sh/f/zWIvIoJSZF4QrRK3kzi42fEjTiNKu9ak3t6wQnGZJ1SrVmLq",
   },
   robots: {
     index: true,
@@ -58,7 +62,7 @@ export default function RootLayout({
     <html lang="en" className="overflow-x-hidden relative" suppressHydrationWarning>
       <body
         className={cn(
-          "min-h-screen bg-background font-sans antialiased max-w-2xl mx-auto py-12 sm:py-24 px-6",
+          "min-h-screen bg-background font-sans antialiased max-w-2xl mx-auto py-12 sm:py-24 px-6 overflow-x-hidden",
           fontSans.variable
         )}
       >
@@ -70,6 +74,9 @@ export default function RootLayout({
             <Navbar />
           </TooltipProvider>
         </ThemeProvider>
+        {process.env.NODE_ENV === "production" && (
+          <GoogleAnalytics gaId={"G-95KQZNMSSE"} />
+        )}
       </body>
     </html>
   );

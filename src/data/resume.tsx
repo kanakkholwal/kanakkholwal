@@ -13,7 +13,7 @@ export const DATA = {
   description:
     "Software Engineer | Passionate about building scalable solutions, automation, and AI-driven products.",
   summary: `I thrive on solving complex problems and building impactful products. From developing scalable architectures to integrating AI solutions, my goal is to create software that makes a real difference. Always eager to learn, contribute to open source, and collaborate with like-minded developers. Check out my work below, and feel free to reach out. My resume is available for download [here](${resume_link}).`,
-  avatarUrl: "/me.png",
+  avatarUrl: "https://2hy7y2bvb4.ufs.sh/f/zWIvIoJSZF4QODD3M9KxlqUsuHJcSkNd3oRnbL2QzBtj8EM7",
   skills: [
     "React",
     "Next.js",
@@ -74,7 +74,7 @@ export const DATA = {
       badges: [],
       location: "Remote",
       title: "Software Developer Intern",
-      logoUrl: "/textify-ai.png",
+      logoUrl: "https://2hy7y2bvb4.ufs.sh/f/zWIvIoJSZF4QYH4HQCOnd4FsWwGtc1QjmblpSJE5xBn6y73Y",
       start: "Dec 2022",
       end: "Jun 2024",
       description:`
@@ -91,7 +91,7 @@ export const DATA = {
       badges: [],
       location: "Remote",
       title: "Frontend Intern",
-      logoUrl: "/koinx.png",
+      logoUrl: "https://2hy7y2bvb4.ufs.sh/f/zWIvIoJSZF4QPeYl8N26Hz53wg87YeZxFt9WfbvpIQLVAXau",
       start: "Mar 2024",
       end: "Jun 2024",
       description:`
@@ -106,7 +106,7 @@ export const DATA = {
       school: "National Institute of Technology, Hamirpur",
       href: "https://nith.ac.in",
       degree: "B.Tech. (Dual), Electronics and Communication Engineering",
-      logoUrl: "/nith.png",
+      logoUrl: "https://2hy7y2bvb4.ufs.sh/f/zWIvIoJSZF4Q1sGyUyITPZD6mAdTXjKkufM30qH2OYSCoLJI",
       start: "2021",
       end: "2026",
     },
@@ -124,7 +124,7 @@ export const DATA = {
         { type: "Website", href: "https://nexonauts.com", icon: <Icons.globe className="size-3" /> },
         { type: "Source", href: "https://github.com/kanakkholwal/nexonauts", icon: <Icons.github className="size-3" /> },
       ],
-      image: "/nexonauts.png",
+      image: "https://2hy7y2bvb4.ufs.sh/f/zWIvIoJSZF4Q64uPWYLSDg1lxYaJETdBLR4osu532vZFqcUH",
       video: "",
     },
     {
@@ -139,7 +139,7 @@ export const DATA = {
         { type: "Website", href: "https://nith.eu.org", icon: <Icons.globe className="size-3" /> },
         { type: "Source", href: "https://github.com/kanakkholwal/college-ecosystem", icon: <Icons.github className="size-3" /> },
       ],
-      image: "/college-ecosystem.png",
+      image: "https://2hy7y2bvb4.ufs.sh/f/zWIvIoJSZF4Q8fkvTJrLAESoTyORbnBq8xC7wQu4rKdJhHvY",
       video: "",
     },
     {
