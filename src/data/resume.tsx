@@ -142,6 +142,22 @@ export const DATA = {
       image: "https://2hy7y2bvb4.ufs.sh/f/zWIvIoJSZF4Q8fkvTJrLAESoTyORbnBq8xC7wQu4rKdJhHvY",
       video: "",
     },
+     {
+      title: "Rich Text Editor React",
+      href: "https://github.com/kanakkholwal/nexo-editor",
+      dates: "August 2025 - August 2025",
+      active: true,
+      description:
+        "A lightweight, customizable Rich Text Editor built on TipTap, designed for modern React projects with support for SSR, Tailwind, ShadCN UI, and plugin extensibility based on prosemirror schema",
+      technologies: ["React.js", "TypeScript", "TailwindCSS", "NPM", "GitHub Actions"],
+      links: [
+        { type: "Docs", href: "https://docs.nexonauts.com/packages/nexo-editor", icon: <Icons.package className="size-3" /> },
+        { type: "Package", href: "https://www.npmjs.com/package/nexo-editor", icon: <Icons.npm className="size-3" /> },
+        { type: "Source", href: "https://github.com/kanakkholwal/nexo-editor", icon: <Icons.github className="size-3" /> },
+      ],
+      image: "",
+      video: "",
+    },
     {
       title: "Markdown Editor React",
       href: "https://github.com/kanakkholwal/nexo-mdx",
@@ -151,7 +167,8 @@ export const DATA = {
         "A highly customizable and accessible Markdown editor with native TypeScript support.",
       technologies: ["React.js", "TypeScript", "TailwindCSS", "Shadcn UI", "NPM", "GitHub Actions"],
       links: [
-        { type: "Package", href: "https://www.npmjs.com/package/nexo-mdx", icon: <Icons.package className="size-3" /> },
+        { type: "Docs", href: "https://docs.nexonauts.com/packages/nexo-mdx", icon: <Icons.package className="size-3" /> },
+        { type: "Package", href: "https://www.npmjs.com/package/nexo-mdx", icon: <Icons.npm className="size-3" /> },
         { type: "Source", href: "https://github.com/kanakkholwal/nexo-mdx", icon: <Icons.github className="size-3" /> },
       ],
       image: "",
@@ -166,6 +183,20 @@ export const DATA = {
         "A serverless mailing system built with Next.js and React Mail for scalable email automation.",
       technologies: ["React Mail", "TypeScript", "TailwindCSS", "GitHub Actions", "Serverless"],
       links: [{ type: "Source", href: "https://github.com/kanakkholwal/mail-system", icon: <Icons.github className="size-3" /> }],
+      image: "",
+      video: "",
+    },
+     {
+      title: "Nexo html2jsx",
+      href: "https://www.npmjs.com/package/nexo-html2jsx",
+      dates: "June 2023 - June 2023",
+      active: true,
+      description:
+        "npm package designed to facilitate the conversion of HTML strings into JSX syntax. It provides a versatile toolset for developers working with HTML-based content who need to integrate it seamlessly into React applications.",
+      technologies: ["React.js", "TypeScript","React Core", "NPM", "GitHub Actions"],
+      links: [
+        { type: "Package", href: "https://www.npmjs.com/package/nexo-html2jsx", icon: <Icons.npm className="size-3" /> },
+      ],
       image: "",
       video: "",
     },
