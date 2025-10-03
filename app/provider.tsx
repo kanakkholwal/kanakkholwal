@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { ViewTransitions } from "next-view-transitions";
 import { Next13ProgressBar } from "next13-progressbar";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 import type React from "react";
 
 
@@ -24,7 +25,9 @@ export function Provider({ children }: { children: React.ReactNode }) {
       >
       
         <div className={cn("min-h-screen w-full h-full overflow-x-hidden")}>
+          <NuqsAdapter>
           {children}
+          </NuqsAdapter>
         </div>
       </NextThemesProvider>
 

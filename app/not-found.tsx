@@ -7,7 +7,7 @@ export default function NotFound() {
 
 
     return <PageWrapper>
-        <main className="flex flex-col items-stretch justify-center place-items-center w-full h-full gap-20 max-h-dvh space-y-4 lg:space-y-6 text-center lg:text-left">
+        <main className="flex flex-col items-center justify-center w-full h-full gap-20 max-h-dvh space-y-4 lg:space-y-6 text-center lg:text-left">
 
                 <NotFoundSvg className="max-w-sm lg:max-w-md w-full pointer-events-none select-none" />
                 <h1 className="text-xl lg:text-4xl font-semibold lg:font-bold">

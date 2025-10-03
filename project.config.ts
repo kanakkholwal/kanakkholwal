@@ -68,6 +68,9 @@ export const appConfig = {
     usernames:{
         github:"kanakkholwal"
     },
+    flags:{
+        enableOgImage: false,
+    },
     verifications: {
         "google.analytics": "G-95KQZNMSSE",
     }

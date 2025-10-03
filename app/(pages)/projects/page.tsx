@@ -34,7 +34,7 @@ export default function ProjectsShowcase() {
       </div>
     
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16 relative mx-auto max-w-6xl px-6 md:px-10 py-20">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2 relative mx-auto max-w-7xl px-6 md:px-10 py-20">
         {projects.map((project, idx) => (
           <motion.div
             key={project.title}
