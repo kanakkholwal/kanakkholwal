@@ -11,17 +11,9 @@ import { motion } from "framer-motion"
 import Link from "next/link"
 import { DATA } from "~/data/resume"
 
-type Project = {
-  title: string
-  href: string
-  dates: string
-  active: boolean
-  description: string
-  technologies: string[]
-  links: { type: string; href: string; icon: React.ReactNode }[]
-  image?: string
-  video?: string
-}
+
+
+
 const projects = DATA.projects
 
 export default function ProjectsShowcase() {
@@ -29,21 +21,20 @@ export default function ProjectsShowcase() {
     <>
       <FloatingElements />
       <ShapeHero
-
-        title1=""
-        title2="Impactful and innovative projects"
+        title1="Impactful &"
+        title2="innovative projects"
         description="A curated selection of my most impactful and innovative projects, showcasing my skills and expertise in software development."
+        shapeClassName="opacity-30 hidden md:block"
       />
-      <div className="max-w-(--max-app-width) mx-auto px-6 md:px-12 pt-12">
-<RollingText
-        text=" Featured Projects"
-        className="text-4xl md:text-5xl font-bold tracking-tight"
-        
+      <div className="max-w-6xl mx-auto px-6 md:px-12 pt-12">
+        <RollingText
+          text="Featured Projects"
+          className="text-4xl font-bold tracking-tight"
         />
-
       </div>
+    
 
-      <div className="flex flex-col gap-16 relative mx-auto max-w-6xl px-6 md:px-10 py-20">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16 relative mx-auto max-w-6xl px-6 md:px-10 py-20">
         {projects.map((project, idx) => (
           <motion.div
             key={project.title}
@@ -52,32 +43,11 @@ export default function ProjectsShowcase() {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: idx * 0.1 }}
             className={cn(
-              "grid gap-8 md:grid-cols-2 items-center",
-              idx % 2 === 1 ? "md:grid-flow-dense" : ""
             )}
           >
-            {/* Media */}
-            <div className="relative w-full overflow-hidden rounded-2xl shadow-lg group">
-              {project.image ? (
-                <motion.img
-                  src={project.image}
-                  alt={project.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-              ) : (
-                <div className="w-full h-64 bg-muted flex items-center justify-center text-muted-foreground text-sm rounded-2xl">
-                  No Image Available
-                </div>
-              )}
-              {project.active && (
-                <span className="absolute top-4 right-4 bg-green-500 text-white text-xs px-2 py-1 rounded-full shadow">
-                  Active
-                </span>
-              )}
-            </div>
 
             {/* Content */}
-            <MagicCard className="rounded-2xl shadow-lg">
+            <MagicCard className="rounded-2xl" layerClassName="bg-card">
               <CardContent className="p-6 flex flex-col gap-4">
                 <div>
                   <h3 className="text-2xl font-semibold tracking-tight mb-1">

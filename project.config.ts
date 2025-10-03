@@ -3,7 +3,9 @@
 export const appConfig = {
     name: "Kanak Kholwal",
     shortName: "Kanak",
-    description: "Personal Portfolio of Kanak Kholwal - Software Developer, Tech Enthusiast, and Lifelong Learner.",
+    initials: "KK",
+    description: "Software Engineer | Passionate about building scalable solutions, automation, and AI-driven products.",
+    summary: `I thrive on solving complex problems and building impactful products. From developing scalable architectures to integrating AI solutions, my goal is to create software that makes a real difference. Always eager to learn, contribute to open source, and collaborate with like-minded developers. Check out my work below, and feel free to reach out.`,
     url: "https://kanakkholwal.eu.org",
     logo: "https://github.com/kanakkholwal.png",
     creator: "Kanak Kholwal",
@@ -25,7 +27,7 @@ export const appConfig = {
         "Full Stack Developer",
         "Open Source",
         "Indie Hacker",
-        
+
     ],
     seo: {
         title: "Kanak Kholwal - Software Developer",
@@ -34,12 +36,12 @@ export const appConfig = {
         category: "Portfolio",
         type: "website",
         publisher: "Kanak Kholwal",
-        geo:{
+        geo: {
             position: "26.8467;80.9462",
             placename: "Rajasthan, India",
             region: "IN",
         },
-        jsonLd:{
+        jsonLd: {
             "@context": "https://schema.org",
             "@type": "Person",
             name: "Kanak Kholwal",
@@ -51,7 +53,7 @@ export const appConfig = {
                 "https://github.com/kanakkholwal"
             ],
             jobTitle: "Software Developer",
-            worksFor: {"@type": "Organization", name: "Self-Employed"}
+            worksFor: { "@type": "Organization", name: "Self-Employed" }
 
         }
     },
@@ -61,12 +63,16 @@ export const appConfig = {
         twitter: "https://twitter.com/kanakkholwal",
         instagram: "https://www.instagram.com/kanakkholwal/",
         youtube: "https://www.youtube.com/@kanakkholwal",
-    },  
+        medium: "https://medium.com/@kanakkholwal",
+    },
+    usernames:{
+        github:"kanakkholwal"
+    },
     verifications: {
-        "google.analytics":"G-95KQZNMSSE",
+        "google.analytics": "G-95KQZNMSSE",
     }
 }
 
 export const resume_link =
-  "https://docs.google.com/document/d/1WleBXhgUwDkRIfodJCvhPchoVBjaCf7Q/edit?usp=sharing&ouid=109800121336149113874&rtpof=true&sd=true";
+    "https://docs.google.com/document/d/1WleBXhgUwDkRIfodJCvhPchoVBjaCf7Q/edit?usp=sharing&ouid=109800121336149113874&rtpof=true&sd=true";
 

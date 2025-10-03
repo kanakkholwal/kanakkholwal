@@ -96,11 +96,13 @@ export default function ShapeHero({
     title2 = "Digital Vision",
     description = "UI Components built with Tailwind CSS.",
     className,
+    shapeClassName
 }: {
     title1?: string;
     title2?: string;
     description?: string;
     className?: string;
+    shapeClassName?:string
 }) {
     const fadeUpVariants = {
         hidden: { opacity: 0, y: 30 },
@@ -119,7 +121,7 @@ export default function ShapeHero({
         <div className={cn("min-h-screen w-full flex items-center justify-center overflow-hidden",className,"relative")}>
             {/* <div className="absolute inset-0 bg-linear-to-br from-indigo-500/[0.02] via-transparent to-rose-500/[0.02] dark:from-indigo-500/[0.05] dark:via-transparent dark:to-rose-500/[0.05] blur-3xl" /> */}
 
-            <div className="absolute inset-0 overflow-hidden">
+            <div className={cn("absolute inset-0 overflow-hidden", shapeClassName)}>
                 {/* Tall rectangle - top left */}
                 <ElegantShape
                     delay={0.3}

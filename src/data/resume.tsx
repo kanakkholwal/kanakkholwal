@@ -1,5 +1,6 @@
 import { Icons } from "@/components/icons/icons";
 import { CodeIcon, HomeIcon, NotebookIcon } from "lucide-react";
+import { FaMedium } from "react-icons/fa6";
 
 export const WorkExperience = [
   {
@@ -43,7 +44,7 @@ export const DATA = {
   description:
     "Software Engineer | Passionate about building scalable solutions, automation, and AI-driven products.",
   summary: `I thrive on solving complex problems and building impactful products. From developing scalable architectures to integrating AI solutions, my goal is to create software that makes a real difference. Always eager to learn, contribute to open source, and collaborate with like-minded developers. Check out my work below, and feel free to reach out.`,
-  avatarUrl: "https://2hy7y2bvb4.ufs.sh/f/zWIvIoJSZF4QODD3M9KxlqUsuHJcSkNd3oRnbL2QzBtj8EM7",
+  avatarUrl: "https://github.com/kanakkholwal.png",
   skills: [
     "React",
     "Next.js",
@@ -89,6 +90,12 @@ export const DATA = {
         icon: Icons.instagram,
         navbar: true,
       },
+      Medium: {
+        name: "Medium",
+        url: "https://medium.com/@kanakkholwal",
+        icon: FaMedium,
+        navbar: true,
+      },
       Email: {
         name: "Send Email",
         url: "mailto:kanakkholwal@gmail.com",
@@ -97,16 +104,6 @@ export const DATA = {
       },
     },
   },
-  education: [
-    {
-      school: "National Institute of Technology, Hamirpur",
-      href: "https://nith.ac.in",
-      degree: "B.Tech. (Dual), Electronics and Communication Engineering",
-      logoUrl: "https://2hy7y2bvb4.ufs.sh/f/zWIvIoJSZF4Q1sGyUyITPZD6mAdTXjKkufM30qH2OYSCoLJI",
-      start: "2021",
-      end: "2026",
-    },
-  ],
   projects: [
     {
       title: "Nexonauts",

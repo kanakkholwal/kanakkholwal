@@ -4,7 +4,7 @@ import { Button, ButtonProps } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { useTransitionRouter } from "next-view-transitions";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 export const TransitionLink = (props: React.ComponentProps<typeof Link>) => {
   const router = useTransitionRouter();
@@ -65,9 +65,10 @@ const pageAnimation = () => {
 
 
 
-export function PreviousPageLink({ ...props }: ButtonProps) {
-  const router = useRouter();
+export function PreviousPageLink(props: ButtonProps) {
+  const router = useTransitionRouter();
   const pathname = usePathname();
+
   return (
     <Button
       rounded="full"
