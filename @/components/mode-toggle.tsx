@@ -15,7 +15,7 @@ export function ModeToggle() {
       className="px-2 text-foreground"
       onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
     >
-      <SunIcon className="h-[1.2rem] w-[1.2rem] text-foreground" />
+      <SunIcon className="h-[1.2rem] w-[1.2rem] text-foreground dark:hidden" />
       <MoonIcon className="hidden h-[1.2rem] w-[1.2rem] text-foreground dark:block" />
     </Button>
   );

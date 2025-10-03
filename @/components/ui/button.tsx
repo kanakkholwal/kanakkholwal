@@ -5,13 +5,13 @@ import * as React from "react";
 
 import { cn } from "@/lib/utils";
 
-
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium capitalize transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-all relative cursor-pointer group",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium capitalize transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-all relative cursor-pointer group user-select-none",
   {
     variants: {
       variant: {
-        default: "bg-primary dark:bg-primary text-white hover:bg-primary/90 shadow-lg shadow-primary/50",
+        default:
+          "bg-primary dark:bg-primary text-white hover:bg-primary/90",
         default_light:
           "bg-primary/10 text-primary hover:bg-primary/20 dark:bg-primary/10 dark:text-primary hover:dark:bg-primary/5 hover:dark:text-primary",
         secondary:
@@ -27,7 +27,7 @@ const buttonVariants = cva(
         outline:
           "border border-border bg-card hover:bg-card/80 dark:bg-muted text-foreground dark:text-muted-foreground dark:hover:text-foreground hover:border-primary",
         ghost:
-          "bg-slate-100/20 hover:bg-slate-100/80 text-muted-foreground hover:text-accent-foreground dark:bg-accent dark:text-muted-foreground dark:hover:bg-accent/80 dark:hover:text-white",
+          "bg-transparent dark:hover:bg-accent text-muted-foreground hover:text-accent-foreground dark:text-muted-foreground dark:hover:text-white",
         success:
           "bg-green-100 text-green-700 hover:bg-green-200 hover:text-green-700",
         slate:
@@ -37,11 +37,15 @@ const buttonVariants = cva(
         light:
           "bg-white shadow text-gray-700 hover:text-gray-700 border border-border",
         glass:
-          "bg-white/90 dark:bg-white/5 backdrop-blur-xl border-slate-600/10 dark:border-border/70 dark:text-slate-400 text-slate-800 hover:bg-white/80 dark:hover:bg-white/10",
+          "bg-white/90 dark:bg-white/5 backdrop-blur-xl border-slate-600/10 dark:border-border/70",
         rainbow:
           "animate-rainbow border-0 bg-[linear-gradient(#121213,#121213),linear-gradient(#121213_50%,rgba(18,18,19,0.6)_80%,rgba(18,18,19,0)),linear-gradient(90deg,var(--color-1),var(--color-5),var(--color-3),var(--color-4),var(--color-2))] bg-[length:200%] text-primary-foreground dark:text-black [background-clip:padding-box,border-box,border-box] [background-origin:border-box] [border:calc(0.125rem)_solid_transparent] before:absolute before:bottom-[-20%] before:left-1/2 before:z-0 before:h-1/5 before:w-3/5 before:-translate-x-1/2 before:animate-rainbow before:bg-[linear-gradient(90deg,var(--color-1),var(--color-5),var(--color-3),var(--color-4),var(--color-2))] before:[filter:blur(0.75rem)] dark:bg-[linear-gradient(#fff,#fff),linear-gradient(#fff_50%,rgba(255,255,255,0.6)_80%,rgba(0,0,0,0)),linear-gradient(90deg,var(--color-1),var(--color-5),var(--color-3),var(--color-4),var(--color-2))]",
         rainbow_outline:
           "border border-input border-b-transparent bg-[linear-gradient(#ffffff,#ffffff),linear-gradient(#ffffff_50%,rgba(18,18,19,0.6)_80%,rgba(18,18,19,0)),linear-gradient(90deg,var(--color-1),var(--color-5),var(--color-3),var(--color-4),var(--color-2))] bg-[length:200%] text-accent-foreground dark:text-primary-foreground [background-clip:padding-box,border-box,border-box] [background-origin:border-box] before:absolute before:bottom-[-20%] before:left-1/2 before:z-0 before:h-1/5 before:w-3/5 before:-translate-x-1/2 before:animate-rainbow before:bg-[linear-gradient(90deg,var(--color-1),var(--color-5),var(--color-3),var(--color-4),var(--color-2))] before:[filter:blur(0.75rem)] dark:bg-[linear-gradient(#0a0a0a,#0a0a0a),linear-gradient(#0a0a0a_50%,rgba(255,255,255,0.6)_80%,rgba(0,0,0,0)),linear-gradient(90deg,var(--color-1),var(--color-5),var(--color-3),var(--color-4),var(--color-2))]",
+
+        vote: "w-full rounded-lg border border-primary text-primary bg-primary/5 hover:bg-primary/10 hover:shadow-md dark:border-primary/70 dark:text-primary",
+        voted: "w-full rounded-lg bg-gradient-to-r from-primary/90 to-primary text-white shadow-lg hover:shadow-xl",
+
 
         gradient_blue:
           "text-white bg-gradient-to-r from-blue-600 via-blue-700 to-blue-700 hover:bg-gradient-to-br",
@@ -59,6 +63,10 @@ const buttonVariants = cva(
           "text-white bg-gradient-to-r from-pink-400 via-pink-600 to-pink-700 hover:bg-gradient-to-br",
         gradient_purple:
           "text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br",
+        gradient_emerald:
+          "text-white bg-gradient-to-r from-emerald-500 via-emerald-600 to-emerald-700 hover:bg-gradient-to-br",
+        gradient_yellow:
+          "text-white bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 hover:bg-gradient-to-br",
         raw: "",
       },
       size: {
@@ -72,10 +80,12 @@ const buttonVariants = cva(
         icon_sm: "size-8 p-2 [&>svg]:size-4",
         icon_lg: "size-12 p-3.5 [&>svg]:size-6",
         icon_xl: "size-14 p-4 [&>svg]:size-8",
+        responsive_lg: "h-9 px-4 py-2 text-sm md:h-11 md:px-5 md:py-3 md:text-base [&>svg]:size-4 md:[&>svg]:size-6 ",
       },
       effect: {
         none: "",
-        expandIcon: "group relative group-hover:gap-4 [&>svg.icon]:transition-transform [&>svg.icon]:group-hover:translate-x-1",
+        expandIcon:
+          "group relative group-hover:gap-4 [&>svg.icon]:transition-transform [&>svg.icon]:group-hover:translate-x-1",
         ringHover:
           "transition-all duration-300 hover:ring-2 hover:ring-primary/90 hover:ring-offset-2",
         shine:
@@ -116,7 +126,7 @@ const buttonVariants = cva(
         scale: "hover:scale-105 active:scale-95",
       },
       shadow: {
-        none: "",
+        none: "shadow-none",
         default: "shadow-lg shadow-primary/50",
         default_light: "shadow-md shadow-primary/20",
         destructive: "shadow-lg shadow-destructive/50",
@@ -128,8 +138,13 @@ const buttonVariants = cva(
         dark: "shadow-lg shadow-neutral-900/50",
         light: "shadow-md shadow-gray-200/50",
         glass: "shadow-lg shadow-white/20 dark:shadow-black/20",
-      }
+      },
     },
+    // compoundVariants:[
+    //   {
+    //     size: "lg",
+    //   }
+    // ],
     defaultVariants: {
       variant: "default",
       size: "default",
@@ -137,7 +152,7 @@ const buttonVariants = cva(
       hoverEffect: "none",
       effect: "none",
       rounded: "default",
-      shadow: "none",
+      // shadow: "none",
     },
   }
 );

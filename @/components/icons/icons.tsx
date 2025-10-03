@@ -1,8 +1,6 @@
-import { GlobeIcon, MailIcon } from "lucide-react";
-import { Package } from 'lucide-react';
+import { GlobeIcon, Instagram, MailIcon, Package } from "lucide-react";
 
 export type IconProps = React.HTMLAttributes<SVGElement>;
-import { Instagram } from 'lucide-react';
 
 export const Icons = {
   globe: (props: IconProps) => <GlobeIcon {...props} />,

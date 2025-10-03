@@ -7,6 +7,7 @@
 
 :root,
 [data-theme="light"] {
+
   --background: hsl(0deg 0% 96.08%);
   --foreground: hsl(0deg 0% 9.8%);
   --card: hsl(0, 0%, 100%);
@@ -473,8 +474,28 @@ body {
        - starts from 1024px (for tablets/small desktops)
        - scales with viewport
        - grows reasonably beyond 1440px without a hard limit */
-  --max-app-width: clamp(1280px, 80vw, 1920px);
+  --max-app-width: clamp(1440px, 80vw, 1920px);
 
+}
+
+::view-transition-group(root) {
+  z-index: auto !important;
+}
+
+::view-transition-image-pair(root) {
+  isolation: isolate;
+  will-change: transform, opacity, scale;
+  z-index: 1;
+}
+
+::view-transition-new(root) {
+  z-index: 2;
+  animation: none !important;
+}
+
+::view-transition-old(root) {
+  z-index: 1;
+  animation: none !important;
 }
 
 .hero {

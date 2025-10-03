@@ -1,8 +1,6 @@
-import { Icons } from "@/components/icons";
+import { Icons } from "@/components/icons/icons";
 import { CodeIcon, HomeIcon, NotebookIcon } from "lucide-react";
 
-const resume_link =
-  "https://docs.google.com/document/d/1WleBXhgUwDkRIfodJCvhPchoVBjaCf7Q/edit?usp=sharing&ouid=109800121336149113874&rtpof=true&sd=true";
 
 export const DATA = {
   name: "Kanak Kholwal",
@@ -12,7 +10,7 @@ export const DATA = {
   locationLink: "https://www.google.com/maps/place/dausa",
   description:
     "Software Engineer | Passionate about building scalable solutions, automation, and AI-driven products.",
-  summary: `I thrive on solving complex problems and building impactful products. From developing scalable architectures to integrating AI solutions, my goal is to create software that makes a real difference. Always eager to learn, contribute to open source, and collaborate with like-minded developers. Check out my work below, and feel free to reach out. My resume is available for download [here](${resume_link}).`,
+  summary: `I thrive on solving complex problems and building impactful products. From developing scalable architectures to integrating AI solutions, my goal is to create software that makes a real difference. Always eager to learn, contribute to open source, and collaborate with like-minded developers. Check out my work below, and feel free to reach out.`,
   avatarUrl: "https://2hy7y2bvb4.ufs.sh/f/zWIvIoJSZF4QODD3M9KxlqUsuHJcSkNd3oRnbL2QzBtj8EM7",
   skills: [
     "React",
@@ -29,7 +27,7 @@ export const DATA = {
   navbar: [
     { href: "/", icon: HomeIcon, label: "Home" },
     { href: "https://kanakkholwal.medium.com", icon: NotebookIcon, label: "Blog" },
-    { href: "/#projects", icon: CodeIcon, label: "Projects" },
+    { href: "/projects", icon: CodeIcon, label: "Projects" },
   ],
   contact: {
     email: "kanakkholwal@gmail.com",

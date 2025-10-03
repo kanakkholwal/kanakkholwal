@@ -7,8 +7,8 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import Link from "next/link";
 import { DATA } from "~/data/resume";
+import { TransitionLink } from "./utils/link";
 
 export default function Navbar() {
   return (
@@ -19,10 +19,11 @@ export default function Navbar() {
           <DockIcon key={item.href}>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button variant="raw" size="icon" className="size-12" asChild>
-                  <Link href={item.href} target="_blank">
+                <Button variant="raw" size="icon_lg" asChild>
+                  <TransitionLink href={item.href} 
+                  target={item.href.startsWith("http") ? "_blank" : "_self"}>
                     <item.icon className="size-4" />
-                  </Link>
+                  </TransitionLink>
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
@@ -38,10 +39,10 @@ export default function Navbar() {
             <DockIcon key={name}>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Button asChild variant="raw" size="icon" className="size-12">
-                    <Link href={social.url} target="_blank">
+                  <Button asChild variant="raw" size="icon_lg" >
+                    <TransitionLink href={social.url} target="_blank">
                       <social.icon className="size-4" />
-                    </Link>
+                    </TransitionLink>
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
