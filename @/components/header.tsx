@@ -5,7 +5,7 @@ import { motion } from 'motion/react';
 import { Logo } from '@/components/logo';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { DATA } from '~/data/resume';
-import { ThemeSwitcher } from './theme-switcher';
+import { ModeToggle } from './mode-toggle';
 import { TransitionLink } from './utils/link';
 
 
@@ -97,7 +97,7 @@ export const Header = ({ transition }: { transition: boolean }) => {
                         })}
                     </div>
 
-                    <ThemeSwitcher className="mt-1 xs:mt-0 sm:mt-1" />
+                    <ModeToggle/>
                 </motion.div>
             </div>
         </motion.div>

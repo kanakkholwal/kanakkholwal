@@ -45,7 +45,7 @@ export const ResumeCard = ({
       className="block cursor-pointer"
       onClick={handleClick}
     >
-      <Card className="flex p-3">
+      <Card className="flex p-4">
         <div className="flex-none">
           <Avatar className="border size-12 m-auto bg-muted-background dark:bg-foreground">
             <AvatarImage
@@ -101,11 +101,13 @@ export const ResumeCard = ({
               }}
               className="mt-2 text-xs sm:text-sm"
             >
-              <Markdown
+              <div
                 className="prose max-w-full prose-sm text-pretty font-sans dark:prose-invert text-muted-foreground"
               >
+                <Markdown>
                 {description}
-              </Markdown>
+                </Markdown>
+              </div>
             </motion.div>
           )}
         </div>

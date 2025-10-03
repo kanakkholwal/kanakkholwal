@@ -48,10 +48,10 @@
         "pattern": "kanak-kholwal.eu.org",
         "custom_domain": true,
       },
-      // {
-      //   "pattern": "kanak.eu.org",
-      //   "custom_domain": true,
-      // }
+      {
+        "pattern": "kanak.eu.org",
+        "custom_domain": true,
+      }
   
     ],
     // "account_id": "${CLOUDFLARE_ACCOUNT_ID}",

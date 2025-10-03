@@ -1,8 +1,11 @@
 "use client"
 
+import { MagicCard } from "@/components/animated/bg.card"
+import { FloatingElements } from "@/components/animated/floating-elements"
+import { RollingText } from "@/components/animated/text.rolling"
 import ShapeHero from "@/components/kokonutui/shape-hero"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
+import { CardContent } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
 import { motion } from "framer-motion"
 import Link from "next/link"
@@ -24,20 +27,21 @@ const projects = DATA.projects
 export default function ProjectsShowcase() {
   return (
     <>
-      <ShapeHero 
-      
+      <FloatingElements />
+      <ShapeHero
+
         title1=""
         title2="Impactful and innovative projects"
         description="A curated selection of my most impactful and innovative projects, showcasing my skills and expertise in software development."
       />
-      <motion.h2
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="text-4xl md:text-5xl font-bold tracking-tight mb-12"
-      >
-        Featured Projects
-      </motion.h2>
+      <div className="max-w-(--max-app-width) mx-auto px-6 md:px-12 pt-12">
+<RollingText
+        text=" Featured Projects"
+        className="text-4xl md:text-5xl font-bold tracking-tight"
+        
+        />
+
+      </div>
 
       <div className="flex flex-col gap-16 relative mx-auto max-w-6xl px-6 md:px-10 py-20">
         {projects.map((project, idx) => (
@@ -73,7 +77,7 @@ export default function ProjectsShowcase() {
             </div>
 
             {/* Content */}
-            <Card>
+            <MagicCard className="rounded-2xl shadow-lg">
               <CardContent className="p-6 flex flex-col gap-4">
                 <div>
                   <h3 className="text-2xl font-semibold tracking-tight mb-1">
@@ -114,7 +118,7 @@ export default function ProjectsShowcase() {
                   ))}
                 </div>
               </CardContent>
-            </Card>
+            </MagicCard>
           </motion.div>
         ))}
       </div>

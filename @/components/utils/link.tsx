@@ -96,6 +96,24 @@ export function ButtonLink({
     </Button>
   );
 }
+export function ButtonTransitionLink({
+  href,
+  children,
+  ...props
+}: React.ComponentProps<typeof Button> & React.ComponentProps<typeof Link>) {
+  const router = useTransitionRouter();
+
+  return (
+    <Button {...props} onClick={(e) => {
+      e.preventDefault();
+      router.push(href.toString(), {
+        onTransitionReady: pageAnimation,
+      });
+    }}>
+      {children}
+    </Button>
+  );
+}
 
 
 export function ButtonScroll({
@@ -107,7 +125,7 @@ export function ButtonScroll({
     const element = document.getElementById(targetId);
     if (!element) return;
     element.scrollIntoView({ behavior: "smooth", block: "start" });
-  
+
   };
   return (
     <Button {...props} onClick={handleScroll} />

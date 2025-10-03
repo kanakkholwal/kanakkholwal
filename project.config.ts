@@ -16,7 +16,16 @@ export const appConfig = {
         "Kanak Kholwal",
         "Software Developer",
         "Tech Enthusiast",
-        "Lifelong Learner"
+        "Lifelong Learner",
+        "Portfolio",
+        "Software Engineer",
+        "Web Developer",
+        "Frontend Developer",
+        "Backend Developer",
+        "Full Stack Developer",
+        "Open Source",
+        "Indie Hacker",
+        
     ],
     seo: {
         title: "Kanak Kholwal - Software Developer",

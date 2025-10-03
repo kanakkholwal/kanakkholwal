@@ -10,13 +10,13 @@
  * @github: https://github.com/kokonut-labs/kokonutui
  */
 
-import Anthropic from "@/components/icons/anthropic";
-import AnthropicDark from "@/components/icons/anthropic-dark";
-import Google from "@/components/icons/gemini";
-import OpenAI from "@/components/icons/open-ai";
-import OpenAIDark from "@/components/icons/open-ai-dark";
-import MistralAI from "@/components/icons/mistral";
-import DeepSeek from "@/components/icons/deepseek";
+import Anthropic from "@/components/kokonutui/anthropic";
+import AnthropicDark from "@/components/kokonutui/anthropic-dark";
+import Google from "@/components/kokonutui/gemini";
+import OpenAI from "@/components/kokonutui/open-ai";
+import OpenAIDark from "@/components/kokonutui/open-ai-dark";
+import MistralAI from "@/components/kokonutui/mistral";
+import DeepSeek from "@/components/kokonutui/deepseek";
 import { cn } from "@/lib/utils";
 import {
     Mic,

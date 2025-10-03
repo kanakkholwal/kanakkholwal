@@ -1,7 +1,39 @@
 import { Icons } from "@/components/icons/icons";
 import { CodeIcon, HomeIcon, NotebookIcon } from "lucide-react";
 
-
+export const WorkExperience = [
+  {
+    company: "Textify AI",
+    href: "https://textify.ai",
+    badges: [],
+    location: "Remote",
+    title: "Software Developer Intern",
+    logoUrl: "https://2hy7y2bvb4.ufs.sh/f/zWIvIoJSZF4QYH4HQCOnd4FsWwGtc1QjmblpSJE5xBn6y73Y",
+    start: "Dec 2022",
+    end: "Jun 2024",
+    description: `
+- Built and maintained core platform features, improving engagement by 220%.
+- Led the development of the initial design system and codebase structure.
+- Fortified platform security by integrating multi-factor authentication through AWS Cognito; reduced unauthorized access attempts and improved overall platform reliability, addressing top security vulnerabilities.
+- Developed RESTful APIs and microservices following Agile practices and CI/CD pipelines, enhancing system scalability on Azure and GCP, reducing deployment time by 30%.
+      `,
+  },
+  {
+    company: "KoinX",
+    href: "https://koinx.com",
+    badges: [],
+    location: "Remote",
+    title: "Frontend Intern",
+    logoUrl: "https://2hy7y2bvb4.ufs.sh/f/zWIvIoJSZF4QPeYl8N26Hz53wg87YeZxFt9WfbvpIQLVAXau",
+    start: "Mar 2024",
+    end: "Jun 2024",
+    description: `
+- Optimized SEO and page speed, boosting organic traffic by 150%.
+- Initiated and led the migration of multiple frontend repositories from CRA to VITE , significantly enhancing build times and performance by 60%.
+- Developed internal UI library, significantly enhancing development efficiency and consistency.
+`,
+  },
+] as const;
 export const DATA = {
   name: "Kanak Kholwal",
   initials: "KK",
@@ -65,40 +97,6 @@ export const DATA = {
       },
     },
   },
-  work: [
-    {
-      company: "Textify AI",
-      href: "https://textify.ai",
-      badges: [],
-      location: "Remote",
-      title: "Software Developer Intern",
-      logoUrl: "https://2hy7y2bvb4.ufs.sh/f/zWIvIoJSZF4QYH4HQCOnd4FsWwGtc1QjmblpSJE5xBn6y73Y",
-      start: "Dec 2022",
-      end: "Jun 2024",
-      description:`
-- Built and maintained core platform features, improving engagement by 220%.
-- Led the development of the initial design system and codebase structure.
-- Fortified platform security by integrating multi-factor authentication through AWS Cognito; reduced unauthorized access attempts and improved overall platform reliability, addressing top security vulnerabilities.
-- Developed RESTful APIs and microservices following Agile practices and CI/CD pipelines, enhancing system scalability on Azure and GCP, reducing deployment time by 30%.
-
-      `,
-    },
-    {
-      company: "KoinX",
-      href: "https://koinx.com",
-      badges: [],
-      location: "Remote",
-      title: "Frontend Intern",
-      logoUrl: "https://2hy7y2bvb4.ufs.sh/f/zWIvIoJSZF4QPeYl8N26Hz53wg87YeZxFt9WfbvpIQLVAXau",
-      start: "Mar 2024",
-      end: "Jun 2024",
-      description:`
-- Optimized SEO and page speed, boosting organic traffic by 150%.
-- Initiated and led the migration of multiple frontend repositories from CRA to VITE , significantly enhancing build times and performance by 60%.
-- Developed internal UI library, significantly enhancing development efficiency and consistency.
-`,
-    },
-  ],
   education: [
     {
       school: "National Institute of Technology, Hamirpur",
@@ -132,7 +130,7 @@ export const DATA = {
       active: true,
       description:
         "A scalable, open-source monorepo built for college management, including student portals, dashboards, and more.",
-      technologies: ["Next.js", "TypeScript", "Turbopack", "GitHub Actions", "MongoDB","PostgresQL", "TailwindCSS", "Shadcn UI"],
+      technologies: ["Next.js", "TypeScript", "Turbopack", "GitHub Actions", "MongoDB", "PostgresQL", "TailwindCSS", "Shadcn UI"],
       links: [
         { type: "Website", href: "https://nith.eu.org", icon: <Icons.globe className="size-3" /> },
         { type: "Source", href: "https://github.com/kanakkholwal/college-ecosystem", icon: <Icons.github className="size-3" /> },
@@ -140,7 +138,7 @@ export const DATA = {
       image: "https://2hy7y2bvb4.ufs.sh/f/zWIvIoJSZF4Q8fkvTJrLAESoTyORbnBq8xC7wQu4rKdJhHvY",
       video: "",
     },
-     {
+    {
       title: "Rich Text Editor React",
       href: "https://github.com/kanakkholwal/nexo-editor",
       dates: "August 2025 - August 2025",
@@ -184,14 +182,14 @@ export const DATA = {
       image: "",
       video: "",
     },
-     {
+    {
       title: "Nexo html2jsx",
       href: "https://www.npmjs.com/package/nexo-html2jsx",
       dates: "June 2023 - June 2023",
       active: true,
       description:
         "npm package designed to facilitate the conversion of HTML strings into JSX syntax. It provides a versatile toolset for developers working with HTML-based content who need to integrate it seamlessly into React applications.",
-      technologies: ["React.js", "TypeScript","React Core", "NPM", "GitHub Actions"],
+      technologies: ["React.js", "TypeScript", "React Core", "NPM", "GitHub Actions"],
       links: [
         { type: "Package", href: "https://www.npmjs.com/package/nexo-html2jsx", icon: <Icons.npm className="size-3" /> },
       ],

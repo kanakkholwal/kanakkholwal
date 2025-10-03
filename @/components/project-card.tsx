@@ -86,9 +86,11 @@ export function ProjectCard({
           <div className="hidden font-sans text-xs underline print:visible">
             {link?.replace("https://", "").replace("www.", "").replace("/", "")}
           </div>
-          <Markdown className="prose max-w-full text-pretty font-sans text-xs text-muted-foreground dark:prose-invert">
+          <div className="prose max-w-full text-pretty font-sans text-xs text-muted-foreground dark:prose-invert">
+            <Markdown>
             {description}
-          </Markdown>
+            </Markdown>
+          </div>
         </div>
       </CardHeader>
       <CardContent className="mt-auto flex flex-col px-2">
@@ -149,7 +151,7 @@ export function ExpandableProjectCards({ cards }: ExpandableCardProps) {
     null
   );
   const id = useId();
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLDivElement>(null!) as React.RefObject<HTMLDivElement>;
 
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
@@ -265,9 +267,11 @@ export function ExpandableProjectCards({ cards }: ExpandableCardProps) {
                     <div className="hidden font-sans text-xs underline print:visible">
                       {active.link?.replace("https://", "").replace("www.", "").replace("/", "")}
                     </div>
-                    <Markdown className="prose max-w-full text-pretty font-sans text-xs text-muted-foreground dark:prose-invert">
+                    <div className="prose max-w-full text-pretty font-sans text-xs text-muted-foreground dark:prose-invert">
+                    <Markdown>
                       {active.description}
                     </Markdown>
+                    </div>
                     <CardContent className="mt-auto flex flex-col px-2">
                       {active.tags && active.tags.length > 0 && (
                         <div className="mt-2 flex flex-wrap gap-1">
@@ -372,9 +376,11 @@ export function ExpandableProjectCards({ cards }: ExpandableCardProps) {
               </div>
             </div>
             <motion.div layoutId={`description-${card.title}-${id}`} className="mt-auto flex flex-col p-2">
-              <Markdown className="prose max-w-full text-pretty font-sans text-xs text-muted-foreground dark:prose-invert">
+              <div className="prose max-w-full text-pretty font-sans text-xs text-muted-foreground dark:prose-invert">
+                <Markdown>
                 {card.description}
-              </Markdown>
+                </Markdown>
+              </div>
               <CardContent className="mt-auto flex flex-col px-2">
                 {card.tags && card.tags.length > 0 && (
                   <div className="mt-2 flex flex-wrap gap-1">
