@@ -6,9 +6,7 @@
 <p><a href="https://github.com/kanakkholwal" target="_blank"><img alt="Github" src="https://img.shields.io/badge/GitHub-%2312100E.svg?&style=for-the-badge&logo=Github&logoColor=white" /></a> <a href="https://twitter.com/kanakkholwal" target="_blank"><img alt="Twitter" src="https://img.shields.io/badge/twitter-%231DA1F2.svg?&style=for-the-badge&logo=twitter&logoColor=white" /></a> <a href="https://www.linkedin.com/in/kanak-kholwal" target="_blank"><img alt="LinkedIn" src="https://img.shields.io/badge/linkedin-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white" /></a> <a href="https://medium.com/@kanakkholwal" target="_blank"><img alt="Medium" src="https://img.shields.io/badge/medium-%2312100E.svg?&style=for-the-badge&logo=medium&logoColor=white" /></a>
 </p>
 
-
 ![OpBento](https://firebasestorage.googleapis.com/v0/b/smartkaksha-fe32c.appspot.com/o/opbento%2Fkanakkholwal794c3.png?alt=media)
-
 
 <picture>
     <source media="(prefers-color-scheme: dark)" srcset="https://github-readme-stats-ouuan.vercel.app/api?username=kanakkholwal&theme=dark&show_icons=true">
@@ -31,15 +29,16 @@
 
 - 📄 Know about my experiences [Resume](https://docs.google.com/document/d/1WleBXhgUwDkRIfodJCvhPchoVBjaCf7Q/edit?usp=sharing&ouid=109800121336149113874&rtpof=true&sd=true)
 
-- ⚡ Fun fact **I think I am *funny**
-
+- ⚡ Fun fact **I think I am \*funny**
 
 ### My Skills
 
 [![My Skills](https://skillicons.dev/icons?i=js,ts,go,python,docker,postgres,mongodb,redis,firebase,npm,pnpm,git,github,gcp,svg,vercel,nextjs,vite,tailwind,notion,react,express,nodejs,postman,figma,bootstrap,html,css,sass)](https://kanakkholwal.eu.org)
 
 ### 📔 Latest Blog posts
+
 <!-- BLOG-POST-LIST:START -->
+
 - [How to implement authentication across all subdomains using Next-Auth in Next.js](https://kanakkholwal.medium.com/how-to-implement-authentication-across-all-subdomains-using-next-auth-in-next-js-2ad8393c268d)
 - [Promise.all and Promise.allSettled -Unlocking JavaScript’s Hidden Secrets](https://kanakkholwal.medium.com/5-things-you-dont-know-about-promise-all-6ab469192b45)
 - [Guide to Recording Canvas Animations Using JavaScript](https://kanakkholwal.medium.com/guide-to-recording-canvas-animations-using-javascript-d2bb1b6e2523)

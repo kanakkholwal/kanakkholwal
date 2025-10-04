@@ -77,7 +77,7 @@ export const ResumeCard = ({
                 <ChevronRightIcon
                   className={cn(
                     "size-4 translate-x-0 transform opacity-0 transition-all duration-300 ease-out group-hover:translate-x-1 group-hover:opacity-100",
-                    isExpanded ? "rotate-90" : "rotate-0"
+                    isExpanded ? "rotate-90" : "rotate-0",
                   )}
                 />
               </h3>
@@ -101,12 +101,8 @@ export const ResumeCard = ({
               }}
               className="mt-2 text-xs sm:text-sm"
             >
-              <div
-                className="prose max-w-full prose-sm text-pretty font-sans dark:prose-invert text-muted-foreground"
-              >
-                <Markdown>
-                {description}
-                </Markdown>
+              <div className="prose max-w-full prose-sm text-pretty font-sans dark:prose-invert text-muted-foreground">
+                <Markdown>{description}</Markdown>
               </div>
             </motion.div>
           )}

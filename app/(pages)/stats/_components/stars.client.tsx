@@ -1,58 +1,71 @@
-'use client'
+"use client";
 
 import {
   ChartContainer,
   ChartTooltip,
-  ChartTooltipContent
-} from '@/components/ui/chart'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Star } from 'lucide-react'
-import { parseAsStringLiteral, useQueryState } from 'nuqs'
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts'
-import { statsConfig } from '../config'
-import { formatDate } from '../lib/format'
-import { GitHubStarHistory } from '../lib/github'
-import { Widget } from './widget'
+  ChartTooltipContent,
+} from "@/components/ui/chart";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Star } from "lucide-react";
+import Image from "next/image";
+import { parseAsStringLiteral, useQueryState } from "nuqs";
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
+import { statsConfig } from "../config";
+import { formatDate } from "../lib/format";
+import { GitHubStarHistory } from "../lib/github";
+import { Widget } from "./widget";
 
 type StarsGraphProps = {
-  data: Record<string, GitHubStarHistory>
-  stargazersTab: React.ReactNode
-}
+  data: Record<string, GitHubStarHistory>;
+  stargazersTab: React.ReactNode;
+};
 
-const starTabs = ['earned', 'gazers'] as const
-type StarTab = (typeof starTabs)[number]
+const starTabs = ["earned", "gazers"] as const;
+type StarTab = (typeof starTabs)[number];
 
 export function StarsGraph({ data, stargazersTab }: StarsGraphProps) {
   const [activeTab, setActiveTab] = useQueryState(
-    'stars',
-    parseAsStringLiteral(starTabs).withDefault('earned')
-  )
+    "stars",
+    parseAsStringLiteral(starTabs).withDefault("earned"),
+  );
   const [activeRepo, setActiveRepo] = useQueryState(
-    'repo',
-    parseAsStringLiteral(statsConfig.repositories.map(repo => repo.repo)).withDefault(statsConfig.repositories[0].repo)
+    "repo",
+    parseAsStringLiteral(
+      statsConfig.repositories.map((repo) => repo.repo),
+    ).withDefault(statsConfig.repositories[0].repo),
   );
 
   return (
     <Widget
       className="px-0 pb-0"
       title={
-        <div className='flex w-full items-center gap-2 pb-1'>
+        <div className="flex w-full items-center gap-2 pb-1">
           <Star size={20} className="ml-2" /> {data[activeRepo].count} stars
           <Select defaultValue={activeRepo} onValueChange={setActiveRepo}>
-            <SelectTrigger className='w-auto min-w-[8rem] h-8 text-sm text-muted-foreground font-light'>
+            <SelectTrigger className="w-auto min-w-[8rem] h-8 text-sm text-muted-foreground font-light">
               <SelectValue placeholder="Select a repository" />
             </SelectTrigger>
             <SelectContent>
               {statsConfig.repositories.map((repo) => {
-                return <SelectItem key={repo.name} value={repo.repo}>{repo.name}</SelectItem>
+                return (
+                  <SelectItem key={repo.name} value={repo.repo}>
+                    {repo.name}
+                  </SelectItem>
+                );
               })}
             </SelectContent>
           </Select>
           <Tabs
             className="mr-2 ml-auto w-auto"
             value={activeTab}
-            onValueChange={value => setActiveTab(value as StarTab)}
+            onValueChange={(value) => setActiveTab(value as StarTab)}
           >
             <TabsList>
               <TabsTrigger
@@ -72,11 +85,13 @@ export function StarsGraph({ data, stargazersTab }: StarsGraphProps) {
         </div>
       }
     >
-      {activeTab === 'earned' && (
+      {activeTab === "earned" && (
         <ChartContainer className="mt-2 h-82 w-full px-2">
           <BarChart
             // accessibilityLayer // note: Causes a bug with Recharts 2.15.4 where a click on the chart moves the cursor to the first data point.
-            data={data[activeRepo].bins.toReversed().map(b => ({ ...b, Stars: b.diff }))}
+            data={data[activeRepo].bins
+              .toReversed()
+              .map((b) => ({ ...b, Stars: b.diff }))}
           >
             <YAxis
               axisLine={false}
@@ -91,8 +106,8 @@ export function StarsGraph({ data, stargazersTab }: StarsGraphProps) {
               tickMargin={10}
               axisLine={false}
               fillOpacity={0.75}
-              tickFormatter={value =>
-                formatDate(value, '', { day: '2-digit', month: 'short' })
+              tickFormatter={(value) =>
+                formatDate(value, "", { day: "2-digit", month: "short" })
               }
             />
             <ChartTooltip
@@ -110,32 +125,36 @@ export function StarsGraph({ data, stargazersTab }: StarsGraphProps) {
           </BarChart>
         </ChartContainer>
       )}
-      {activeTab === 'gazers' && stargazersTab}
+      {activeTab === "gazers" && stargazersTab}
     </Widget>
-  )
+  );
 }
 
 export function RepoBeatsActivityGraph() {
   const [activeRepo] = useQueryState(
-    'repo',
-    parseAsStringLiteral(statsConfig.repositories.map(repo => repo.repo)).withDefault(statsConfig.repositories[0].repo)
+    "repo",
+    parseAsStringLiteral(
+      statsConfig.repositories.map((repo) => repo.repo),
+    ).withDefault(statsConfig.repositories[0].repo),
   );
-  const repoIdx = statsConfig.repositories.findIndex(r => r.repo === activeRepo);
+  const repoIdx = statsConfig.repositories.findIndex(
+    (r) => r.repo === activeRepo,
+  );
 
   return (
-    <img
+    <Image
       width={814}
       height={318}
       alt="Project analytics and stats"
       src={statsConfig.repositories[repoIdx].repoBeatsUri}
     />
-  )
+  );
 }
 
 const CustomGradientBar = (
-  props: React.SVGProps<SVGRectElement> & { dataKey?: string }
+  props: React.SVGProps<SVGRectElement> & { dataKey?: string },
 ) => {
-  const { fill, x, y, width, height, dataKey } = props
+  const { fill, x, y, width, height, dataKey } = props;
   return (
     <>
       <rect
@@ -160,5 +179,5 @@ const CustomGradientBar = (
         </linearGradient>
       </defs>
     </>
-  )
-}
+  );
+};

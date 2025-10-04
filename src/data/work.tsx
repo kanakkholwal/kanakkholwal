@@ -1,15 +1,15 @@
-
 export const workExperiences = [
-    {
-        company: "Textify AI",
-        href: "https://textify.ai",
-        badges: [],
-        location: "Remote",
-        title: "Software Developer Intern",
-        logoUrl: "https://2hy7y2bvb4.ufs.sh/f/zWIvIoJSZF4QYH4HQCOnd4FsWwGtc1QjmblpSJE5xBn6y73Y",
-        start: "Dec 2022",
-        end: "Jun 2024",
-        description: `
+  {
+    company: "Textify AI",
+    href: "https://textify.ai",
+    badges: [],
+    location: "Remote",
+    title: "Software Developer Intern",
+    logoUrl:
+      "https://2hy7y2bvb4.ufs.sh/f/zWIvIoJSZF4QYH4HQCOnd4FsWwGtc1QjmblpSJE5xBn6y73Y",
+    start: "Dec 2022",
+    end: "Jun 2024",
+    description: `
 - Re-architected legacy hard-coded apps into modular tools with centralized schema handling, improving developer efficiency and scalability.
 - Developed **no-code AI tool builder** with drag-and-drop support, enabling dynamic prompt structures and schema-driven LLM requests (text, markdown, image outputs).
 - Implemented authentication with **AWS Cognito**, later migrating to NextAuth for streamlined cross-database user/session management.
@@ -19,17 +19,18 @@ export const workExperiences = [
 - Contributed majorly to rewriting and stabilizing the legacy codebase, establishing a foundation for future features.
 
       `,
-    },
-    {
-        company: "KoinX",
-        href: "https://koinx.com",
-        badges: ["Internship"],
-        location: "Remote",
-        title: "Frontend Intern",
-        logoUrl: "https://2hy7y2bvb4.ufs.sh/f/zWIvIoJSZF4QPeYl8N26Hz53wg87YeZxFt9WfbvpIQLVAXau",
-        start: "Mar 2024",
-        end: "Jun 2024",
-        description: `
+  },
+  {
+    company: "KoinX",
+    href: "https://koinx.com",
+    badges: ["Internship"],
+    location: "Remote",
+    title: "Frontend Intern",
+    logoUrl:
+      "https://2hy7y2bvb4.ufs.sh/f/zWIvIoJSZF4QPeYl8N26Hz53wg87YeZxFt9WfbvpIQLVAXau",
+    start: "Mar 2024",
+    end: "Jun 2024",
+    description: `
 - Built and optimized client-side applications for **B2B and customer-facing platforms**, ensuring high performance and responsiveness.
 - Contributed to development of the **internal UI component library**, leveraging **strong UI/UX design sense** to improve team productivity.
 - Optimized SEO and page speed, boosting organic traffic by 150%.
@@ -39,5 +40,5 @@ export const workExperiences = [
 
 
 `,
-    },
+  },
 ] as const;

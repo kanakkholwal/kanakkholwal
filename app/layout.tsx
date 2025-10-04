@@ -103,7 +103,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
         className={cn(
           "min-h-screen min-w-screen w-full antialiased !overflow-x-hidden",
           fontSans.variable,
-          fontMono.variable
+          fontMono.variable,
         )}
       >
         <script
@@ -115,9 +115,12 @@ export default function RootLayout({ children }: RootLayoutProps) {
           suppressHydrationWarning
         />
         <Provider>{children} </Provider>
-        {process.env.NODE_ENV === "production" && (<>
-          <GoogleAnalytics gaId={appConfig.verifications["google.analytics"]} />
-        </>
+        {process.env.NODE_ENV === "production" && (
+          <>
+            <GoogleAnalytics
+              gaId={appConfig.verifications["google.analytics"]}
+            />
+          </>
         )}
       </body>
     </html>

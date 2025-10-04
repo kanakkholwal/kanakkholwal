@@ -4,13 +4,13 @@ import { appConfig } from "root/project.config";
 export function generateSlug(length = 8): string {
   return customAlphabet(
     "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
-    length
+    length,
   )();
 }
 
 export function changeCase(
   str: string,
-  type: "upper" | "lower" | "title" | "sentence" | "camel_to_title"
+  type: "upper" | "lower" | "title" | "sentence" | "camel_to_title",
 ) {
   switch (type) {
     case "upper":
@@ -68,10 +68,9 @@ export function marketwiseLink(link: string, options: UTMParams = {}) {
   return url.toString();
 }
 
-
 export function calculateReadingTime(
   text: string,
-  wordsPerMinute = 200
+  wordsPerMinute = 200,
 ): string {
   if (!text) return "0 min read";
 

@@ -58,7 +58,7 @@ export const mdxComponents = {
           href={href}
           data-suffix={"#"}
           className={cn(
-            "underline-0 not-prose after:content-[attr(data-suffix)] after:ml-1 after:text-muted-foreground after:opacity-0 hover:after:opacity-100 after:transition-opacity after:duration-200"
+            "underline-0 not-prose after:content-[attr(data-suffix)] after:ml-1 after:text-muted-foreground after:opacity-0 hover:after:opacity-100 after:transition-opacity after:duration-200",
           )}
           {...props}
         >

@@ -19,7 +19,7 @@ import remarkFlexibleToc, { TocItem } from "remark-flexible-toc";
  */
 
 export const compileMdxSource = async (
-  content: string
+  content: string,
 ): Promise<MDXRemoteSerializeResult> => {
   try {
     // Serialize the MDX content with frontmatter parsing
@@ -55,8 +55,6 @@ export const compileMdxSource = async (
     } as Error);
   }
 };
-
-
 
 /**
  * Extract Table of Contents from MDX content

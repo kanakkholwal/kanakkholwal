@@ -10,7 +10,7 @@ import { ResourceFrontMatter } from "~/lib/markdown/mdx";
 export function CategoryFilter({ categories }: { categories: string[] }) {
   const [category, setCategory] = useQueryState(
     "type",
-    parseAsStringEnum(categories)
+    parseAsStringEnum(categories),
   );
   return (
     <div className="flex flex-wrap gap-2 mb-4">
@@ -40,36 +40,36 @@ export function ResourcesList({
 }) {
   const [category, _] = useQueryState(
     "category",
-    parseAsStringEnum(resources.map((r) => r.category || ""))
+    parseAsStringEnum(resources.map((r) => r.category || "")),
   );
- 
+
   const [tag] = useQueryState("tag");
   const [type] = useQueryState(
     "type",
-    parseAsStringEnum(resources.map((r) => r.type || ""))
+    parseAsStringEnum(resources.map((r) => r.type || "")),
   );
   const [results, setResults] = useState<ResourceFrontMatter[]>([]);
 
   // Memoized Fuse.js instance
- 
+
   useEffect(() => {
     let filteredResources: ResourceFrontMatter[] = [];
-  
+
     if (category && category.trim() !== "") {
       filteredResources = filteredResources.filter(
         (resource) =>
-          resource.category?.toLowerCase() === category.toLowerCase()
+          resource.category?.toLowerCase() === category.toLowerCase(),
       );
     }
     if (tag && tag.trim() !== "") {
       filteredResources = filteredResources.filter(
         (resource) =>
-          Array.isArray(resource.tags) && resource.tags.includes(tag)
+          Array.isArray(resource.tags) && resource.tags.includes(tag),
       );
     }
     if (type && type.trim() !== "") {
       filteredResources = filteredResources.filter(
-        (resource) => resource.type?.toLowerCase() === type.toLowerCase()
+        (resource) => resource.type?.toLowerCase() === type.toLowerCase(),
       );
     }
     setResults(filteredResources);
@@ -79,7 +79,7 @@ export function ResourcesList({
     <ResponsiveContainer
       className={cn(
         "px-3 pr-4 lg:px-6 @md:grid-cols-1 @5xl:grid-cols-3",
-        className
+        className,
       )}
       role="list"
       aria-label="List of resources"

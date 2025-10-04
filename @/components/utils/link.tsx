@@ -9,18 +9,18 @@ import { usePathname } from "next/navigation";
 export const TransitionLink = (props: React.ComponentProps<typeof Link>) => {
   const router = useTransitionRouter();
 
-
-  return (<Link
-    href={props.href}
-    onClick={(e) => {
-      e.preventDefault();
-      router.push(props.href.toString(), {
-        onTransitionReady: pageAnimation,
-      });
-    }}
-  >
-    {props.children}
-  </Link>);
+  return (
+    <Link
+      {...props}
+      href={props.href}
+      onClick={(e) => {
+        e.preventDefault();
+        router.push(props.href.toString(), {
+          onTransitionReady: pageAnimation,
+        });
+      }}
+    />
+  );
 };
 
 const pageAnimation = () => {
@@ -42,7 +42,7 @@ const pageAnimation = () => {
       easing: "cubic-bezier(0.76, 0, 0.24, 1)",
       fill: "forwards",
       pseudoElement: "::view-transition-old(root)",
-    }
+    },
   );
 
   document.documentElement.animate(
@@ -59,11 +59,9 @@ const pageAnimation = () => {
       easing: "cubic-bezier(0.76, 0, 0.24, 1)",
       fill: "forwards",
       pseudoElement: "::view-transition-new(root)",
-    }
+    },
   );
 };
-
-
 
 export function PreviousPageLink(props: ButtonProps) {
   const router = useTransitionRouter();
@@ -105,32 +103,32 @@ export function ButtonTransitionLink({
   const router = useTransitionRouter();
 
   return (
-    <Button {...props} onClick={(e) => {
-      e.preventDefault();
-      router.push(href.toString(), {
-        onTransitionReady: pageAnimation,
-      });
-    }}>
+    <Button
+      {...props}
+      onClick={(e) => {
+        e.preventDefault();
+        router.push(href.toString(), {
+          onTransitionReady: pageAnimation,
+        });
+      }}
+    >
       {children}
     </Button>
   );
 }
 
-
 export function ButtonScroll({
   ...props
-}: React.ComponentProps<typeof Button> & { targetId: string; offset?: number }) {
+}: React.ComponentProps<typeof Button> & {
+  targetId: string;
+  offset?: number;
+}) {
   const { targetId, offset = 50 } = props;
 
   const handleScroll = () => {
     const element = document.getElementById(targetId);
     if (!element) return;
     element.scrollIntoView({ behavior: "smooth", block: "start" });
-
   };
-  return (
-    <Button {...props} onClick={handleScroll} />
-  );
+  return <Button {...props} onClick={handleScroll} />;
 }
-
-

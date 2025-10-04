@@ -28,7 +28,10 @@ const depthClass = {
   5: "pl-16 text-xs",
   6: "pl-20 text-xs",
 };
-export const TableOfContents = ({ items, className = "" }: TableOfContentsProps) => {
+export const TableOfContents = ({
+  items,
+  className = "",
+}: TableOfContentsProps) => {
   const [activeId, setActiveId] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(true);
   const observer = useRef<IntersectionObserver | null>(null);
@@ -62,13 +65,11 @@ export const TableOfContents = ({ items, className = "" }: TableOfContentsProps)
     }
   };
 
-
-
   return (
     <motion.div
       className={cn(
         "sticky top-[4.5rem] max-h-[80vh] flex flex-col bg-inherit",
-        className
+        className,
       )}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -115,14 +116,20 @@ export const TableOfContents = ({ items, className = "" }: TableOfContentsProps)
                       onClick={(e) => handleClick(e, item.href)}
                       className={cn(
                         "block py-1 pr-3 transition-all duration-200 text-sm",
-                        isActive ? "text-primary font-medium" : "text-muted-foreground"
+                        isActive
+                          ? "text-primary font-medium"
+                          : "text-muted-foreground",
                       )}
                     >
                       {isActive && (
                         <motion.span
                           layoutId="toc-active-indicator"
                           className="absolute left-0 top-0 bottom-0 w-0.5 bg-primary rounded-full"
-                          transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                          transition={{
+                            type: "spring",
+                            stiffness: 400,
+                            damping: 30,
+                          }}
                         />
                       )}
                       {item.value}
@@ -137,5 +144,3 @@ export const TableOfContents = ({ items, className = "" }: TableOfContentsProps)
     </motion.div>
   );
 };
-
-

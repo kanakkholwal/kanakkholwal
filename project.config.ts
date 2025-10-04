@@ -1,81 +1,80 @@
-
-
 export const appConfig = {
-    name: "Kanak Kholwal",
-    shortName: "Kanak",
-    initials: "KK",
-    description: "Software Engineer | Passionate about building scalable solutions, automation, and AI-driven products.",
-    summary: `I thrive on solving complex problems and building impactful products. From developing scalable architectures to integrating AI solutions, my goal is to create software that makes a real difference. Always eager to learn, contribute to open source, and collaborate with like-minded developers. Check out my work below, and feel free to reach out.`,
-    url: "https://kanakkholwal.eu.org",
-    logo: "https://github.com/kanakkholwal.png",
-    creator: "Kanak Kholwal",
-    authors: [
-        { name: "Kanak Kholwal", url: "https://kanakkholwal.eu.org" },
-        { name: "Kanak Kholwal", url: "https://kanak-kholwal.eu.org" },
-        { name: "Kanak Kholwal", url: "https://kanak.eu.org" },
-    ],
-    keywords: [
-        "Kanak Kholwal",
-        "Software Developer",
-        "Tech Enthusiast",
-        "Lifelong Learner",
-        "Portfolio",
-        "Software Engineer",
-        "Web Developer",
-        "Frontend Developer",
-        "Backend Developer",
-        "Full Stack Developer",
-        "Open Source",
-        "Indie Hacker",
-
-    ],
-    seo: {
-        title: "Kanak Kholwal - Software Developer",
-        description: "Personal Portfolio of Kanak Kholwal - Software Developer, Tech Enthusiast, and Lifelong Learner.",
-        locale: "en_US",
-        category: "Portfolio",
-        type: "website",
-        publisher: "Kanak Kholwal",
-        geo: {
-            position: "26.8467;80.9462",
-            placename: "Rajasthan, India",
-            region: "IN",
-        },
-        jsonLd: {
-            "@context": "https://schema.org",
-            "@type": "Person",
-            name: "Kanak Kholwal",
-            url: "https://kanakkholwal.eu.org",
-            image: "https://github.com/kanakkholwal.png",
-            description: "Personal Portfolio of Kanak Kholwal - Software Developer, Tech Enthusiast, and Lifelong Learner.",
-            sameAs: [
-                "https://www.linkedin.com/in/kanak-kholwal/",
-                "https://github.com/kanakkholwal"
-            ],
-            jobTitle: "Software Developer",
-            worksFor: { "@type": "Organization", name: "Self-Employed" }
-
-        }
+  name: "Kanak Kholwal",
+  shortName: "Kanak",
+  initials: "KK",
+  description:
+    "Software Engineer | Passionate about building scalable solutions, automation, and AI-driven products.",
+  summary: `I thrive on solving complex problems and building impactful products. From developing scalable architectures to integrating AI solutions, my goal is to create software that makes a real difference. Always eager to learn, contribute to open source, and collaborate with like-minded developers. Check out my work below, and feel free to reach out.`,
+  url: "https://kanakkholwal.eu.org",
+  logo: "https://github.com/kanakkholwal.png",
+  emails: ["me@kanak.eu.org"],
+  creator: "Kanak Kholwal",
+  authors: [
+    { name: "Kanak Kholwal", url: "https://kanakkholwal.eu.org" },
+    { name: "Kanak Kholwal", url: "https://kanak-kholwal.eu.org" },
+    { name: "Kanak Kholwal", url: "https://kanak.eu.org" },
+  ],
+  keywords: [
+    "Kanak Kholwal",
+    "Software Developer",
+    "Tech Enthusiast",
+    "Lifelong Learner",
+    "Portfolio",
+    "Software Engineer",
+    "Web Developer",
+    "Frontend Developer",
+    "Backend Developer",
+    "Full Stack Developer",
+    "Open Source",
+    "Indie Hacker",
+  ],
+  seo: {
+    title: "Kanak Kholwal - Software Developer",
+    description:
+      "Personal Portfolio of Kanak Kholwal - Software Developer, Tech Enthusiast, and Lifelong Learner.",
+    locale: "en_US",
+    category: "Portfolio",
+    type: "website",
+    publisher: "Kanak Kholwal",
+    geo: {
+      position: "26.8467;80.9462",
+      placename: "Rajasthan, India",
+      region: "IN",
     },
-    social: {
-        github: "https://github.com/kanakkholwal",
-        linkedin: "https://www.linkedin.com/in/kanak-kholwal",
-        twitter: "https://twitter.com/kanakkholwal",
-        medium: "https://medium.com/@kanakkholwal",
-        instagram: "https://www.instagram.com/kanakkholwal",
-        youtube: "https://www.youtube.com/@kanakkholwal",
+    jsonLd: {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      name: "Kanak Kholwal",
+      url: "https://kanakkholwal.eu.org",
+      image: "https://github.com/kanakkholwal.png",
+      description:
+        "Personal Portfolio of Kanak Kholwal - Software Developer, Tech Enthusiast, and Lifelong Learner.",
+      sameAs: [
+        "https://www.linkedin.com/in/kanak-kholwal/",
+        "https://github.com/kanakkholwal",
+      ],
+      jobTitle: "Software Developer",
+      worksFor: { "@type": "Organization", name: "Self-Employed" },
     },
-    usernames:{
-        github:"kanakkholwal"
-    },
-    flags:{
-        enableOgImage: false,
-    },
-    verifications: {
-        "google.analytics": "G-95KQZNMSSE",
-    }
-}
+  },
+  social: {
+    github: "https://github.com/kanakkholwal",
+    linkedin: "https://www.linkedin.com/in/kanak-kholwal",
+    twitter: "https://twitter.com/kanakkholwal",
+    medium: "https://medium.com/@kanakkholwal",
+    instagram: "https://www.instagram.com/kanakkholwal",
+    youtube: "https://www.youtube.com/@kanakkholwal",
+  },
+  usernames: {
+    github: "kanakkholwal",
+  },
+  flags: {
+    enableOgImage: false,
+  },
+  verifications: {
+    "google.analytics": "G-95KQZNMSSE",
+  },
+};
 
 export const resume_link =
-    "https://docs.google.com/document/d/1WleBXhgUwDkRIfodJCvhPchoVBjaCf7Q/edit?usp=sharing&ouid=109800121336149113874&rtpof=true&sd=true";
-
+  "https://docs.google.com/document/d/1WleBXhgUwDkRIfodJCvhPchoVBjaCf7Q/edit?usp=sharing&ouid=109800121336149113874&rtpof=true&sd=true";

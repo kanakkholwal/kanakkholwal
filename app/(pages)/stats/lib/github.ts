@@ -1,41 +1,41 @@
-import dayjs from 'dayjs'
-import utc from 'dayjs/plugin/utc'
-import 'server-only'
-import { z } from 'zod'
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import "server-only";
+import { z } from "zod";
 
-dayjs.extend(utc)
+dayjs.extend(utc);
 
 export type GitHubRepositoryData = {
-  version?: string
-  stars: number
-  issues: number
-  prs: number
-  updatedAt: Date
-}
+  version?: string;
+  stars: number;
+  issues: number;
+  prs: number;
+  updatedAt: Date;
+};
 
 const repositoryQuerySchema = z.object({
   data: z.object({
     repository: z.object({
       latestRelease: z
         .object({
-          tagName: z.string().nullish()
+          tagName: z.string().nullish(),
         })
         .nullish(),
       issues: z.object({
-        totalCount: z.number()
+        totalCount: z.number(),
       }),
       pullRequests: z.object({
-        totalCount: z.number()
+        totalCount: z.number(),
       }),
-      stargazerCount: z.number()
-    })
-  })
-})
+      stargazerCount: z.number(),
+    }),
+  }),
+});
 
 export async function fetchRepository(
-  slug = 'kanakkholwal/college-ecosystem'
+  slug = "kanakkholwal/college-ecosystem",
 ): Promise<GitHubRepositoryData> {
-  const [owner, repo] = slug.split('/')
+  const [owner, repo] = slug.split("/");
   const query = `query {
   repository(owner: "${owner}", name: "${repo}") {
     latestRelease {
@@ -49,48 +49,48 @@ export async function fetchRepository(
     }
     stargazerCount
   }
-}`.replace(/\s+/g, ' ') // Minify
+}`.replace(/\s+/g, " "); // Minify
   // The querystring is not necessary but it helps tagging cache entries in Cache Explorer
   const res = await fetch(`https://api.github.com/graphql?repo=${slug}`, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      Authorization: `bearer ${process.env.GITHUB_TOKEN}`
+      Authorization: `bearer ${process.env.GITHUB_TOKEN}`,
     },
     body: JSON.stringify({ query }),
     next: {
-      tags: ['github'],
-      revalidate: 3600 // 1h
-    }
-  })
+      tags: ["github"],
+      revalidate: 3600, // 1h
+    },
+  });
   const {
-    data: { repository }
-  } = repositoryQuerySchema.parse(await res.json())
+    data: { repository },
+  } = repositoryQuerySchema.parse(await res.json());
   return {
     issues: repository.issues.totalCount,
     prs: repository.pullRequests.totalCount,
     stars: repository.stargazerCount,
-    version: repository.latestRelease?.tagName?.replace(/^v/, '') ?? undefined,
-    updatedAt: new Date()
-  }
+    version: repository.latestRelease?.tagName?.replace(/^v/, "") ?? undefined,
+    updatedAt: new Date(),
+  };
 }
 
 // --
 
 export type GitHubStarHistory = {
-  count: number
+  count: number;
   bins: Array<{
-    stars: number // Value at the end of the day
-    diff: number // Stars earned during the day
-    date: string
+    stars: number; // Value at the end of the day
+    diff: number; // Stars earned during the day
+    date: string;
     stargarzers: Array<{
-      login: string
-      name: string | null
-      avatarUrl: string
-      company: string | null
-      followers: number
-    }>
-  }>
-}
+      login: string;
+      name: string | null;
+      avatarUrl: string;
+      company: string | null;
+      followers: number;
+    }>;
+  }>;
+};
 
 const starHistoryQuerySchema = z.object({
   data: z.object({
@@ -99,57 +99,57 @@ const starHistoryQuerySchema = z.object({
         totalCount: z.number(),
         pageInfo: z.object({
           hasNextPage: z.boolean(),
-          endCursor: z.string().nullish()
+          endCursor: z.string().nullish(),
         }),
         edges: z.array(
           z.object({
             starredAt: z
               .string()
               .datetime()
-              .transform(d => new Date(d)),
+              .transform((d) => new Date(d)),
             node: z.object({
               login: z.string(),
               name: z.string().nullish(),
               avatarUrl: z.string(),
               company: z.string().nullish(),
               followers: z.object({
-                totalCount: z.number()
-              })
-            })
-          })
-        )
-      })
-    })
-  })
-})
+                totalCount: z.number(),
+              }),
+            }),
+          }),
+        ),
+      }),
+    }),
+  }),
+});
 
 export async function getStarHistory(
-  slug = 'kanakkholwal/college-ecosystem'
+  slug = "kanakkholwal/college-ecosystem",
 ): Promise<GitHubStarHistory> {
-  const [owner, repo] = slug.split('/')
+  const [owner, repo] = slug.split("/");
 
   // Compute the 12-day window [today .. today-11d] in UTC
-  const todayStart = dayjs().utc().startOf('day')
+  const todayStart = dayjs().utc().startOf("day");
   const days = Array.from({ length: 12 }, (_, i) =>
-    todayStart.clone().subtract(i, 'day').format('YYYY-MM-DD')
-  )
-  const windowStart = todayStart.clone().subtract(11, 'day') // already startOf('day')
+    todayStart.clone().subtract(i, "day").format("YYYY-MM-DD"),
+  );
+  const windowStart = todayStart.clone().subtract(11, "day"); // already startOf('day')
 
   // Pre-initialize bins for consecutive days (including empty days), most recent first
-  const bins: GitHubStarHistory['bins'] = days.map(date => ({
+  const bins: GitHubStarHistory["bins"] = days.map((date) => ({
     stars: 0,
     diff: 0,
     date,
-    stargarzers: []
-  }))
+    stargarzers: [],
+  }));
 
   // Paginate through stargazers 100 at a time until we reach older than the window start
-  let after: string | undefined
-  let hasNextPage = true
-  let totalCount = 0
+  let after: string | undefined;
+  let hasNextPage = true;
+  let totalCount = 0;
 
   while (hasNextPage) {
-    const afterClause = after ? `, after: "${after}"` : ''
+    const afterClause = after ? `, after: "${after}"` : "";
     const query = `query {
   repository(owner: "${owner}", name: "${repo}") {
     stargazers(first: 100, orderBy: {field: STARRED_AT, direction: DESC}${afterClause}) {
@@ -172,18 +172,18 @@ export async function getStarHistory(
       }
     }
   }
-}`.replace(/\s+/g, ' ') // Minify
+}`.replace(/\s+/g, " "); // Minify
     const res = await fetch(`https://api.github.com/graphql?stars=${slug}`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        Authorization: `bearer ${process.env.GITHUB_TOKEN}`
+        Authorization: `bearer ${process.env.GITHUB_TOKEN}`,
       },
       body: JSON.stringify({ query }),
       next: {
-        tags: ['github', slug],
-        revalidate: 3600 // 1h
-      }
-    })
+        tags: ["github", slug],
+        revalidate: 3600, // 1h
+      },
+    });
 
     const json = await res.json();
     // Defensive: handle null repository (invalid repo, private, or bad token)
@@ -193,62 +193,62 @@ export async function getStarHistory(
     const {
       data: {
         repository: {
-          stargazers: { totalCount: tc, pageInfo, edges }
-        }
-      }
-    } = starHistoryQuerySchema.parse(json)
+          stargazers: { totalCount: tc, pageInfo, edges },
+        },
+      },
+    } = starHistoryQuerySchema.parse(json);
 
-    totalCount = tc
+    totalCount = tc;
 
     // Fill bins for edges within the 12-day window
     for (const { starredAt, node } of edges) {
-      const starredAtUtc = dayjs.utc(starredAt)
+      const starredAtUtc = dayjs.utc(starredAt);
       if (starredAtUtc.isBefore(windowStart)) {
         // We already went beyond the 12-day window; stop after this page
-        hasNextPage = false
-        continue
+        hasNextPage = false;
+        continue;
       }
-      const dateStr = starredAtUtc.format('YYYY-MM-DD')
-      const idx = days.indexOf(dateStr)
+      const dateStr = starredAtUtc.format("YYYY-MM-DD");
+      const idx = days.indexOf(dateStr);
       if (idx !== -1) {
-        bins[idx].stars++
+        bins[idx].stars++;
         bins[idx].stargarzers.push({
           login: node.login,
           name: node.name ?? null,
           avatarUrl: node.avatarUrl,
           company: node.company ?? null,
-          followers: node.followers.totalCount
-        })
+          followers: node.followers.totalCount,
+        });
       }
     }
 
     // Decide if we should continue pagination
     if (!pageInfo.hasNextPage) {
-      hasNextPage = false
+      hasNextPage = false;
     } else if (edges.length > 0) {
-      const oldestInPage = dayjs.utc(edges[edges.length - 1].starredAt)
+      const oldestInPage = dayjs.utc(edges[edges.length - 1].starredAt);
       if (oldestInPage.isBefore(windowStart)) {
-        hasNextPage = false
+        hasNextPage = false;
       } else {
-        after = pageInfo.endCursor ?? undefined
+        after = pageInfo.endCursor ?? undefined;
       }
     } else {
-      hasNextPage = false
+      hasNextPage = false;
     }
   }
 
   // Compute end-of-day star totals using totalCount
   if (bins.length > 0) {
-    bins[0].diff = bins[0].stars
-    bins[0].stars = totalCount
+    bins[0].diff = bins[0].stars;
+    bins[0].stars = totalCount;
     for (let i = 1; i < bins.length; ++i) {
-      bins[i].diff = bins[i].stars
-      bins[i].stars = bins[i - 1].stars - bins[i - 1].diff
+      bins[i].diff = bins[i].stars;
+      bins[i].stars = bins[i - 1].stars - bins[i - 1].diff;
     }
   }
 
   return {
     count: totalCount,
-    bins
-  }
+    bins,
+  };
 }

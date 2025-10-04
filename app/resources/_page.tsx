@@ -1,4 +1,3 @@
-
 import { ShimmeringText } from "@/components/animated/text.shimmer";
 import { Metadata } from "next";
 import { appConfig } from "root/project.config";
@@ -83,9 +82,10 @@ export default async function Page() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
-    <ShimmeringText className="text-3xl font-bold mb-8 text-center"
-    text="Resources"
-    />
+      <ShimmeringText
+        className="text-3xl font-bold mb-8 text-center"
+        text="Resources"
+      />
       <ResourcesList resources={resources} />
     </>
   );

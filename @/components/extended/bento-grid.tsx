@@ -1,23 +1,23 @@
-'use client';
+"use client";
 
 import {
-    Card,
-    CardContent,
-    CardFooter,
-    CardHeader,
-} from '@/components/ui/card';
-import { cn } from '@/lib/utils';
-import { motion } from 'framer-motion';
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
+import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
 import {
-    Building,
-    Camera,
-    Compass,
-    Heart,
-    Home,
-    HomeIcon,
-    MapPin,
-} from 'lucide-react';
-import type React from 'react';
+  Building,
+  Camera,
+  Compass,
+  Heart,
+  Home,
+  HomeIcon,
+  MapPin,
+} from "lucide-react";
+import type React from "react";
 
 export interface BentoItem {
   title: string;
@@ -37,65 +37,65 @@ interface BentoGridProps {
 
 const itemsSample: BentoItem[] = [
   {
-    title: 'Component Library',
-    meta: '100+ components',
+    title: "Component Library",
+    meta: "100+ components",
     description:
-      'Explore our extensive collection of ready-to-use UI components built with Next.js and Tailwind CSS. Perfect for quickly building beautiful, responsive websites.',
+      "Explore our extensive collection of ready-to-use UI components built with Next.js and Tailwind CSS. Perfect for quickly building beautiful, responsive websites.",
     icon: <Home className="text-primary h-4 w-4" />,
-    status: 'Popular',
-    tags: ['UI', 'Components', 'Tailwind'],
+    status: "Popular",
+    tags: ["UI", "Components", "Tailwind"],
     colSpan: 2,
     hasPersistentHover: true,
   },
   {
-    title: 'Responsive Design',
-    meta: 'All devices',
+    title: "Responsive Design",
+    meta: "All devices",
     description:
-      'Every component is fully responsive and works beautifully on all screen sizes, from mobile to desktop.',
+      "Every component is fully responsive and works beautifully on all screen sizes, from mobile to desktop.",
     icon: <Building className="text-primary h-4 w-4" />,
-    status: 'Essential',
-    tags: ['Mobile', 'Desktop'],
+    status: "Essential",
+    tags: ["Mobile", "Desktop"],
   },
   {
-    title: 'Theme Support',
+    title: "Theme Support",
     description:
-      'All components support both light and dark modes out of the box, with seamless transitions.',
+      "All components support both light and dark modes out of the box, with seamless transitions.",
     icon: <MapPin className="text-primary h-4 w-4" />,
-    status: 'New',
+    status: "New",
   },
   {
-    title: 'Performance Optimized',
+    title: "Performance Optimized",
     description:
-      'Built with performance in mind, ensuring fast load times and smooth interactions.',
+      "Built with performance in mind, ensuring fast load times and smooth interactions.",
     icon: <HomeIcon className="text-primary h-4 w-4" />,
-    meta: 'Lighthouse 100',
-    tags: ['Speed', 'Optimization'],
+    meta: "Lighthouse 100",
+    tags: ["Speed", "Optimization"],
   },
   {
-    title: 'Accessibility',
+    title: "Accessibility",
     description:
-      'All components follow WCAG guidelines and are fully accessible to all users.',
+      "All components follow WCAG guidelines and are fully accessible to all users.",
     icon: <Heart className="text-primary h-4 w-4" />,
-    meta: 'WCAG 2.1 AA',
-    tags: ['A11y', 'Inclusive'],
+    meta: "WCAG 2.1 AA",
+    tags: ["A11y", "Inclusive"],
   },
   {
-    title: 'Developer Experience',
-    meta: 'TypeScript',
+    title: "Developer Experience",
+    meta: "TypeScript",
     description:
-      'Clean, well-documented code with TypeScript support for a seamless development experience.',
+      "Clean, well-documented code with TypeScript support for a seamless development experience.",
     icon: <Compass className="text-primary h-4 w-4" />,
-    status: 'Featured',
-    tags: ['DX', 'TypeScript'],
+    status: "Featured",
+    tags: ["DX", "TypeScript"],
   },
   {
-    title: 'Open Source',
-    meta: 'MIT License',
+    title: "Open Source",
+    meta: "MIT License",
     description:
-      'MVPBlocks is completely free and open-source. Use it for personal and commercial projects without any restrictions or attribution requirements.',
+      "MVPBlocks is completely free and open-source. Use it for personal and commercial projects without any restrictions or attribution requirements.",
     icon: <Camera className="text-primary h-4 w-4" />,
-    status: 'Free',
-    tags: ['Open Source', 'MIT'],
+    status: "Free",
+    tags: ["Open Source", "MIT"],
     colSpan: 2,
   },
 ];
@@ -113,8 +113,8 @@ export function BentoGrid({ items = itemsSample }: BentoGridProps) {
             href="#"
             key={`${item.title}-${item.status || item.meta}`}
             className={cn(
-              item.colSpan || 'col-span-1',
-              item.colSpan === 2 ? 'md:col-span-2' : '',
+              item.colSpan || "col-span-1",
+              item.colSpan === 2 ? "md:col-span-2" : "",
             )}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -122,21 +122,21 @@ export function BentoGrid({ items = itemsSample }: BentoGridProps) {
           >
             <Card
               className={cn(
-                'group bg-card/40 relative h-full transition-all duration-300 hover:shadow-md',
-                'will-change-transform hover:-translate-y-1',
-                'border-border/60 overflow-hidden',
+                "group bg-card/40 relative h-full transition-all duration-300 hover:shadow-md",
+                "will-change-transform hover:-translate-y-1",
+                "border-border/60 overflow-hidden",
                 {
-                  '-translate-y-1 shadow-md': item.hasPersistentHover,
+                  "-translate-y-1 shadow-md": item.hasPersistentHover,
                 },
               )}
             >
               <div
                 className={cn(
-                  'absolute inset-0',
+                  "absolute inset-0",
                   item.hasPersistentHover
-                    ? 'opacity-100'
-                    : 'opacity-0 group-hover:opacity-100',
-                  'transition-opacity duration-300',
+                    ? "opacity-100"
+                    : "opacity-0 group-hover:opacity-100",
+                  "transition-opacity duration-300",
                 )}
               >
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.03)_1px,transparent_1px)] bg-[length:4px_4px] dark:bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.03)_1px,transparent_1px)]" />
@@ -148,7 +148,7 @@ export function BentoGrid({ items = itemsSample }: BentoGridProps) {
                     {item.icon}
                   </div>
                   <span className="bg-secondary text-secondary-foreground rounded-md px-2 py-1 text-xs font-medium">
-                    {item.status || 'Active'}
+                    {item.status || "Active"}
                   </span>
                 </div>
               </CardHeader>
@@ -180,18 +180,18 @@ export function BentoGrid({ items = itemsSample }: BentoGridProps) {
                     ))}
                   </div>
                   <span className="text-primary text-xs font-medium opacity-0 transition-opacity group-hover:opacity-100">
-                    {item.cta || 'Explore →'}
+                    {item.cta || "Explore →"}
                   </span>
                 </div>
               </CardFooter>
 
               <div
                 className={cn(
-                  'via-primary/10 absolute inset-0 -z-10 rounded-xl bg-gradient-to-br from-transparent to-transparent p-px',
+                  "via-primary/10 absolute inset-0 -z-10 rounded-xl bg-gradient-to-br from-transparent to-transparent p-px",
                   item.hasPersistentHover
-                    ? 'opacity-100'
-                    : 'opacity-0 group-hover:opacity-100',
-                  'transition-opacity duration-300',
+                    ? "opacity-100"
+                    : "opacity-0 group-hover:opacity-100",
+                  "transition-opacity duration-300",
                 )}
               />
             </Card>

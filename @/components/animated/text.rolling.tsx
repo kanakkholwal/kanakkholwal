@@ -1,22 +1,19 @@
-'use client';
+"use client";
 
-import { motion, type Transition } from 'motion/react';
-import * as React from 'react';
+import { motion, type Transition } from "motion/react";
+import * as React from "react";
 
-import {
-    useIsInView,
-    type UseIsInViewOptions,
-} from '@/hooks/use-is-in-view';
+import { useIsInView, type UseIsInViewOptions } from "@/hooks/use-is-in-view";
 
-const formatCharacter = (char: string) => (char === ' ' ? '\u00A0' : char);
+const formatCharacter = (char: string) => (char === " " ? "\u00A0" : char);
 
 const CHAR_STYLE: React.CSSProperties = {
-  position: 'absolute',
-  display: 'inline-block',
-  backfaceVisibility: 'hidden',
+  position: "absolute",
+  display: "inline-block",
+  backfaceVisibility: "hidden",
 };
 
-type RollingTextProps = Omit<React.ComponentProps<'span'>, 'children'> & {
+type RollingTextProps = Omit<React.ComponentProps<"span">, "children"> & {
   text: string;
   transition?: Transition;
   delay?: number;
@@ -26,9 +23,9 @@ function RollingText({
   ref,
   text,
   inView = false,
-  inViewMargin = '0px',
+  inViewMargin = "0px",
   inViewOnce = true,
-  transition = { duration: 0.5, delay: 0.1, ease: 'easeOut' },
+  transition = { duration: 0.5, delay: 0.1, ease: "easeOut" },
   delay = 0,
   ...props
 }: RollingTextProps) {
@@ -57,7 +54,7 @@ function RollingText({
         return (
           <span
             key={`word-${wi}`}
-            style={{ display: 'inline-block', whiteSpace: 'nowrap' }}
+            style={{ display: "inline-block", whiteSpace: "nowrap" }}
           >
             {chars.map((char, ci) => {
               const thisIdx = charIdx++;
@@ -66,18 +63,18 @@ function RollingText({
                 <span
                   key={`c-${wi}-${ci}`}
                   style={{
-                    position: 'relative',
-                    display: 'inline-block',
-                    perspective: '9999999px',
-                    transformStyle: 'preserve-3d',
-                    width: 'auto',
+                    position: "relative",
+                    display: "inline-block",
+                    perspective: "9999999px",
+                    transformStyle: "preserve-3d",
+                    width: "auto",
                   }}
                   aria-hidden="true"
                 >
                   <motion.span
                     style={{
                       ...CHAR_STYLE,
-                      transformOrigin: '50% 25%',
+                      transformOrigin: "50% 25%",
                     }}
                     initial={{ rotateX: 0 }}
                     animate={isInView ? { rotateX: 90 } : undefined}
@@ -91,7 +88,7 @@ function RollingText({
                   <motion.span
                     style={{
                       ...CHAR_STYLE,
-                      transformOrigin: '50% 100%',
+                      transformOrigin: "50% 100%",
                     }}
                     initial={{ rotateX: 90 }}
                     animate={isInView ? { rotateX: 0 } : undefined}
@@ -102,7 +99,7 @@ function RollingText({
                   >
                     {formatCharacter(char)}
                   </motion.span>
-                  <span style={{ visibility: 'hidden' }}>
+                  <span style={{ visibility: "hidden" }}>
                     {formatCharacter(char)}
                   </span>
                 </span>

@@ -8,7 +8,6 @@ import { Next13ProgressBar } from "next13-progressbar";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import type React from "react";
 
-
 export function Provider({ children }: { children: React.ReactNode }) {
   return (
     <ViewTransitions>
@@ -23,16 +22,12 @@ export function Provider({ children }: { children: React.ReactNode }) {
         themes={["light", "dark", "system"]}
         defaultTheme="system"
       >
-      
         <div className={cn("min-h-screen w-full h-full overflow-x-hidden")}>
-          <NuqsAdapter>
-          {children}
-          </NuqsAdapter>
+          <NuqsAdapter>{children}</NuqsAdapter>
         </div>
       </NextThemesProvider>
 
       <Toaster position="bottom-right" richColors />
-
     </ViewTransitions>
   );
 }

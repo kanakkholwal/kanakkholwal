@@ -1,26 +1,31 @@
-import { cn } from '@/lib/utils'
-import { SearchParams } from 'nuqs/server'
-import { Suspense } from 'react'
+import { cn } from "@/lib/utils";
+import { Metadata } from "next";
+import { SearchParams } from "nuqs/server";
+import { Suspense } from "react";
+import { appConfig } from "root/project.config";
 import {
   NPMDownloads,
   NPMDownloadsSkeleton,
   NPMStats,
-  NPMStatsSkeleton
-} from './_components/downloads'
-import { StarHistoryGraph, StarHistoryGraphSkeleton } from './_components/stars'
-import { RepoBeatsActivityGraph } from './_components/stars.client'
-import { Versions } from './_components/versions'
-import { Widget } from './_components/widget'
-import { WidgetSkeleton } from './_components/widget.skeleton'
-import { statsConfig } from './config'
-import { getVersions, sumVersions } from './lib/versions'
-import { loadSearchParams } from './searchParams'
+  NPMStatsSkeleton,
+} from "./_components/downloads";
+import {
+  StarHistoryGraph,
+  StarHistoryGraphSkeleton,
+} from "./_components/stars";
+import { RepoBeatsActivityGraph } from "./_components/stars.client";
+import { Versions } from "./_components/versions";
+import { Widget } from "./_components/widget";
+import { WidgetSkeleton } from "./_components/widget.skeleton";
+import { statsConfig } from "./config";
+import { getVersions, sumVersions } from "./lib/versions";
+import { loadSearchParams } from "./searchParams";
 
-export const dynamic = 'force-dynamic'
+export const dynamic = "force-dynamic";
 
 type StatsPageProps = {
-  searchParams: Promise<SearchParams>
-}
+  searchParams: Promise<SearchParams>;
+};
 
 export default function StatsPage({ searchParams }: StatsPageProps) {
   return (
@@ -30,7 +35,12 @@ export default function StatsPage({ searchParams }: StatsPageProps) {
         <Suspense fallback={<StarHistoryGraphSkeleton />}>
           <StarHistoryGraph />
         </Suspense>
-        <Widget className={cn("h-auto flex-col gap-2", statsConfig.flags.repoBeats ? "flex" : "hidden")}>
+        <Widget
+          className={cn(
+            "h-auto flex-col gap-2",
+            statsConfig.flags.repoBeats ? "flex" : "hidden",
+          )}
+        >
           {statsConfig.flags.repoBeats && <RepoBeatsActivityGraph />}
           <div className="flex flex-1 items-center gap-6 p-4">
             <Suspense fallback={<NPMStatsSkeleton />}>
@@ -41,40 +51,84 @@ export default function StatsPage({ searchParams }: StatsPageProps) {
         <Suspense fallback={<NPMDownloadsSkeleton />}>
           <NPMDownloads />
         </Suspense>
-        {statsConfig.flags.versionAdoptionGraph && (<Suspense fallback={<WidgetSkeleton />}>
-          <VersionsLoader searchParams={searchParams} />
-        </Suspense>)}
+        {statsConfig.flags.versionAdoptionGraph && (
+          <Suspense fallback={<WidgetSkeleton />}>
+            <VersionsLoader searchParams={searchParams} />
+          </Suspense>
+        )}
       </section>
     </div>
-  )
+  );
 }
-
+export const metadata: Metadata = {
+  title: "Project Statistics & Insights",
+  description:
+    "Explore detailed analytics of Kanak’s open-source projects — GitHub star growth, NPM downloads, version adoption, and repository activity visualized in real-time.",
+  alternates: {
+    canonical: "/stats",
+  },
+  openGraph: {
+    title: "Project Statistics & Insights | Kanak",
+    description:
+      "Visual analytics and metrics of Kanak’s projects — star history, NPM stats, repo activity, and version adoption trends.",
+    url: `${appConfig.url}/stats`,
+    siteName: "Kanak’s Portfolio",
+    images: [
+      {
+        url: `${appConfig.url}/og/stats.png`,
+        width: 1200,
+        height: 630,
+        alt: "Kanak’s Project Statistics Dashboard",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Project Statistics & Insights | Kanak",
+    description:
+      "Track GitHub stars, NPM downloads, and version adoption for Kanak’s open-source work in one interactive dashboard.",
+    creator: appConfig.social.twitter,
+    images: [`${appConfig.url}/og/stats.png`],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    nocache: false,
+    googleBot: {
+      index: true,
+      follow: true,
+      noimageindex: false,
+    },
+  },
+};
 // --
 
 type VersionsLoaderProps = {
-  searchParams: Promise<SearchParams>
-}
+  searchParams: Promise<SearchParams>;
+};
 
 async function VersionsLoader({ searchParams }: VersionsLoaderProps) {
-  const { pkg, beta } = await loadSearchParams(searchParams)
-  const allVersions = await getVersions(beta)
-  const pkgVersions = pkg === 'both' ? sumVersions(allVersions) : allVersions
+  const { pkg, beta } = await loadSearchParams(searchParams);
+  const allVersions = await getVersions(beta);
+  const pkgVersions = pkg === "both" ? sumVersions(allVersions) : allVersions;
   // @ts-expect-error
   const versionsToShow = Object.entries(pkgVersions.at(-1)?.[pkg] ?? {})
     .slice(0, 5)
-    .map(([key, _]) => key)
+    .map(([key, _]) => key);
   return (
     <Suspense
       fallback={<div className="animate-pulse text-center">Loading...</div>}
     >
       <Versions
-        records={pkgVersions.map(v => ({
+        records={pkgVersions.map((v) => ({
           date: v.date,
           // @ts-ignore
-          ...v[pkg]
+          ...v[pkg],
         }))}
         versions={versionsToShow}
       />
     </Suspense>
-  )
+  );
 }

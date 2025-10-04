@@ -35,8 +35,6 @@ interface Props {
   className?: string;
 }
 
-
-
 export function ProjectCard({
   title,
   href,
@@ -87,9 +85,7 @@ export function ProjectCard({
             {link?.replace("https://", "").replace("www.", "").replace("/", "")}
           </div>
           <div className="prose max-w-full text-pretty font-sans text-xs text-muted-foreground dark:prose-invert">
-            <Markdown>
-            {description}
-            </Markdown>
+            <Markdown>{description}</Markdown>
           </div>
         </div>
       </CardHeader>
@@ -126,7 +122,6 @@ export function ProjectCard({
   );
 }
 
-
 export interface ExpandableCardProps {
   cards: Array<{
     title: string;
@@ -142,14 +137,13 @@ export interface ExpandableCardProps {
       type: string;
       href: string;
     }[];
-  }>
+  }>;
 }
 
-
 export function ExpandableProjectCards({ cards }: ExpandableCardProps) {
-  const [active, setActive] = useState<ExpandableCardProps["cards"][number] | boolean | null>(
-    null
-  );
+  const [active, setActive] = useState<
+    ExpandableCardProps["cards"][number] | boolean | null
+  >(null);
   const id = useId();
   const ref = useRef<HTMLDivElement>(null!) as React.RefObject<HTMLDivElement>;
 
@@ -212,14 +206,19 @@ export function ExpandableProjectCards({ cards }: ExpandableCardProps) {
               ref={ref}
               className="w-full max-w-[500px]  h-full md:h-fit md:max-h-[90%] flex flex-col bg-card sm:rounded-3xl overflow-hidden pt-10 md:pt-0"
             >
-              <motion.div layoutId={`media-${active.title}-${id}`} className="px-3">
-                {active.image && (<Image
-                  src={active?.image}
-                  alt={active?.title}
-                  width={640}
-                  height={360}
-                  className="w-full h-80 lg:h-80 rounded-lg   md:rounded-tr-lg md:rounded-tl-lg object-cover object-top"
-                />)}
+              <motion.div
+                layoutId={`media-${active.title}-${id}`}
+                className="px-3"
+              >
+                {active.image && (
+                  <Image
+                    src={active?.image}
+                    alt={active?.title}
+                    width={640}
+                    height={360}
+                    className="w-full h-80 lg:h-80 rounded-lg   md:rounded-tr-lg md:rounded-tl-lg object-cover object-top"
+                  />
+                )}
               </motion.div>
 
               <div>
@@ -238,16 +237,9 @@ export function ExpandableProjectCards({ cards }: ExpandableCardProps) {
                       {active.dates}
                     </motion.time>
                   </div>
-                  <motion.div
-                    layoutId={`cta-${active.title}-${id}`}
-                  >
-                    <Button
-                      variant="rainbow"
-                      rounded="full"
-                      asChild
-                    >
+                  <motion.div layoutId={`cta-${active.title}-${id}`}>
+                    <Button variant="rainbow" rounded="full" asChild>
                       <Link
-
                         href={active?.href || active?.link || "#"}
                         target="_blank"
                       >
@@ -260,17 +252,16 @@ export function ExpandableProjectCards({ cards }: ExpandableCardProps) {
                 <div className="relative px-4">
                   <motion.div
                     layoutId={`description-${active.title}-${id}`}
-
                     className="text-xs md:text-sm lg:text-base h-40 md:h-fit pb-10 flex flex-col items-start gap-4 overflow-auto [mask:linear-gradient(to_bottom,white,white,transparent)] [scrollbar-width:none] [-ms-overflow-style:none] [-webkit-overflow-scrolling:touch]"
                   >
-
                     <div className="hidden font-sans text-xs underline print:visible">
-                      {active.link?.replace("https://", "").replace("www.", "").replace("/", "")}
+                      {active.link
+                        ?.replace("https://", "")
+                        .replace("www.", "")
+                        .replace("/", "")}
                     </div>
                     <div className="prose max-w-full text-pretty font-sans text-xs text-muted-foreground dark:prose-invert">
-                    <Markdown>
-                      {active.description}
-                    </Markdown>
+                      <Markdown>{active.description}</Markdown>
                     </div>
                     <CardContent className="mt-auto flex flex-col px-2">
                       {active.tags && active.tags.length > 0 && (
@@ -292,7 +283,12 @@ export function ExpandableProjectCards({ cards }: ExpandableCardProps) {
                         <div className="flex flex-row flex-wrap items-start gap-1">
                           {active.links?.map((link, idx) => (
                             <Link href={link?.href} key={idx} target="_blank">
-                              <Button key={idx} variant="dark" size="xs" className="flex gap-2 px-2 py-1 text-[10px]">
+                              <Button
+                                key={idx}
+                                variant="dark"
+                                size="xs"
+                                className="flex gap-2 px-2 py-1 text-[10px]"
+                              >
                                 {link.icon}
                                 {link.type}
                               </Button>
@@ -316,26 +312,29 @@ export function ExpandableProjectCards({ cards }: ExpandableCardProps) {
             onClick={() => setActive(card)}
             className="rounded-lg bg-card text-card-foreground flex flex-col overflow-hidden border hover:shadow-lg transition-all duration-300 ease-out h-full cursor-pointer"
           >
-            {<motion.div layoutId={`media-${card.title}-${id}`}>
-              {card?.video && (
-                <video
-                  src={card.video}
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  className="pointer-events-none mx-auto h-40 w-full object-cover object-top" // needed because random black line at bottom of video
-                />
-              )}
-              {card?.image && (<Image
-                src={card?.image}
-                alt={card?.title}
-                width={640}
-                height={360}
-                className="h-40 w-full overflow-hidden object-cover object-top"
-              />)}
-            </motion.div>}
-
+            {
+              <motion.div layoutId={`media-${card.title}-${id}`}>
+                {card?.video && (
+                  <video
+                    src={card.video}
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    className="pointer-events-none mx-auto h-40 w-full object-cover object-top" // needed because random black line at bottom of video
+                  />
+                )}
+                {card?.image && (
+                  <Image
+                    src={card?.image}
+                    alt={card?.title}
+                    width={640}
+                    height={360}
+                    className="h-40 w-full overflow-hidden object-cover object-top"
+                  />
+                )}
+              </motion.div>
+            }
 
             <div className="flex gap-4 flex-col p-2 w-full relative">
               <div className="space-y-1">
@@ -352,7 +351,10 @@ export function ExpandableProjectCards({ cards }: ExpandableCardProps) {
                   {card.dates}
                 </motion.time>
                 <div className="hidden font-sans text-xs underline print:visible">
-                  {card.link?.replace("https://", "").replace("www.", "").replace("/", "")}
+                  {card.link
+                    ?.replace("https://", "")
+                    .replace("www.", "")
+                    .replace("/", "")}
                 </div>
                 <motion.div
                   layoutId={`cta-${card.title}-${id}`}
@@ -365,7 +367,6 @@ export function ExpandableProjectCards({ cards }: ExpandableCardProps) {
                     asChild
                   >
                     <Link
-
                       href={card?.href || card?.link || "#"}
                       target="_blank"
                     >
@@ -375,11 +376,12 @@ export function ExpandableProjectCards({ cards }: ExpandableCardProps) {
                 </motion.div>
               </div>
             </div>
-            <motion.div layoutId={`description-${card.title}-${id}`} className="mt-auto flex flex-col p-2">
+            <motion.div
+              layoutId={`description-${card.title}-${id}`}
+              className="mt-auto flex flex-col p-2"
+            >
               <div className="prose max-w-full text-pretty font-sans text-xs text-muted-foreground dark:prose-invert">
-                <Markdown>
-                {card.description}
-                </Markdown>
+                <Markdown>{card.description}</Markdown>
               </div>
               <CardContent className="mt-auto flex flex-col px-2">
                 {card.tags && card.tags.length > 0 && (
@@ -436,4 +438,3 @@ export const CloseIcon = () => {
     </motion.svg>
   );
 };
-

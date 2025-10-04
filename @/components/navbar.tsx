@@ -20,8 +20,10 @@ export default function Navbar() {
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button variant="raw" size="icon_lg" asChild>
-                  <TransitionLink href={item.href} 
-                  target={item.href.startsWith("http") ? "_blank" : "_self"}>
+                  <TransitionLink
+                    href={item.href}
+                    target={item.href.startsWith("http") ? "_blank" : "_self"}
+                  >
                     <item.icon className="size-4" />
                   </TransitionLink>
                 </Button>
@@ -39,7 +41,7 @@ export default function Navbar() {
             <DockIcon key={name}>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Button asChild variant="raw" size="icon_lg" >
+                  <Button asChild variant="raw" size="icon_lg">
                     <TransitionLink href={social.url} target="_blank">
                       <social.icon className="size-4" />
                     </TransitionLink>

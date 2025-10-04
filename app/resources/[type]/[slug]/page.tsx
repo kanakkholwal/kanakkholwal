@@ -37,7 +37,7 @@ export default async function ResourcePage({ params }: PageProps) {
   const resolvedParams = await params;
   const response = await getResourceBySlug(
     resolvedParams.type,
-    resolvedParams.slug
+    resolvedParams.slug,
   );
   if (!response) notFound();
 
@@ -45,7 +45,7 @@ export default async function ResourcePage({ params }: PageProps) {
   const resourceUrl = `${appConfig.url}/resources/${resolvedParams.type}/${resolvedParams.slug}`;
   const publishedDate = new Date(frontmatter.date).toISOString();
   const modifiedDate = new Date(
-    frontmatter.updated || frontmatter.date
+    frontmatter.updated || frontmatter.date,
   ).toISOString();
   const otherResources = await getResourceRelated(resolvedParams.slug);
 
@@ -64,13 +64,13 @@ export default async function ResourcePage({ params }: PageProps) {
     dateModified: modifiedDate,
     author: frontmatter.author
       ? {
-        "@type": "Person",
-        name: frontmatter.author,
-      }
+          "@type": "Person",
+          name: frontmatter.author,
+        }
       : {
-        "@type": "Organization",
-        name: appConfig.name,
-      },
+          "@type": "Organization",
+          name: appConfig.name,
+        },
     publisher: {
       "@type": "Organization",
       name: appConfig.name,
@@ -83,11 +83,11 @@ export default async function ResourcePage({ params }: PageProps) {
     keywords: frontmatter.tags?.join(", ") || "",
     image: appConfig.flags.enableOgImage
       ? {
-        "@type": "ImageObject",
-        url: `${appConfig.url}/og/resources/${resolvedParams.type}/${resolvedParams.slug}`,
-        width: 1200,
-        height: 630,
-      }
+          "@type": "ImageObject",
+          url: `${appConfig.url}/og/resources/${resolvedParams.type}/${resolvedParams.slug}`,
+          width: 1200,
+          height: 630,
+        }
       : undefined,
   };
 
@@ -100,10 +100,7 @@ export default async function ResourcePage({ params }: PageProps) {
         id="structured-data-resource"
       />
       <div className="grid grid-cols-1 gap-4 mb-10 lg:mb-20 w-full mx-auto max-w-[calc((--max-app-width) * 0.8)]">
-        <main
-          itemType="https://schema.org/BlogPosting"
-          itemScope
-        >
+        <main itemType="https://schema.org/BlogPosting" itemScope>
           <div className="flex justify-between items-center m-4 gap-2 pr-2 mb-10 max-w-6xl mx-auto">
             <ButtonTransitionLink
               href={`/resources/${resolvedParams.type}`}
@@ -145,13 +142,15 @@ export default async function ResourcePage({ params }: PageProps) {
 
             <h1
               className="mb-2 text-2xl font-bold text-foreground sm:text-4xl"
-              itemProp="headline">
+              itemProp="headline"
+            >
               {frontmatter.title}
             </h1>
 
             <p
               className="text-sm text-muted-foreground text-pretty mb-3 line-clamp-3"
-              itemProp="abstract">
+              itemProp="abstract"
+            >
               {frontmatter.summary}
             </p>
             <div className="flex gap-4 px-4 py-2 text-sm items-center justify-between flex-wrap lg:px-8 border-y">
@@ -172,9 +171,7 @@ export default async function ResourcePage({ params }: PageProps) {
                     className="size-9 rounded-full"
                     role="presentation"
                     loading="lazy"
-                    src={
-                      frontmatter.author?.image || appConfig.authors[0].url
-                    }
+                    src={frontmatter.author?.image || appConfig.authors[0].url}
                     itemProp="image"
                     itemType="https://schema.org/ImageObject"
                   />
@@ -224,45 +221,41 @@ export default async function ResourcePage({ params }: PageProps) {
                 </ShareButton> */}
               </div>
             </div>
-            {frontmatter?.alternate_reads?.length && (<div className="text-sm text-muted-foreground">
-
-              <div className="mt-2">
-                <p className="text-xs font-medium mb-1">Alternate reads:</p>
-                {frontmatter.alternate_reads?.length ? (
-                  frontmatter.alternate_reads.map((url, index) => (
-                    <ButtonLink
-                      key={index}
-                      size="xs"
-                      variant="link"
-                      className="ml-2 group gap-1"
-                      href={marketwiseLink(
-                        url,{
+            {frontmatter?.alternate_reads?.length && (
+              <div className="text-sm text-muted-foreground">
+                <div className="mt-2">
+                  <p className="text-xs font-medium mb-1">Alternate reads:</p>
+                  {frontmatter.alternate_reads?.length ? (
+                    frontmatter.alternate_reads.map((url, index) => (
+                      <ButtonLink
+                        key={index}
+                        size="xs"
+                        variant="link"
+                        className="ml-2 group gap-1"
+                        href={marketwiseLink(url, {
                           utm_medium: "app",
                           utm_campaign: "resource_alternate_reads",
-                        }
-                      )}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      itemProp="alternateName"
-                    >
-                      {new URL(url).hostname.replace("www.", "")}
-                      <Icon
-                        name="arrow-right"
-                        className="group-hover:-rotate-45 transition-all duration-200"
-                      />
-                    </ButtonLink>
-                  ))
-                ) : (
-                  <span className="text-muted-foreground">
-                    No alternate reads available
-                  </span>
-                )}
+                        })}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        itemProp="alternateName"
+                      >
+                        {new URL(url).hostname.replace("www.", "")}
+                        <Icon
+                          name="arrow-right"
+                          className="group-hover:-rotate-45 transition-all duration-200"
+                        />
+                      </ButtonLink>
+                    ))
+                  ) : (
+                    <span className="text-muted-foreground">
+                      No alternate reads available
+                    </span>
+                  )}
+                </div>
+                <Separator className="mt-4" />
               </div>
-              <Separator className="mt-4" />
-
-            </div>
             )}
-
           </div>
 
           <article
@@ -286,11 +279,7 @@ export default async function ResourcePage({ params }: PageProps) {
               )}
             </p>
           </article>
-
-         
         </main>
-       
-
       </div>
       {otherResources.length > 0 && (
         <section
@@ -300,10 +289,7 @@ export default async function ResourcePage({ params }: PageProps) {
           <h2 className="text-xl font-semibold mb-4 text-foreground pl-5">
             Related Resources
           </h2>
-          <ResourcesList
-            resources={otherResources}
-            className="items-stretch"
-          />
+          <ResourcesList resources={otherResources} className="items-stretch" />
         </section>
       )}
     </>
@@ -312,12 +298,12 @@ export default async function ResourcePage({ params }: PageProps) {
 
 export async function generateMetadata(
   { params }: PageProps,
-  parent: ResolvingMetadata
+  parent: ResolvingMetadata,
 ): Promise<Metadata> {
   const resolvedParams = await params;
   const resourceMeta = await getResourceBySlug(
     resolvedParams.type,
-    resolvedParams.slug
+    resolvedParams.slug,
   );
   if (!resourceMeta) notFound();
 
@@ -339,20 +325,20 @@ export async function generateMetadata(
       type: "article",
       publishedTime: new Date(frontmatter.date).toISOString(),
       modifiedTime: new Date(
-        frontmatter.updated || frontmatter.date
+        frontmatter.updated || frontmatter.date,
       ).toISOString(),
       //   authors: frontmatter.author ? [frontmatter.author] : [],
       section: frontmatter.category,
 
       images: appConfig.flags.enableOgImage
         ? [
-          {
-            url: `${appConfig.url}/og/resources/${resolvedParams.type}/${resolvedParams.slug}`,
-            alt: frontmatter.title,
-            width: 1200,
-            height: 630,
-          },
-        ]
+            {
+              url: `${appConfig.url}/og/resources/${resolvedParams.type}/${resolvedParams.slug}`,
+              alt: frontmatter.title,
+              width: 1200,
+              height: 630,
+            },
+          ]
         : [],
     },
     twitter: {
@@ -362,13 +348,13 @@ export async function generateMetadata(
       creator: appConfig.social.twitter,
       images: appConfig.flags.enableOgImage
         ? [
-          {
-            url: `${appConfig.url}/og/resources/${resolvedParams.type}/${resolvedParams.slug}`,
-            alt: frontmatter.title,
-            width: 1200,
-            height: 630,
-          },
-        ]
+            {
+              url: `${appConfig.url}/og/resources/${resolvedParams.type}/${resolvedParams.slug}`,
+              alt: frontmatter.title,
+              width: 1200,
+              height: 630,
+            },
+          ]
         : [],
     },
     robots: {

@@ -1,22 +1,22 @@
-'use client'
+"use client";
 
 import {
   ChartContainer,
   ChartLegend,
   ChartLegendContent,
   ChartTooltip,
-  ChartTooltipContent
-} from '@/components/ui/chart'
-import { Checkbox } from '@/components/ui/checkbox'
-import { Label } from '@/components/ui/label'
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Boxes } from 'lucide-react'
-import { inferParserType, useQueryStates } from 'nuqs'
-import { CartesianGrid, Line, LineChart, XAxis, YAxis } from 'recharts'
-import { formatDate, formatStatNumber } from '../lib/format'
-import { pkgParser, searchParams } from '../searchParams'
-import { Widget } from './widget'
-import { statsConfig } from '../config'
+  ChartTooltipContent,
+} from "@/components/ui/chart";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Boxes } from "lucide-react";
+import { inferParserType, useQueryStates } from "nuqs";
+import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
+import { formatDate, formatStatNumber } from "../lib/format";
+import { pkgParser, searchParams } from "../searchParams";
+import { Widget } from "./widget";
+import { statsConfig } from "../config";
 
 type VersionProps = {
   records: Array<
@@ -25,11 +25,11 @@ type VersionProps = {
       | `${number}.${number}.${number}-beta.${number}`,
       number
     > & {
-      date: string
+      date: string;
     }
-  >
-  versions: string[]
-}
+  >;
+  versions: string[];
+};
 
 // stroke-red-500 fill-red-500 bg-red-500 text-red-500
 // stroke-amber-500 fill-amber-500 bg-amber-500 text-amber-500
@@ -38,18 +38,18 @@ type VersionProps = {
 // stroke-purple-500 fill-purple-500 bg-purple-500 text-purple-500
 
 const lineColors = [
-  'green-500',
-  'amber-500',
-  'red-500',
-  'blue-500',
-  'purple-500'
-]
+  "green-500",
+  "amber-500",
+  "red-500",
+  "blue-500",
+  "purple-500",
+];
 
 export function Versions({ records, versions }: VersionProps) {
   const [{ pkg: activeTab, beta }, setSearchParams] = useQueryStates(
     searchParams,
-    { shallow: false }
-  )
+    { shallow: false },
+  );
   return (
     <Widget
       className="lg:col-span-2"
@@ -61,7 +61,7 @@ export function Versions({ records, versions }: VersionProps) {
             <Checkbox
               id="beta"
               checked={beta}
-              onCheckedChange={checked =>
+              onCheckedChange={(checked) =>
                 setSearchParams({ beta: checked === true })
               }
             />
@@ -70,23 +70,25 @@ export function Versions({ records, versions }: VersionProps) {
           <Tabs
             className="ml-1 w-auto"
             value={activeTab}
-            onValueChange={value =>
+            onValueChange={(value) =>
               setSearchParams({
-                pkg: value as inferParserType<typeof pkgParser>
+                pkg: value as inferParserType<typeof pkgParser>,
               })
             }
           >
             <TabsList>
-              {statsConfig.npmPackages.map(pkg => {
-                return (<TabsTrigger
-                  key={pkg}
-                  value={pkg}
-                  className="data-[state=active]:text-blue-700 dark:data-[state=active]:text-blue-400"
-                >
-                  {pkg}
-                </TabsTrigger>)
+              {statsConfig.npmPackages.map((pkg) => {
+                return (
+                  <TabsTrigger
+                    key={pkg}
+                    value={pkg}
+                    className="data-[state=active]:text-blue-700 dark:data-[state=active]:text-blue-400"
+                  >
+                    {pkg}
+                  </TabsTrigger>
+                );
               })}
-            
+
               <TabsTrigger
                 value="both"
                 className="data-[state=active]:text-green-700 dark:data-[state=active]:text-green-300"
@@ -102,7 +104,7 @@ export function Versions({ records, versions }: VersionProps) {
         className="mt-1 h-82 w-full pr-1"
         config={versions.reduce(
           (config, version) => ({ ...config, [version]: { label: version } }),
-          {}
+          {},
         )}
       >
         <LineChart
@@ -120,7 +122,7 @@ export function Versions({ records, versions }: VersionProps) {
             fillOpacity={0.75}
             axisLine={false}
             tickLine={false}
-            tickFormatter={value => formatStatNumber(value)}
+            tickFormatter={(value) => formatStatNumber(value)}
             allowDataOverflow
           />
           <CartesianGrid vertical={false} />
@@ -132,8 +134,8 @@ export function Versions({ records, versions }: VersionProps) {
             minTickGap={40}
             tickMargin={10}
             fillOpacity={0.75}
-            tickFormatter={value =>
-              formatDate(value, '', { day: '2-digit', month: 'short' })
+            tickFormatter={(value) =>
+              formatDate(value, "", { day: "2-digit", month: "short" })
             }
           />
           <ChartTooltip
@@ -159,5 +161,5 @@ export function Versions({ records, versions }: VersionProps) {
         </LineChart>
       </ChartContainer>
     </Widget>
-  )
+  );
 }

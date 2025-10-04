@@ -51,7 +51,7 @@ export function MagicCard({
         mouseY.set(clientY - top);
       }
     },
-    [mouseX, mouseY]
+    [mouseX, mouseY],
   );
 
   const handleMouseOut = useCallback(
@@ -62,7 +62,7 @@ export function MagicCard({
         mouseY.set(-gradientSize);
       }
     },
-    [handleMouseMove, mouseX, gradientSize, mouseY]
+    [handleMouseMove, mouseX, gradientSize, mouseY],
   );
 
   const handleMouseEnter = useCallback(() => {
@@ -108,7 +108,7 @@ export function MagicCard({
       <div
         className={cn(
           "absolute inset-px rounded-[inherit] bg-background",
-          layerClassName
+          layerClassName,
         )}
       />
       <motion.div
