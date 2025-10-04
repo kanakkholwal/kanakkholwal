@@ -57,11 +57,11 @@
     // "account_id": "${CLOUDFLARE_ACCOUNT_ID}",
     // Vars that will be injected into the worker
     
-    "vars": {
-      "NODE_ENV": "production",
-      "GITHUB_TOKEN": "${GITHUB_TOKEN}"
+    // "vars": {
+      // "NODE_ENV": "production",
+      // "GITHUB_TOKEN": "${GITHUB_TOKEN}"
     //   "MAIL_EMAIL": "${MAIL_EMAIL}",
     //   "MAIL_PASSWORD": "${MAIL_PASSWORD}",
     //   "SERVER_IDENTITY": "${SERVER_IDENTITY}"
-    }
+    // }
   }
