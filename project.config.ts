@@ -67,6 +67,10 @@ export const appConfig = {
   },
   usernames: {
     github: "kanakkholwal",
+    medium: "kanakkholwal",
+    youtube: "kanakkholwal",
+    twitter: "kanakkholwal",
+    linkedin: "kanak-kholwal",
   },
   flags: {
     enableOgImage: false,

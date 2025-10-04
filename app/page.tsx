@@ -23,14 +23,17 @@ import { ArrowRight } from "lucide-react";
 // import { Suspense } from "react";
 import Markdown from "react-markdown";
 import { appConfig, resume_link } from "root/project.config";
+import { getCachedContributions } from "~/api/github";
 import { educationExperiences } from "~/data/education";
+import { projectsList } from "~/data/projects";
 import { DATA } from "~/data/resume";
 import { workExperiences } from "~/data/work";
+import { GithubSection } from "./client";
 
 const BLUR_FADE_DELAY = 0.04;
 
 export default async function HomePage() {
-  // const contributions = await getCachedContributions(appConfig.usernames.github)
+  const data = await getCachedContributions(appConfig.usernames.github)
   return (
     <Wrapper>
       {/* Hero */}
@@ -117,6 +120,7 @@ export default async function HomePage() {
           <GithubContributions data={contributions.contributions} />
         </Suspense>
       </section> */}
+      <GithubSection data={data} />
       {/* Projects */}
       <section id="projects" className="w-full py-16 px-6 md:px-12">
         <div className="max-w-6xl mx-auto space-y-12">
@@ -134,7 +138,7 @@ export default async function HomePage() {
             </div>
           </BlurFade>
           <ExpandableProjectCards
-            cards={DATA.projects as unknown as ExpandableCardProps["cards"]}
+            cards={projectsList as unknown as ExpandableCardProps["cards"]}
           />
           <div className="flex mx-auto justify-center gap-2">
             <ButtonTransitionLink href="/stats" variant="outline">
@@ -239,24 +243,28 @@ function HeroSection() {
           inView={true}
           inViewOnce={false}
         />
-        <div className="mt-5 flex justify-center md:justify-start gap-4">
+        <div className="mt-5 flex justify-center md:justify-start items-center gap-4 w-full  flex-wrap">
           <ButtonLink
             variant="dark"
             href={resume_link}
             target="_blank"
             effect="gooeyRight"
+            size="lg"
+            rounded="full"
           >
             Download Resume
             <Icon name="arrow-up-right" />
           </ButtonLink>
-          <ButtonTransitionLink
-            variant="ghost"
-            href="/journey"
-            effect="shineHover"
-          >
-            My Journey
-            <Icon name="arrow-right" />
-          </ButtonTransitionLink>
+          <GlowFillButton icon={ArrowRight} className="h-11 my-0">
+            <TransitionLink
+              // variant="ghost"
+              href="/journey"
+            // effect="shineHover"
+            >
+              My Journey
+              {/* <Icon name="arrow-right" /> */}
+            </TransitionLink>
+          </GlowFillButton>
         </div>
       </div>
       <BlurFade
@@ -268,7 +276,7 @@ function HeroSection() {
           <AvatarFallback>{DATA.initials}</AvatarFallback>
         </Avatar>
       </BlurFade>
-      <div className="md:col-span-2 flex justify-center mt-6 flex-col gap-4 mx-auto items-center">
+      <div className="md:col-span-2 flex justify-center flex-col gap-4 mx-auto items-center">
         <RollingText
           className="text-muted-foreground max-w-lg md:text-xs"
           delay={BLUR_FADE_DELAY}

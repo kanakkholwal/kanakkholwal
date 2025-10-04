@@ -1,11 +1,11 @@
 "use client";
 
 import {
-  ChartContainer,
-  ChartLegend,
-  ChartLegendContent,
-  ChartTooltip,
-  ChartTooltipContent,
+    ChartContainer,
+    ChartLegend,
+    ChartLegendContent,
+    ChartTooltip,
+    ChartTooltipContent,
 } from "@/components/ui/chart";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
@@ -13,10 +13,10 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Boxes } from "lucide-react";
 import { inferParserType, useQueryStates } from "nuqs";
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
+import { statsConfig } from "../config";
 import { formatDate, formatStatNumber } from "../lib/format";
 import { pkgParser, searchParams } from "../searchParams";
 import { Widget } from "./widget";
-import { statsConfig } from "../config";
 
 type VersionProps = {
   records: Array<
@@ -34,7 +34,7 @@ type VersionProps = {
 // stroke-red-500 fill-red-500 bg-red-500 text-red-500
 // stroke-amber-500 fill-amber-500 bg-amber-500 text-amber-500
 // stroke-green-500 fill-green-500 bg-green-500 text-green-500
-// stroke-blue-500 fill-blue-500 bg-blue-500 text-blue-500
+// stroke-primary fill-primary bg-primary text-primary
 // stroke-purple-500 fill-purple-500 bg-purple-500 text-purple-500
 
 const lineColors = [

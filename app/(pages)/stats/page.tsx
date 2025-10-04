@@ -18,6 +18,8 @@ import { Versions } from "./_components/versions";
 import { Widget } from "./_components/widget";
 import { WidgetSkeleton } from "./_components/widget.skeleton";
 import { statsConfig } from "./config";
+import { getStarHistory } from "./lib/github";
+import { fetchNpmPackage } from "./lib/npm";
 import { getVersions, sumVersions } from "./lib/versions";
 import { loadSearchParams } from "./searchParams";
 
@@ -27,13 +29,23 @@ type StatsPageProps = {
   searchParams: Promise<SearchParams>;
 };
 
-export default function StatsPage({ searchParams }: StatsPageProps) {
+export default async function StatsPage({ searchParams }: StatsPageProps) {
+  const stars = await Promise.all(
+    statsConfig.repositories.map((r) => r.repo).map(getStarHistory),
+  );
+  const npmStats = await Promise.all(
+    statsConfig.npmPackages.map((pkg) => fetchNpmPackage(pkg)),
+  );
+
+
+
+
   return (
     <div className="mx-auto max-w-[88rem] px-4">
       <h1 className="sr-only">Project Stats</h1>
       <section className="my-4 grid grid-cols-1 gap-4 lg:grid-cols-2">
         <Suspense fallback={<StarHistoryGraphSkeleton />}>
-          <StarHistoryGraph />
+          <StarHistoryGraph stars={stars} />
         </Suspense>
         <Widget
           className={cn(
@@ -44,12 +56,12 @@ export default function StatsPage({ searchParams }: StatsPageProps) {
           {statsConfig.flags.repoBeats && <RepoBeatsActivityGraph />}
           <div className="flex flex-1 items-center gap-6 p-4">
             <Suspense fallback={<NPMStatsSkeleton />}>
-              <NPMStats />
+              <NPMStats npmStats={npmStats} />
             </Suspense>
           </div>
         </Widget>
         <Suspense fallback={<NPMDownloadsSkeleton />}>
-          <NPMDownloads />
+          <NPMDownloads  npmStats={npmStats} />
         </Suspense>
         {statsConfig.flags.versionAdoptionGraph && (
           <Suspense fallback={<WidgetSkeleton />}>

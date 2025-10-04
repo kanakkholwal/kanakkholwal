@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { DATA } from "./resume";
+import { projectsList } from "./projects";
 
 export const journey_data = [
   {
@@ -12,7 +12,7 @@ export const journey_data = [
           learning new skills and also started contributing to Open Source.
         </p>
         <div className="grid grid-cols-2 gap-4">
-          {DATA.projects
+          {projectsList
             .filter((project) => {
               if (!project.image) return false;
               if (

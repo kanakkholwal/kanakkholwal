@@ -5,10 +5,9 @@ import { formatStatNumber } from "../lib/format";
 import {
   combineStats,
   Datum,
-  fetchNpmPackage,
   getIsoWeekday,
   getPartialPreviousWeekDownloads,
-  NpmPackageStatsData,
+  NpmPackageStatsData
 } from "../lib/npm";
 import { DownloadsGraph } from "./downloads.client";
 import { GraphSkeleton } from "./graph.skeleton";
@@ -17,10 +16,7 @@ import { WidgetSkeleton } from "./widget.skeleton";
 import { Fragment } from "react";
 import { statsConfig } from "../config";
 
-export async function NPMStats() {
-  const npmStats = await Promise.all(
-    statsConfig.npmPackages.map((pkg) => fetchNpmPackage(pkg)),
-  );
+export function NPMStats({ npmStats }: { npmStats: NpmPackageStatsData[] }) {
 
   const all = combineStats(
     statsConfig.npmPackages.reduce(
@@ -65,11 +61,7 @@ export const NPMStatsSkeleton = () => (
   <div className="bg-muted h-9 w-64 animate-pulse rounded-md lg:h-12" />
 );
 
-export async function NPMDownloads() {
-  const npmStats = await Promise.all(
-    statsConfig.npmPackages.map((pkg) => fetchNpmPackage(pkg)),
-  );
-
+export function NPMDownloads({ npmStats }: { npmStats: NpmPackageStatsData[] }) {
   const all = combineStats(
     statsConfig.npmPackages.reduce(
       (acc, pkg, index) => {
@@ -84,7 +76,7 @@ export async function NPMDownloads() {
   // Fortunately the epoch did not land on a Sunday (it was a Thursday).
   const isLastDateSunday = lastDateWeekday === 7;
 
-  console.log({ all, npmStats });
+  // console.log({ all, npmStats });
   return (
     <>
       <DownloadsGraph

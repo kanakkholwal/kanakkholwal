@@ -304,7 +304,7 @@ export function ExpandableProjectCards({ cards }: ExpandableCardProps) {
           </div>
         ) : null}
       </AnimatePresence>
-      <div className=" sm:grid-cols-2 max-w-6xl @min-7xl:max-w-4/5 mx-auto w-full grid grid-cols-1 md:grid-cols-3 items-start gap-4">
+      <div className="sm:grid-cols-2 max-w-6xl @min-7xl:max-w-4/5 mx-auto w-full grid grid-cols-1 lg:grid-cols-3 items-start gap-4">
         {cards.map((card) => (
           <motion.div
             layoutId={`card-${card.title}-${id}`}

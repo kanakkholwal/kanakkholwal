@@ -1,9 +1,8 @@
 import { appConfig } from "root/project.config";
-import { DATA } from "~/data/resume";
 import { Logo } from "./logo";
 import { ModeToggle } from "./mode-toggle";
-import { TransitionLink } from "./utils/link";
 import { Socials } from "./socials";
+import { TransitionLink } from "./utils/link";
 
 const footerLinks = {
   general: [
@@ -50,6 +49,10 @@ const footerLinks = {
     {
       label: "Links",
       href: "/links",
+    },
+    {
+      label: "Attributions",
+      href: "/attribution",
     },
   ],
 };
@@ -120,18 +123,18 @@ export function FooterSection() {
             . All rights reserved
           </p>
           <div className="flex items-center justify-center gap-4 sm:gap-6">
-            <a
+            <TransitionLink
               className="whitespace-nowrap transition-colors hover:text-black dark:hover:text-white"
               href="/legal/privacy"
             >
               Privacy Policy
-            </a>
-            <a
+            </TransitionLink>
+            <TransitionLink
               className="whitespace-nowrap transition-colors hover:text-black dark:hover:text-white"
               href="/legal/terms"
             >
               Terms &amp; Conditions
-            </a>
+            </TransitionLink>
           </div>
         </div>
         <div className="flex flex-col items-center gap-4 md:flex-row md:justify-end">

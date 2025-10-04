@@ -193,7 +193,7 @@ export default function ShapeHero({
           height={200}
           rotate={-25}
           borderRadius={28}
-          gradient="from-blue-500/[0.25] dark:from-blue-500/[0.35]"
+          gradient="from-primary/[0.25] dark:from-primary/[0.35]"
           className="left-[20%] bottom-[10%]"
         />
 

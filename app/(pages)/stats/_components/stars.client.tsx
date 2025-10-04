@@ -147,6 +147,8 @@ export function RepoBeatsActivityGraph() {
       height={318}
       alt="Project analytics and stats"
       src={statsConfig.repositories[repoIdx].repoBeatsUri}
+      draggable={false}
+      unselectable="on"
     />
   );
 }

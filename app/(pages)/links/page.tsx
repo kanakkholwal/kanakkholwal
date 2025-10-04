@@ -17,7 +17,7 @@ export default function LinksPage() {
           />
           <h1 className="text-xl font-semibold">{appConfig.name}</h1>
           <div className="flex flex-wrap gap-x-2 gap-y-1 text-xs md:text-sm">
-            <span className="rounded-full px-2 py-1 bg-blue-500/10 text-blue-600 dark:text-blue-500">
+            <span className="rounded-full px-2 py-1 bg-primary/10 text-blue-600 dark:text-primary">
               Developer
             </span>
             <span className="rounded-full px-2 py-1 bg-green-500/10 text-green-600 dark:text-green-500">

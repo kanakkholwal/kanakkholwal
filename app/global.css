@@ -590,6 +590,29 @@ body {
     /* Firefox */
   }
 
+  @keyframes gradient-x {
+
+    0%,
+    100% {
+      background-position: 0;
+    }
+
+    50% {
+      background-position: 100%;
+    }
+  }
+
+}
+
+.animate-gradient-x {
+  animation: gradient-x 6s infinite;
+  background-size: 200% 200%;
+}
+
+.text-colorfull {
+  -webkit-text-fill-color: transparent;
+  background: linear-gradient(288deg, #ff8000, #f0c 53.2394%, #04f);
+  -webkit-background-clip: text;
 }
 
 :root {

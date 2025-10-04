@@ -50,7 +50,7 @@ const badgeVariants = cva(
         slate:
           "bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-950 dark:hover:text-slate-100",
         gradient_blue:
-          "text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br",
+          "text-white bg-gradient-to-r from-primary via-blue-600 to-blue-700 hover:bg-gradient-to-br",
         gradient_green:
           "text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br",
         gradient_cyan:

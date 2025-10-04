@@ -1,9 +1,7 @@
 import { Icons } from "@/components/icons/icons";
-import { CodeIcon, HomeIcon, NotebookIcon } from "lucide-react";
-import { FaMedium } from "react-icons/fa6";
 
 
-export const Projects = [
+export const projectsList = [
     {
       title: "Nexonauts",
       href: "https://nexonauts.com",
@@ -209,79 +207,3 @@ export const Projects = [
       video: "",
     },
   ]
-
-export const DATA = {
-  name: "Kanak Kholwal",
-  initials: "KK",
-  url: "https://kanakkholwal.eu.org",
-  location: "Rajasthan, India",
-  locationLink: "https://www.google.com/maps/place/dausa",
-  description:
-    "Software Engineer | Passionate about building scalable solutions, automation, and AI-driven products.",
-  summary: `I thrive on solving complex problems and building impactful products. From developing scalable architectures to integrating AI solutions, my goal is to create software that makes a real difference. Always eager to learn, contribute to open source, and collaborate with like-minded developers. Check out my work below, and feel free to reach out.`,
-  avatarUrl: "https://github.com/kanakkholwal.png",
-  skills: [
-    "React",
-    "Next.js",
-    "TypeScript",
-    "Node.js",
-    "Go",
-    "MongoDB",
-    "PostgreSQL",
-    "Docker",
-    "Google Cloud Platform",
-    "AI/ML",
-  ],
-  navbar: [
-    { href: "/", icon: HomeIcon, label: "Home" },
-    {
-      href: "https://kanakkholwal.medium.com",
-      icon: NotebookIcon,
-      label: "Blog",
-    },
-    { href: "/projects", icon: CodeIcon, label: "Projects" },
-  ],
-  contact: {
-    email: "kanakkholwal@gmail.com",
-    tel: "+123456789",
-    social: {
-      GitHub: {
-        name: "GitHub",
-        url: "https://github.com/kanakkholwal",
-        icon: Icons.github,
-        navbar: true,
-      },
-      LinkedIn: {
-        name: "LinkedIn",
-        url: "https://linkedin.com/in/kanakkholwal",
-        icon: Icons.linkedin,
-        navbar: true,
-      },
-      Twitter: {
-        name: "Twitter",
-        url: "https://twitter.com/kanakkholwal",
-        icon: Icons.x,
-        navbar: true,
-      },
-      Instagram: {
-        name: "Instagram",
-        url: "https://www.instagram.com/kanakkholwal",
-        icon: Icons.instagram,
-        navbar: true,
-      },
-      Medium: {
-        name: "Medium",
-        url: "https://medium.com/@kanakkholwal",
-        icon: FaMedium,
-        navbar: true,
-      },
-      Email: {
-        name: "Send Email",
-        url: "mailto:kanakkholwal@gmail.com",
-        icon: Icons.email,
-        navbar: false,
-      },
-    },
-  },
-
-} as const;

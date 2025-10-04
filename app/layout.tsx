@@ -101,7 +101,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <head />
       <body
         className={cn(
-          "min-h-screen min-w-screen w-full antialiased !overflow-x-hidden",
+          "min-h-screen min-w-screen w-full antialiased !overflow-x-hidden no-scrollbar h-full",
           fontSans.variable,
           fontMono.variable,
         )}
