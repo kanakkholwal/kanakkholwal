@@ -39,21 +39,21 @@
     //     "bucket_name": "next-inc-cache"
     //   }
     // ],
-    "routes": [
-      {
-        "pattern": "kanakkholwal.eu.org",
-        "custom_domain": true,
-      },
-      {
-        "pattern": "kanak-kholwal.eu.org",
-        "custom_domain": true,
-      },
-      {
-        "pattern": "kanak.eu.org",
-        "custom_domain": true,
-      }
+    // "routes": [
+    //   {
+    //     "pattern": "kanakkholwal.eu.org",
+    //     "custom_domain": true,
+    //   },
+    //   {
+    //     "pattern": "kanak-kholwal.eu.org",
+    //     "custom_domain": true,
+    //   },
+    //   {
+    //     "pattern": "kanak.eu.org",
+    //     "custom_domain": true,
+    //   }
   
-    ],
+    // ],
     // "account_id": "${CLOUDFLARE_ACCOUNT_ID}",
     // Vars that will be injected into the worker
     
