@@ -56,7 +56,7 @@ export default function AttributionPage() {
                         return <li className="relative" key={attribution.person}>
                             <div className="absolute top-2 -left-6 h-2 w-2 rounded-full bg-neutral-500" />
                             <span className="dark:text-neutral-200 text-black">{attribution.person}</span>
-                            <span>'s {attribution.attribute}</span>
+                            <span>{"'"}s {attribution.attribute}</span>
                         </li>
                     })}
 

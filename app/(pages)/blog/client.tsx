@@ -4,17 +4,9 @@ import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
 import { Clock } from "lucide-react";
 import Image from "next/image";
+import { PostType } from "~/api/medium";
 
 
-export type PostType = {
-  title: string;
-  link: string;
-  pubDate: Date;
-  snippet: string;
-  thumbnail: string | null;
-  tags: string[];
-  readingTime: string;
-};
 
 type Props = {
   posts: PostType[];

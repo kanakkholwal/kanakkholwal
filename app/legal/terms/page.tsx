@@ -24,7 +24,7 @@ const PrivacyPolicyPage: React.FC = () => {
             <article className="prose prose-lg dark:prose-invert">
                                 <section>
                     <p>
-                        Welcome to <strong>{appConfig.name}{"'"}s Portfolio</strong> ("Site"). By accessing or using the Site you agree to these Terms. If you
+                        Welcome to <strong>{appConfig.name}{"'"}s Portfolio</strong> ({`"Site"`}). By accessing or using the Site you agree to these Terms. If you
                         disagree, do not use the Site.
                     </p>
                 </section>
@@ -48,8 +48,8 @@ const PrivacyPolicyPage: React.FC = () => {
                 </section>
                 <section>
                     <p>
-                        This Privacy Policy explains how <strong>{appConfig.name}{"'"}s Portfolio</strong> ("we", "us") collects, uses, and shares
-                        information through this portfolio website ("Site"). By using the Site you agree to the terms below.
+                        This Privacy Policy explains how <strong>{appConfig.name}{"'"}s Portfolio</strong> ({`"we", "us"`}) collects, uses, and shares
+                        information through this portfolio website ({`"Site"`}). By using the Site you agree to the terms below.
                     </p>
                 </section>
 
@@ -74,7 +74,7 @@ const PrivacyPolicyPage: React.FC = () => {
                 <section>
                     <h2>4. Disclaimers</h2>
                     <p>
-                        Content is provided "as is" without warranties. We are not liable for damages arising from use of the Site.
+                        Content is provided {`"as is"`} without warranties. We are not liable for damages arising from use of the Site.
                     </p>
                 </section>
 

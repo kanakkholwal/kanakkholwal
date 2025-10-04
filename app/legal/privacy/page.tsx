@@ -55,7 +55,7 @@ const PrivacyPolicyPage: React.FC = () => {
                     <h2>4. Google AdSense & Third-Party Ads</h2>
                     <p>
                         If Google AdSense is enabled, Google may use cookies to serve ads based on past visits to this Site and other
-                        sites. To use AdSense, we include Google scripts which are governed by Google's privacy policy. You can opt
+                        sites. To use AdSense, we include Google scripts which are governed by Google{"'"}s privacy policy. You can opt
                         out of personalized ads via Google Ad Settings.
                     </p>
 
