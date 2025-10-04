@@ -19,19 +19,19 @@ import {
 } from "@/components/utils/link";
 import Wrapper from "@/components/wrapper";
 import { ArrowRight } from "lucide-react";
-import { Suspense } from "react";
+// import { Suspense } from "react";
 import Markdown from "react-markdown";
 import { appConfig, resume_link } from "root/project.config";
-import { getCachedContributions } from "~/api/github";
+// import { getCachedContributions } from "~/api/github";
 import { educationExperiences } from "~/data/education";
 import { projectsList } from "~/data/projects";
 import { workExperiences } from "~/data/work";
-import { GithubSection } from "./client";
+// import { GithubSection } from "./client";
 
 const BLUR_FADE_DELAY = 0.04;
 
 export default async function HomePage() {
-  const data = await getCachedContributions(appConfig.usernames.github)
+  // const data = await getCachedContributions(appConfig.usernames.github)
   return (
     <Wrapper>
       {/* Hero */}
@@ -106,7 +106,9 @@ export default async function HomePage() {
           }}
         />
       </section>
-      <Suspense
+
+      {/* Github Activity */}
+      {/* <Suspense
         fallback={
           <>
             <div className="h-96 w-full animate-pulse rounded-md bg-muted" />
@@ -114,7 +116,7 @@ export default async function HomePage() {
         }
       >
         <GithubSection data={data} />
-      </Suspense>
+      </Suspense> */}
       {/* Projects */}
       <section id="projects" className="w-full py-16 px-6 md:px-12">
         <div className="max-w-6xl mx-auto space-y-12">
