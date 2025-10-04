@@ -59,11 +59,11 @@ export const appConfig = {
     },
     social: {
         github: "https://github.com/kanakkholwal",
-        linkedin: "https://www.linkedin.com/in/kanak-kholwal/",
+        linkedin: "https://www.linkedin.com/in/kanak-kholwal",
         twitter: "https://twitter.com/kanakkholwal",
-        instagram: "https://www.instagram.com/kanakkholwal/",
-        youtube: "https://www.youtube.com/@kanakkholwal",
         medium: "https://medium.com/@kanakkholwal",
+        instagram: "https://www.instagram.com/kanakkholwal",
+        youtube: "https://www.youtube.com/@kanakkholwal",
     },
     usernames:{
         github:"kanakkholwal"

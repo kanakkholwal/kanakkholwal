@@ -34,7 +34,7 @@ export default function PageWrapper({ children }: { children: React.ReactNode, }
         <main className={cn('relative h-dvh', !isLoaded && 'overflow-y-hidden')}>
             <Header transition={transition} />
             <motion.div
-                className={cn("h-dvh w-full pt-20 md:pt-24 lg:pt-28")}
+                className={cn("min-h-dvh w-full py-20 md:py-24 lg:py-28")}
                 initial="hidden"
                 animate={transition ? "visible" : "hidden"}
                 variants={CONTENT_VARIANTS}

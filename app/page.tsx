@@ -110,7 +110,11 @@ export default async function HomePage() {
             </div>
           </BlurFade>
           <ExpandableProjectCards cards={DATA.projects as unknown as ExpandableCardProps["cards"]} />
-          <div className="flex mx-auto justify-center">
+          <div className="flex mx-auto justify-center gap-2">
+            <ButtonTransitionLink href="/stats" variant="gradient_blue">
+              <Icon name="trend-up" />
+              View Stats
+            </ButtonTransitionLink>
             <ButtonTransitionLink href="/projects" variant="rainbow">
               View All Projects
               <Icon name="arrow-right" />
@@ -191,7 +195,7 @@ function HeroSection() {
           Download Resume
           <Icon name="arrow-up-right" />
         </ButtonLink>
-        <ButtonTransitionLink variant="default_light" href="/journey" effect="shineHover">
+        <ButtonTransitionLink variant="ghost" href="/journey" effect="shineHover">
           My Journey
           <Icon name="arrow-right" />
         </ButtonTransitionLink>
