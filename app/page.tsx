@@ -19,18 +19,17 @@ import {
 } from "@/components/utils/link";
 import Wrapper from "@/components/wrapper";
 import { ArrowRight } from "lucide-react";
-// import { Suspense } from "react";
+import dynamic from "next/dynamic";
 import { Suspense } from "react";
 import Markdown from "react-markdown";
 import { appConfig, resume_link } from "root/project.config";
 import { getCachedContributions } from "~/api/github";
 import { educationExperiences } from "~/data/education";
 import { projectsList } from "~/data/projects";
-import { DATA } from "~/data/resume";
 import { workExperiences } from "~/data/work";
-import { GithubSection } from "./client";
 
 const BLUR_FADE_DELAY = 0.04;
+const GithubSection = dynamic(() => import('./client').then(mod => mod.GithubSection), { ssr: false });
 
 export default async function HomePage() {
   const data = await getCachedContributions(appConfig.usernames.github)
@@ -91,7 +90,7 @@ export default async function HomePage() {
       >
         <ShimmeringText text="Skills" className="text-2xl font-bold mb-8" />
         <div className="flex flex-wrap gap-3">
-          {DATA.skills.map((skill, id) => (
+          {appConfig.skills.map((skill, id) => (
             <BlurFade key={skill} delay={BLUR_FADE_DELAY * 10 + id * 0.05}>
               <Button variant="outline" size="sm" className="sr-only">
                 {skill}
@@ -108,9 +107,6 @@ export default async function HomePage() {
           }}
         />
       </section>
-      {/* <section id="github" className="max-w-6xl mx-auto w-full px-6 md:px-12 py-16">
-        <ShimmeringText text="Github Contributions" className="text-2xl font-bold mb-8" />
-        </section> */}
       <Suspense
         fallback={
           <>
@@ -232,13 +228,13 @@ function HeroSection() {
     >
       <div className="flex flex-col gap-4 justify-center text-center md:text-left flex-1 md:col-span-1">
         <ShimmeringText
-          text={`Hi, I'm ${DATA.name.split(" ")[0]}`}
+          text={`Hi, I'm ${appConfig.name.split(" ")[0]}`}
           className="text-3xl font-bold tracking-tight sm:text-5xl lg:text-6xl"
         />
         <RollingText
           className="text-muted-foreground max-w-lg md:text-xl"
           delay={BLUR_FADE_DELAY}
-          text={DATA.description}
+          text={appConfig.description}
           inView={true}
           inViewOnce={false}
         />
@@ -271,7 +267,7 @@ function HeroSection() {
         className="hidden sm:col-span-1 md:flex justify-center"
       >
         <Avatar className="size-32 md:size-60 border-4 border-primary/20 shadow-lg">
-          <AvatarImage alt={appConfig.name} src={DATA.avatarUrl} />
+          <AvatarImage alt={appConfig.name} src={appConfig.logo} />
           <AvatarFallback>{appConfig.initials}</AvatarFallback>
         </Avatar>
       </BlurFade>

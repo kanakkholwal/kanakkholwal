@@ -14,6 +14,18 @@ export const appConfig = {
     { name: "Kanak Kholwal", url: "https://kanak-kholwal.eu.org" },
     { name: "Kanak Kholwal", url: "https://kanak.eu.org" },
   ],
+  skills: [
+    "React",
+    "Next.js",
+    "TypeScript",
+    "Node.js",
+    "Go",
+    "MongoDB",
+    "PostgreSQL",
+    "Docker",
+    "Google Cloud Platform",
+    "AI/ML",
+  ],
   keywords: [
     "Kanak Kholwal",
     "Software Developer",
