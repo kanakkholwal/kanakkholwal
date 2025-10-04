@@ -1,7 +1,6 @@
 import { GlowFillButton } from "@/components/animated/button.fill";
 import { RollingText } from "@/components/animated/text.rolling";
 import { ShimmeringText } from "@/components/animated/text.shimmer";
-// import GithubContributions from "@/components/card.contribution";
 import { WorkExperienceCard } from "@/components/card.work";
 import { Icon } from "@/components/icons";
 import ShapeHero from "@/components/kokonutui/shape-hero";
@@ -21,6 +20,7 @@ import {
 import Wrapper from "@/components/wrapper";
 import { ArrowRight } from "lucide-react";
 // import { Suspense } from "react";
+import { Suspense } from "react";
 import Markdown from "react-markdown";
 import { appConfig, resume_link } from "root/project.config";
 import { getCachedContributions } from "~/api/github";
@@ -110,17 +110,16 @@ export default async function HomePage() {
       </section>
       {/* <section id="github" className="max-w-6xl mx-auto w-full px-6 md:px-12 py-16">
         <ShimmeringText text="Github Contributions" className="text-2xl font-bold mb-8" />
-        <Suspense
-          fallback={
-            <>
-              <div className="h-96 w-full animate-pulse rounded-md bg-muted" />
-            </>
-          }
-        >
-          <GithubContributions data={contributions.contributions} />
-        </Suspense>
-      </section> */}
-      <GithubSection data={data} />
+        </section> */}
+      <Suspense
+        fallback={
+          <>
+            <div className="h-96 w-full animate-pulse rounded-md bg-muted" />
+          </>
+        }
+      >
+        <GithubSection data={data} />
+      </Suspense>
       {/* Projects */}
       <section id="projects" className="w-full py-16 px-6 md:px-12">
         <div className="max-w-6xl mx-auto space-y-12">
@@ -272,8 +271,8 @@ function HeroSection() {
         className="hidden sm:col-span-1 md:flex justify-center"
       >
         <Avatar className="size-32 md:size-60 border-4 border-primary/20 shadow-lg">
-          <AvatarImage alt={DATA.name} src={DATA.avatarUrl} />
-          <AvatarFallback>{DATA.initials}</AvatarFallback>
+          <AvatarImage alt={appConfig.name} src={DATA.avatarUrl} />
+          <AvatarFallback>{appConfig.initials}</AvatarFallback>
         </Avatar>
       </BlurFade>
       <div className="md:col-span-2 flex justify-center flex-col gap-4 mx-auto items-center">
