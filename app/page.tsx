@@ -19,7 +19,6 @@ import {
 } from "@/components/utils/link";
 import Wrapper from "@/components/wrapper";
 import { ArrowRight } from "lucide-react";
-import dynamic from "next/dynamic";
 import { Suspense } from "react";
 import Markdown from "react-markdown";
 import { appConfig, resume_link } from "root/project.config";
@@ -27,9 +26,9 @@ import { getCachedContributions } from "~/api/github";
 import { educationExperiences } from "~/data/education";
 import { projectsList } from "~/data/projects";
 import { workExperiences } from "~/data/work";
+import { GithubSection } from "./client";
 
 const BLUR_FADE_DELAY = 0.04;
-const GithubSection = dynamic(() => import('./client').then(mod => mod.GithubSection), { ssr: false });
 
 export default async function HomePage() {
   const data = await getCachedContributions(appConfig.usernames.github)
