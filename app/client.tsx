@@ -1,4 +1,10 @@
 "use client"
+import { GlowFillButton } from "@/components/animated/button.fill";
+import { OrbitingCircles } from "@/components/animated/elements.orbiting";
+import { CountingNumber } from "@/components/animated/text.counter";
+import { RollingText } from "@/components/animated/text.rolling";
+import { ShimmeringText } from "@/components/animated/text.shimmer";
+import { Icon } from "@/components/icons";
 import {
     ContributionGraph,
     ContributionGraphBlock,
@@ -7,12 +13,127 @@ import {
     ContributionGraphLegend,
     ContributionGraphTotalCount,
 } from "@/components/kibo-ui/contribution-graph";
+import BlurFade from "@/components/magicui/blur-fade";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+    ButtonLink,
+    ButtonScroll,
+    TransitionLink
+} from "@/components/utils/link";
 import { cn } from "@/lib/utils";
+import { AvatarImage } from "@radix-ui/react-avatar";
+import { motion } from "framer-motion";
+import { ArrowRight, BookOpen, GitFork, Star, Users } from "lucide-react";
 import { useState } from "react";
+import { appConfig, resume_link } from "root/project.config";
 import { Contributions } from "~/api/github";
 
+
+const BLUR_FADE_DELAY = 0.04;
+
+
+
+export function HeroSection() {
+    return (
+        <section
+            id="hero"
+            className="relative flex flex-col sm:grid md:grid-cols-2 items-center justify-between gap-8 px-6 md:px-12 min-h-dvh max-w-7xl mx-auto w-full"
+        >
+            <div className="flex flex-col gap-4 justify-center text-center md:text-left flex-1 md:col-span-1">
+                <ShimmeringText
+                    text={`Hi, I'm ${appConfig.name.split(" ")[0]}`}
+                    className="text-3xl font-bold tracking-tight sm:text-5xl lg:text-6xl"
+                />
+                <RollingText
+                    className="text-muted-foreground max-w-lg md:text-xl"
+                    delay={BLUR_FADE_DELAY}
+                    text={appConfig.description}
+                    inView={true}
+                    inViewOnce={false}
+                />
+                <div className="mt-5 flex justify-center md:justify-start items-center gap-4 w-full  flex-wrap">
+                    <ButtonLink
+                        variant="dark"
+                        href={resume_link}
+                        target="_blank"
+                        effect="gooeyRight"
+                        size="lg"
+                        rounded="full"
+                    >
+                        Download Resume
+                        <Icon name="arrow-up-right" />
+                    </ButtonLink>
+                    <GlowFillButton icon={ArrowRight} className="h-11 my-0">
+                        <TransitionLink
+                            href="/journey"
+                        >
+                            My Journey
+                        </TransitionLink>
+                    </GlowFillButton>
+                </div>
+            </div>
+            <BlurFade
+                delay={BLUR_FADE_DELAY}
+                className="hidden sm:col-span-1 md:flex justify-center"
+            >
+
+
+                <div className="relative flex size-[500px] w-full flex-col items-center justify-center overflow-hidden">
+
+                    <OrbitingCircles iconSize={40} radius={200} speed={0.5}>
+                        {appConfig.skill_icons.toReversed().slice(0, appConfig.skill_icons.length / 2).map((skill, index) => (
+                            <div className="size-24" key={index}>
+                                <img
+                                    width={200}
+                                    height={200}
+                                    alt={skill}
+                                    className="overflow-hidden rounded-full size-full"
+                                    src={`https://skillicons.dev/icons?i=${skill}`}
+                                />
+                            </div>
+                        ))}
+                    </OrbitingCircles>
+                    <Avatar className="size-32 md:size-60 border-4 border-primary/20 shadow-lg">
+                        <AvatarImage alt={appConfig.name} src={appConfig.logo} />
+                        <AvatarFallback>{appConfig.initials}</AvatarFallback>
+                    </Avatar>
+                    <OrbitingCircles iconSize={30} radius={150} reverse speed={1}>
+                        {appConfig.skill_icons.slice(0, appConfig.skill_icons.length / 3).map((skill, index) => (
+                            <div className="size-24" key={index}>
+                                <img
+                                    width={200}
+                                    height={200}
+                                    alt={skill}
+                                    className="overflow-hidden rounded-full size-full"
+                                    src={`https://skillicons.dev/icons?i=${skill}`}
+                                />
+                            </div>
+                        ))}
+                    </OrbitingCircles>
+                </div>
+            </BlurFade>
+            <div className="md:col-span-2 flex justify-center flex-col gap-4 mx-auto items-center">
+                <RollingText
+                    className="text-muted-foreground max-w-lg md:text-xs"
+                    delay={BLUR_FADE_DELAY}
+                    text="Scroll down to explore my work and experience!"
+                />
+                <ButtonScroll
+                    variant="ghost"
+                    size="icon"
+                    rounded="full"
+                    className="animate-bounce rotate-180"
+                    targetId="work"
+                    offset={100}
+                >
+                    <Icon name="arrow-up" />
+                </ButtonScroll>
+            </div>
+        </section>
+    );
+}
 
 
 export function GithubSection({ data }: { data: Contributions }) {
@@ -21,21 +142,18 @@ export function GithubSection({ data }: { data: Contributions }) {
 
     return <section
         id="github"
-        className="mx-auto my-24 w-full max-w-6xl px-4 mt-10 mb-32 space-y-8"
+        className="mx-auto my-24 w-full max-w-7xl px-4 mt-10 mb-32 space-y-8"
     >
         <h2
-            className="relative z-2 text-5xl font-medium tracking-tight text-balance sm:text-5xl md:text-6xl mb-12 md:mb-12 text-center"
-            style={{
-                textShadow:
-                    "rgba(255, 255, 255, 0.05) 0px 4px 8px, rgba(255, 255, 255, 0.25) 0px 8px 30px"
-            }}
+            className="text-shadow-glow relative z-2 text-5xl font-medium tracking-tight text-balance sm:text-5xl md:text-6xl mb-12 md:mb-12 text-center"
+
         >
             <p className="mb-3 font-mono text-xs font-normal tracking-widest text-black/80 uppercase md:text-sm dark:text-white/70">
                 Developer Insights
             </p>
             <span className="font-instrument-serif">
                 <span className="">GitHub </span>{" "}
-                <span className="text-colorfull animate-gradient-x font-instrument-serif pe-2 tracking-tight italic">
+                <span className="text-colorful animate-gradient-x font-instrument-serif pe-2 tracking-tight italic">
                     Activity
                 </span>
             </span>
@@ -105,111 +223,58 @@ export function GithubSection({ data }: { data: Contributions }) {
             </ContributionGraphFooter>
         </ContributionGraph>
         <div className="mx-auto mt-4 grid grid-cols-2 gap-4 lg:grid-cols-4">
-            <div className="relative overflow-hidden rounded-xl border p-3 transition-all duration-300 md:p-4 bg-zinc-900/50 border-purple-500/30 hover:bg-purple-500/5 col-span-1">
+            <div className="relative overflow-hidden rounded-xl border p-3 transition-all duration-300 md:p-4 bg-card border-purple-500/30 hover:bg-purple-500/5 col-span-1">
                 <div className="flex items-center gap-3 md:gap-4">
-                    <div className="rounded-lg p-3 bg-purple-900/20">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width={24}
-                            height={24}
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth={2}
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            className="lucide lucide-users h-6 w-6 text-purple-400"
-                            aria-hidden="true"
-                        >
-                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-                            <path d="M16 3.128a4 4 0 0 1 0 7.744" />
-                            <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
-                            <circle cx={9} cy={7} r={4} />
-                        </svg>
+                    <div className="rounded-lg p-3 bg-purple-100 dark:bg-purple-900/20">
+
+                        <Users className="size-6 text-purple-400" />
                     </div>
                     <div>
-                        <p className="line-clamp-1 text-sm text-zinc-400">Followers</p>
-                        <p className="text-xl font-bold text-zinc-100 md:text-2xl">{data.stats.followers}</p>
+                        <p className="line-clamp-1 text-sm text-muted-foreground">Followers</p>
+                        <p className="text-xl font-bold text-foreground md:text-2xl">
+                            <CountingNumber from={0} to={data.stats.followers} duration={3} />
+                        </p>
                     </div>
                 </div>
             </div>
-            <div className="relative overflow-hidden rounded-xl border p-3 transition-all duration-300 md:p-4 bg-zinc-900/50 border-yellow-500/30 hover:bg-yellow-500/5 col-span-1">
+            <div className="relative overflow-hidden rounded-xl border p-3 transition-all duration-300 md:p-4 bg-card border-yellow-500/30 hover:bg-yellow-500/5 col-span-1">
                 <div className="flex items-center gap-3 md:gap-4">
-                    <div className="rounded-lg p-3 bg-yellow-900/20">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width={24}
-                            height={24}
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth={2}
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            className="lucide lucide-star h-6 w-6 text-yellow-400"
-                            aria-hidden="true"
-                        >
-                            <path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" />
-                        </svg>
+                    <div className="rounded-lg p-3 bg-yellow-100 dark:bg-yellow-900/20">
+
+                        <Star className="size-6 text-yellow-400" />
+
                     </div>
                     <div>
-                        <p className="line-clamp-1 text-sm text-zinc-400">Total Stars</p>
-                        <p className="text-xl font-bold text-zinc-100 md:text-2xl">{data.stats.stars}</p>
+                        <p className="line-clamp-1 text-sm text-muted-foreground">Total Stars</p>
+                        <p className="text-xl font-bold text-foreground md:text-2xl">
+                            <CountingNumber from={0} to={data.stats.stars} duration={3} />
+                        </p>
                     </div>
                 </div>
             </div>
-            <div className="relative overflow-hidden rounded-xl border p-3 transition-all duration-300 md:p-4 bg-zinc-900/50 border-green-500/30 hover:bg-green-500/5 col-span-1">
+            <div className="relative overflow-hidden rounded-xl border p-3 transition-all duration-300 md:p-4 bg-card border-green-500/30 hover:bg-green-500/5 col-span-1">
                 <div className="flex items-center gap-3 md:gap-4">
-                    <div className="rounded-lg p-3 bg-green-900/20">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width={24}
-                            height={24}
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth={2}
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            className="lucide lucide-book-open h-6 w-6 text-green-400"
-                            aria-hidden="true"
-                        >
-                            <path d="M12 7v14" />
-                            <path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z" />
-                        </svg>
+                    <div className="rounded-lg p-3 bg-green-100 dark:bg-green-900/20">
+                        <BookOpen className="size-6 text-green-400" />
                     </div>
                     <div>
-                        <p className="line-clamp-1 text-sm text-zinc-400">Public Repos</p>
-                        <p className="text-xl font-bold text-zinc-100 md:text-2xl">{data.stats.repos}</p>
+                        <p className="line-clamp-1 text-sm text-muted-foreground">Public Repos</p>
+                        <p className="text-xl font-bold text-foreground md:text-2xl">
+                            <CountingNumber from={0} to={data.stats.repos} duration={3} />
+                        </p>
                     </div>
                 </div>
             </div>
-            <div className="relative overflow-hidden rounded-xl border p-3 transition-all duration-300 md:p-4 bg-zinc-900/50 border-blue-500/30 hover:bg-blue-500/5 col-span-1">
+            <div className="relative overflow-hidden rounded-xl border p-3 transition-all duration-300 md:p-4 bg-card border-blue-500/30 hover:bg-blue-500/5 col-span-1">
                 <div className="flex items-center gap-3 md:gap-4">
-                    <div className="rounded-lg p-3 bg-blue-900/20">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width={24}
-                            height={24}
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth={2}
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            className="lucide lucide-git-fork h-6 w-6 text-blue-400"
-                            aria-hidden="true"
-                        >
-                            <circle cx={12} cy={18} r={3} />
-                            <circle cx={6} cy={6} r={3} />
-                            <circle cx={18} cy={6} r={3} />
-                            <path d="M18 9v2c0 .6-.4 1-1 1H7c-.6 0-1-.4-1-1V9" />
-                            <path d="M12 12v3" />
-                        </svg>
+                    <div className="rounded-lg p-3 bg-blue-100 dark:bg-blue-900/20">
+                        <GitFork className="size-6 text-blue-400" />
                     </div>
                     <div>
-                        <p className="line-clamp-1 text-sm text-zinc-400">Total Forks</p>
-                        <p className="text-xl font-bold text-zinc-100 md:text-2xl">{data.stats.forks}</p>
+                        <p className="line-clamp-1 text-sm text-muted-foreground">Total Forks</p>
+                        <p className="text-xl font-bold text-foreground md:text-2xl">
+                            <CountingNumber from={0} to={data.stats.forks} duration={3} />
+                        </p>
                     </div>
                 </div>
             </div>
@@ -219,4 +284,54 @@ export function GithubSection({ data }: { data: Contributions }) {
 
 }
 
+
+
+export function SkillSection() {
+
+
+    return (<section
+        id="skills"
+        className="max-w-7xl mx-auto w-full px-6 md:px-12 py-32"
+    >
+        <h2
+            className="text-shadow-glow relative text-5xl font-medium tracking-tight text-balance sm:text-5xl md:text-6xl text-center z-30 mb-0 md:mb-0 size-full -translate-y-10"
+        >
+            <p className="mb-3 font-mono text-xs font-normal tracking-widest text-black/80 uppercase md:text-sm dark:text-white/70">
+                My Skills
+            </p>
+            <span className="font-instrument-serif">
+                <span className="">The Secret</span>{" "}
+                <span className="text-colorful animate-gradient-x font-instrument-serif pe-2 tracking-tight italic">
+                    {" "}
+                    Sauce
+                </span>
+            </span>
+        </h2>
+
+        <div className="flex justify-center flex-wrap gap-3 mb-2 relative">
+            {appConfig.skill_icons.map((skill) => {
+                return <motion.img
+                    key={skill}
+                    aria-label={skill}
+                    src={`https://skillicons.dev/icons?i=${skill}`}
+                    alt={`${skill} icon`}
+                    whileHover={{
+                        scale: 1.15,
+                        transition: { duration: 0.2 }
+                    }}
+                    draggable="false"
+                    unselectable="on"
+                    className="inline-block cursor-pointer size-11 md:size-14 rounded-md border p-2.5 md:p-3 will-change-transform border-[#A5AEB81F]/10 bg-[#EDEEF0] shadow-[inset_0px_2px_1.5px_0px_#A5AEB852] dark:border-white/10 dark:shadow-[inset_0_2px_4px_rgba(0,0,0,0.2),inset_0_-2px_4px_rgba(255,255,255,0.1)] dark:bg-[#1e1e1e]"
+                />
+            })}
+
+        </div>
+
+
+
+    </section>
+
+
+    );
+}
 

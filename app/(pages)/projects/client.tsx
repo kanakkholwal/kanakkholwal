@@ -24,7 +24,7 @@ export default function ProjectsShowcase() {
         description="A curated selection of my most impactful and innovative projects, showcasing my skills and expertise in software development."
         shapeClassName="opacity-30 hidden md:block"
       />
-      <div className="max-w-6xl mx-auto px-6 md:px-12 pt-12">
+      <div className="max-w-7xl mx-auto px-6 md:px-12 pt-12">
         <RollingText
           text="Featured Projects"
           className="text-4xl font-bold tracking-tight"

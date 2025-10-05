@@ -1,21 +1,21 @@
 "use client";
 
 import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
+    Card,
+    CardContent,
+    CardFooter,
+    CardHeader,
 } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import {
-  Building,
-  Camera,
-  Compass,
-  Heart,
-  Home,
-  HomeIcon,
-  MapPin,
+    Building,
+    Camera,
+    Compass,
+    Heart,
+    Home,
+    HomeIcon,
+    MapPin,
 } from "lucide-react";
 import type React from "react";
 
@@ -107,7 +107,7 @@ export function BentoGrid({ items = itemsSample }: BentoGridProps) {
       <div className="bg-primary/5 absolute top-20 -left-20 h-64 w-64 rounded-full blur-3xl" />
       <div className="bg-primary/5 absolute -right-20 bottom-20 h-64 w-64 rounded-full blur-3xl" />
 
-      <div className="relative mx-auto grid max-w-6xl grid-cols-1 gap-4 p-4 md:grid-cols-3">
+      <div className="relative mx-auto grid max-w-7xl grid-cols-1 gap-4 p-4 md:grid-cols-3">
         {items.map((item, index) => (
           <motion.a
             href="#"

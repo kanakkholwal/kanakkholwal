@@ -1,5 +1,4 @@
 import { GlowFillButton } from "@/components/animated/button.fill";
-import { RollingText } from "@/components/animated/text.rolling";
 import { ShimmeringText } from "@/components/animated/text.shimmer";
 import { WorkExperienceCard } from "@/components/card.work";
 import { Icon } from "@/components/icons";
@@ -9,24 +8,19 @@ import {
   ExpandableCardProps,
   ExpandableProjectCards,
 } from "@/components/project-card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import {
-  ButtonLink,
-  ButtonScroll,
   ButtonTransitionLink,
-  TransitionLink,
+  TransitionLink
 } from "@/components/utils/link";
 import Wrapper from "@/components/wrapper";
 import { ArrowRight } from "lucide-react";
 import { Suspense } from "react";
 import Markdown from "react-markdown";
-import { appConfig, resume_link } from "root/project.config";
+import { appConfig } from "root/project.config";
 import { getCachedContributions } from "~/api/github";
-import { educationExperiences } from "~/data/education";
 import { projectsList } from "~/data/projects";
 import { workExperiences } from "~/data/work";
-import { GithubSection } from "./client";
+import { GithubSection, HeroSection, SkillSection } from "./client";
 
 const BLUR_FADE_DELAY = 0.04;
 
@@ -56,12 +50,22 @@ export default async function HomePage() {
       {/* Work Experience */}
       <section
         id="work"
-        className="max-w-6xl mx-auto w-full px-6 md:px-12 py-16"
+        className="max-w-7xl mx-auto w-full px-6 md:px-12 py-16"
       >
-        <ShimmeringText
-          text="Work Experience"
-          className="text-2xl font-bold mb-8"
-        />
+        <h2
+          className="mb-8text-shadow-glow relative text-5xl font-medium tracking-tight text-balance sm:text-5xl md:text-6xl text-center z-30 mb-5 md:mb-0 size-full -translate-y-10"
+        >
+          <p className="mb-3 font-mono text-xs font-normal tracking-widest text-black/80 uppercase md:text-sm dark:text-white/70">
+            Jobs & Roles
+          </p>
+          <span className="font-instrument-serif">
+            <span className="">Work </span>{" "}
+            <span className="text-colorful animate-gradient-x font-instrument-serif pe-2 tracking-tight italic">
+              {" "}
+              Experience
+            </span>
+          </span>
+        </h2>
         <div className="grid gap-6">
           {workExperiences.map((work, id) => (
             <BlurFade
@@ -83,29 +87,7 @@ export default async function HomePage() {
       </section>
 
       {/* Skills */}
-      <section
-        id="skills"
-        className="max-w-6xl mx-auto w-full px-6 md:px-12 py-16"
-      >
-        <ShimmeringText text="Skills" className="text-2xl font-bold mb-8" />
-        <div className="flex flex-wrap gap-3">
-          {appConfig.skills.map((skill, id) => (
-            <BlurFade key={skill} delay={BLUR_FADE_DELAY * 10 + id * 0.05}>
-              <Button variant="outline" size="sm" className="sr-only">
-                {skill}
-              </Button>
-            </BlurFade>
-          ))}
-        </div>
-        <div
-          className="h-40"
-          style={{
-            backgroundImage:
-              "url('https://skillicons.dev/icons?i=js,ts,go,python,docker,postgres,mongodb,redis,firebase,npm,pnpm,git,github,gcp,svg,vercel,nextjs,vite,tailwind,notion,react,express,nodejs,postman,figma,bootstrap,html,css,sass')",
-            backgroundRepeat: "no-repeat",
-          }}
-        />
-      </section>
+      <SkillSection />
 
       {/* Github Activity */}
       <Suspense
@@ -119,7 +101,7 @@ export default async function HomePage() {
       </Suspense>
       {/* Projects */}
       <section id="projects" className="w-full py-16 px-6 md:px-12">
-        <div className="max-w-6xl mx-auto space-y-12">
+        <div className="max-w-7xl mx-auto space-y-12">
           <BlurFade delay={BLUR_FADE_DELAY * 11}>
             <div className="text-center space-y-4">
               <ShimmeringText
@@ -137,46 +119,23 @@ export default async function HomePage() {
             cards={projectsList as unknown as ExpandableCardProps["cards"]}
           />
           <div className="flex mx-auto justify-center gap-2">
-            <ButtonTransitionLink href="/stats" variant="outline">
+            <ButtonTransitionLink href="/stats" variant="outline" rounded="full">
               <Icon name="trend-up" />
               View Stats
             </ButtonTransitionLink>
-            <ButtonTransitionLink href="/projects" variant="rainbow">
+            <ButtonTransitionLink href="/projects" variant="rainbow" rounded="full">
               View All Projects
               <Icon name="arrow-right" />
             </ButtonTransitionLink>
           </div>
         </div>
       </section>
-      {/* Education */}
-      <section
-        id="education"
-        className="max-w-6xl mx-auto w-full px-6 md:px-12 py-16"
-      >
-        <ShimmeringText text="Education" className="text-2xl font-bold mb-8" />
-        <div className="grid gap-6">
-          {educationExperiences.map((education, id) => (
-            <BlurFade
-              key={education.school}
-              delay={BLUR_FADE_DELAY * 8 + id * 0.05}
-            >
-              <WorkExperienceCard
-                href={education.href}
-                logoUrl={education.logoUrl}
-                altText={education.school}
-                title={education.school}
-                role={education.degree}
-                period={`${education.start} - ${education.end}`}
-              />
-            </BlurFade>
-          ))}
-        </div>
-      </section>
+
 
       {/* Contact */}
       <section
         id="contact"
-        className="relative z-0 mt-40 flex w-full justify-center overflow-x-hidden px-4 py-20"
+        className="relative z-0 mt-20 flex w-full justify-center overflow-x-hidden px-4 py-20"
       >
         <ShapeHero
           title1=""
@@ -221,74 +180,3 @@ export default async function HomePage() {
   );
 }
 
-function HeroSection() {
-  return (
-    <section
-      id="hero"
-      className="relative flex flex-col sm:grid md:grid-cols-2 items-center justify-between gap-8 px-6 md:px-12 min-h-dvh max-w-6xl mx-auto w-full"
-    >
-      <div className="flex flex-col gap-4 justify-center text-center md:text-left flex-1 md:col-span-1">
-        <ShimmeringText
-          text={`Hi, I'm ${appConfig.name.split(" ")[0]}`}
-          className="text-3xl font-bold tracking-tight sm:text-5xl lg:text-6xl"
-        />
-        <RollingText
-          className="text-muted-foreground max-w-lg md:text-xl"
-          delay={BLUR_FADE_DELAY}
-          text={appConfig.description}
-          inView={true}
-          inViewOnce={false}
-        />
-        <div className="mt-5 flex justify-center md:justify-start items-center gap-4 w-full  flex-wrap">
-          <ButtonLink
-            variant="dark"
-            href={resume_link}
-            target="_blank"
-            effect="gooeyRight"
-            size="lg"
-            rounded="full"
-          >
-            Download Resume
-            <Icon name="arrow-up-right" />
-          </ButtonLink>
-          <GlowFillButton icon={ArrowRight} className="h-11 my-0">
-            <TransitionLink
-              // variant="ghost"
-              href="/journey"
-            // effect="shineHover"
-            >
-              My Journey
-              {/* <Icon name="arrow-right" /> */}
-            </TransitionLink>
-          </GlowFillButton>
-        </div>
-      </div>
-      <BlurFade
-        delay={BLUR_FADE_DELAY}
-        className="hidden sm:col-span-1 md:flex justify-center"
-      >
-        <Avatar className="size-32 md:size-60 border-4 border-primary/20 shadow-lg">
-          <AvatarImage alt={appConfig.name} src={appConfig.logo} />
-          <AvatarFallback>{appConfig.initials}</AvatarFallback>
-        </Avatar>
-      </BlurFade>
-      <div className="md:col-span-2 flex justify-center flex-col gap-4 mx-auto items-center">
-        <RollingText
-          className="text-muted-foreground max-w-lg md:text-xs"
-          delay={BLUR_FADE_DELAY}
-          text="Scroll down to explore my work and experience!"
-        />
-        <ButtonScroll
-          variant="ghost"
-          size="icon"
-          rounded="full"
-          className="animate-bounce rotate-180"
-          targetId="work"
-          offset={100}
-        >
-          <Icon name="arrow-up" />
-        </ButtonScroll>
-      </div>
-    </section>
-  );
-}

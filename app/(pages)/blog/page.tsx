@@ -15,22 +15,19 @@ export default async function MediumPage() {
     const now = Date.now();
 
     return (
-        <main className="mx-auto flex flex-col justify-center px-4 py-16 md:px-6 max-w-6xl">
+        <main className="mx-auto flex flex-col justify-center px-4 py-16 md:px-6 max-w-7xl">
             {/* Heading */}
             <div className="mx-auto">
                 <h2
-                    className="relative z-2 text-5xl font-medium tracking-tight sm:text-5xl md:text-6xl text-center max-w-2xl text-balance mx-auto mb-10"
-                    style={{
-                        textShadow:
-                            "rgba(255, 255, 255, 0.05) 0px 4px 8px, rgba(255, 255, 255, 0.25) 0px 8px 30px",
-                    }}
+                    className="text-shadow-glow relative z-2 text-5xl font-medium tracking-tight sm:text-5xl md:text-6xl text-center max-w-2xl text-balance mx-auto mb-10"
+                    
                 >
                     <p className="mb-3 font-mono text-xs font-normal tracking-widest text-black/80 uppercase md:text-sm dark:text-white/70">
                         The Blog
                     </p>
                     <span className="font-instrument-serif">
                         <span>Handpicked insights from</span>{" "}
-                        <span className="text-colorfull animate-gradient-x italic pe-2">
+                        <span className="text-colorful animate-gradient-x italic pe-2">
                             the pensieve
                         </span>
                     </span>

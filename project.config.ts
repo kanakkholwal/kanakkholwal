@@ -7,7 +7,7 @@ export const appConfig = {
   summary: `I thrive on solving complex problems and building impactful products. From developing scalable architectures to integrating AI solutions, my goal is to create software that makes a real difference. Always eager to learn, contribute to open source, and collaborate with like-minded developers. Check out my work below, and feel free to reach out.`,
   url: "https://kanakkholwal.eu.org",
   logo: "https://github.com/kanakkholwal.png",
-  emails: ["me@kanak.eu.org"],
+  emails: ["me@kanak.eu.org", "contact@kanak.eu.org"],
   creator: "Kanak Kholwal",
   authors: [
     { name: "Kanak Kholwal", url: "https://kanakkholwal.eu.org" },
@@ -26,6 +26,62 @@ export const appConfig = {
     "Google Cloud Platform",
     "AI/ML",
   ],
+  skill_icons: [
+    "javascript",
+    "typescript",
+    "go",
+    "python",
+    "docker",
+    "postgres",
+    // "postgresql/sky",
+    "mongodb",
+    "redis",
+    "firebase",
+    "npm",
+    "pnpm",
+    "git",
+    "github",
+    "gcp",
+    // "googlecloud/gold",
+    "svg",
+    "vercel",
+    "nextjs",
+    // "nextdotjs",
+    // "vite/yellow",
+    "vite",
+    "tailwindcss",
+    "notion",
+    "react",
+    // "zustand",
+    "express",
+    "nodejs",
+    // "nodedotjs",
+    "postman",
+    "figma",
+    "bootstrap",
+    "html",
+    // "html5",
+    "css",
+    "sass",
+    "graphql"
+  ],
+  attribution: {
+    journey: [
+      "The first version of this website was created in 2022. I was just getting started with web technologies and built that one with vanilla js, after that I used some templates and code snippets from here and there, those version are still open source back then. The old version is actually open-sourced.",
+      "Recently, in 2025, it was time for an evolution. I completely redesigned the site to better showcase my current front-end development capabilities, focusing on a clean aesthetic and refined animations.",
+      "I would like to express my thanks to all of websites that inspired me to build this website (non-exhaustive):"
+    ],
+    list: [
+      {
+        person: "Josh W. Comeau",
+        attribute: " blog and micro-interactions"
+      },
+      {
+        person: "Aayush Bharti",
+        attribute: " bucket list page"
+      },
+    ]
+  },
   keywords: [
     "Kanak Kholwal",
     "Software Developer",
@@ -90,6 +146,85 @@ export const appConfig = {
   verifications: {
     "google.analytics": "G-95KQZNMSSE",
   },
+  statsConfig: {
+    npmPackages: ["nexo-editor", "nexo-mdx"],
+    repositories: [
+      {
+        name: "college-ecosystem",
+        repo: "kanakkholwal/college-ecosystem",
+        repoBeatsUri:
+          "https://repobeats.axiom.co/api/embed/5c24e4ec8193c618a748a6339fb9eae49ad645ee.svg",
+      },
+      {
+        name: "nexo-mdx",
+        repo: "kanakkholwal/nexo-mdx",
+        repoBeatsUri:
+          "https://repobeats.axiom.co/api/embed/e66720ef5fadf321ae59f5a9ae917ff738d6653d.svg",
+      },
+      {
+        name: "nexo-editor",
+        repo: "kanakkholwal/nexo-editor",
+        repoBeatsUri:
+          "https://repobeats.axiom.co/api/embed/cf1b65e0830b9fc55bc538fdff36a7d416a53976.svg",
+      },
+    ],
+    flags: {
+      repoBeats: true,
+      versionAdoptionGraph: false,
+    },
+  },
+  footerLinks: {
+    general: [
+      {
+        label: "Home",
+        href: "/",
+      },
+      {
+        label: "Journey",
+        href: "/journey",
+      },
+      {
+        label: "Projects",
+        href: "/projects",
+      },
+      {
+        label: "Blog",
+        href: "/blog",
+      },
+    ],
+    specifics: [
+      {
+        label: "OS Stats",
+        href: "/stats",
+      },
+      {
+        label: "Toolkit",
+        href: "/toolkit",
+      },
+      {
+        label: "Tech Stack",
+        href: "/tech-stack",
+      },
+      {
+        label: "Bucket List",
+        href: "/bucket-list",
+      },
+    ],
+    more: [
+      {
+        label: "Book a call",
+        href: "/contact",
+      },
+      {
+        label: "Links",
+        href: "/links",
+      },
+      {
+        label: "Attributions",
+        href: "/attribution",
+      },
+    ],
+  }
 };
 
 export const resume_link =

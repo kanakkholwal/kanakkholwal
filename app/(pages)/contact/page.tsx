@@ -10,11 +10,8 @@ export default function ContactPage() {
       <section className="relative px-4 pt-10">
         <div className="mt-24 mb-6 flex w-full flex-col items-center text-balance">
           <h2
-            className="relative z-2 text-5xl font-medium tracking-tight text-balance sm:text-5xl md:mb-36 md:text-6xl text-center !mb-0"
-            style={{
-              textShadow:
-                "rgba(255, 255, 255, 0.05) 0px 4px 8px, rgba(255, 255, 255, 0.25) 0px 8px 30px",
-            }}
+            className="text-shadow-glow relative z-2 text-5xl font-medium tracking-tight text-balance sm:text-5xl md:mb-36 md:text-6xl text-center !mb-0"
+            
           >
             <p className="mb-3 font-mono text-xs font-normal tracking-widest text-black/80 uppercase md:text-sm dark:text-white/70">
               Contact

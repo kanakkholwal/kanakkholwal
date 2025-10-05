@@ -8,7 +8,7 @@ export function GlowFillButton(
   return (
     <button
       className={cn(
-        "group relative inline-flex cursor-pointer items-center justify-between overflow-hidden rounded-full border border-black/30 bg-black/20 py-[3px] pr-[3px] pl-2 text-base font-medium opacity-85 backdrop-blur-xs transition-all hover:bg-transparent md:py-1 md:pr-1 md:pl-3 dark:border-white/10 dark:bg-white/10 my-10 group-hover:scale-125",
+        "group relative inline-flex cursor-pointer items-center justify-between overflow-hidden rounded-full border border-black/30 bg-neutral-100 py-[3px] pr-[3px] pl-2 text-base font-medium opacity-85 backdrop-blur-xs transition-all hover:bg-transparent md:py-1 md:pr-1 md:pl-3 dark:border-white/10 dark:bg-white/10 my-10 group-hover:scale-125",
         props.className,
       )}
     >

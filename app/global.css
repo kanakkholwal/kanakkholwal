@@ -206,6 +206,8 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
+  --width-app: var(--max-app-width);
+
   --font-mono: 'Space Mono', 'Fira Code', 'Courier New', 'Courier', 'monospace';
   --font-sans: 'Inter', 'Helvetica', 'Arial', sans-serif;
 
@@ -221,6 +223,17 @@
   --animate-gradient: gradient 8s linear infinite;
   --animate-spin-slow: spin-slow 20s linear infinite;
   --animate-spin-reverse: spin-slow 20s linear infinite reverse;
+  --animate-orbit: orbit calc(var(--duration) * 1s) linear infinite;
+
+  @keyframes orbit {
+    0% {
+      transform: rotate(calc(var(--angle) * 1deg)) translateY(calc(var(--radius) * 1px)) rotate(calc(var(--angle) * -1deg));
+    }
+
+    100% {
+      transform: rotate(calc(var(--angle) * 1deg + 360deg)) translateY(calc(var(--radius) * 1px)) rotate(calc((var(--angle) * -1deg) - 360deg));
+    }
+  }
 
   @keyframes gradient {
     to {
@@ -474,7 +487,7 @@ body {
        - starts from 1024px (for tablets/small desktops)
        - scales with viewport
        - grows reasonably beyond 1440px without a hard limit */
-  --max-app-width: clamp(1440px, 80vw, 1920px);
+  --max-app-width: clamp(1440px, 80vw, 2480px);
 
 }
 
@@ -496,6 +509,10 @@ body {
 ::view-transition-old(root) {
   z-index: 1;
   animation: none !important;
+}
+
+.text-shadow-glow {
+  text-shadow: rgba(255, 255, 255, 0.05) 0px 4px 8px, rgba(255, 255, 255, 0.25) 0px 8px 30px;
 }
 
 .hero {
@@ -609,7 +626,7 @@ body {
   background-size: 200% 200%;
 }
 
-.text-colorfull {
+.text-colorful {
   -webkit-text-fill-color: transparent;
   background: linear-gradient(288deg, #ff8000, #f0c 53.2394%, #04f);
   -webkit-background-clip: text;

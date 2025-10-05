@@ -4,58 +4,6 @@ import { ModeToggle } from "./mode-toggle";
 import { Socials } from "./socials";
 import { TransitionLink } from "./utils/link";
 
-const footerLinks = {
-  general: [
-    {
-      label: "Home",
-      href: "/",
-    },
-    {
-      label: "Journey",
-      href: "/journey",
-    },
-    {
-      label: "Projects",
-      href: "/projects",
-    },
-    {
-      label: "Blog",
-      href: "/blog",
-    },
-  ],
-  specifics: [
-    {
-      label: "OS Stats",
-      href: "/stats",
-    },
-    {
-      label: "Toolkit",
-      href: "/toolkit",
-    },
-    {
-      label: "Tech Stack",
-      href: "/tech-stack",
-    },
-    {
-      label: "Bucket List",
-      href: "/bucket-list",
-    },
-  ],
-  more: [
-    {
-      label: "Book a call",
-      href: "/contact",
-    },
-    {
-      label: "Links",
-      href: "/links",
-    },
-    {
-      label: "Attributions",
-      href: "/attribution",
-    },
-  ],
-};
 
 export function FooterSection() {
   return (
@@ -71,7 +19,7 @@ export function FooterSection() {
             </p>
           </div>
           <div className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:gap-16 lg:gap-32 max-sm:bg-primary/[0.05] rounded-3xl p-5">
-            {Object.entries(footerLinks).map(([key, links]) => {
+            {Object.entries(appConfig.footerLinks).map(([key, links]) => {
               return (
                 <div className="flex flex-col gap-2 sm:gap-4" key={key}>
                   <h4 className="text-base text-neutral-700 dark:text-white/90 font-mono capitalize">
@@ -138,8 +86,8 @@ export function FooterSection() {
           </div>
         </div>
         <div className="flex flex-col items-center gap-4 md:flex-row md:justify-end">
-          <ModeToggle />
           <Socials />
+          <ModeToggle />
         </div>
       </div>
     </footer>

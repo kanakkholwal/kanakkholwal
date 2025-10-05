@@ -9,14 +9,15 @@ export function ModeToggle() {
 
   return (
     <Button
-      variant="raw"
+      variant="light"
       type="button"
-      size="icon"
-      className="px-2 text-foreground"
+      size="icon_sm"
+      rounded="full"
+      className="hover:animate-spin hover:animation-duration-3000"
       onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
     >
-      <SunIcon className="h-[1.2rem] w-[1.2rem] text-foreground dark:hidden" />
-      <MoonIcon className="hidden h-[1.2rem] w-[1.2rem] text-foreground dark:block" />
+      <SunIcon className="dark:hidden" />
+      <MoonIcon className="hidden dark:block" />
     </Button>
   );
 }
