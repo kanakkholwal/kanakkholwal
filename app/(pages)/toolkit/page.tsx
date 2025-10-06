@@ -48,12 +48,10 @@ export default function ToolKitPage() {
                             className="group no-underline transition-all duration-500 hover:-translate-y-2"
                         >
                             <div className="group inline-block text-center">
-                                <div className="h-28 w-28 rounded-[20px] border-2 p-2 transition-all duration-300 group-hover:border-indigo-400 group-hover:shadow-lg dark:group-hover:border-indigo-500">
+                                <div className="size-28 rounded-[20px] border-2 p-2 transition-all duration-300 group-hover:border-indigo-400 group-hover:shadow-lg dark:group-hover:border-indigo-500">
                                     <div
-                                        className="grid h-full place-items-center rounded-xl border-2 border-[#A5AEB81F]/10 bg-[#EDEEF0] dark:border-[#5A5F661F]/10 dark:bg-[#1A1B1E]"
-                                        style={{
-                                            boxShadow: "rgba(165, 174, 184, 0.32) 0px 2px 1.5px 0px inset"
-                                        }}
+                                        className="box-shadow-glow grid h-full place-items-center rounded-xl border-2 border-[#A5AEB81F]/10 bg-[#EDEEF0] dark:border-[#5A5F661F]/10 dark:bg-[#1A1B1E]"
+                                      
                                     >
                                         <Image
                                             className="h-10 w-10"
@@ -64,7 +62,7 @@ export default function ToolKitPage() {
                                         />
                                     </div>
                                 </div>
-                                <p className="mt-3 text-sm text-gray-500">{tool.label}</p>
+                                <p className="mt-3 text-sm text-muted-foreground">{tool.label}</p>
                             </div>
 
                         </a>

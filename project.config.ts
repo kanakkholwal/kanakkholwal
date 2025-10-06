@@ -7,7 +7,7 @@ export const appConfig = {
   summary: `I thrive on solving complex problems and building impactful products. From developing scalable architectures to integrating AI solutions, my goal is to create software that makes a real difference. Always eager to learn, contribute to open source, and collaborate with like-minded developers. Check out my work below, and feel free to reach out.`,
   url: "https://kanakkholwal.eu.org",
   logo: "https://github.com/kanakkholwal.png",
-  emails: ["me@kanak.eu.org", "contact@kanak.eu.org"],
+  emails: ["contact@kanak.eu.org", "me@kanak.eu.org"],
   creator: "Kanak Kholwal",
   authors: [
     { name: "Kanak Kholwal", url: "https://kanakkholwal.eu.org" },
@@ -82,6 +82,68 @@ export const appConfig = {
       },
     ]
   },
+  bucketList :[
+    {
+        name: "SkyDiving",
+        completed: false,
+        description: null,
+        images: [],
+    },
+    {
+        name: "Create Portfolio Website",
+        completed: true,
+        description: "October 2025, https://kanak.eu.org",
+        images: [],
+    },
+    {
+        name: "Do a Marathon",
+        completed: true,
+        description: "October 2024",
+        images: [],
+    },
+    {
+        name: "Solo travel to another country",
+        completed: false,
+        description: null,
+        images: [],
+    },
+    {
+        name: "Impactful Software Project",
+        completed: false,
+        description: null,
+        images: [],
+    },
+    {
+        name: "Actual World Tour",
+        completed: false,
+        description: null,
+        images: [],
+    },
+    {
+        name: "Get 100+ followers on Github",
+        completed: false,
+        description: null,
+        images: [],
+    },
+    {
+        name: "Speak at an international conference or Ted talk",
+        completed: false,
+        description: null,
+        images: [],
+    },
+    {
+        name: "Publish a Research Paper",
+        completed: false,
+        description: null,
+        images: [],
+    },
+    {
+        name: "3 month Europe Trip with a Remote Job",
+        completed: false,
+        description: null,
+        images: [],
+    },
+],
   keywords: [
     "Kanak Kholwal",
     "Software Developer",
@@ -201,10 +263,10 @@ export const appConfig = {
         label: "Toolkit",
         href: "/toolkit",
       },
-      {
-        label: "Tech Stack",
-        href: "/tech-stack",
-      },
+      // {
+      //   label: "Tech Stack",
+      //   href: "/tech-stack",
+      // },
       {
         label: "Bucket List",
         href: "/bucket-list",

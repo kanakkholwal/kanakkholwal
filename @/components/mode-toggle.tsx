@@ -9,11 +9,11 @@ export function ModeToggle() {
 
   return (
     <Button
-      variant="light"
+      variant="ghost"
       type="button"
       size="icon_sm"
       rounded="full"
-      className="hover:animate-spin hover:animation-duration-3000"
+      className="hover:[&>svg]:rotate-360 [&>svg]:duration-500"
       onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
     >
       <SunIcon className="dark:hidden" />

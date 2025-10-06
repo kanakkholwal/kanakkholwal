@@ -1,19 +1,15 @@
-import { GlowFillButton } from "@/components/animated/button.fill";
-import { ShimmeringText } from "@/components/animated/text.shimmer";
 import { WorkExperienceCard } from "@/components/card.work";
+import { ContactSection } from "@/components/contact";
 import { Icon } from "@/components/icons";
-import ShapeHero from "@/components/kokonutui/shape-hero";
 import BlurFade from "@/components/magicui/blur-fade";
 import {
   ExpandableCardProps,
   ExpandableProjectCards,
 } from "@/components/project-card";
 import {
-  ButtonTransitionLink,
-  TransitionLink
+  ButtonTransitionLink
 } from "@/components/utils/link";
 import Wrapper from "@/components/wrapper";
-import { ArrowRight } from "lucide-react";
 import { Suspense } from "react";
 import Markdown from "react-markdown";
 import { appConfig } from "root/project.config";
@@ -53,9 +49,9 @@ export default async function HomePage() {
         className="max-w-7xl mx-auto w-full px-6 md:px-12 py-16"
       >
         <h2
-          className="mb-8text-shadow-glow relative text-5xl font-medium tracking-tight text-balance sm:text-5xl md:text-6xl text-center z-30 mb-5 md:mb-0 size-full -translate-y-10"
+          className="text-shadow-glow relative text-5xl font-medium tracking-tight text-balance sm:text-5xl md:text-6xl text-center z-30 mb-5 md:mb-0 size-full -translate-y-10"
         >
-          <p className="mb-3 font-mono text-xs font-normal tracking-widest text-black/80 uppercase md:text-sm dark:text-white/70">
+          <p className="mb-3 font-mono text-xs font-normal tracking-widest text-foreground uppercase md:text-sm">
             Jobs & Roles
           </p>
           <span className="font-instrument-serif">
@@ -72,18 +68,11 @@ export default async function HomePage() {
               key={work.company}
               delay={BLUR_FADE_DELAY * 6 + id * 0.05}
             >
-              <WorkExperienceCard
-                logoUrl={work.logoUrl}
-                altText={work.company}
-                title={work.company}
-                role={work.title}
-                href={work.href}
-                period={`${work.start} - ${work.end ?? "Present"}`}
-                description={work.description}
-              />
+              <WorkExperienceCard  work={work} />
             </BlurFade>
           ))}
         </div>
+
       </section>
 
       {/* Skills */}
@@ -103,17 +92,20 @@ export default async function HomePage() {
       <section id="projects" className="w-full py-16 px-6 md:px-12">
         <div className="max-w-7xl mx-auto space-y-12">
           <BlurFade delay={BLUR_FADE_DELAY * 11}>
-            <div className="text-center space-y-4">
-              <ShimmeringText
-                text="Check out my latest work"
-                className="text-3xl font-bold tracking-tight sm:text-5xl block"
-              />
 
-              <p className="text-muted-foreground max-w-2xl mx-auto md:text-lg">
-                From web apps, packages to low-code platforms, here are some of
-                my favorite projects.
+            <h2 className="text-shadow-glow relative text-5xl font-medium tracking-tight text-balance sm:text-5xl md:text-6xl text-center z-30 mb-5 md:mb-0 size-full -translate-y-10"
+            >
+              <p className="mb-3 font-mono text-xs font-normal tracking-widest text-black/80 uppercase md:text-sm dark:text-white/70">
+                From web apps, packages to low-code platforms
               </p>
-            </div>
+              <span className="font-instrument-serif">
+                <span className="">Curated  </span>{" "}
+                <span className="text-colorful animate-gradient-x font-instrument-serif pe-2 tracking-tight italic">
+                  {" "}
+                  Projects
+                </span>
+              </span>
+            </h2>
           </BlurFade>
           <ExpandableProjectCards
             cards={projectsList as unknown as ExpandableCardProps["cards"]}
@@ -133,49 +125,7 @@ export default async function HomePage() {
 
 
       {/* Contact */}
-      <section
-        id="contact"
-        className="relative z-0 mt-20 flex w-full justify-center overflow-x-hidden px-4 py-20"
-      >
-        <ShapeHero
-          title1=""
-          title2=""
-          description=""
-          shapeClassName="opacity-30 hidden md:block"
-          className="w-full"
-        >
-          <div className="relative z-10 mx-auto flex w-full container flex-col items-center justify-center gap-y-2 py-10 text-center ">
-            <span className="mt-4 text-2xl font-light tracking-wide text-black sm:text-4xl lg:text-5xl dark:text-white">
-              <h3
-                className="text-nowrap"
-                style={{ opacity: 1, transform: "none" }}
-              >
-                FROM CONCEPT TO <span className="font-extrabold">CREATION</span>
-              </h3>
-              <h3
-                className="mt-3 text-nowrap"
-                style={{ opacity: 1, transform: "none" }}
-              >
-                LET{"'"}s MAKE IT{" "}
-                <span className="font-extrabold">HAPPEN!</span>
-              </h3>
-            </span>
-            <div className="group" style={{ transform: "none" }}>
-              <GlowFillButton icon={ArrowRight}>
-                <TransitionLink href="/contact">Get in Touch</TransitionLink>
-              </GlowFillButton>
-            </div>
-            <p className="text-base font-semibold lg:text-2xl">
-              I{"'"}m available for full-time roles &amp; freelance projects.
-            </p>
-            <p className="my-2 text-sm font-extralight tracking-wide text-balance opacity-75 lg:text-xl">
-              I thrive on crafting dynamic web applications, and
-              <br />
-              delivering seamless user experiences.
-            </p>
-          </div>
-        </ShapeHero>
-      </section>
+      <ContactSection />
     </Wrapper>
   );
 }

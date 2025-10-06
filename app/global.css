@@ -482,7 +482,7 @@ body {
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
   position: relative;
-  font-family: var(--font-sans, 'Inter', 'Helvetica', 'Arial', sans-serif);
+  font-family: var(--font-sans, 'Inter','Poppins', 'Helvetica', 'Arial', sans-serif);
   /* Fluid max width that:
        - starts from 1024px (for tablets/small desktops)
        - scales with viewport
@@ -513,6 +513,9 @@ body {
 
 .text-shadow-glow {
   text-shadow: rgba(255, 255, 255, 0.05) 0px 4px 8px, rgba(255, 255, 255, 0.25) 0px 8px 30px;
+}
+.box-shadow-glow {
+  box-shadow: rgba(255, 255, 255, 0.05) 0px 4px 8px, rgba(255, 255, 255, 0.25) 0px 8px 30px;
 }
 
 .hero {

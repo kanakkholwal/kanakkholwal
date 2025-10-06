@@ -39,7 +39,7 @@ export function HeroSection() {
     return (
         <section
             id="hero"
-            className="relative flex flex-col sm:grid md:grid-cols-2 items-center justify-between gap-8 px-6 md:px-12 min-h-dvh max-w-7xl mx-auto w-full"
+            className="relative flex flex-col md:grid md:grid-cols-2 items-center justify-between gap-8 px-6 md:px-12 min-h-dvh max-w-7xl mx-auto w-full"
         >
             <div className="flex flex-col gap-4 justify-center text-center md:text-left flex-1 md:col-span-1">
                 <ShimmeringText
@@ -310,19 +310,31 @@ export function SkillSection() {
 
         <div className="flex justify-center flex-wrap gap-3 mb-2 relative">
             {appConfig.skill_icons.map((skill) => {
-                return <motion.img
+                return <div
                     key={skill}
-                    aria-label={skill}
-                    src={`https://skillicons.dev/icons?i=${skill}`}
-                    alt={`${skill} icon`}
-                    whileHover={{
-                        scale: 1.15,
-                        transition: { duration: 0.2 }
-                    }}
-                    draggable="false"
-                    unselectable="on"
-                    className="inline-block cursor-pointer size-11 md:size-14 rounded-md border p-2.5 md:p-3 will-change-transform border-[#A5AEB81F]/10 bg-[#EDEEF0] shadow-[inset_0px_2px_1.5px_0px_#A5AEB852] dark:border-white/10 dark:shadow-[inset_0_2px_4px_rgba(0,0,0,0.2),inset_0_-2px_4px_rgba(255,255,255,0.1)] dark:bg-[#1e1e1e]"
-                />
+                    className="group no-underline transition-all duration-500 hover:-translate-y-2"
+                >
+                    <div className="group inline-block text-center">
+                        <div className="size-28 rounded-xl border-2 p-2 transition-all duration-300 group-hover:border-primary group-hover:shadow-lg">
+                            <div
+                                className="box-shadow-glow grid h-full place-items-center rounded-xl border-2 border-[#A5AEB81F]/10 bg-[#EDEEF0] dark:border-[#5A5F661F]/10 dark:bg-[#1A1B1E]"
+
+                            >
+                                <motion.img
+                                    aria-label={skill}
+                                    src={`https://skillicons.dev/icons?i=${skill}`}
+                                    alt={`${skill} icon`}
+                                    draggable="false"
+                                    unselectable="on"
+                                    className="mt-2"
+                                />
+                                <p className="text-xs text-muted-foreground">{skill}</p>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
             })}
 
         </div>

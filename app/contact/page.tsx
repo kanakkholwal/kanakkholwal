@@ -1,8 +1,7 @@
 import { Socials } from "@/components/socials";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Metadata } from "next";
 import { appConfig } from "root/project.config";
-import { BookACallForm, ContactForm } from "./client";
+import { BookACallForm } from "./client";
 
 export default function ContactPage() {
   return (
@@ -29,7 +28,8 @@ export default function ContactPage() {
           </a>
           <Socials className="items-center gap-x-1" />
         </div>
-        <Tabs
+        <BookACallForm />
+        {/* <Tabs
           defaultValue="book-call"
           className="gap-2 flex w-full flex-col justify-center"
         >
@@ -38,12 +38,11 @@ export default function ContactPage() {
             <TabsTrigger value="fill-form">Fill a form</TabsTrigger>
           </TabsList>
           <TabsContent value="book-call">
-            <BookACallForm />
           </TabsContent>
           <TabsContent value="fill-form">
             <ContactForm />
           </TabsContent>
-        </Tabs>
+        </Tabs> */}
       </section>
     </>
   );

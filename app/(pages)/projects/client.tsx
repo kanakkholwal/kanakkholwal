@@ -5,12 +5,11 @@ import { GlowFillButton } from "@/components/animated/button.fill";
 import { FloatingElements } from "@/components/animated/floating-elements";
 import { RollingText } from "@/components/animated/text.rolling";
 import ShapeHero from "@/components/kokonutui/shape-hero";
-import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { CardContent } from "@/components/ui/card";
-import { TransitionLink } from "@/components/utils/link";
+import { ButtonLink, TransitionLink } from "@/components/utils/link";
 import { motion } from "framer-motion";
 import { ArrowRight, TrendingUp } from "lucide-react";
-import Link from "next/link";
 import { projectsList } from "~/data/projects";
 
 
@@ -27,7 +26,8 @@ export default function ProjectsShowcase() {
       <div className="max-w-7xl mx-auto px-6 md:px-12 pt-12">
         <RollingText
           text="Featured Projects"
-          className="text-4xl font-bold tracking-tight"
+          className="text-4xl font-bold tracking-tight text-shadow-colorful"
+          inViewOnce={false}
         />
       </div>
 
@@ -40,7 +40,7 @@ export default function ProjectsShowcase() {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: idx * 0.1 }}
           >
-            <MagicCard className="rounded-2xl" layerClassName="bg-card">
+            <MagicCard className="rounded-2xl h-full" layerClassName="bg-card">
               <CardContent className="p-6 flex flex-col gap-4">
                 <div>
                   <h3 className="text-2xl font-semibold tracking-tight mb-1">
@@ -57,27 +57,26 @@ export default function ProjectsShowcase() {
 
                 <div className="flex flex-wrap gap-2">
                   {project.technologies.map((tech) => (
-                    <span
+                    <Badge
                       key={tech}
-                      className="px-2 py-1 text-xs rounded-full bg-accent text-accent-foreground"
+                      size="sm"
+                      variant="secondary"
                     >
                       {tech}
-                    </span>
+                    </Badge>
                   ))}
                 </div>
 
-                <div className="flex gap-3 mt-2">
+                <div className="flex gap-3 mt-2 flex-wrap">
                   {project.links.map((link) => (
-                    <Link key={link.type} href={link.href} target="_blank">
-                      <Button
-                        size="sm"
+                    <ButtonLink key={link.type} href={link.href} target="_blank" 
+                        size="xs"
                         variant="outline"
                         className="flex gap-1 items-center"
                       >
                         {link.icon}
                         {link.type}
-                      </Button>
-                    </Link>
+                      </ButtonLink>
                   ))}
                 </div>
               </CardContent>

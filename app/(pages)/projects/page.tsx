@@ -2,6 +2,10 @@ import { Metadata } from "next";
 import { appConfig } from "root/project.config";
 import ProjectsShowcase from "./client";
 
+
+export default function ProjectsPage() {
+  return <ProjectsShowcase />;
+}
 export const metadata: Metadata = {
   title: "Projects Showcase",
   description:
@@ -43,7 +47,3 @@ export const metadata: Metadata = {
     },
   },
 };
-
-export default function ProjectsPage() {
-  return <ProjectsShowcase />;
-}

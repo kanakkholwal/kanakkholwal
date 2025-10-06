@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import type { Metadata } from "next";
-import { Inter as FontSans, Space_Mono } from "next/font/google";
+import { Inter as FontSans, Instrument_Serif, Quicksand, Space_Mono } from "next/font/google";
 import { appConfig } from "root/project.config";
 import "./global.css";
 import { Provider } from "./provider";
@@ -85,12 +85,22 @@ const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
 });
+const fontInstrumentSerif = Instrument_Serif({
+  subsets: ["latin"],
+  variable: "--font-instrument-serif",
+  weight: "400",
+});
 const fontMono = Space_Mono({
   subsets: ["latin"],
   variable: "--font-mono",
   weight: "400",
 });
 
+const logoFont = Quicksand({
+  weight: ["700"],
+  subsets: ["latin"],
+  variable: "--font-logo",
+});
 type RootLayoutProps = Readonly<{
   children: React.ReactNode;
 }>;
@@ -104,6 +114,8 @@ export default function RootLayout({ children }: RootLayoutProps) {
           "min-h-screen min-w-screen w-full antialiased !overflow-x-hidden no-scrollbar h-full",
           fontSans.variable,
           fontMono.variable,
+          logoFont.variable,
+          fontInstrumentSerif.variable,
         )}
       >
         <script

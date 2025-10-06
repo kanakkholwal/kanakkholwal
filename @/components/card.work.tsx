@@ -1,105 +1,92 @@
 "use client";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Card, CardHeader } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
-import { motion } from "framer-motion";
-import { ChevronRightIcon } from "lucide-react";
-import React from "react";
+import { Briefcase, MapPin } from "lucide-react";
 import Markdown from "react-markdown";
-import { MagicCard } from "./animated/bg.card";
+import { WorkExperience } from "~/data/work";
+import { HyperText } from "./animated/text.hyper";
+import { TextReveal } from "./animated/text.reveal";
 
 interface WorkExperienceCardProps {
-  logoUrl: string;
-  altText: string;
-  title: string;
-  role?: string;
-  href?: string;
-  period: string;
-  description?: string;
+  work: WorkExperience
 }
-export function WorkExperienceCard(props: WorkExperienceCardProps) {
-  const [isExpanded, setIsExpanded] = React.useState(false);
-  const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    if (props.description) {
-      e.preventDefault();
-      setIsExpanded(!isExpanded);
-    }
-  };
+export function WorkExperienceCard({ work }: WorkExperienceCardProps) {
+
 
   return (
-    <Card className="border-none p-0 shadow-none">
-      <MagicCard wrapperClassName="flex p-4" layerClassName="bg-card">
-        <div className="flex-none">
-          <Avatar className="border size-12 m-auto bg-muted-background dark:bg-foreground">
+    <div className="flex flex-col md:flex-row justify-start gap-6 md:gap-10 pt-10 md:pt-32">
+      {/* Left Title Section (sticky on desktop) */}
+      <div className="flex flex-col items-start gap-y-3 text-sm font-light md:flex  md:sticky md:top-32 self-start z-40 w-full max-w-sm lg:max-w-md">
+        <time
+          className="text-muted-foreground text-xs font-medium tracking-wide uppercase"
+          dateTime={work.start + (work.end ? `-${work.end}` : "-present")}
+        >
+          {work.start} - {work.end ?? "Present"}
+        </time>
+        <div className="flex items-center gap-2">
+          <Avatar className="border size-10 m-auto bg-muted-background dark:bg-foreground">
             <AvatarImage
-              src={props.logoUrl}
-              alt={props.altText}
+              src={work.logoUrl}
+              alt={work.company}
               className="object-contain"
             />
-            <AvatarFallback>{props.altText[0]}</AvatarFallback>
+            <AvatarFallback>{work.company[0]}</AvatarFallback>
           </Avatar>
-        </div>
-        <div className="grow ml-4 items-center flex-col group">
-          <CardHeader>
-            <div
-              className={cn(
-                "flex items-center justify-between gap-x-2 text-base",
-                { "cursor-pointer": props.description },
-              )}
-              onClick={handleClick}
-              aria-expanded={isExpanded}
-              aria-controls="work-description"
-            >
-              <h3 className="inline-flex items-center justify-center font-semibold leading-none text-xs sm:text-sm">
-                {props?.role ? (
-                  <span className="font-sans mr-1">{props.role} - </span>
-                ) : null}
-                {props.title}
+          <div className="flex flex-col justify-center gap-0">
 
-                <ChevronRightIcon
-                  className={cn(
-                    "size-4 translate-x-0 transform transition-all duration-300 ease-out",
-                    isExpanded ? "rotate-90" : "rotate-0",
-                    props?.description ? "opacity-100 " : "opacity-0",
-                  )}
-                />
-              </h3>
-              <div className="text-xs sm:text-sm tabular-nums text-muted-foreground text-right">
-                {props.period}
-              </div>
-            </div>
-            {props?.href && (
-              <div>
-                <a
-                  className="font-sans text-xs text-primary hover:underline flex-auto"
-                  href={props?.href}
-                  target="_blank"
-                >
-                  {props.href.replace(/(^\w+:|^)\/\//, "").replace(/www\./, "")}
-                </a>
-              </div>
-            )}
-          </CardHeader>
-          {props.description && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{
-                opacity: isExpanded ? 1 : 0,
-
-                height: isExpanded ? "auto" : 0,
-              }}
-              transition={{
-                duration: 0.7,
-                ease: [0.16, 1, 0.3, 1],
-              }}
-              className="mt-2 text-xs sm:text-sm prose max-w-full prose-sm text-pretty font-sans dark:prose-invert text-muted-foreground"
-            >
-              <Markdown>{props.description}</Markdown>
-            </motion.div>
-          )}
+            <TextReveal
+              aria-labelledby="company"
+              className="font-logo text-md font-bold text-foreground md:text-xl text-shadow-glow tracking-wide">
+              {work.company}
+            </TextReveal>
+            <a className="font-sans text-xs text-primary hover:underline flex-auto" href={work.href}
+              rel="noreferrer"
+              aria-label={`Visit ${work.company} website`}
+              target="_blank">
+              {work.href.replace(/(^\w+:|^)\/\//, "").replace(/www\./, "")}
+            </a>
+          </div>
         </div>
-      </MagicCard>
-    </Card>
+        <div className="flex flex-col gap-2">
+          <div className="text-muted-foreground flex items-center gap-1.5">
+            <MapPin
+              className="lucide lucide-map-pin size-3.5 flex-shrink-0"
+              aria-hidden="true"
+            />
+            <span className="text-sm">{work.location}</span>
+          </div>
+          <div className="text-muted-foreground flex items-center gap-1.5">
+            <Briefcase
+              className="lucide lucide-briefcase size-3.5 flex-shrink-0"
+              aria-hidden="true"
+            />
+            <span className="text-sm font-medium">
+              {work.locationType === "remote" ? "Remote" : "On-site"}
+            </span>
+          </div>
+        </div>
+      </div>
+
+
+      {/* Right Content Section */}
+      <div className="relative w-full">
+        {/* Mobile Title */}
+        <div className="mb-3 text-colorful animate-gradient-x">
+          <HyperText
+            startOnView
+            className="text-2xl sm:text-3xl font-bold  font-instrument-serif"
+          >
+            {work.title}
+          </HyperText>
+        </div>
+
+        {/* Description */}
+        <div
+          className="mt-2 text-sm sm:text-base prose max-w-none text-pretty font-sans dark:prose-invert text-muted-foreground"
+        >
+          <Markdown>{work.description}</Markdown>
+        </div>
+      </div>
+    </div>
   );
 }

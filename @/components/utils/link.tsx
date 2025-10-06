@@ -117,18 +117,16 @@ export function ButtonTransitionLink({
   );
 }
 
-export function ButtonScroll({
-  ...props
-}: React.ComponentProps<typeof Button> & {
+export function ButtonScroll(props: React.ComponentProps<typeof Button> & {
   targetId: string;
   offset?: number;
 }) {
-  const { targetId, offset = 50 } = props;
+  const { targetId, offset = 50 ,...rest} = props;
 
   const handleScroll = () => {
     const element = document.getElementById(targetId);
     if (!element) return;
     element.scrollIntoView({ behavior: "smooth", block: "start" });
   };
-  return <Button {...props} onClick={handleScroll} />;
+  return <Button {...rest} onClick={handleScroll} />;
 }

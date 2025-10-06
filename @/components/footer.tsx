@@ -7,7 +7,7 @@ import { TransitionLink } from "./utils/link";
 
 export function FooterSection() {
   return (
-    <footer className="mx-auto my-6 max-w-7xl">
+    <footer className="mx-auto my-6 max-w-7xl px-3">
       <div className="relative flex flex-col items-center gap-6 mb-10 md:flex-row">
         <div className="flex flex-1 flex-col items-start gap-4 md:flex-row md:justify-between">
           <div className="hidden flex-col gap-y-6 md:flex md:w-1/2">

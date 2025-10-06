@@ -21,7 +21,6 @@ export const toolKit = {
     tools: [
   { image: "https://aayushbharti.in/uses/arc_logo.png", label: "Arc", href: "https://arc.net/" },
   { image: "https://aayushbharti.in/uses/vscode_logo.png", label: "VSCode", href: "https://code.visualstudio.com/" },
-  { image: "https://aayushbharti.in/uses/obsidian_logo.png", label: "Obsidian", href: "https://obsidian.md/" },
   { image: "https://aayushbharti.in/uses/notion_logo.png", label: "Notion", href: "https://www.notion.so/" },
   { image: "https://aayushbharti.in/uses/spotify_logo.png", label: "Spotify", href: "https://www.spotify.com/" },
   { image: "https://aayushbharti.in/uses/figma_logo.png", label: "Figma", href: "https://www.figma.com/" },

@@ -3,8 +3,9 @@ export const workExperiences = [
     company: "Textify AI",
     href: "https://textify.ai",
     badges: [],
-    location: "Remote",
-    title: "Software Developer Intern",
+    location: "Indore, MP, India",
+        locationType: "remote",
+    title: "Software Developer",
     logoUrl:
       "https://2hy7y2bvb4.ufs.sh/f/zWIvIoJSZF4QYH4HQCOnd4FsWwGtc1QjmblpSJE5xBn6y73Y",
     start: "Dec 2022",
@@ -24,8 +25,9 @@ export const workExperiences = [
     company: "KoinX",
     href: "https://koinx.com",
     badges: ["Internship"],
-    location: "Remote",
-    title: "Frontend Intern",
+    location: "Bhubaneswar, India",
+     locationType: "remote",
+    title: "Frontend Engineer",
     logoUrl:
       "https://2hy7y2bvb4.ufs.sh/f/zWIvIoJSZF4QPeYl8N26Hz53wg87YeZxFt9WfbvpIQLVAXau",
     start: "Mar 2024",
@@ -42,3 +44,5 @@ export const workExperiences = [
 `,
   },
 ] as const;
+
+export type WorkExperience = (typeof workExperiences)[number];
