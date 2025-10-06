@@ -1,6 +1,6 @@
 import { Socials } from "@/components/socials";
-import { Metadata } from "next";
 import { appConfig } from "root/project.config";
+import { generateMetadata } from "~/utils/seo";
 import { BookACallForm } from "./client";
 
 export default function ContactPage() {
@@ -8,10 +8,7 @@ export default function ContactPage() {
     <>
       <section className="relative px-4 pt-10">
         <div className="mt-24 mb-6 flex w-full flex-col items-center text-balance">
-          <h2
-            className="text-shadow-glow relative z-2 text-5xl font-medium tracking-tight text-balance sm:text-5xl md:mb-36 md:text-6xl text-center !mb-0"
-            
-          >
+          <h2 className="text-shadow-glow relative z-2 text-5xl font-medium tracking-tight text-balance sm:text-5xl md:mb-36 md:text-6xl text-center !mb-0">
             <p className="mb-3 font-mono text-xs font-normal tracking-widest text-black/80 uppercase md:text-sm dark:text-white/70">
               Contact
             </p>
@@ -48,46 +45,22 @@ export default function ContactPage() {
   );
 }
 
-export const metadata: Metadata = {
+export const metadata = generateMetadata({
   title: "Contact ",
-  description:
-    "Get in touch with Kanak — reach out for collaborations, freelance opportunities, or professional inquiries. Book a call or fill out the contact form to connect directly.",
-  alternates: {
-    canonical: "/contact",
-  },
-  openGraph: {
-    title: "Contact | Kanak",
-    description:
-      "Want to collaborate or discuss a project? Connect with Kanak via email, book a call, or submit a quick contact form.",
-    url: `${appConfig.url}/contact`,
-    siteName: "Kanak’s Portfolio",
-    images: [
-      {
-        url: `${appConfig.url}/og/contact.png`,
-        width: 1200,
-        height: 630,
-        alt: "Contact Kanak — Portfolio",
-      },
-    ],
-    locale: "en_US",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Contact | Kanak",
-    description:
-      "Reach out to Kanak for collaborations, partnerships, or questions — book a call or send a quick message.",
-    creator: appConfig.social.twitter,
-    images: [`${appConfig.url}/og/contact.png`],
-  },
-  robots: {
-    index: true,
-    follow: true,
-    nocache: false,
-    googleBot: {
-      index: true,
-      follow: true,
-      noimageindex: false,
-    },
-  },
-};
+  description: `Get in touch with ${appConfig.name} — reach out for collaborations, freelance opportunities, or professional inquiries. Book a call or fill out the contact form to connect directly.`,
+  url: "/contact",
+  keywords: [
+    "contact",
+    "get in touch",
+    "collaborate",
+    "freelance",
+    "inquiries",
+    "book a call",
+    "contact form",
+    appConfig.name,
+    "developer",
+    "designer",
+    "freelancer",
+    "problem solver",
+  ],
+});

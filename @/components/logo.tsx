@@ -22,8 +22,6 @@ const textVariants = {
   },
 } as const;
 
-
-
 const sizes = {
   xs: "h-5.5",
   sm: "h-7",
@@ -73,7 +71,6 @@ export const Logo = ({
           variants={draw ? textVariants : {}}
           initial={draw ? "hidden" : false}
           animate={draw ? "visible" : false}
-          
         >
           {appConfig.name.split(" ")[0]}
         </motion.text>

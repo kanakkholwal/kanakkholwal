@@ -6,8 +6,6 @@ import { Clock } from "lucide-react";
 import Image from "next/image";
 import { PostType } from "~/api/medium";
 
-
-
 type Props = {
   posts: PostType[];
   now: number;
@@ -43,13 +41,7 @@ export default function AnimatedMediumPosts({ posts, now }: Props) {
     </motion.div>
   );
 }
-function PostCard({
-  post,
-  now,
-}: {
-  post: PostType;
-  now: number;
-}) {
+function PostCard({ post, now }: { post: PostType; now: number }) {
   const isRecent = now - post.pubDate.getTime() < 7 * 24 * 60 * 60 * 1000; // 7 days
 
   return (

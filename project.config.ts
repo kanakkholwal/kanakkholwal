@@ -63,87 +63,87 @@ export const appConfig = {
     // "html5",
     "css",
     "sass",
-    "graphql"
+    "graphql",
   ],
   attribution: {
     journey: [
       "The first version of this website was created in 2022. I was just getting started with web technologies and built that one with vanilla js, after that I used some templates and code snippets from here and there, those version are still open source back then. The old version is actually open-sourced.",
       "Recently, in 2025, it was time for an evolution. I completely redesigned the site to better showcase my current front-end development capabilities, focusing on a clean aesthetic and refined animations.",
-      "I would like to express my thanks to all of websites that inspired me to build this website (non-exhaustive):"
+      "I would like to express my thanks to all of websites that inspired me to build this website (non-exhaustive):",
     ],
     list: [
       {
         person: "Josh W. Comeau",
-        attribute: " blog and micro-interactions"
+        attribute: " blog and micro-interactions",
       },
       {
         person: "Aayush Bharti",
-        attribute: " bucket list page"
+        attribute: " bucket list page",
       },
-    ]
+    ],
   },
-  bucketList :[
+  bucketList: [
     {
-        name: "SkyDiving",
-        completed: false,
-        description: null,
-        images: [],
+      name: "SkyDiving",
+      completed: false,
+      description: null,
+      images: [],
     },
     {
-        name: "Create Portfolio Website",
-        completed: true,
-        description: "October 2025, https://kanak.eu.org",
-        images: [],
+      name: "Create Portfolio Website",
+      completed: true,
+      description: "October 2025, https://kanak.eu.org",
+      images: [],
     },
     {
-        name: "Do a Marathon",
-        completed: true,
-        description: "October 2024",
-        images: [],
+      name: "Do a Marathon",
+      completed: true,
+      description: "October 2024",
+      images: [],
     },
     {
-        name: "Solo travel to another country",
-        completed: false,
-        description: null,
-        images: [],
+      name: "Solo travel to another country",
+      completed: false,
+      description: null,
+      images: [],
     },
     {
-        name: "Impactful Software Project",
-        completed: false,
-        description: null,
-        images: [],
+      name: "Impactful Software Project",
+      completed: false,
+      description: null,
+      images: [],
     },
     {
-        name: "Actual World Tour",
-        completed: false,
-        description: null,
-        images: [],
+      name: "Actual World Tour",
+      completed: false,
+      description: null,
+      images: [],
     },
     {
-        name: "Get 100+ followers on Github",
-        completed: false,
-        description: null,
-        images: [],
+      name: "Get 100+ followers on Github",
+      completed: false,
+      description: null,
+      images: [],
     },
     {
-        name: "Speak at an international conference or Ted talk",
-        completed: false,
-        description: null,
-        images: [],
+      name: "Speak at an international conference or Ted talk",
+      completed: false,
+      description: null,
+      images: [],
     },
     {
-        name: "Publish a Research Paper",
-        completed: false,
-        description: null,
-        images: [],
+      name: "Publish a Research Paper",
+      completed: false,
+      description: null,
+      images: [],
     },
     {
-        name: "3 month Europe Trip with a Remote Job",
-        completed: false,
-        description: null,
-        images: [],
+      name: "3 month Europe Trip with a Remote Job",
+      completed: false,
+      description: null,
+      images: [],
     },
-],
+  ],
   keywords: [
     "Kanak Kholwal",
     "Software Developer",
@@ -286,8 +286,8 @@ export const appConfig = {
         href: "/attribution",
       },
     ],
-  }
+  },
 };
 
 export const resume_link =
-  "https://docs.google.com/document/d/1WleBXhgUwDkRIfodJCvhPchoVBjaCf7Q/edit?usp=sharing&ouid=109800121336149113874&rtpof=true&sd=true";
+  "https://drive.google.com/drive/folders/1dgEd1npDuh08nUtgmc1E4T2QvpeKYpA1?usp=sharing";

@@ -58,7 +58,10 @@ export const getCachedContributions = cache(
           "Content-Type": "application/json",
           Authorization: `Bearer ${GITHUB_TOKEN}`,
         },
-        body: JSON.stringify({ query: githubQuery, variables: { login: username } }),
+        body: JSON.stringify({
+          query: githubQuery,
+          variables: { login: username },
+        }),
       }),
     ]);
 
@@ -73,13 +76,19 @@ export const getCachedContributions = cache(
         mapping[year].push(item);
         return mapping;
       },
-      {} as Record<string, ContributionActivity[]>
+      {} as Record<string, ContributionActivity[]>,
     );
 
     // Aggregate stars and forks
     const repos = githubData.data.user.repositories.nodes;
-    const totalStars = repos.reduce((acc: number, r: any) => acc + r.stargazerCount, 0);
-    const totalForks = repos.reduce((acc: number, r: any) => acc + r.forkCount, 0);
+    const totalStars = repos.reduce(
+      (acc: number, r: any) => acc + r.stargazerCount,
+      0,
+    );
+    const totalForks = repos.reduce(
+      (acc: number, r: any) => acc + r.forkCount,
+      0,
+    );
 
     const stats: GithubStats = {
       followers: githubData.data.user.followers.totalCount,

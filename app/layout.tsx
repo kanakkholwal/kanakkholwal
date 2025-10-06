@@ -1,7 +1,12 @@
 import { cn } from "@/lib/utils";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import type { Metadata } from "next";
-import { Inter as FontSans, Instrument_Serif, Quicksand, Space_Mono } from "next/font/google";
+import {
+  Inter as FontSans,
+  Instrument_Serif,
+  Quicksand,
+  Space_Mono,
+} from "next/font/google";
 import { appConfig } from "root/project.config";
 import "./global.css";
 import { Provider } from "./provider";

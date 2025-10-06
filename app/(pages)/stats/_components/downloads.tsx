@@ -7,7 +7,7 @@ import {
   Datum,
   getIsoWeekday,
   getPartialPreviousWeekDownloads,
-  NpmPackageStatsData
+  NpmPackageStatsData,
 } from "../lib/npm";
 import { DownloadsGraph } from "./downloads.client";
 import { GraphSkeleton } from "./graph.skeleton";
@@ -17,7 +17,6 @@ import { Fragment } from "react";
 import { statsConfig } from "../config";
 
 export function NPMStats({ npmStats }: { npmStats: NpmPackageStatsData[] }) {
-
   const all = combineStats(
     statsConfig.npmPackages.reduce(
       (acc, pkg, index) => {
@@ -61,7 +60,11 @@ export const NPMStatsSkeleton = () => (
   <div className="bg-muted h-9 w-64 animate-pulse rounded-md lg:h-12" />
 );
 
-export function NPMDownloads({ npmStats }: { npmStats: NpmPackageStatsData[] }) {
+export function NPMDownloads({
+  npmStats,
+}: {
+  npmStats: NpmPackageStatsData[];
+}) {
   const all = combineStats(
     statsConfig.npmPackages.reduce(
       (acc, pkg, index) => {

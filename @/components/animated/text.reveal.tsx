@@ -1,22 +1,22 @@
-'use client';
+"use client";
 
-import React, { useEffect, useRef, useState } from 'react';
-import { motion, useInView, Variants } from 'motion/react';
-import { cn } from '@/lib/utils';
+import React, { useEffect, useRef, useState } from "react";
+import { motion, useInView, Variants } from "motion/react";
+import { cn } from "@/lib/utils";
 
 type RevealVariant =
-  | 'fade'
-  | 'slideUp'
-  | 'slideDown'
-  | 'slideLeft'
-  | 'slideRight'
-  | 'scale'
-  | 'blur'
-  | 'typewriter'
-  | 'wave'
-  | 'stagger'
-  | 'rotate'
-  | 'elastic';
+  | "fade"
+  | "slideUp"
+  | "slideDown"
+  | "slideLeft"
+  | "slideRight"
+  | "scale"
+  | "blur"
+  | "typewriter"
+  | "wave"
+  | "stagger"
+  | "rotate"
+  | "elastic";
 
 interface TextRevealProps {
   children: string;
@@ -112,7 +112,7 @@ const itemVariants: Record<RevealVariant, Variants> = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: { duration: 0.6, ease: 'easeOut' },
+      transition: { duration: 0.6, ease: "easeOut" },
     },
   },
   slideUp: {
@@ -160,18 +160,18 @@ const itemVariants: Record<RevealVariant, Variants> = {
     },
   },
   blur: {
-    hidden: { opacity: 0, filter: 'blur(4px)' },
+    hidden: { opacity: 0, filter: "blur(4px)" },
     visible: {
       opacity: 1,
-      filter: 'blur(0px)',
-      transition: { duration: 0.6, ease: 'easeOut' },
+      filter: "blur(0px)",
+      transition: { duration: 0.6, ease: "easeOut" },
     },
   },
   typewriter: {
     hidden: { width: 0 },
     visible: {
-      width: 'auto',
-      transition: { duration: 0.3, ease: 'easeInOut' },
+      width: "auto",
+      transition: { duration: 0.3, ease: "easeInOut" },
     },
   },
   wave: {
@@ -220,7 +220,7 @@ const itemVariants: Record<RevealVariant, Variants> = {
 
 export function TextReveal({
   children,
-  variant = 'fade',
+  variant = "fade",
   className,
   style,
   delay = 0,
@@ -231,15 +231,17 @@ export function TextReveal({
   wordLevel = false,
 }: TextRevealProps) {
   const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once, margin: '-10%' });
+  const isInView = useInView(ref, { once, margin: "-10%" });
   const [hasAnimated, setHasAnimated] = useState(false);
 
   const shouldAnimate = startOnView ? isInView : true;
 
   // Split text into words or characters
   const elements = wordLevel
-    ? children.split(' ').map((word, i, arr) => (i < arr.length - 1 ? `${word} ` : word))
-    : children.split('');
+    ? children
+        .split(" ")
+        .map((word, i, arr) => (i < arr.length - 1 ? `${word} ` : word))
+    : children.split("");
 
   // Update container variants with custom stagger delay
   const customContainerVariants = {
@@ -262,7 +264,8 @@ export function TextReveal({
           visible: {
             ...originalVariant.visible,
             transition: {
-              ...((originalVariant.visible as Record<string, unknown>).transition as Record<string, unknown>),
+              ...((originalVariant.visible as Record<string, unknown>)
+                .transition as Record<string, unknown>),
               duration,
             },
           },
@@ -274,33 +277,33 @@ export function TextReveal({
     }
   }, [shouldAnimate, hasAnimated]);
 
-  const MotionComponent = variant === 'typewriter' ? motion.div : motion.span;
+  const MotionComponent = variant === "typewriter" ? motion.div : motion.span;
 
   return (
     <motion.div
       ref={ref}
-      className={cn('inline-block', className)}
+      className={cn("inline-block", className)}
       variants={customContainerVariants}
       initial="hidden"
-      animate={shouldAnimate ? 'visible' : 'hidden'}
+      animate={shouldAnimate ? "visible" : "hidden"}
       style={{
-        willChange: 'transform, opacity',
-        WebkitBackfaceVisibility: 'hidden',
-        backfaceVisibility: 'hidden',
-        WebkitTransform: 'translate3d(0,0,0)',
-        transform: 'translate3d(0,0,0)',
-        isolation: 'isolate',
-        contain: 'layout style paint',
+        willChange: "transform, opacity",
+        WebkitBackfaceVisibility: "hidden",
+        backfaceVisibility: "hidden",
+        WebkitTransform: "translate3d(0,0,0)",
+        transform: "translate3d(0,0,0)",
+        isolation: "isolate",
+        contain: "layout style paint",
         ...style,
       }}
     >
-      {variant === 'typewriter' ? (
+      {variant === "typewriter" ? (
         <motion.span
           className="inline-block overflow-hidden whitespace-nowrap"
           variants={customItemVariants}
           style={{
-            display: 'inline-block',
-            whiteSpace: 'nowrap',
+            display: "inline-block",
+            whiteSpace: "nowrap",
           }}
         >
           {children}
@@ -309,22 +312,23 @@ export function TextReveal({
         elements.map((element, index) => (
           <MotionComponent
             key={index}
-            className={cn('inline-block', {
-              'whitespace-pre': !wordLevel,
+            className={cn("inline-block", {
+              "whitespace-pre": !wordLevel,
             })}
             variants={customItemVariants}
             style={{
-              display: 'inline-block',
-              transformOrigin: variant === 'rotate' ? 'center center' : undefined,
-              willChange: 'transform, opacity',
-              WebkitBackfaceVisibility: 'hidden',
-              backfaceVisibility: 'hidden',
-              WebkitTransform: 'translate3d(0,0,0)',
-              transform: 'translate3d(0,0,0)',
-              isolation: 'isolate',
+              display: "inline-block",
+              transformOrigin:
+                variant === "rotate" ? "center center" : undefined,
+              willChange: "transform, opacity",
+              WebkitBackfaceVisibility: "hidden",
+              backfaceVisibility: "hidden",
+              WebkitTransform: "translate3d(0,0,0)",
+              transform: "translate3d(0,0,0)",
+              isolation: "isolate",
             }}
           >
-            {element === ' ' ? '\u00A0' : element}
+            {element === " " ? "\u00A0" : element}
           </MotionComponent>
         ))
       )}

@@ -8,11 +8,9 @@ import { HyperText } from "./animated/text.hyper";
 import { TextReveal } from "./animated/text.reveal";
 
 interface WorkExperienceCardProps {
-  work: WorkExperience
+  work: WorkExperience;
 }
 export function WorkExperienceCard({ work }: WorkExperienceCardProps) {
-
-
   return (
     <div className="flex flex-col md:flex-row justify-start gap-6 md:gap-10 pt-10 md:pt-32">
       {/* Left Title Section (sticky on desktop) */}
@@ -33,16 +31,19 @@ export function WorkExperienceCard({ work }: WorkExperienceCardProps) {
             <AvatarFallback>{work.company[0]}</AvatarFallback>
           </Avatar>
           <div className="flex flex-col justify-center gap-0">
-
             <TextReveal
               aria-labelledby="company"
-              className="font-logo text-md font-bold text-foreground md:text-xl text-shadow-glow tracking-wide">
+              className="font-logo text-md font-bold text-foreground md:text-xl text-shadow-glow tracking-wide"
+            >
               {work.company}
             </TextReveal>
-            <a className="font-sans text-xs text-primary hover:underline flex-auto" href={work.href}
+            <a
+              className="font-sans text-xs text-primary hover:underline flex-auto"
+              href={work.href}
               rel="noreferrer"
               aria-label={`Visit ${work.company} website`}
-              target="_blank">
+              target="_blank"
+            >
               {work.href.replace(/(^\w+:|^)\/\//, "").replace(/www\./, "")}
             </a>
           </div>
@@ -67,7 +68,6 @@ export function WorkExperienceCard({ work }: WorkExperienceCardProps) {
         </div>
       </div>
 
-
       {/* Right Content Section */}
       <div className="relative w-full">
         {/* Mobile Title */}
@@ -81,9 +81,7 @@ export function WorkExperienceCard({ work }: WorkExperienceCardProps) {
         </div>
 
         {/* Description */}
-        <div
-          className="mt-2 text-sm sm:text-base prose max-w-none text-pretty font-sans dark:prose-invert text-muted-foreground"
-        >
+        <div className="mt-2 text-sm sm:text-base prose max-w-none text-pretty font-sans dark:prose-invert text-muted-foreground">
           <Markdown>{work.description}</Markdown>
         </div>
       </div>

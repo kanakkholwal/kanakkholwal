@@ -6,9 +6,7 @@ import {
   ExpandableCardProps,
   ExpandableProjectCards,
 } from "@/components/project-card";
-import {
-  ButtonTransitionLink
-} from "@/components/utils/link";
+import { ButtonTransitionLink } from "@/components/utils/link";
 import Wrapper from "@/components/wrapper";
 import { Suspense } from "react";
 import Markdown from "react-markdown";
@@ -21,7 +19,7 @@ import { GithubSection, HeroSection, SkillSection } from "./client";
 const BLUR_FADE_DELAY = 0.04;
 
 export default async function HomePage() {
-  const data = await getCachedContributions(appConfig.usernames.github)
+  const data = await getCachedContributions(appConfig.usernames.github);
   return (
     <Wrapper>
       {/* Hero */}
@@ -48,9 +46,7 @@ export default async function HomePage() {
         id="work"
         className="max-w-7xl mx-auto w-full px-6 md:px-12 py-16"
       >
-        <h2
-          className="text-shadow-glow relative text-5xl font-medium tracking-tight text-balance sm:text-5xl md:text-6xl text-center z-30 mb-5 md:mb-0 size-full -translate-y-10"
-        >
+        <h2 className="text-shadow-glow relative text-5xl font-medium tracking-tight text-balance sm:text-5xl md:text-6xl text-center z-30 mb-5 md:mb-0 size-full -translate-y-10">
           <p className="mb-3 font-mono text-xs font-normal tracking-widest text-foreground uppercase md:text-sm">
             Jobs & Roles
           </p>
@@ -68,11 +64,10 @@ export default async function HomePage() {
               key={work.company}
               delay={BLUR_FADE_DELAY * 6 + id * 0.05}
             >
-              <WorkExperienceCard  work={work} />
+              <WorkExperienceCard work={work} />
             </BlurFade>
           ))}
         </div>
-
       </section>
 
       {/* Skills */}
@@ -92,14 +87,12 @@ export default async function HomePage() {
       <section id="projects" className="w-full py-16 px-6 md:px-12">
         <div className="max-w-7xl mx-auto space-y-12">
           <BlurFade delay={BLUR_FADE_DELAY * 11}>
-
-            <h2 className="text-shadow-glow relative text-5xl font-medium tracking-tight text-balance sm:text-5xl md:text-6xl text-center z-30 mb-5 md:mb-0 size-full -translate-y-10"
-            >
+            <h2 className="text-shadow-glow relative text-5xl font-medium tracking-tight text-balance sm:text-5xl md:text-6xl text-center z-30 mb-5 md:mb-0 size-full -translate-y-10">
               <p className="mb-3 font-mono text-xs font-normal tracking-widest text-black/80 uppercase md:text-sm dark:text-white/70">
                 From web apps, packages to low-code platforms
               </p>
               <span className="font-instrument-serif">
-                <span className="">Curated  </span>{" "}
+                <span className="">Curated </span>{" "}
                 <span className="text-colorful animate-gradient-x font-instrument-serif pe-2 tracking-tight italic">
                   {" "}
                   Projects
@@ -111,11 +104,19 @@ export default async function HomePage() {
             cards={projectsList as unknown as ExpandableCardProps["cards"]}
           />
           <div className="flex mx-auto justify-center gap-2">
-            <ButtonTransitionLink href="/stats" variant="outline" rounded="full">
+            <ButtonTransitionLink
+              href="/stats"
+              variant="outline"
+              rounded="full"
+            >
               <Icon name="trend-up" />
               View Stats
             </ButtonTransitionLink>
-            <ButtonTransitionLink href="/projects" variant="rainbow" rounded="full">
+            <ButtonTransitionLink
+              href="/projects"
+              variant="rainbow"
+              rounded="full"
+            >
               View All Projects
               <Icon name="arrow-right" />
             </ButtonTransitionLink>
@@ -123,10 +124,8 @@ export default async function HomePage() {
         </div>
       </section>
 
-
       {/* Contact */}
       <ContactSection />
     </Wrapper>
   );
 }
-

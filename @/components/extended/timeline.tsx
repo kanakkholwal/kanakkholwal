@@ -36,7 +36,10 @@ export const Timeline = ({ data, title, description }: TimelineProps) => {
   return (
     <div className="w-full  font-sans md:px-10" ref={containerRef}>
       <div className="max-w-7xl mx-auto py-20 px-4 md:px-8 lg:px-10">
-        <ShimmeringText className="text-lg md:text-4xl mb-4 text-foreground max-w-4xl" text={title || " Changelog from my journey"}/>
+        <ShimmeringText
+          className="text-lg md:text-4xl mb-4 text-foreground max-w-4xl"
+          text={title || " Changelog from my journey"}
+        />
         <p className="text-muted-foregroundtext-sm md:text-base max-w-sm">
           {description ||
             "I've been working on Open Source and Personal Projects for the past year. Here's a timeline of my journey."}
@@ -56,7 +59,8 @@ export const Timeline = ({ data, title, description }: TimelineProps) => {
               <h3
                 title={item.title}
                 className="hidden md:block text-xl md:pl-20 md:text-5xl font-bold text-foreground"
-              >{item.title}
+              >
+                {item.title}
               </h3>
             </div>
 

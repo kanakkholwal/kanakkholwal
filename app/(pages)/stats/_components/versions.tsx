@@ -1,11 +1,11 @@
 "use client";
 
 import {
-    ChartContainer,
-    ChartLegend,
-    ChartLegendContent,
-    ChartTooltip,
-    ChartTooltipContent,
+  ChartContainer,
+  ChartLegend,
+  ChartLegendContent,
+  ChartTooltip,
+  ChartTooltipContent,
 } from "@/components/ui/chart";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";

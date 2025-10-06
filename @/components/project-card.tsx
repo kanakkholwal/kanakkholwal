@@ -202,15 +202,11 @@ export function ExpandableProjectCards({ cards }: ExpandableCardProps) {
             >
               <CloseIcon />
             </motion.button>
-            <motion.div
-              layoutId={`card-${active.title}-${id}`}
-              ref={ref}
-            >
-              <MagicCard layerClassName="bg-card"
-
+            <motion.div layoutId={`card-${active.title}-${id}`} ref={ref}>
+              <MagicCard
+                layerClassName="bg-card"
                 className="w-full max-w-lg  h-full md:h-fit md:max-h-[90%] flex flex-col bg-card sm:rounded-3xl overflow-hidden pt-10 md:pt-0 shadow-xl backdrop-blur-2xl"
               >
-
                 <motion.div
                   layoutId={`media-${active.title}-${id}`}
                   className="px-3"
@@ -317,11 +313,10 @@ export function ExpandableProjectCards({ cards }: ExpandableCardProps) {
             key={card.title}
             onClick={() => setActive(card)}
           >
-            <MagicCard layerClassName="bg-card"
+            <MagicCard
+              layerClassName="bg-card"
               className="rounded-lg text-card-foreground flex flex-col overflow-hidden border hover:shadow-lg transition-all duration-300 ease-out h-full cursor-pointer"
-
             >
-
               {
                 <motion.div layoutId={`media-${card.title}-${id}`}>
                   {card?.video && (

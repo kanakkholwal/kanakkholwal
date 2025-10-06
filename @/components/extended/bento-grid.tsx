@@ -1,21 +1,21 @@
 "use client";
 
 import {
-    Card,
-    CardContent,
-    CardFooter,
-    CardHeader,
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
 } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import {
-    Building,
-    Camera,
-    Compass,
-    Heart,
-    Home,
-    HomeIcon,
-    MapPin,
+  Building,
+  Camera,
+  Compass,
+  Heart,
+  Home,
+  HomeIcon,
+  MapPin,
 } from "lucide-react";
 import type React from "react";
 

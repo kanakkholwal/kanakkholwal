@@ -27,7 +27,8 @@ const badgeVariants = cva(
         default: "bg-muted text-muted-foreground",
         default_light:
           "border-primary/5 bg-primary/5 text-primary hover:bg-primary/20 dark:backdrop-blur",
-        secondary: "bg-neutral-100 [&>svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-black dark:text-white font-mono border-border dark:bg-neutral-900 dark:border-white/[0.14] [a&]:hover:bg-primary/90",
+        secondary:
+          "bg-neutral-100 [&>svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-black dark:text-white font-mono border-border dark:bg-neutral-900 dark:border-white/[0.14] [a&]:hover:bg-primary/90",
         success:
           "bg-[var(--color-success-accent,var(--color-green-500))] text-[var(--color-success-foreground,var(--color-white))]",
         warning:

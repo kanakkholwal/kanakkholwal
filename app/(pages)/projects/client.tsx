@@ -12,7 +12,6 @@ import { motion } from "framer-motion";
 import { ArrowRight, TrendingUp } from "lucide-react";
 import { projectsList } from "~/data/projects";
 
-
 export default function ProjectsShowcase() {
   return (
     <>
@@ -57,11 +56,7 @@ export default function ProjectsShowcase() {
 
                 <div className="flex flex-wrap gap-2">
                   {project.technologies.map((tech) => (
-                    <Badge
-                      key={tech}
-                      size="sm"
-                      variant="secondary"
-                    >
+                    <Badge key={tech} size="sm" variant="secondary">
                       {tech}
                     </Badge>
                   ))}
@@ -69,14 +64,17 @@ export default function ProjectsShowcase() {
 
                 <div className="flex gap-3 mt-2 flex-wrap">
                   {project.links.map((link) => (
-                    <ButtonLink key={link.type} href={link.href} target="_blank" 
-                        size="xs"
-                        variant="outline"
-                        className="flex gap-1 items-center"
-                      >
-                        {link.icon}
-                        {link.type}
-                      </ButtonLink>
+                    <ButtonLink
+                      key={link.type}
+                      href={link.href}
+                      target="_blank"
+                      size="xs"
+                      variant="outline"
+                      className="flex gap-1 items-center"
+                    >
+                      {link.icon}
+                      {link.type}
+                    </ButtonLink>
                   ))}
                 </div>
               </CardContent>
@@ -87,8 +85,8 @@ export default function ProjectsShowcase() {
 
       <div className="flex mx-auto justify-center gap-2 my-5 mb-20">
         <GlowFillButton icon={ArrowRight}>
-          <TransitionLink href="/stats" >
-          <TrendingUp className="size-6 inline-block mr-2" />
+          <TransitionLink href="/stats">
+            <TrendingUp className="size-6 inline-block mr-2" />
             View Project Stats
           </TransitionLink>
         </GlowFillButton>

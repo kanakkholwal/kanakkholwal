@@ -4,7 +4,7 @@ export const workExperiences = [
     href: "https://textify.ai",
     badges: [],
     location: "Indore, MP, India",
-        locationType: "remote",
+    locationType: "remote",
     title: "Software Developer",
     logoUrl:
       "https://2hy7y2bvb4.ufs.sh/f/zWIvIoJSZF4QYH4HQCOnd4FsWwGtc1QjmblpSJE5xBn6y73Y",
@@ -26,7 +26,7 @@ export const workExperiences = [
     href: "https://koinx.com",
     badges: ["Internship"],
     location: "Bhubaneswar, India",
-     locationType: "remote",
+    locationType: "remote",
     title: "Frontend Engineer",
     logoUrl:
       "https://2hy7y2bvb4.ufs.sh/f/zWIvIoJSZF4QPeYl8N26Hz53wg87YeZxFt9WfbvpIQLVAXau",

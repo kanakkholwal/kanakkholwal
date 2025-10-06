@@ -22,6 +22,7 @@ import { getStarHistory } from "./lib/github";
 import { fetchNpmPackage } from "./lib/npm";
 import { getVersions, sumVersions } from "./lib/versions";
 import { loadSearchParams } from "./searchParams";
+import { generateMetadata } from "~/utils/seo";
 
 export const dynamic = "force-dynamic";
 
@@ -37,18 +38,11 @@ export default async function StatsPage({ searchParams }: StatsPageProps) {
     statsConfig.npmPackages.map((pkg) => fetchNpmPackage(pkg)),
   );
 
-
-
-
   return (
     <div className="mx-auto max-w-[88rem] px-4">
-      <h2
-        className="text-shadow-glow relative z-2  text-5xl font-medium tracking-tight text-balance sm:text-5xl md:mb-36 md:text-6xl text-center max-w-xl mx-auto !mb-12"
-
-      >
+      <h2 className="text-shadow-glow relative z-2  text-5xl font-medium tracking-tight text-balance sm:text-5xl md:mb-36 md:text-6xl text-center max-w-xl mx-auto !mb-12">
         <p className="mb-3 font-mono text-xs font-normal tracking-widest text-black/80 uppercase md:text-sm dark:text-white/70">
           Project Stats
-
         </p>
         <span className="font-instrument-serif">
           <span className="md:text-6xl">Statistics & </span>{" "}
@@ -86,49 +80,27 @@ export default async function StatsPage({ searchParams }: StatsPageProps) {
     </div>
   );
 }
-export const metadata: Metadata = {
+
+export const metadata = generateMetadata({
   title: "Project Statistics & Insights",
   description:
-    "Explore detailed analytics of Kanak’s open-source projects — GitHub star growth, NPM downloads, version adoption, and repository activity visualized in real-time.",
-  alternates: {
-    canonical: "/stats",
-  },
-  openGraph: {
-    title: "Project Statistics & Insights | Kanak",
-    description:
-      "Visual analytics and metrics of Kanak’s projects — star history, NPM stats, repo activity, and version adoption trends.",
-    url: `${appConfig.url}/stats`,
-    siteName: "Kanak’s Portfolio",
-    images: [
-      {
-        url: `${appConfig.url}/og/stats.png`,
-        width: 1200,
-        height: 630,
-        alt: "Kanak’s Project Statistics Dashboard",
-      },
-    ],
-    locale: "en_US",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Project Statistics & Insights | Kanak",
-    description:
-      "Track GitHub stars, NPM downloads, and version adoption for Kanak’s open-source work in one interactive dashboard.",
-    creator: appConfig.social.twitter,
-    images: [`${appConfig.url}/og/stats.png`],
-  },
-  robots: {
-    index: true,
-    follow: true,
-    nocache: false,
-    googleBot: {
-      index: true,
-      follow: true,
-      noimageindex: false,
-    },
-  },
-};
+    "Explore detailed visual analytics of Kanak’s open-source projects — GitHub star growth, NPM downloads, version adoption, and repository activity visualized in real-time.",
+  url: "/stats",
+  keywords: [
+    "project statistics",
+    "github stars",
+    "npm downloads",
+    "version adoption",
+    "repository activity",
+    "open source",
+    "developer insights",
+    "kanak kholwal",
+    "portfolio",
+    "analytics",
+    "data visualization",
+  ],
+});
+
 // --
 
 type VersionsLoaderProps = {

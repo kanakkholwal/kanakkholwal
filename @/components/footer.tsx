@@ -4,7 +4,6 @@ import { ModeToggle } from "./mode-toggle";
 import { Socials } from "./socials";
 import { TransitionLink } from "./utils/link";
 
-
 export function FooterSection() {
   return (
     <footer className="mx-auto my-6 max-w-7xl px-3">

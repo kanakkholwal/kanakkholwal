@@ -22,7 +22,11 @@ export function Provider({ children }: { children: React.ReactNode }) {
         themes={["light", "dark", "system"]}
         defaultTheme="dark"
       >
-        <div className={cn("min-h-screen w-full h-full overflow-x-hidden no-scrollbar")}>
+        <div
+          className={cn(
+            "min-h-screen w-full h-full overflow-x-hidden no-scrollbar",
+          )}
+        >
           <NuqsAdapter>{children}</NuqsAdapter>
         </div>
       </NextThemesProvider>

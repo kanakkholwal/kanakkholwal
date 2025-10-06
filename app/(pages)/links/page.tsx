@@ -2,6 +2,7 @@ import { MagicCard } from "@/components/animated/bg.card";
 import Image from "next/image";
 import { appConfig } from "root/project.config";
 import { DATA } from "~/data/resume";
+import { generateMetadata } from "~/utils/seo";
 
 export default function LinksPage() {
   return (
@@ -147,3 +148,20 @@ export default function LinksPage() {
     </section>
   );
 }
+
+export const metadata = generateMetadata({
+  title: "Links - " + appConfig.name,
+  description: `Connect with ${appConfig.name} on various platforms. Find links to social media, portfolio, and more.`,
+  url: "/links",
+  keywords: [
+    "links",
+    "social media",
+    "portfolio",
+    "contact",
+    "connect",
+    appConfig.name,
+    "developer",
+    "freelancer",
+    "problem solver",
+  ],
+});

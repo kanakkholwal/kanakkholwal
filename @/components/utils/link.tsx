@@ -117,11 +117,13 @@ export function ButtonTransitionLink({
   );
 }
 
-export function ButtonScroll(props: React.ComponentProps<typeof Button> & {
-  targetId: string;
-  offset?: number;
-}) {
-  const { targetId, offset = 50 ,...rest} = props;
+export function ButtonScroll(
+  props: React.ComponentProps<typeof Button> & {
+    targetId: string;
+    offset?: number;
+  },
+) {
+  const { targetId, offset = 50, ...rest } = props;
 
   const handleScroll = () => {
     const element = document.getElementById(targetId);
