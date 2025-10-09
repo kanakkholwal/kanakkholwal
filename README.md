@@ -19,15 +19,15 @@
 
 - 🌱 I’m currently learning **System Design, DevOps, Product based Machine learning**
 
-- 👨‍💻 All of my projects are available at [Projects](https://kanakkholwal.eu.org)
+- 👨‍💻 All of my projects are available at [Projects](https://kanak.eu.org)
 
 - 📝 I regularly write articles on [Blog](http://kanakkholwal.medium.com)
 
 - 💬 Ask me about **react, nextjs, Go Lang, Devops**
 
-- 📫 How to reach me **me@kanak.eu.org**
+- 📫 How to reach me **contact@kanak.eu.org**
 
-- 📄 Know about my experiences [Resume](https://docs.google.com/document/d/1WleBXhgUwDkRIfodJCvhPchoVBjaCf7Q/edit?usp=sharing&ouid=109800121336149113874&rtpof=true&sd=true)
+- 📄 Know about my experiences [Resume](https://drive.google.com/drive/folders/1dgEd1npDuh08nUtgmc1E4T2QvpeKYpA1)
 
 - ⚡ Fun fact **I think I am \*funny**
 
