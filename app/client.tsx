@@ -91,6 +91,8 @@ export function HeroSection() {
                     alt={skill}
                     className="overflow-hidden rounded-full size-full"
                     src={`https://skillicons.dev/icons?i=${skill}`}
+                    unoptimized
+                    
                   />
                 </div>
               ))}
@@ -110,6 +112,7 @@ export function HeroSection() {
                     alt={skill}
                     className="overflow-hidden rounded-full size-full"
                     src={`https://skillicons.dev/icons?i=${skill}`}
+                    unoptimized
                   />
                 </div>
               ))}

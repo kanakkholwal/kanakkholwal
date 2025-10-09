@@ -1,7 +1,7 @@
 "use client";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Briefcase, MapPin } from "lucide-react";
+import { Briefcase } from "lucide-react";
 import Markdown from "react-markdown";
 import { WorkExperience } from "~/data/work";
 import { HyperText } from "./animated/text.hyper";
@@ -49,13 +49,13 @@ export function WorkExperienceCard({ work }: WorkExperienceCardProps) {
           </div>
         </div>
         <div className="flex flex-col gap-2">
-          <div className="text-muted-foreground flex items-center gap-1.5">
+          {/* <div className="text-muted-foreground flex items-center gap-1.5">
             <MapPin
               className="lucide lucide-map-pin size-3.5 flex-shrink-0"
               aria-hidden="true"
             />
             <span className="text-sm">{work.location}</span>
-          </div>
+          </div> */}
           <div className="text-muted-foreground flex items-center gap-1.5">
             <Briefcase
               className="lucide lucide-briefcase size-3.5 flex-shrink-0"

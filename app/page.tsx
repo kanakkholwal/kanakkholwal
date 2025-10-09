@@ -20,6 +20,7 @@ const BLUR_FADE_DELAY = 0.04;
 
 export default async function HomePage() {
   const data = await getCachedContributions(appConfig.usernames.github);
+
   return (
     <Wrapper>
       {/* Hero */}

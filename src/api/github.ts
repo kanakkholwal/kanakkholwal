@@ -50,7 +50,7 @@ export const getCachedContributions = cache(
       }
     `;
 
-    const [contribRes, githubRes] = await Promise.all([
+    const [contribRes, githubRes] = await Promise.allSettled([
       fetch(contributionsUrl),
       fetch("https://api.github.com/graphql", {
         method: "POST",
@@ -64,9 +64,24 @@ export const getCachedContributions = cache(
         }),
       }),
     ]);
+    if (contribRes.status !== "fulfilled" || githubRes.status !== "fulfilled") {
+      throw new Error("Failed to fetch contributions or GitHub data");
+    }
 
-    const contribData = (await contribRes.json()) as ContributionResponse;
-    const githubData = await githubRes.json();
+    // Parse responses
+    if (!contribRes.value.ok || !githubRes.value.ok) {
+      throw new Error("Failed to fetch contributions or GitHub data");
+    }
+    // Type assertion for contributions response
+    if (!contribRes.value.headers.get("content-type")?.includes("application/json")) {
+      throw new Error("Invalid contributions response format");
+    }
+    if (!githubRes.value.headers.get("content-type")?.includes("application/json")) {
+      throw new Error("Invalid GitHub response format");
+    }
+    // Parse JSON responses
+    const contribData = (await contribRes.value.json()) as ContributionResponse;
+    const githubData = await githubRes.value.json();
 
     // Map contributions year-wise
     const contributionByYear = contribData.contributions.reduce(
