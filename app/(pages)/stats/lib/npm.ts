@@ -1,6 +1,7 @@
 import dayjs from "dayjs";
 import isoWeek from "dayjs/plugin/isoWeek";
 import minMax from "dayjs/plugin/minMax";
+import { cache } from "react";
 import "server-only";
 import { z } from "zod";
 
@@ -112,9 +113,9 @@ async function getAllTime(pkg: string): Promise<number> {
   return downloads;
 }
 
-export async function fetchNpmPackage(
+export const fetchNpmPackage = cache(async (
   pkg: string,
-): Promise<NpmPackageStatsData> {
+): Promise<NpmPackageStatsData> => {
   // Ensure we cover 90 days + a full first week
   const startOfFirstWeek = dayjs().subtract(90, "day").startOf("isoWeek");
   const ninetyOrSoDays = dayjs().diff(startOfFirstWeek, "day");
@@ -128,7 +129,7 @@ export async function fetchNpmPackage(
     last30Days,
     last90Days: groupByWeek(last90Days),
   };
-}
+})
 
 async function get(url: string): Promise<unknown> {
   const res = await fetch(url, {

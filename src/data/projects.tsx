@@ -1,7 +1,8 @@
 import { Icons } from "@/components/icons/icons";
 
 export const projectsList = [
-  {
+  { 
+    id:"nexonauts",
     title: "Nexonauts",
     href: "https://nexonauts.com",
     dates: "Jan 2024 - Feb 2024",
