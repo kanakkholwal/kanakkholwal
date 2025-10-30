@@ -11,7 +11,7 @@
 
 ## Summary
 
-Software Engineer with full-stack development, scalable systems, and cloud computing experience. Shipped high-impact OSS projects (200k+ visitors, 300+ npm downloads) and delivered production features at SaaS startups. Skilled in React, Next.js, TypeScript, Node.js, Docker, Python, Go, AWS/GCP/Azure. Achievements: +220% engagement, +150% SEO traffic, 60% faster builds. Active in algorithms & data structures (150+ LeetCode problems).
+Software Engineer with full-stack development, scalable systems, and cloud computing experience. Shipped high-impact OSS projects 900k+ visitors, 300+ npm downloads) and delivered production features at SaaS startups. Skilled in React, Next.js, TypeScript, Node.js, Docker, Python, Go, AWS/GCP/Azure. Achievements: +220% engagement, +150% SEO traffic, 60% faster builds. Active in algorithms & data structures (150+ LeetCode problems).
 
 
 ## Experience
