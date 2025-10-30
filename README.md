@@ -3,7 +3,7 @@
 
 **X / Twitter:** [x.com/kanakkholwal](https://x.com/kanakkholwal)  
 **LinkedIn:** [linkedin.com/in/kanak-kholwal](https://linkedin.com/in/kanak-kholwal)  
-**LeetCode:** [leetcode.com/u/kanakkholwal](https://leetcode.com/u/kanakkholwal) 
+**LeetCode:** [leetcode.com/u/kanakkholwal](https://leetcode.com/u/kanakkholwal)
 **Portfolio:** [kanakkholwal.eu.org](kanakkholwal.eu.org)  
 **Email:** contact@kanak.eu.org
 
@@ -34,7 +34,14 @@ Software Engineer with full-stack development, scalable systems, and cloud compu
 - **College Ecosystem** - Next.js/TS platform; 900k+ visits; 700+ users; realtime polls, rankings, communities.  
 - **SwipFit** - AI fashion discovery (vector search); reduced user selection time 40%.
 
-## Projects
+## Best Projects
+
+### College Ecosystem ([GitHub](https://github.com/kanakkholwal/college-ecosystem), [Live](https://app.nith.eu.org))
+- Multi-feature college portal (Next.js, TypeScript, Node.js, PostgreSQL, MongoDB, Docker).  
+- Scaled to 900k+ visits with features like rankings, attendance, real-time polling.  
+- Implemented subreddit-like communities and live announcements.  
+- Optimized database queries and caching for scalability & fault tolerance.  
+- Implemented microservices for scraping and email delivery system.
 
 ### NexoNauts.com ([GitHub](https://github.com/kanakkholwal/nexonauts), [Live](https://nexonauts.com))
 - Ecosystem for developers (Next.js, Shadcn UI, MongoDB).  
@@ -48,12 +55,6 @@ Software Engineer with full-stack development, scalable systems, and cloud compu
 - Designed vector similarity search for efficient personalization.  
 - Integrated scalable APIs and database queries with indexing for performance.
 
-### College Ecosystem ([GitHub](https://github.com/kanakkholwal/college-ecosystem), [Live](https://app.nith.eu.org))
-- Multi-feature college portal (Next.js, TypeScript, Node.js, PostgreSQL, MongoDB, Docker).  
-- Scaled to 900k+ visits with features like rankings, attendance, real-time polling.  
-- Implemented subreddit-like communities and live announcements.  
-- Optimized database queries and caching for scalability & fault tolerance.  
-- Implemented microservices for scraping and email delivery system.
 
 ## Skills
 
