@@ -1,12 +1,15 @@
 import { Star } from "lucide-react";
 import { statsConfig } from "../config";
-import { GitHubStarHistory } from "../lib/github";
+import { getStarHistory, GitHubStarHistory } from "../lib/github";
 import { GraphSkeleton } from "./graph.skeleton";
 import { StarsGraph } from "./stars.client";
 import StargazersList from "./stars.gazers-list";
 import { WidgetSkeleton } from "./widget.skeleton";
 
-export function StarHistoryGraph({ stars }: { stars: GitHubStarHistory[] }) {
+export async function StarHistoryGraph() {
+   const stars = await Promise.all(
+      statsConfig.repositories.map((r) => r.repo).map(getStarHistory),
+    );
   const starsByRepo: Record<string, GitHubStarHistory> = {};
   statsConfig.repositories.forEach((r, i) => {
     starsByRepo[r.repo] = stars[i];

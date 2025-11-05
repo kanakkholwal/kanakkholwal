@@ -1,5 +1,6 @@
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
+import { cache } from "react";
 import "server-only";
 import { z } from "zod";
 
@@ -123,9 +124,9 @@ const starHistoryQuerySchema = z.object({
   }),
 });
 
-export async function getStarHistory(
+export const getStarHistory = cache(async (
   slug = "kanakkholwal/college-ecosystem",
-): Promise<GitHubStarHistory> {
+): Promise<GitHubStarHistory> => {
   const [owner, repo] = slug.split("/");
 
   // Compute the 12-day window [today .. today-11d] in UTC
@@ -251,4 +252,4 @@ export async function getStarHistory(
     count: totalCount,
     bins,
   };
-}
+})

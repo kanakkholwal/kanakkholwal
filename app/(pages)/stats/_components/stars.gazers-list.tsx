@@ -74,6 +74,8 @@ function Stargazer({
           src={avatarUrl}
           alt={name ?? "Unknown"}
           className="h-5 w-5 rounded-full"
+          width={20}
+          height={20}
         />
         <span className="text-foreground font-semibold empty:hidden">
           {name}

@@ -5,6 +5,7 @@ import { formatStatNumber } from "../lib/format";
 import {
   combineStats,
   Datum,
+  fetchNpmPackage,
   getIsoWeekday,
   getPartialPreviousWeekDownloads,
   NpmPackageStatsData,
@@ -16,7 +17,10 @@ import { WidgetSkeleton } from "./widget.skeleton";
 import { Fragment } from "react";
 import { statsConfig } from "../config";
 
-export function NPMStats({ npmStats }: { npmStats: NpmPackageStatsData[] }) {
+export async function NPMStats() {
+  const npmStats = await Promise.all(
+    statsConfig.npmPackages.map((pkg) => fetchNpmPackage(pkg)),
+  );
   const all = combineStats(
     statsConfig.npmPackages.reduce(
       (acc, pkg, index) => {
@@ -60,11 +64,10 @@ export const NPMStatsSkeleton = () => (
   <div className="bg-muted h-9 w-64 animate-pulse rounded-md lg:h-12" />
 );
 
-export function NPMDownloads({
-  npmStats,
-}: {
-  npmStats: NpmPackageStatsData[];
-}) {
+export async function NPMDownloads() {
+  const npmStats = await Promise.all(
+    statsConfig.npmPackages.map((pkg) => fetchNpmPackage(pkg)),
+  );
   const all = combineStats(
     statsConfig.npmPackages.reduce(
       (acc, pkg, index) => {

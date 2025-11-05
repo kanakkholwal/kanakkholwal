@@ -1,8 +1,7 @@
 import { cn } from "@/lib/utils";
-import { Metadata } from "next";
 import { SearchParams } from "nuqs/server";
 import { Suspense } from "react";
-import { appConfig } from "root/project.config";
+import { generateMetadata } from "~/utils/seo";
 import {
   NPMDownloads,
   NPMDownloadsSkeleton,
@@ -18,11 +17,8 @@ import { Versions } from "./_components/versions";
 import { Widget } from "./_components/widget";
 import { WidgetSkeleton } from "./_components/widget.skeleton";
 import { statsConfig } from "./config";
-import { getStarHistory } from "./lib/github";
-import { fetchNpmPackage } from "./lib/npm";
 import { getVersions, sumVersions } from "./lib/versions";
 import { loadSearchParams } from "./searchParams";
-import { generateMetadata } from "~/utils/seo";
 
 export const dynamic = "force-dynamic";
 
@@ -31,12 +27,8 @@ type StatsPageProps = {
 };
 
 export default async function StatsPage({ searchParams }: StatsPageProps) {
-  const stars = await Promise.all(
-    statsConfig.repositories.map((r) => r.repo).map(getStarHistory),
-  );
-  const npmStats = await Promise.all(
-    statsConfig.npmPackages.map((pkg) => fetchNpmPackage(pkg)),
-  );
+ 
+  
 
   return (
     <div className="mx-auto max-w-[88rem] px-4">
@@ -53,7 +45,7 @@ export default async function StatsPage({ searchParams }: StatsPageProps) {
       </h2>
       <section className="my-4 grid grid-cols-1 gap-4 lg:grid-cols-2 max-w-(--max-app-width) mt-10">
         <Suspense fallback={<StarHistoryGraphSkeleton />}>
-          <StarHistoryGraph stars={stars} />
+          <StarHistoryGraph  />
         </Suspense>
         <Widget
           className={cn(
@@ -64,12 +56,12 @@ export default async function StatsPage({ searchParams }: StatsPageProps) {
           {statsConfig.flags.repoBeats && <RepoBeatsActivityGraph />}
           <div className="flex flex-1 items-center gap-6 p-4">
             <Suspense fallback={<NPMStatsSkeleton />}>
-              <NPMStats npmStats={npmStats} />
+              <NPMStats  />
             </Suspense>
           </div>
         </Widget>
         <Suspense fallback={<NPMDownloadsSkeleton />}>
-          <NPMDownloads npmStats={npmStats} />
+          <NPMDownloads />
         </Suspense>
         {statsConfig.flags.versionAdoptionGraph && (
           <Suspense fallback={<WidgetSkeleton />}>
@@ -101,7 +93,7 @@ export const metadata = generateMetadata({
   ],
 });
 
-// --
+
 
 type VersionsLoaderProps = {
   searchParams: Promise<SearchParams>;
