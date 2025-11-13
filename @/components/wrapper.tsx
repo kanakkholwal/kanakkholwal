@@ -47,6 +47,7 @@ export default function PageWrapper({
         {children}
       </motion.div>
 
+
       <StarsBackground
         starColor={resolvedTheme === "dark" ? "#FFF" : "#000"}
         className={cn(

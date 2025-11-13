@@ -27,8 +27,8 @@ type StatsPageProps = {
 };
 
 export default async function StatsPage({ searchParams }: StatsPageProps) {
- 
-  
+
+
 
   return (
     <div className="mx-auto max-w-[88rem] px-4">
@@ -45,7 +45,7 @@ export default async function StatsPage({ searchParams }: StatsPageProps) {
       </h2>
       <section className="my-4 grid grid-cols-1 gap-4 lg:grid-cols-2 max-w-(--max-app-width) mt-10">
         <Suspense fallback={<StarHistoryGraphSkeleton />}>
-          <StarHistoryGraph  />
+          <StarHistoryGraph />
         </Suspense>
         <Widget
           className={cn(
@@ -56,7 +56,7 @@ export default async function StatsPage({ searchParams }: StatsPageProps) {
           {statsConfig.flags.repoBeats && <RepoBeatsActivityGraph />}
           <div className="flex flex-1 items-center gap-6 p-4">
             <Suspense fallback={<NPMStatsSkeleton />}>
-              <NPMStats  />
+              <NPMStats />
             </Suspense>
           </div>
         </Widget>

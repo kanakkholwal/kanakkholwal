@@ -1,4 +1,5 @@
 "use client";
+import { FloatingPaths } from "@/components/animated/bg.floating-paths";
 import { GlowFillButton } from "@/components/animated/button.fill";
 import { OrbitingCircles } from "@/components/animated/elements.orbiting";
 import { CountingNumber } from "@/components/animated/text.counter";
@@ -45,6 +46,7 @@ export function HeroSection() {
       id="hero"
       className="relative flex flex-col md:grid md:grid-cols-2 items-center justify-between gap-8 px-6 md:px-12 min-h-dvh max-w-7xl mx-auto w-full"
     >
+    
       <div className="flex flex-col gap-4 justify-center text-center md:text-left flex-1 md:col-span-1">
         <ShimmeringText
           text={`Hi, I'm ${appConfig.name.split(" ")[0]}`}
@@ -322,7 +324,7 @@ export function SkillSection() {
               className="group no-underline transition-all duration-500 hover:-translate-y-2"
             >
               <div className="group inline-block text-center">
-                <div className="size-28 rounded-xl border-2 p-2 transition-all duration-300 group-hover:border-primary group-hover:shadow-lg">
+                <div className="size-28 rounded-xl border-2 p-2 transition-all duration-300 group-hover:border-primary/50 group-hover:shadow-lg">
                   <div className="box-shadow-glow grid h-full place-items-center rounded-xl border-2 border-[#A5AEB81F]/10 bg-[#EDEEF0] dark:border-[#5A5F661F]/10 dark:bg-[#1A1B1E]">
                     <motion.img
                       aria-label={skill}

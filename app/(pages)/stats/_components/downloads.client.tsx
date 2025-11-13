@@ -37,10 +37,11 @@ export function DownloadsGraph({
   const [DasharrayCalculator, lineDashArrays] = useDynamicDasharray({
     splitIndex: data.length - 2,
   });
+
   return (
     <Widget {...props}>
       <ChartContainer
-        className="relative h-85.5 w-full pr-1"
+        className="relative h-86 w-full pr-1"
         config={{
           ...statsConfig.npmPackages.reduce(
             (acc, pkg) => {

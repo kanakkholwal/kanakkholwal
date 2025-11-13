@@ -15,15 +15,20 @@ export type Datum = {
 
 export type MultiDatum = {
   date: string;
-} & {
-  [key: string]: number | string;
+  [key: string]: string | number;
 };
 
 export type NpmPackageStatsData = {
+  withKeys: false
   allTime: number;
   last30Days: Datum[];
   last90Days: Datum[];
-};
+} | {
+  withKeys: true
+  allTime: number;
+  last30Days: MultiDatum[];
+  last90Days: MultiDatum[];
+}
 
 // const regexp = /https:\/\/npmjs\.com\/package\/([\w.-]+|@[\w.-]+\/[\w.-]+)/gm
 
@@ -125,6 +130,7 @@ export const fetchNpmPackage = cache(async (
     getLastNDays(pkg, ninetyOrSoDays),
   ]);
   return {
+    withKeys: false,
     allTime,
     last30Days,
     last90Days: groupByWeek(last90Days),
@@ -159,20 +165,55 @@ function groupByWeek(data: Datum[]): Datum[] {
 
 export function combineStats(
   args: Record<string, NpmPackageStatsData>,
+  withKeys = true,
 ): NpmPackageStatsData {
   function getCombined(key: "last30Days" | "last90Days"): Datum[] {
     const dateMap: Record<string, number> = {};
-    Object.values(args).forEach((pkg) => {
-      pkg[key].forEach((d) => {
-        dateMap[d.date] = (dateMap[d.date] ?? 0) + d.downloads;
-      });
-    });
+    for (const pkg of Object.values(args)) {
+      for (const d of pkg[key]) {
+        dateMap[d.date] = (dateMap[d.date] ?? 0) + (d.downloads as number) ;
+      }
+    }
     return Object.entries(dateMap)
       .map(([date, downloads]) => ({ date, downloads }))
-      .sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0));
+      .sort((a, b) => a.date.localeCompare(b.date));
   }
 
+  function getWithKeys(key: "last30Days" | "last90Days"): MultiDatum[] {
+    const dateMap: Record<string, Record<string, number>> = {};
+
+    for (const [pkgName, pkg] of Object.entries(args)) {
+      for (const d of pkg[key]) {
+        if (!dateMap[d.date]) dateMap[d.date] = {};
+
+        // Datum shape
+        if ("downloads" in d) {
+          dateMap[d.date][pkgName] = d.downloads as number;
+        }
+
+        // MultiDatum shape
+        else {
+          for (const [k, v] of Object.entries(d)) {
+            if (k !== "date") dateMap[d.date][k] = v as number;
+          }
+        }
+      }
+    }
+
+    return Object.entries(dateMap)
+      .map(([date, obj]) => ({ date, ...obj }))
+      .sort((a, b) => a.date.localeCompare(b.date));
+  }
+  if (withKeys) {
+    return {
+      withKeys: true,
+      allTime: Object.values(args).reduce((sum, pkg) => sum + pkg.allTime, 0),
+      last30Days: getWithKeys("last30Days"),
+      last90Days: getWithKeys("last90Days"),
+    };
+  }
   return {
+    withKeys: false,
     allTime: Object.values(args).reduce((sum, pkg) => sum + pkg.allTime, 0),
     last30Days: getCombined("last30Days"),
     last90Days: getCombined("last90Days"),

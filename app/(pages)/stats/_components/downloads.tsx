@@ -8,6 +8,7 @@ import {
   fetchNpmPackage,
   getIsoWeekday,
   getPartialPreviousWeekDownloads,
+  MultiDatum,
   NpmPackageStatsData,
 } from "../lib/npm";
 import { DownloadsGraph } from "./downloads.client";
@@ -63,26 +64,41 @@ export async function NPMStats() {
 export const NPMStatsSkeleton = () => (
   <div className="bg-muted h-9 w-64 animate-pulse rounded-md lg:h-12" />
 );
+function sumPastPeriodCallback(d: MultiDatum, index: number, array: MultiDatum[]) {
+  let sum = 0;
+  for (const key in d) {
+    if (key !== "date") {
+      sum += d[key] as number;
+    }
+  }
+  return sum;
+}
 
 export async function NPMDownloads() {
   const npmStats = await Promise.all(
     statsConfig.npmPackages.map((pkg) => fetchNpmPackage(pkg)),
   );
-  const all = combineStats(
-    statsConfig.npmPackages.reduce(
-      (acc, pkg, index) => {
-        acc[pkg] = npmStats[index];
-        return acc;
-      },
-      {} as Record<string, NpmPackageStatsData>,
-    ),
+  const data = statsConfig.npmPackages.reduce(
+    (acc, pkg, index) => {
+      acc[pkg] = npmStats[index];
+      return acc;
+    },
+    {} as Record<string, NpmPackageStatsData>,
+  )
+  const [all,allWithoutKeys] = [combineStats(data),combineStats(data,false)];
+  const allLast30Days = all.last30Days.reduce(
+    (sum, d) => sum + sumPastPeriodCallback(d, 0, all.last30Days),
+    0,
+  );
+  const allLast90Days = all.last90Days.reduce(
+    (sum, d) => sum + sumPastPeriodCallback(d, 0, all.last90Days),
+    0,
   );
   const lastDate = all.last30Days.at(-1)?.date;
   const lastDateWeekday = getIsoWeekday(lastDate ?? "");
   // Fortunately the epoch did not land on a Sunday (it was a Thursday).
   const isLastDateSunday = lastDateWeekday === 7;
 
-  // console.log({ all, npmStats });
   return (
     <>
       <DownloadsGraph
@@ -94,12 +110,12 @@ export async function NPMDownloads() {
             // Compare the N days of the current week (possibly pending)
             // to the first N days of the previous week.
             oldValue={getPartialPreviousWeekDownloads(
-              all.last30Days.reduce(
-                (sum, d) => sum.concat(d as unknown as Datum[]),
+              allWithoutKeys.last30Days.reduce(
+                (sum, d) => (sum.concat(d as unknown as Datum[])),
                 [] as Datum[],
               ),
             )}
-            newValue={Number(all.last90Days.at(-1)?.downloads ?? 0)}
+            newValue={Number(allWithoutKeys.last90Days.at(-1)?.downloads ?? 0)}
           />
         }
         title={
@@ -108,11 +124,7 @@ export async function NPMDownloads() {
             <dl className="mr-1 ml-auto flex gap-2">
               <dt className="sr-only">combined</dt>
               <dd>
-                {formatStatNumber(
-                  all.last90Days
-                    .filter((d) => d.downloads)
-                    .reduce((sum, { downloads }) => sum + Number(downloads), 0),
-                )}
+                {formatStatNumber(allLast90Days)}
               </dd>
               <span className="font-light text-zinc-500" aria-hidden>
                 |
@@ -132,7 +144,7 @@ export async function NPMDownloads() {
                     >
                       {formatStatNumber(
                         npmStats[index].last90Days.reduce(
-                          (sum, { downloads }) => sum + downloads,
+                          (sum, { downloads }) => sum + (downloads as number),
                           0,
                         ),
                       )}
@@ -150,8 +162,8 @@ export async function NPMDownloads() {
         trend={
           <TrendBadge
             label=" downloads compared to 7 days ago"
-            oldValue={Number(all.last30Days.at(-8)?.downloads ?? 0)}
-            newValue={Number(all.last30Days.at(-1)?.downloads ?? 0)}
+            oldValue={Number(allWithoutKeys.last30Days.at(-8)?.downloads ?? 0)}
+            newValue={Number(allWithoutKeys.last30Days.at(-1)?.downloads ?? 0)}
           />
         }
         title={
@@ -160,12 +172,7 @@ export async function NPMDownloads() {
             <dl className="mr-1 ml-auto flex gap-2">
               <dt className="sr-only">combined</dt>
               <dd>
-                {formatStatNumber(
-                  all.last30Days.reduce(
-                    (sum, { downloads }) => sum + Number(downloads),
-                    0,
-                  ),
-                )}
+                {formatStatNumber(allLast30Days)}
               </dd>
               <span className="font-light text-zinc-500" aria-hidden>
                 |
@@ -185,7 +192,7 @@ export async function NPMDownloads() {
                     >
                       {formatStatNumber(
                         npmStats[index].last30Days.reduce(
-                          (sum, { downloads }) => sum + downloads,
+                          (sum, { downloads }) => sum + (downloads as number),
                           0,
                         ),
                       )}

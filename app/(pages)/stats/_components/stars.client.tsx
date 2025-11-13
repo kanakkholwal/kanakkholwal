@@ -46,7 +46,7 @@ export function StarsGraph({ data, stargazersTab }: StarsGraphProps) {
     <Widget
       className="px-0 pb-0"
       title={
-        <div className="flex w-full items-center gap-2 pb-1">
+        <div className="flex w-full items-center gap-2 pb-1 flex-wrap">
           <Star size={20} className="ml-2" /> {data[activeRepo].count} stars
           <Select defaultValue={activeRepo} onValueChange={setActiveRepo}>
             <SelectTrigger className="w-auto min-w-[8rem] h-8 text-sm text-muted-foreground font-light">
