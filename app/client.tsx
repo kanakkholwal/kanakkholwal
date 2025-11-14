@@ -72,7 +72,7 @@ export function HeroSection() {
             <Icon name="arrow-up-right" />
           </ButtonLink>
           <GlowFillButton icon={ArrowRight} className="h-11 my-0">
-            <TransitionLink href="/journey">My Journey</TransitionLink>
+            <TransitionLink href="/stats">Project Stats</TransitionLink>
           </GlowFillButton>
         </div>
       </div>
