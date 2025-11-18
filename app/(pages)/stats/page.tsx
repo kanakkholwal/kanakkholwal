@@ -46,7 +46,7 @@ export default async function StatsPage({ searchParams }: StatsPageProps) {
       </h2>
       <section className="my-4 grid grid-cols-1 gap-4 lg:grid-cols-2 max-w-(--max-app-width) mt-10">
         <h3 className="grid-cols-1 text-left lg:col-span-2 font-instrument-serif text-lg lg:text-3xl border-l-4 ps-4 border-colorful/30">
-          <span className="text-colorful animate-gradient-x font-instrument-serif">Packages </span>{"'s "}
+          <span className="text-colorful animate-gradient-x font-instrument-serif">Packages</span>{"'s "}
           <span className="pe-2 tracking-tight italic">
             Insights
           </span>
@@ -79,7 +79,7 @@ export default async function StatsPage({ searchParams }: StatsPageProps) {
       </section>
       <section className="my-4 grid grid-cols-1 gap-4  max-w-(--max-app-width) mt-10">
         <h3 className="grid-cols-1 text-left lg:col-span-2 font-instrument-serif text-lg lg:text-3xl border-l-4 ps-4 border-colorful/30">
-          <span className="text-colorful animate-gradient-x font-instrument-serif">Projects </span>{"'s "}
+          <span className="text-colorful animate-gradient-x font-instrument-serif">Projects</span>{"'s "}
           <span className="pe-2 tracking-tight italic">
             Insights
           </span>
