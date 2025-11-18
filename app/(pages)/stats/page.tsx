@@ -8,6 +8,7 @@ import {
   NPMStats,
   NPMStatsSkeleton,
 } from "./_components/downloads";
+import { InsightStats } from "./_components/insight";
 import {
   StarHistoryGraph,
   StarHistoryGraphSkeleton,
@@ -16,7 +17,7 @@ import { RepoBeatsActivityGraph } from "./_components/stars.client";
 import { Versions } from "./_components/versions";
 import { Widget } from "./_components/widget";
 import { WidgetSkeleton } from "./_components/widget.skeleton";
-import { statsConfig } from "./config";
+import { insightConfig, statsConfig } from "./config";
 import { getVersions, sumVersions } from "./lib/versions";
 import { loadSearchParams } from "./searchParams";
 
@@ -44,6 +45,12 @@ export default async function StatsPage({ searchParams }: StatsPageProps) {
         </span>
       </h2>
       <section className="my-4 grid grid-cols-1 gap-4 lg:grid-cols-2 max-w-(--max-app-width) mt-10">
+        <h3 className="grid-cols-1 text-left lg:col-span-2 font-instrument-serif text-lg lg:text-3xl border-l-4 ps-4 border-colorful/30">
+          <span className="text-colorful animate-gradient-x font-instrument-serif">Packages </span>{"'s "}
+          <span className="pe-2 tracking-tight italic">
+            Insights
+          </span>
+        </h3>
         <Suspense fallback={<StarHistoryGraphSkeleton />}>
           <StarHistoryGraph />
         </Suspense>
@@ -68,6 +75,20 @@ export default async function StatsPage({ searchParams }: StatsPageProps) {
             <VersionsLoader searchParams={searchParams} />
           </Suspense>
         )}
+
+      </section>
+      <section className="my-4 grid grid-cols-1 gap-4  max-w-(--max-app-width) mt-10">
+        <h3 className="grid-cols-1 text-left lg:col-span-2 font-instrument-serif text-lg lg:text-3xl border-l-4 ps-4 border-colorful/30">
+          <span className="text-colorful animate-gradient-x font-instrument-serif">Projects </span>{"'s "}
+          <span className="pe-2 tracking-tight italic">
+            Insights
+          </span>
+        </h3>
+        {insightConfig.map((insight) => {
+          return <Suspense fallback={<WidgetSkeleton />} key={insight.id}>
+            <InsightStats key={insight.id} project={insight} />
+          </Suspense>;
+        })}
       </section>
     </div>
   );

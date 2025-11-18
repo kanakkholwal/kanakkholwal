@@ -255,7 +255,7 @@ type TrendBadgeProps = {
   label: string;
 };
 
-function TrendBadge({ oldValue, newValue, label }: TrendBadgeProps) {
+export function TrendBadge({ oldValue, newValue, label }: TrendBadgeProps) {
   const diff = newValue - oldValue;
   const pct = oldValue === 0 ? 100 : (diff / oldValue) * 100;
   const sign = diff === 0 ? "" : diff > 0 ? "+" : "-";
