@@ -61,6 +61,8 @@ Software Engineer with full-stack development, scalable systems, and cloud compu
 ### SwipFit
 [GitHub](https://github.com/kanakkholwal/swipfit)  
 *AI-powered fashion discovery (TypeScript, PostgreSQL, Shadcn UI, recommendation system)*
+- Researched and scraped 25K+ products across different fashion e-commerce platforms.
+- Developed different techniques to perform better recommendation.
 - Implemented swipe-based recommendation engine; reduced selection time 40%.
 - Designed vector similarity search for efficient personalization.
 - Integrated scalable APIs and database queries with indexing for performance.
