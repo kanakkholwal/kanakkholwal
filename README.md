@@ -23,7 +23,7 @@ Software Engineer with full-stack development, scalable systems, and cloud compu
 ## Experience
 
 ### Textify AI — *Remote*
-**Software Developer Intern** | *Jan 2023 – Jun 2024*
+**Software Developer Intern** | *Jan 2023 – Feb 2024*
 - Built and maintained core platform features, boosting user engagement by 220%.
 - Integrated AWS Cognito MFA; secured APIs and reduced unauthorized access attempts.
 - Developed REST APIs & microservices; reduced deployment time 30% using CI/CD on Azure & GCP.
