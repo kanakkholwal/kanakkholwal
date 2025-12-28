@@ -15,7 +15,12 @@
 
 ## Summary
 
-Software Engineer with full-stack development, scalable systems, and cloud computing experience. Shipped high-impact OSS projects (200k+ visitors, 300+ npm downloads) and delivered production features at SaaS startups. Skilled in React, Next.js, TypeScript, Node.js, Docker, Python, Go, AWS/GCP/Azure. Achievements: +220% engagement, +150% SEO traffic, 60% faster builds. Active in algorithms & data structures (150+ LeetCode problems).
+- **Software Engineer** with full-stack development, scalable systems, and **devops/cloud computing ** experience. 
+- Shipped **high-impact OSS projects** (**1.1M+ visitors,** 300+ weekly npm downloads) and delivered production features at SaaS startups.
+- Skilled in **Reactjs, Next.js, TypeScript, Node.js, React Native, Docker, Python, Go, AWS/GCP/Azure**. 
+- Achieved +220% engagement, +150% SEO traffic, 60% faster builds.
+- Active in algorithms & data structures.
+- Actively learning **System Design, Devops**
 
 ---
 
@@ -25,21 +30,23 @@ Software Engineer with full-stack development, scalable systems, and cloud compu
 ### Textify AI — *Remote*
 **Software Developer Intern** | *Jan 2023 – Feb 2024*
 - Built and maintained core platform features, boosting user engagement by 220%.
-- Integrated AWS Cognito MFA; secured APIs and reduced unauthorized access attempts.
-- Developed REST APIs & microservices; reduced deployment time 30% using CI/CD on Azure & GCP.
+- Integrated **AWS Cognito MFA**; secured APIs and reduced unauthorized access attempts.
+- Developed **REST APIs & microservices**; reduced deployment time 30% using ** CI/CD through Docker on Azure & GCP**.
 
 ### KoinX — *Remote*
 **Frontend Developer Intern** | *Mar 2024 – Jun 2024*
-- Optimized frontend SEO & performance (LCP/CLS), increasing organic traffic 150%.
-- Migrated repositories CRA → Vite, cutting build times 60%.
-- Built internal TypeScript UI library with unit tests & Storybook for consistency across teams.
+- **Optimized frontend SEO & performance** (LCP/CLS), increasing organic traffic 150%.
+- **Migrated** repositories **CRA (CREATE-REACT-APP) → Vite**, cutting build times 60%.
+- Built **internal TypeScript UI library** with unit tests & Storybook for consistency across teams.
 
 ### Open Source — *Global*
 **Contributor & Maintainer** | *2022 – Present*
-- **Markdown Editor** - plugin-based TS editor; rendering speed +35%; 300+ weekly downloads.
 - **College Ecosystem** - Next.js/TS platform; 100k+ visits; realtime polls, rankings, communities.
-- **SwipFit** - AI fashion discovery (vector search); reduced user selection time 40%.
-
+- **Muse** - AI fashion discovery (vector search); reduced user selection time 40%.
+- **Mailing system** - An extendable serverless mailing system with Nextjs and React mail
+- **Markdown Editor** - plugin-based Markdown Editor with React + TS + shadcn UI / Tailwind css ; rendering speed +35%; 300+ weekly downloads.
+- **Rich Text Editor** - A lightweight, customizable React Rich Text Editor built on TipTap
+- **Remark Plugins** - A collection of remark plugins for markdown processing.
 ---
 
 ## Projects
@@ -48,24 +55,29 @@ Software Engineer with full-stack development, scalable systems, and cloud compu
 [GitHub](https://github.com/kanakkholwal/nexonauts) | [Live](https://nexonauts.com)  
 *Ecosystem for developers (Next.js, Shadcn UI, MongoDB)*
 - Launched mentorship program connecting developers; improved satisfaction to 90%.
-- Designed marketplace, tools engine, and developer utilities for productivity.
-- Architected scalable frontend, integrating CI/CD pipelines for rapid feature delivery.
+- Designed **marketplace**, tools engine, and** developer utilities** for productivity.
+- Architected scalable frontend, integrating **CI/CD pipelines **for rapid feature delivery.
+-  Orchestrated microservices for **email delivery system** for transactional emails and newsletter.
 
 ### College Ecosystem
 [GitHub](https://github.com/kanakkholwal/college-ecosystem) | [Live](https://app.nith.eu.org)  
 *Multi-feature college portal (Next.js, Typescript, Node.js, PostgreSQL, MongoDB, Docker)*
-- Scaled to 900k+ visits & 700+ active users with features like rankings, attendance, real-time polling.
-- Implemented subreddit-like communities and live announcements.
-- Optimized database queries and caching for scalability & fault tolerance. Also implemented microservices for scraping and email delivery system.
+- Scaled to **1,200,000+ visits** & **740+ active users** with features like rankings, attendance, real-time polling.
+- Implemented **subreddit-like communities **and live announcements.
+- Optimized database queries and caching for scalability & fault tolerance.
+- Orchestrated microservices for scraping and **email delivery system**.
 
-### SwipFit
-[GitHub](https://github.com/kanakkholwal/swipfit)  
-*AI-powered fashion discovery (TypeScript, PostgreSQL, Shadcn UI, recommendation system)*
-- Researched and scraped 25K+ products across different fashion e-commerce platforms.
+### Muse
+[GitHub](https://github.com/kanakkholwal/muse-mvp)  
+*AI-powered fashion discovery (TypeScript, PostgreSQL, Shadcn UI, React Native, Python, Nextjs, recommendation system)*
+- **Researched and scraped 25K+ products** across different fashion e-commerce platforms.
 - Developed different techniques to perform better recommendation.
-- Implemented swipe-based recommendation engine; reduced selection time 40%.
-- Designed vector similarity search for efficient personalization.
-- Integrated scalable APIs and database queries with indexing for performance.
+- Implemented **swipe-based recommendation engine**; reduced selection time 40%.
+- Designed **vector similarity search** for efficient personalization.
+- Integrated **scalable** APIs and database queries with **indexing** for performance.
+- Orchestrated **Continous Integration** of publishing Docker Images on **Github Container Registry**.
+- Orchestrated **Continous Deployement** of** Docker images from GHCR to Google Cloud Run**.
+- Handled **Application Load balancer** to handle point custom domains to Google Cloud Run Instances which doesn't support Domain mapping yet.
 
 
 ---
