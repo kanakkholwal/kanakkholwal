@@ -114,7 +114,7 @@
 <!-- BLOG-POST-LIST:END -->
 
 
-![OpBento](https://firebasestorage.googleapis.com/v0/b/smartkaksha-fe32c.appspot.com/o/opbento%2Fkanakkholwal794c3.png?alt=media)
+![OpBento](https://firebasestorage.googleapis.com/v0/b/smartkaksha-fe32c.appspot.com/o/opbento%2Fkanakkholwalca860.png?alt=media)
 
 <picture>
     <source media="(prefers-color-scheme: dark)" srcset="https://github-readme-stats-ouuan.vercel.app/api?username=kanakkholwal&theme=dark&show_icons=true">
