@@ -106,7 +106,7 @@ export function HeroSection() {
             icon={ArrowRight}
             className="h-12 px-8 my-0 bg-transparent rounded-full font-semibold"
           >
-            <TransitionLink href="/work">View Projects</TransitionLink>
+            <TransitionLink href="/projects">View Projects</TransitionLink>
           </GlowFillButton>
         </motion.div>
       </div>
