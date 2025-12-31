@@ -1,21 +1,15 @@
 "use client";
-import { FloatingPaths } from "@/components/animated/bg.floating-paths";
 import { GlowFillButton } from "@/components/animated/button.fill";
-import { OrbitingCircles } from "@/components/animated/elements.orbiting";
 import { CountingNumber } from "@/components/animated/text.counter";
 import { RollingText } from "@/components/animated/text.rolling";
-import { ShimmeringText } from "@/components/animated/text.shimmer";
 import { Icon } from "@/components/icons";
 import {
   ContributionGraph,
   ContributionGraphBlock,
   ContributionGraphCalendar,
-  ContributionGraphFooter,
   ContributionGraphLegend,
-  ContributionGraphTotalCount,
+  ContributionGraphTotalCount
 } from "@/components/kibo-ui/contribution-graph";
-import BlurFade from "@/components/magicui/blur-fade";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import {
   Select,
@@ -26,11 +20,9 @@ import {
 } from "@/components/ui/select";
 import {
   ButtonLink,
-  ButtonScroll,
-  TransitionLink,
+  TransitionLink
 } from "@/components/utils/link";
 import { cn } from "@/lib/utils";
-import { AvatarImage } from "@radix-ui/react-avatar";
 import { motion } from "framer-motion";
 import { ArrowRight, BookOpen, GitFork, Star, Users } from "lucide-react";
 import Image from "next/image";
@@ -38,309 +30,429 @@ import { useState } from "react";
 import { appConfig, resume_link } from "root/project.config";
 import { Contributions } from "~/api/github";
 
-const BLUR_FADE_DELAY = 0.04;
+import { OrbitingCircles } from "@/components/animated/elements.orbiting";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useMotionTemplate, useMotionValue } from "framer-motion";
+import { MouseEvent } from "react";
+
+
 
 export function HeroSection() {
   return (
     <section
       id="hero"
-      className="relative flex flex-col md:grid md:grid-cols-2 items-center justify-between gap-8 px-6 md:px-12 min-h-dvh max-w-7xl mx-auto w-full"
+      className={"relative grid lg:grid-cols-12 items-center gap-12 px-6 lg:px-12 min-h-[92vh] max-w-7xl mx-auto w-full pt-24 md:pt-0 overflow-hidden lg:overflow-visible"}
     >
-    
-      <div className="flex flex-col gap-4 justify-center text-center md:text-left flex-1 md:col-span-1">
-        <ShimmeringText
-          text={`Hi, I'm ${appConfig.name.split(" ")[0]}`}
-          className="text-3xl font-bold tracking-tight sm:text-5xl lg:text-6xl"
-        />
+      <div className="flex flex-col gap-8 justify-center text-center md:text-left lg:col-span-7 z-20">
+
+
+        {/* 1. Identity Kicker (The "Hi, I'm Kanak" part) */}
+        <div className="flex flex-col items-center md:items-start space-y-4">
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="flex items-center gap-2"
+          >
+            {/* Stripe-style Status Badge */}
+            <Badge
+              variant="outline"
+              className="pl-2 pr-4 py-1.5 rounded-full border-slate-200 dark:border-slate-800 bg-white/70 dark:bg-slate-900/70 backdrop-blur-md text-slate-700 dark:text-slate-300 shadow-sm"
+            >
+              <span className="relative flex h-2 w-2 mr-3">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              </span>
+              <span className="text-xs font-semibold tracking-wide">AVAILABLE FOR WORK</span>
+            </Badge>
+
+            <span className="text-sm font-mono text-slate-500 dark:text-slate-400 font-medium tracking-wide">
+             {`// Hi, I am ${appConfig.name}`}
+            </span>
+          </motion.div>
+
+          <div className="space-y-2">
+            <h1 className="text-5xl md:text-7xl font-bold tracking-tighter text-metallic leading-[0.9]">
+              Building digital products for
+              <br />
+              <span className="text-titanium">
+               modern web.
+              </span>
+            </h1>
+          </div>
+        </div>
         <RollingText
-          className="text-muted-foreground max-w-lg md:text-xl"
-          delay={BLUR_FADE_DELAY}
+          className="text-slate-600 dark:text-slate-400 text-lg md:text-xl max-w-xl leading-relaxed mx-auto md:mx-0 font-medium"
           text={appConfig.description}
-          inView={true}
-          inViewOnce={false}
+          delay={0.3}
         />
-        <div className="mt-5 flex justify-center md:justify-start items-center gap-4 w-full  flex-wrap">
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4, duration: 0.6 }}
+          className="flex flex-wrap justify-center md:justify-start gap-4 mt-4"
+        >
           <ButtonLink
             variant="dark"
             href={resume_link}
             target="_blank"
-            effect="gooeyRight"
             size="lg"
             rounded="full"
+            className="h-12 px-8 text-base shadow-xl shadow-slate-900/10 dark:shadow-black/20 transition-transform hover:scale-105 active:scale-95"
           >
-            Download Resume
-            <Icon name="arrow-up-right" />
+            Download Resume <Icon name="arrow-up-right" className="ml-2 w-5 h-5" />
           </ButtonLink>
-          <GlowFillButton icon={ArrowRight} className="h-11 my-0">
-            <TransitionLink href="/stats">Project Stats</TransitionLink>
+
+          <GlowFillButton
+            icon={ArrowRight}
+            className="h-12 px-8 my-0 bg-transparent rounded-full font-semibold"
+          >
+            <TransitionLink href="/work">View Projects</TransitionLink>
           </GlowFillButton>
-        </div>
+        </motion.div>
       </div>
-      <BlurFade
-        delay={BLUR_FADE_DELAY}
-        className="hidden sm:col-span-1 md:flex justify-center"
+
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9, filter: "blur(10px)" }}
+        animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+        transition={{ delay: 0.2, duration: 1, ease: [0.22, 1, 0.36, 1] }}
+        className="hidden lg:col-span-5 md:flex justify-center lg:justify-end z-10 pointer-events-none lg:pointer-events-auto"
       >
-        <div className="relative flex size-[500px] w-full flex-col items-center justify-center overflow-hidden">
-          <OrbitingCircles iconSize={40} radius={200} speed={0.5}>
-            {appConfig.skill_icons
-              .toReversed()
-              .slice(0, appConfig.skill_icons.length / 2)
-              .map((skill, index) => (
-                <div className="size-24" key={index}>
-                  <Image
-                    width={200}
-                    height={200}
-                    alt={skill}
-                    className="overflow-hidden rounded-full size-full"
-                    src={`https://skillicons.dev/icons?i=${skill}`}
-                    unoptimized
-                    
-                  />
-                </div>
-              ))}
-          </OrbitingCircles>
-          <Avatar className="size-32 md:size-60 border-4 border-primary/20 shadow-lg">
-            <AvatarImage alt={appConfig.name} src={appConfig.logo} />
-            <AvatarFallback>{appConfig.initials}</AvatarFallback>
-          </Avatar>
-          <OrbitingCircles iconSize={30} radius={150} reverse speed={1}>
-            {appConfig.skill_icons
-              .slice(0, appConfig.skill_icons.length / 3)
-              .map((skill, index) => (
-                <div className="size-24" key={index}>
-                  <Image
-                    width={200}
-                    height={200}
-                    alt={skill}
-                    className="overflow-hidden rounded-full size-full"
-                    src={`https://skillicons.dev/icons?i=${skill}`}
-                    unoptimized
-                  />
-                </div>
-              ))}
-          </OrbitingCircles>
-        </div>
-      </BlurFade>
-      <div className="md:col-span-2 flex justify-center flex-col gap-4 mx-auto items-center">
-        <RollingText
-          className="text-muted-foreground max-w-lg md:text-xs"
-          delay={BLUR_FADE_DELAY}
-          text="Scroll down to explore my work and experience!"
-        />
-        <ButtonScroll
-          variant="ghost"
-          size="icon"
-          rounded="full"
-          className="animate-bounce rotate-180"
-          targetId="work"
-          offset={100}
-        >
-          <Icon name="arrow-up" />
-        </ButtonScroll>
-      </div>
+        <OrbitingIdentity />
+      </motion.div>
     </section>
   );
 }
+function OrbitingIdentity() {
+  return (
+    <div className="relative flex h-[500px] w-full max-w-[500px] flex-col items-center justify-center overflow-visible">
+
+      <div className="absolute inset-0 bg-gradient-radial from-indigo-500/15 via-transparent to-transparent blur-3xl -z-10 scale-150" />
+
+      <div className="relative z-10 p-2 rounded-full bg-background/50 backdrop-blur-sm border border-border/50 shadow-2xl">
+        <Avatar className="size-36 md:size-48 border-4 border-background ring-4 ring-slate-100 dark:ring-slate-800">
+          <AvatarImage
+            alt={appConfig.name}
+            src={appConfig.logo}
+            className="object-cover"
+          />
+          <AvatarFallback className="text-2xl font-bold bg-slate-100 dark:bg-slate-900">
+            {appConfig.initials}
+          </AvatarFallback>
+        </Avatar>
+      </div>
+
+      <OrbitingCircles iconSize={50} radius={190} speed={0.8}>
+        {appConfig.skill_icons
+          .slice(0, appConfig.skill_icons.length / 2)
+          .map((skill, index) => (
+            // Wrap icons in glass containers for a premium feel
+            <div key={index} className="p-2 rounded-full bg-background/60 dark:bg-slate-900/60 backdrop-blur-md border border-white/20 dark:border-slate-700/30 shadow-sm">
+              <Image
+                width={40}
+                height={40}
+                alt={skill}
+                className="size-10 object-contain"
+                src={`https://skillicons.dev/icons?i=${skill}`}
+                unoptimized
+              />
+            </div>
+          ))}
+      </OrbitingCircles>
+
+      <OrbitingCircles iconSize={40} radius={260} reverse speed={1.2} className="opacity-70">
+        {appConfig.skill_icons
+          .slice(appConfig.skill_icons.length / 2)
+          .map((skill, index) => (
+            <div key={index} className="p-1.5 rounded-full bg-background/40 dark:bg-slate-900/40 backdrop-blur-md border border-white/10 dark:border-slate-800/20 shadow-sm">
+              <Image
+                width={30}
+                height={30}
+                alt={skill}
+                className="size-8 object-contain"
+                src={`https://skillicons.dev/icons?i=${skill}`}
+                unoptimized
+              />
+            </div>
+          ))}
+      </OrbitingCircles>
+    </div>
+  );
+}
+
+
+// Configuration for the stats to keep code clean
+// We use 'group-hover' to reveal colors only when interacting
+const STATS_CONFIG = [
+  {
+    label: "Followers",
+    icon: Users,
+    key: "followers",
+    hoverColor: "group-hover:text-purple-500", 
+  },
+  {
+    label: "Total Stars",
+    icon: Star,
+    key: "stars",
+    hoverColor: "group-hover:text-amber-500",
+  },
+  {
+    label: "Public Repos",
+    icon: BookOpen,
+    key: "repos",
+    hoverColor: "group-hover:text-emerald-500",
+  },
+  {
+    label: "Total Forks",
+    icon: GitFork,
+    key: "forks",
+    hoverColor: "group-hover:text-blue-500",
+  },
+] as const;
 
 export function GithubSection({ data }: { data: Contributions }) {
   const [year, setYear] = useState(Object.keys(data.total).toReversed()[0]);
 
   return (
-    <section
-      id="github"
-      className="mx-auto my-24 w-full max-w-7xl px-4 mt-10 mb-32 space-y-8"
-    >
-      <h2 className="text-shadow-glow relative z-2 text-5xl font-medium tracking-tight text-balance sm:text-5xl md:text-6xl mb-12 md:mb-12 text-center">
-        <p className="mb-3 font-mono text-xs font-normal tracking-widest text-black/80 uppercase md:text-sm dark:text-white/70">
-          Developer Insights
-        </p>
-        <span className="font-instrument-serif">
-          <span className="">GitHub </span>{" "}
-          <span className="text-colorful animate-gradient-x font-instrument-serif pe-2 tracking-tight italic">
-            Activity
-          </span>
+    <section id="github" className="mx-auto my-32 w-full max-w-7xl px-6 md:px-12 space-y-16">
+      
+      {/* --- HEADER: TITANIUM STYLE --- */}
+      <div className="flex flex-col items-center text-center space-y-4">
+        <span className="text-sm font-mono text-muted-foreground uppercase tracking-widest">
+           {`// Open Source`}
         </span>
-      </h2>
+        <h2 className="text-4xl md:text-6xl font-bold tracking-tighter text-foreground">
+          <span className="font-instrument-serif italic font-normal text-muted-foreground/80 mr-3">
+            Code
+          </span>
+          <span className="text-colorful-titanium">
+             Contributions
+          </span>
+        </h2>
+        <p className="max-w-xl text-muted-foreground text-lg">
+          A live look at my commit history and open source impact.
+        </p>
+      </div>
 
-      <ContributionGraph data={data.contributions[year]} className="mx-auto">
-        <div className="flex justify-end items-center-safe py-2">
-          <Select defaultValue={year} onValueChange={(year) => setYear(year)}>
-            <SelectTrigger className="w-auto min-w-[8rem] h-8 text-sm text-muted-foreground font-light">
-              <SelectValue placeholder="Select a repository" />
-            </SelectTrigger>
-            <SelectContent>
-              {Object.keys(data.total)
-                .toReversed()
-                .map((year) => {
-                  return (
-                    <SelectItem key={year} value={year}>
-                      {year}
-                    </SelectItem>
-                  );
-                })}
-            </SelectContent>
-          </Select>
+      {/* --- THE DASHBOARD CONTAINER --- */}
+      <div className="rounded-3xl border border-border bg-card/50 backdrop-blur-sm overflow-hidden shadow-sm">
+        
+        {/* 1. TOP ROW: KPI STATS (The "Ticker") */}
+        <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-border border-b border-border">
+          {STATS_CONFIG.map((stat) => (
+            <div 
+              key={stat.key} 
+              className="group flex flex-col items-center justify-center p-8 bg-background/50 hover:bg-background transition-colors duration-300"
+            >
+              <div className={cn("mb-3 transition-colors duration-300 text-muted-foreground", stat.hoverColor)}>
+                <stat.icon className="size-5 md:size-6" />
+              </div>
+              <p className="text-2xl md:text-4xl font-bold tracking-tight text-foreground font-mono">
+                <CountingNumber 
+                  from={0} 
+                  to={data.stats[stat.key as keyof typeof data.stats]} 
+                  duration={2.5} 
+                />
+              </p>
+              <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mt-2">
+                {stat.label}
+              </p>
+            </div>
+          ))}
         </div>
-        <ContributionGraphCalendar>
-          {({ activity, dayIndex, weekIndex }) => (
-            <ContributionGraphBlock
-              activity={activity}
-              dayIndex={dayIndex}
-              weekIndex={weekIndex}
-              className={cn(
-                'data-[level="0"]:fill-[#ebedf0] dark:data-[level="0"]:fill-[#161b22]',
-                'data-[level="1"]:fill-[#9be9a8] dark:data-[level="1"]:fill-[#0e4429]',
-                'data-[level="2"]:fill-[#40c463] dark:data-[level="2"]:fill-[#006d32]',
-                'data-[level="3"]:fill-[#30a14e] dark:data-[level="3"]:fill-[#26a641]',
-                'data-[level="4"]:fill-[#216e39] dark:data-[level="4"]:fill-[#39d353]',
+
+        {/* 2. MAIN CONTENT: THE GRAPH */}
+        <div className="p-6 md:p-10 bg-card">
+          <ContributionGraph data={data.contributions[year]} className="mx-auto w-full">
+            
+            {/* Graph Header / Controls */}
+            <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-8">
+               <div className="flex items-center gap-2">
+                 <span className="relative flex h-2.5 w-2.5">
+                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                   <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                 </span>
+                 <span className="text-sm font-medium text-foreground">Live Activity Map</span>
+               </div>
+               
+               <Select defaultValue={year} onValueChange={(year) => setYear(year)}>
+                <SelectTrigger className="w-[120px] bg-background border-border text-foreground font-mono text-xs h-9">
+                  <SelectValue placeholder="Year" />
+                </SelectTrigger>
+                <SelectContent>
+                  {Object.keys(data.total)
+                    .toReversed()
+                    .map((y) => (
+                      <SelectItem key={y} value={y} className="font-mono text-xs">
+                        {y}
+                      </SelectItem>
+                    ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* The Visual Graph */}
+            <ContributionGraphCalendar>
+              {({ activity, dayIndex, weekIndex }) => (
+                <ContributionGraphBlock
+                  activity={activity}
+                  dayIndex={dayIndex}
+                  weekIndex={weekIndex}
+                  className={cn(
+                    // CUSTOM COLOR MAP: Using semantic opacity steps instead of hex codes
+                    // This ensures it looks perfect in both Light (Green) and Dark (Glowing Green) modes
+                    "rounded-[2px] transition-all duration-300 hover:scale-125",
+                    'data-[level="0"]:fill-muted/20 dark:data-[level="0"]:fill-muted/10', 
+                    'data-[level="1"]:fill-emerald-400/30 dark:data-[level="1"]:fill-emerald-900/40',
+                    'data-[level="2"]:fill-emerald-400/60 dark:data-[level="2"]:fill-emerald-700/60',
+                    'data-[level="3"]:fill-emerald-500 dark:data-[level="3"]:fill-emerald-600',
+                    'data-[level="4"]:fill-emerald-600 dark:data-[level="4"]:fill-emerald-500',
+                  )}
+                />
               )}
-            />
-          )}
-        </ContributionGraphCalendar>
-        <ContributionGraphFooter>
-          <ContributionGraphTotalCount>
-            {({ totalCount, year }) => (
-              <div className="flex items-center gap-2">
-                <span className="text-muted-foreground text-sm">
-                  Year {year}:
-                </span>
-                <Badge className="ml-2">
-                  {totalCount.toLocaleString()} contributions
-                </Badge>
-              </div>
-            )}
-          </ContributionGraphTotalCount>
-          <ContributionGraphLegend>
-            {({ level }) => (
-              <div
-                className="group relative flex h-3 w-3 items-center justify-center"
-                data-level={level}
-              >
-                <div
-                  className={`h-full w-full rounded-sm border border-border ${level === 0 ? "bg-muted" : ""} ${level === 1 ? "bg-emerald-200 dark:bg-emerald-900" : ""} ${level === 2 ? "bg-emerald-400 dark:bg-emerald-700" : ""} ${level === 3 ? "bg-emerald-600 dark:bg-emerald-500" : ""} ${level === 4 ? "bg-emerald-800 dark:bg-emerald-300" : ""} `}
-                />
-                <span className="-top-8 absolute hidden rounded bg-popover px-2 py-1 text-popover-foreground text-xs shadow-md group-hover:block">
-                  Level {level}
-                </span>
-              </div>
-            )}
-          </ContributionGraphLegend>
-        </ContributionGraphFooter>
-      </ContributionGraph>
-      <div className="mx-auto mt-4 grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <div className="relative overflow-hidden rounded-xl border p-3 transition-all duration-300 md:p-4 bg-card border-purple-500/30 hover:bg-purple-500/5 col-span-1">
-          <div className="flex items-center gap-3 md:gap-4">
-            <div className="rounded-lg p-3 bg-purple-100 dark:bg-purple-900/20">
-              <Users className="size-6 text-purple-400" />
+            </ContributionGraphCalendar>
+            
+            {/* Footer / Summary */}
+            <div className="mt-8 pt-6 border-t border-border flex flex-col sm:flex-row justify-between items-center gap-4">
+               <ContributionGraphTotalCount>
+                {({ totalCount, year }) => (
+                  <div className="flex items-center gap-3">
+                    <span className="text-muted-foreground text-sm font-medium">
+                      Total commits in {year}
+                    </span>
+                    <Badge variant="secondary" className="font-mono text-xs px-2 py-0.5 h-6">
+                      {totalCount.toLocaleString()}
+                    </Badge>
+                  </div>
+                )}
+              </ContributionGraphTotalCount>
+              
+              <ContributionGraphLegend>
+                {({ level }) => (
+                  <div
+                    className="flex h-3 w-3 items-center justify-center rounded-[1px]"
+                    data-level={level}
+                  >
+                     <div
+                      className={cn(
+                        "h-full w-full rounded-[1px]",
+                        level === 0 && "bg-muted/20",
+                        level === 1 && "bg-emerald-400/30 dark:bg-emerald-900/40",
+                        level === 2 && "bg-emerald-400/60 dark:bg-emerald-700/60",
+                        level === 3 && "bg-emerald-500 dark:bg-emerald-600",
+                        level === 4 && "bg-emerald-600 dark:bg-emerald-500"
+                      )}
+                    />
+                  </div>
+                )}
+              </ContributionGraphLegend>
             </div>
-            <div>
-              <p className="line-clamp-1 text-sm text-muted-foreground">
-                Followers
-              </p>
-              <p className="text-xl font-bold text-foreground md:text-2xl">
-                <CountingNumber
-                  from={0}
-                  to={data.stats.followers}
-                  duration={3}
-                />
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="relative overflow-hidden rounded-xl border p-3 transition-all duration-300 md:p-4 bg-card border-yellow-500/30 hover:bg-yellow-500/5 col-span-1">
-          <div className="flex items-center gap-3 md:gap-4">
-            <div className="rounded-lg p-3 bg-yellow-100 dark:bg-yellow-900/20">
-              <Star className="size-6 text-yellow-400" />
-            </div>
-            <div>
-              <p className="line-clamp-1 text-sm text-muted-foreground">
-                Total Stars
-              </p>
-              <p className="text-xl font-bold text-foreground md:text-2xl">
-                <CountingNumber from={0} to={data.stats.stars} duration={3} />
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="relative overflow-hidden rounded-xl border p-3 transition-all duration-300 md:p-4 bg-card border-green-500/30 hover:bg-green-500/5 col-span-1">
-          <div className="flex items-center gap-3 md:gap-4">
-            <div className="rounded-lg p-3 bg-green-100 dark:bg-green-900/20">
-              <BookOpen className="size-6 text-green-400" />
-            </div>
-            <div>
-              <p className="line-clamp-1 text-sm text-muted-foreground">
-                Public Repos
-              </p>
-              <p className="text-xl font-bold text-foreground md:text-2xl">
-                <CountingNumber from={0} to={data.stats.repos} duration={3} />
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="relative overflow-hidden rounded-xl border p-3 transition-all duration-300 md:p-4 bg-card border-blue-500/30 hover:bg-blue-500/5 col-span-1">
-          <div className="flex items-center gap-3 md:gap-4">
-            <div className="rounded-lg p-3 bg-blue-100 dark:bg-blue-900/20">
-              <GitFork className="size-6 text-blue-400" />
-            </div>
-            <div>
-              <p className="line-clamp-1 text-sm text-muted-foreground">
-                Total Forks
-              </p>
-              <p className="text-xl font-bold text-foreground md:text-2xl">
-                <CountingNumber from={0} to={data.stats.forks} duration={3} />
-              </p>
-            </div>
-          </div>
+
+          </ContributionGraph>
         </div>
       </div>
     </section>
   );
 }
 
+
+
+function SpotlightCard({ 
+  children, 
+  className = "" 
+}: { 
+  children: React.ReactNode; 
+  className?: string; 
+}) {
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  function handleMouseMove({ currentTarget, clientX, clientY }: MouseEvent) {
+    const { left, top } = currentTarget.getBoundingClientRect();
+    mouseX.set(clientX - left);
+    mouseY.set(clientY - top);
+  }
+
+  return (
+    <div
+      className={cn(
+        // Base styles using semantic tokens
+        "group relative border border-border bg-card overflow-hidden rounded-xl",
+        className
+      )}
+      onMouseMove={handleMouseMove}
+    >
+      {/* The Glow Effect */}
+      <motion.div
+        className="pointer-events-none absolute -inset-px rounded-xl opacity-0 transition duration-300 group-hover:opacity-100"
+        style={{
+          background: useMotionTemplate`
+            radial-gradient(
+              650px circle at ${mouseX}px ${mouseY}px,
+              hsl(var(--primary) / 0.15), 
+              transparent 80%
+            )
+          `,
+        }}
+      />
+      <div className="relative h-full">{children}</div>
+    </div>
+  );
+}
+
+// --- MAIN SECTION ---
 export function SkillSection() {
   return (
     <section
       id="skills"
-      className="max-w-7xl mx-auto w-full px-6 md:px-12 py-32"
+      className="relative max-w-7xl mx-auto w-full px-6 md:px-12 py-32 overflow-hidden"
     >
-      <h2 className="text-shadow-glow relative text-5xl font-medium tracking-tight text-balance sm:text-5xl md:text-6xl text-center z-30 mb-0 md:mb-0 size-full -translate-y-10">
-        <p className="mb-3 font-mono text-xs font-normal tracking-widest text-black/80 uppercase md:text-sm dark:text-white/70">
-          My Skills
-        </p>
-        <span className="font-instrument-serif">
-          <span className="">The Secret</span>{" "}
-          <span className="text-colorful animate-gradient-x font-instrument-serif pe-2 tracking-tight italic">
-            {" "}
-            Sauce
-          </span>
-        </span>
-      </h2>
+      {/* Background Engineering Grid (Using muted foreground for lines) */}
+      <div className="absolute inset-0 -z-10 h-full w-full bg-[linear-gradient(to_right,hsl(var(--muted-foreground)/0.05)_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--muted-foreground)/0.05)_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
 
-      <div className="flex justify-center flex-wrap gap-3 mb-2 relative">
-        {appConfig.skill_icons.map((skill) => {
-          return (
-            <div
-              key={skill}
-              className="group no-underline transition-all duration-500 hover:-translate-y-2"
-            >
-              <div className="group inline-block text-center">
-                <div className="size-28 rounded-xl border-2 p-2 transition-all duration-300 group-hover:border-primary/50 group-hover:shadow-lg">
-                  <div className="box-shadow-glow grid h-full place-items-center rounded-xl border-2 border-[#A5AEB81F]/10 bg-[#EDEEF0] dark:border-[#5A5F661F]/10 dark:bg-[#1A1B1E]">
-                    <motion.img
-                      aria-label={skill}
-                      src={`https://skillicons.dev/icons?i=${skill}`}
-                      alt={`${skill} icon`}
-                      draggable="false"
-                      unselectable="on"
-                      className="mt-2"
-                    />
-                    <p className="text-xs text-muted-foreground">{skill}</p>
-                  </div>
-                </div>
+      {/* --- HEADER --- */}
+      <div className="flex flex-col items-center text-center mb-16 space-y-4">
+        <span className="text-sm font-mono text-muted-foreground uppercase tracking-widest">
+           {`// The Toolkit`}
+        </span>
+        <h2 className="text-4xl md:text-6xl font-bold tracking-tighter text-foreground">
+          <span className="font-instrument-serif italic font-normal text-muted-foreground/80 mr-3">
+            My Technical
+          </span>
+          {/* Kept the titanium class as requested previously, or use text-foreground if preferred */}
+          <span className="text-colorful-titanium">
+             Arsenal
+          </span>
+        </h2>
+        <p className="max-w-xl text-muted-foreground text-lg">
+          A comprehensive suite of tools and technologies I use to architect scalable digital solutions.
+        </p>
+      </div>
+
+      {/* --- THE MATRIX GRID --- */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 relative z-10">
+        {appConfig.skill_icons.map((skill, index) => (
+          <SpotlightCard key={skill} className="aspect-square">
+            <div className="flex flex-col items-center justify-center h-full p-4 transition-all duration-300">
+              
+              {/* Icon Container */}
+              <div className="relative size-14 md:size-16 flex items-center justify-center rounded-2xl bg-background shadow-sm border border-border mb-3 group-hover:scale-110 group-hover:-translate-y-1 transition-transform duration-500">
+                <Image
+                  src={`https://skillicons.dev/icons?i=${skill}`}
+                  alt={`${skill} icon`}
+                  width={64}
+                  height={64}
+                  className="size-10 md:size-12 object-contain grayscale opacity-70 transition-all duration-500 group-hover:grayscale-0 group-hover:opacity-100"
+                  unoptimized
+                />
               </div>
+
+              {/* Skill Name */}
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider group-hover:text-primary transition-colors">
+                {skill}
+              </p>
             </div>
-          );
-        })}
+          </SpotlightCard>
+        ))}
       </div>
     </section>
   );

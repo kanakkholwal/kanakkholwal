@@ -1,20 +1,19 @@
 import { cn } from "@/lib/utils";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import type { Metadata } from "next";
-import {
-  Inter as FontSans,
-  Instrument_Serif,
-  Quicksand,
-  Space_Mono,
-} from "next/font/google";
+// Geist is the new standard for "Engineering" aesthetics (replaces Inter)
+import { GeistMono } from "geist/font/mono";
+import { GeistSans } from "geist/font/sans";
+import { Instrument_Serif, Quicksand, } from "next/font/google";
 import { appConfig } from "root/project.config";
 import "./global.css";
 import { Provider } from "./provider";
+// You will need to install this: npm i lenis react-lenis
 
 export const metadata: Metadata = {
   title: {
-    default: `${appConfig.name}'s Portfolio`,
-    template: `%s | ${appConfig.name} 's Portfolio`,
+    default: `${appConfig.name} | ${appConfig.role}`,
+    template: `%s | ${appConfig.name}`,
   },
   description: appConfig.description,
   applicationName: appConfig.name,
@@ -22,107 +21,93 @@ export const metadata: Metadata = {
   creator: appConfig.creator,
   keywords: appConfig.keywords,
   metadataBase: new URL(appConfig.url),
-  alternates: {
-    canonical: "/",
-  },
   robots: {
     index: true,
     follow: true,
-    nocache: true,
     googleBot: {
       index: true,
       follow: true,
-      noimageindex: false,
       "max-video-preview": -1,
       "max-image-preview": "large",
       "max-snippet": -1,
     },
   },
-  manifest: "/manifest.json",
+  manifest: "/favicon/manifest.json",
   openGraph: {
     type: "website",
     locale: appConfig.seo.locale,
     url: appConfig.url,
-    title: `${appConfig.name}'s Portfolio`,
+    title: appConfig.name,
     description: appConfig.description,
     siteName: appConfig.name,
     images: [
       {
-        url: new URL("/social/og-image.jpg", appConfig.url).toString(),
+        url: "/social/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: `${appConfig.name} - Software Developer Portfolio`,
+        alt: `${appConfig.name} - UI/UX & Full Stack Engineer`,
       },
     ],
-    countryName: "India",
   },
   twitter: {
     card: "summary_large_image",
-    title: `${appConfig.name}'s Portfolio`,
+    title: appConfig.name,
     description: appConfig.description,
-    images: [new URL(appConfig.logo, appConfig.url).toString()],
-    creator: "@kanakkholwal",
-    site: "@kanakkholwal",
+    images: [appConfig.logo],
+    creator: `@${appConfig.usernames.twitter}`,
   },
   icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon-16x16.png",
-    apple: "/apple-touch-icon.png",
-  },
-  // New SEO fields
-  category: appConfig.seo.category,
-  publisher: appConfig.seo.publisher,
-  appLinks: {
-    web: {
-      url: appConfig.url,
-      should_fallback: true,
-    },
-  },
-  other: {
-    "geo.position": appConfig.seo.geo.position,
-    "geo.placename": appConfig.seo.geo.placename,
-    "geo.region": appConfig.seo.geo.region,
-    "og:locale:alternate": "hi_IN",
+    icon: "/favicon/favicon.ico",
+    shortcut: "/favicon/icon.png",
+    apple: "/favicon/apple-icon.png",
   },
 };
 
-const fontSans = FontSans({
-  subsets: ["latin"],
-  variable: "--font-sans",
-});
+// Editorial font for headers (keeps the "Design" feel)
 const fontInstrumentSerif = Instrument_Serif({
   subsets: ["latin"],
   variable: "--font-instrument-serif",
   weight: "400",
 });
-const fontMono = Space_Mono({
-  subsets: ["latin"],
-  variable: "--font-mono",
-  weight: "400",
-});
 
+// Logo font (Playful accent)
 const logoFont = Quicksand({
   weight: ["700"],
   subsets: ["latin"],
   variable: "--font-logo",
 });
-type RootLayoutProps = Readonly<{
-  children: React.ReactNode;
-}>;
 
-export default function RootLayout({ children }: RootLayoutProps) {
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
-    <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth">
+    <html lang="en" suppressHydrationWarning>
       <head />
       <body
         className={cn(
+          // Base Layout
           "min-h-screen min-w-screen w-full antialiased !overflow-x-hidden no-scrollbar h-full",
-          fontSans.variable,
-          fontMono.variable,
+          // Colors: Ensure these are defined in your Tailwind CSS
+          "bg-background text-foreground",
+          // Typography Variables
+          GeistSans.className,
+          GeistMono.className,
           logoFont.variable,
           fontInstrumentSerif.variable,
+          // Premium Feel: Custom Selection Color (Stripe-like)
+          "selection:bg-primary/20 selection:text-primary"
         )}
       >
+
+          <Provider>
+               <div className="fixed inset-0 z-50 pointer-events-none opacity-[0.03] bg-[url('/noise.svg')] mix-blend-overlay"></div>
+           
+            {children}
+          </Provider>
+
+        {/* JSON-LD for SEO */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -131,13 +116,9 @@ export default function RootLayout({ children }: RootLayoutProps) {
           id="json-ld-personal"
           suppressHydrationWarning
         />
-        <Provider>{children} </Provider>
+
         {process.env.NODE_ENV === "production" && (
-          <>
-            <GoogleAnalytics
-              gaId={appConfig.verifications["google.analytics"]}
-            />
-          </>
+          <GoogleAnalytics gaId={appConfig.verifications["google.analytics"]} />
         )}
       </body>
     </html>

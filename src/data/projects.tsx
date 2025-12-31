@@ -1,8 +1,8 @@
 import { Icons } from "@/components/icons/icons";
 
 export const projectsList = [
-  { 
-    id:"nexonauts",
+  {
+    id: "nexonauts",
     title: "Nexonauts",
     href: "https://nexonauts.com",
     dates: "Jan 2024 - Feb 2024",
@@ -34,6 +34,7 @@ export const projectsList = [
     video: "",
   },
   {
+    id: "college-ecosystem",
     title: "College Ecosystem Monorepo",
     href: "https://app.nith.eu.org",
     dates: "Jan 2025 - Present",
@@ -67,6 +68,7 @@ export const projectsList = [
     video: "",
   },
   {
+    id: "nexo-editor",
     title: "Rich Text Editor React",
     href: "https://github.com/kanakkholwal/nexo-editor",
     dates: "August 2025 - August 2025",
@@ -107,6 +109,7 @@ export const projectsList = [
     video: "",
   },
   {
+    id: "nexo-mdx",
     title: "Markdown Editor React",
     href: "https://github.com/kanakkholwal/nexo-mdx",
     dates: "June 2024 - June 2024",
@@ -142,6 +145,7 @@ export const projectsList = [
     video: "",
   },
   {
+    id: "mail-system",
     title: "Serverless Mailing System MVP",
     href: "https://github.com/kanakkholwal/mail-system",
     dates: "Feb 2025",
@@ -166,6 +170,7 @@ export const projectsList = [
     video: "",
   },
   {
+    id: "nexo-html2jsx",
     title: "Nexo html2jsx",
     href: "https://www.npmjs.com/package/nexo-html2jsx",
     dates: "June 2023 - June 2023",
@@ -190,6 +195,7 @@ export const projectsList = [
     video: "",
   },
   {
+    id: "crawler-llms",
     title: "Web Crawler for LLMs",
     href: "https://github.com/kanakkholwal/crawler-for-llms",
     dates: "Feb 2025",
@@ -208,3 +214,5 @@ export const projectsList = [
     video: "",
   },
 ];
+
+export type ProjectType = typeof projectsList[number];

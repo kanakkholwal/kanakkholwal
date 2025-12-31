@@ -1,31 +1,28 @@
 import type { MetadataRoute } from "next";
-import { appConfig, } from "root/project.config";
+import { appConfig } from "root/project.config";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    id: "college-platform",
+    id: "kanakkholwal",
     name: appConfig.name,
     short_name: appConfig.shortName,
     description: appConfig.description,
     icons: [
       {
-        src: "./favicon-16x16.png",
-        sizes: "16x16",
-        type: "image/png",
-      },
-      {
-        src: "./favicon-32x32.png",
-        sizes: "32x32",
-        type: "image/png",
-      },
-      {
-        src: "./android-chrome-192x192.png",
+        src: "./favicon/web-app-manifest-192x192.png",
         sizes: "192x192",
         type: "image/png",
+        purpose:"maskable"
+      },
+      {
+        src: "./favicon/web-app-manifest-512x512.png",
+        sizes: "512x512",
+        type: "image/png",
+        purpose:"maskable"
       },
     ],
-    theme_color: "#7c3aed",
-    background_color: "#7c3aed1a",
+    theme_color: "#0d9488",
+    background_color: "#0d9488",
     start_url: "/",
     scope: ".",
     display: "standalone",

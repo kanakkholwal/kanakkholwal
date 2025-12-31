@@ -20,8 +20,10 @@ const CONTENT_VARIANTS = {
 
 export default function PageWrapper({
   children,
+  className,
 }: {
   children: React.ReactNode;
+  className?: string;
 }) {
   const [transition, setTransition] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -39,7 +41,7 @@ export default function PageWrapper({
     <div className={cn("relative h-dvh", !isLoaded && "overflow-y-hidden")}>
       <Header transition={transition} />
       <motion.div
-        className={cn("min-h-dvh w-full py-20 md:py-24 lg:py-28")}
+        className={cn("min-h-dvh w-full py-20 md:py-24 lg:py-28",className)}
         initial="hidden"
         animate={transition ? "visible" : "hidden"}
         variants={CONTENT_VARIANTS}

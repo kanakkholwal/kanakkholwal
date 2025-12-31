@@ -2,7 +2,7 @@
 
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
-import { Clock } from "lucide-react";
+import { ArrowUpRight, CalendarDays, Clock } from "lucide-react";
 import Image from "next/image";
 import { PostType } from "~/api/medium";
 
@@ -14,14 +14,14 @@ type Props = {
 export default function AnimatedMediumPosts({ posts, now }: Props) {
   return (
     <motion.div
-      className="grid grid-cols-1 gap-10 mx-auto max-w-4xl"
+      className="flex flex-col gap-8"
       initial="hidden"
       animate="visible"
       variants={{
         hidden: {},
         visible: {
           transition: {
-            staggerChildren: 0.15,
+            staggerChildren: 0.1,
           },
         },
       }}
@@ -41,63 +41,87 @@ export default function AnimatedMediumPosts({ posts, now }: Props) {
     </motion.div>
   );
 }
+
 function PostCard({ post, now }: { post: PostType; now: number }) {
-  const isRecent = now - post.pubDate.getTime() < 7 * 24 * 60 * 60 * 1000; // 7 days
+  const isRecent = now - post.pubDate.getTime() < 30 * 24 * 60 * 60 * 1000; // Extended recent to 30 days for blog cadence
 
   return (
     <a
-      className="group mx-auto flex max-w-3xl flex-col gap-4 border-b border-dashed py-10 px-3 lg:flex-row-reverse lg:items-center hover:bg-card/20 rounded-2xl transition"
       href={post.link}
       target="_blank"
       rel="noreferrer noopener"
+      className="group relative grid md:grid-cols-[280px_1fr] gap-6 md:gap-8 p-6 rounded-3xl bg-card/30 hover:bg-card/80 border border-transparent hover:border-border/50 transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
     >
-      {post.thumbnail && (
-        <div className="relative z-1 h-44 w-full overflow-hidden rounded-sm lg:h-28 lg:w-48">
+      {/* 1. Thumbnail Section */}
+      <div className="relative aspect-[16/9] md:aspect-[4/3] w-full overflow-hidden rounded-2xl bg-muted border border-border/50">
+        {post.thumbnail ? (
           <Image
             alt={post.title}
             src={post.thumbnail}
-            // width={540}
-            // height={480}
             fill
-            className="object-cover transition-transform duration-300 group-hover:scale-110"
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
           />
-        </div>
-      )}
-      <div className="w-full">
-        <div className="flex items-center gap-3">
-          <time
-            className="text-muted-foreground text-xs"
-            dateTime={post.pubDate.toISOString()}
-          >
-            {post.pubDate.toDateString()}
-          </time>
-          {isRecent && (
-            <span className="rounded-sm bg-emerald-500/15 px-1.5 py-0.5 text-xs text-green-500">
-              Recently released
-            </span>
-          )}
-        </div>
-        <h3 className="relative mt-3 text-xl font-bold">{post.title}</h3>
-        <p className="mt-1 text-sm text-neutral-900 dark:text-white/75 line-clamp-3">
-          {post.snippet}
-        </p>
-        <div className="mt-5 flex flex-col justify-between gap-4 lg:flex-row lg:items-center">
-          <div className="flex items-center gap-5">
-            <div className="flex items-center gap-2">
-              <Clock className="text-green-400 w-4 h-4" />
-              <p className="text-xs whitespace-nowrap">{post.readingTime}</p>
-            </div>
+        ) : (
+          // Fallback pattern if no image
+           <div className="absolute inset-0 bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center">
+              <span className="text-4xl font-mono opacity-10 font-bold">BLOG</span>
+           </div>
+        )}
+        
+        {/* Recent Badge (Overlay) */}
+        {isRecent && (
+           <div className="absolute top-3 left-3 px-2 py-1 bg-emerald-500/90 backdrop-blur-md text-white text-[10px] font-bold uppercase tracking-wider rounded-md shadow-sm">
+              New
+           </div>
+        )}
+      </div>
+
+      {/* 2. Content Section */}
+      <div className="flex flex-col justify-between py-1">
+        <div>
+          {/* Metadata Row */}
+          <div className="flex flex-wrap items-center gap-4 text-xs font-mono text-muted-foreground mb-3">
+             <div className="flex items-center gap-1.5">
+                <CalendarDays className="size-3.5" />
+                <time dateTime={post.pubDate.toISOString()}>
+                   {post.pubDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                </time>
+             </div>
+             <span className="h-3 w-[1px] bg-border" />
+             <div className="flex items-center gap-1.5">
+                <Clock className="size-3.5 text-indigo-500" />
+                <span>{post.readingTime || "5 min read"}</span>
+             </div>
           </div>
-          <div className="flex flex-wrap gap-x-2 gap-y-1 text-xs lg:text-sm">
-            {post.tags.map((tag) => (
-              <Badge
-                key={tag}
-                className="inline-flex items-center justify-center border w-fit whitespace-nowrap shrink-0 gap-2 [&>svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-black dark:text-white font-mono border-white-3 dark:bg-neutral-900 dark:border-white/[0.14] bg-white-2 [a&]:hover:bg-primary/90 rounded-sm px-1.5 py-0.5 text-xs"
-              >
-                {tag}
-              </Badge>
-            ))}
-          </div>
+
+          {/* Title */}
+          <h3 className="text-xl md:text-2xl font-bold tracking-tight text-foreground group-hover:text-primary transition-colors mb-3">
+            {post.title}
+          </h3>
+
+          {/* Snippet */}
+          <p className="text-muted-foreground text-sm leading-relaxed line-clamp-2 md:line-clamp-3">
+            {post.snippet.replace(/<[^>]*>?/gm, '')} {/* Strip HTML tags if any */}
+          </p>
+        </div>
+
+        {/* Footer: Tags & CTA */}
+        <div className="flex items-center justify-between mt-6">
+           <div className="flex flex-wrap gap-2">
+              {post.tags.slice(0, 3).map((tag) => (
+                 <Badge 
+                    key={tag} 
+                    variant="secondary" 
+                    className="rounded-md px-2 py-0.5 text-[10px] font-mono font-normal bg-background border border-border/50 text-muted-foreground group-hover:border-primary/20 transition-colors"
+                 >
+                    #{tag}
+                 </Badge>
+              ))}
+           </div>
+           
+           <div className="hidden md:flex items-center gap-1 text-xs font-medium text-primary opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
+              Read Article <ArrowUpRight className="size-3" />
+           </div>
         </div>
       </div>
     </a>

@@ -1,4 +1,5 @@
-import Image from "next/image";
+import { TimelineProjectGrid } from "@/components/extended/timeline";
+import Link from "next/link";
 import { projectsList } from "./projects";
 
 export const journey_data = [
@@ -11,37 +12,7 @@ export const journey_data = [
           personal projects, Data Structures and Algorithms, System Design,
           learning new skills and also started contributing to Open Source.
         </p>
-        <div className="grid grid-cols-2 gap-4">
-          {projectsList
-            .filter((project) => {
-              if (!project.image) return false;
-              if (
-                project.dates.includes("2024") ||
-                project.dates.includes("2025")
-              ) {
-                return true;
-              }
-              return false;
-            })
-            .map((project) => {
-              return (
-                <a
-                  key={project.href}
-                  href={project.links[0].href}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <Image
-                    src={project.image}
-                    alt={project.title}
-                    width={500}
-                    height={500}
-                    className="min-h-20 w-full rounded-2xl border object-cover box-shadow-glow md:min-h-44 lg:min-h-60 aspect-video"
-                  />
-                </a>
-              );
-            })}
-        </div>
+        <TimelineProjectGrid yearFilter={["2024", "2025"]} projectsList={projectsList} />
       </>
     ),
   },
@@ -51,25 +22,28 @@ export const journey_data = [
       <>
         <p>
           I joined{" "}
-          <a
+          <Link
             href="https://koinx.com?utm_source=kanak.eu.org"
-            className="text-primary hover:underline"
+            className="text-foreground font-medium underline underline-offset-4 decoration-border hover:decoration-primary transition-all"
           >
             KoinX
-          </a>
-          , a fast-growing crypto tax and compliance startup, as a Frontend
+          </Link>
+          , a fast-growing crypto tax and compliance startup. As a Frontend
           Engineer Intern, I focused on building and optimizing frontend
           applications.
         </p>
-        <p>
+        <p className="mt-4">
           I worked on customer-facing and B2B platforms while also contributing
           to the company’s internal UI library. I migrated{" "}
-          <strong> legacy CRA applications to Vite/TypeScript</strong> for
-          faster builds, and optimized the multi-language landing pages by
+          <strong className="text-foreground font-semibold">
+            legacy CRA applications to Vite/TypeScript
+          </strong>{" "}
+          for faster builds, and optimized the multi-language landing pages by
           centralizing sources of truth, which improved{" "}
-          <strong> SEO and page performance</strong>. My work helped strengthen
-          the platform’s user experience and developer efficiency, ensuring
-          smoother scaling for global audiences.
+          <strong className="text-foreground font-semibold">
+            SEO and page performance
+          </strong>
+          .
         </p>
       </>
     ),
@@ -81,39 +55,26 @@ export const journey_data = [
         <p>
           I got fascinated with building web apps and web technologies. My first
           noticeable and actually first React.js project was a result ranking
-          app for my college. I built that app in just 24 hours, although it was
-          my first experience working with React.js, but I was able to complete
-          the project, and batchmates, seniors & juniors were very impressed
-          with the app. During that project I also learnt to scrape websites
-          using nodejs. Although I had no idea about web scraping before that
-          project, nor did I have any experience with any database. I ended up
-          storing data in JSON files and bundled it in the React.js app and
-          deployed that on the Firebase web app.
+          app for my college. I built that app in just 24 hours.
         </p>
-        <p>
-          After that I started learning more about web development and started
+        <p className="mt-4">
+          After that, I started learning more about web development and started
           building more projects. I started getting confident with my skills and
           started applying for internships. I got my first internship at{" "}
-          <a
+          <Link
             href="https://www.linkedin.com/company/textifyai"
-            className="text-primary hover:underline"
+            className="text-foreground font-medium underline underline-offset-4 decoration-border hover:decoration-primary transition-all"
           >
             Textify AI
-          </a>{" "}
+          </Link>{" "}
           as a SDE Intern.
         </p>
-        <p>
-          At Textify, an early-stage AI startup, I played a key role in
-          developing no-code AI tools. I designed and implemented a
-          drag-and-drop AI tool builder that allowed dynamic schema-driven
-          prompt execution, replacing rigid hard-coded applications. I also led
-          the migration of authentication from AWS Cognito to NextAuth for more
-          seamless user/session management, and managed deployments across AWS,
-          Azure, and finally GCP using Docker and Cloud Run. Beyond
-          infrastructure, I contributed significantly to rewriting and
-          stabilizing the legacy codebase, laying the groundwork for scalable
-          product growth.
-        </p>
+        <div className="mt-4 p-4 rounded-xl bg-primary/30 border border-border/50 text-sm">
+           <p>
+             <strong>At Textify:</strong> I designed a drag-and-drop AI tool builder, 
+             migrated auth to NextAuth, and managed multi-cloud deployments (AWS, Azure, GCP).
+           </p>
+        </div>
       </>
     ),
   },

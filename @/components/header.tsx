@@ -1,90 +1,101 @@
 "use client";
 
-import { motion } from "motion/react";
-
 import { Logo } from "@/components/logo";
+import { ModeToggle } from "@/components/mode-toggle";
+import { TransitionLink } from "@/components/utils/link"; // Assuming you have this
 import { useIsMobile } from "@/hooks/use-mobile";
-import { ModeToggle } from "./mode-toggle";
+import { AnimatePresence, motion } from "framer-motion";
+import { Github, Linkedin, Twitter } from "lucide-react";
 import { Socials } from "./socials";
-import { TransitionLink } from "./utils/link";
 
-const LOGO_WRAPPER_VARIANTS = {
-  center: {
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    height: "100%",
-  },
-  topLeft: {
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: "auto",
-    height: "auto",
-  },
-};
+const NAV_ITEMS = [
+  { label: "Work", href: "/#work" },
+  { label: "Projects", href: "/projects" },
+  { label: "Stack", href: "/#skills" },
+  { label: "Blog", href: "/blog" },
+];
 
 export const Header = ({ transition }: { transition: boolean }) => {
   const isMobile = useIsMobile();
 
   return (
-    <motion.div
-      variants={LOGO_WRAPPER_VARIANTS}
-      initial="center"
-      animate={transition ? "topLeft" : "center"}
-      transition={{ type: "spring", stiffness: 200, damping: 30 }}
-      className="absolute z-40 flex items-center justify-center"
+    <motion.header
+      className="fixed top-0 left-0 right-0 z-50 flex justify-center pt-6 px-4 pointer-events-none"
     >
-      <div className="relative max-w-7xl size-full">
-        {transition ? (
+      <AnimatePresence mode="popLayout">
+        
+        {!transition ? (
           <motion.div
-            layoutId="logo"
-            className="absolute z-110 left-5"
-            animate={{
-              top: 32,
-            }}
+            key="splash-logo"
+            layoutId="logo-container"
+            className="absolute inset-0 flex items-center justify-center h-screen w-screen pointer-events-auto bg-background"
+            initial={{ opacity: 1 }}
+            exit={{ opacity: 0, transition: { duration: 0.5 } }}
           >
-            <TransitionLink href="/">
-              <Logo size="sm" />
-            </TransitionLink>
+            <motion.div layoutId="logo-icon" className="relative z-10">
+              <Logo size={isMobile ? "lg" : "xl"} draw />
+            </motion.div>
           </motion.div>
         ) : (
+          
+          /* --- STATE 2: THE FLOATING HEADER (Logo Left, Nav Center, Tools Right) --- */
           <motion.div
-            layoutId="logo"
-            className="absolute z-110 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+            key="header-nav"
+            initial={{ y: -100, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ type: "spring", stiffness: 260, damping: 20, delay: 0.1 }}
+            className="pointer-events-auto relative flex items-center justify-between w-full max-w-5xl rounded-full border border-border/40 bg-background/60 backdrop-blur-md shadow-sm px-4 py-2"
           >
-            <Logo size={isMobile ? "lg" : "xl"} draw />
+            
+            {/* LEFT: LOGO */}
+            <div className="flex items-center gap-2">
+              <TransitionLink href="/" className="flex items-center gap-2 group">
+                <motion.div layoutId="logo-icon" className="relative">
+                  <Logo size="sm" />
+                </motion.div>
+                {/* <span className="font-bold tracking-tight hidden sm:block group-hover:text-primary transition-colors">
+                  {appConfig.name}
+                </span> */}
+              </TransitionLink>
+            </div>
+
+            <nav className="hidden md:flex items-center gap-1 absolute left-1/2 -translate-x-1/2">
+              {NAV_ITEMS.map((item) => (
+                <TransitionLink
+                  key={item.href}
+                  href={item.href}
+                  className="px-4 py-1.5 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/50 rounded-full transition-all duration-200"
+                >
+                  {item.label}
+                </TransitionLink>
+              ))}
+            </nav>
+
+            {/* RIGHT: TOOLS & SOCIALS */}
+            <div className="flex items-center gap-2">
+              
+                <Socials className="items-center gap-x-1 hidden sm:flex border-r border-border/50 pr-2 mr-1" />
+
+              <ModeToggle />
+              
+              {/* Mobile Menu Trigger could go here if needed */}
+              {/* <MobileMenuButton /> */}
+            </div>
+
           </motion.div>
         )}
-
-        <motion.div
-          initial={{
-            top: 28,
-            right: -43,
-            opacity: 0,
-          }}
-          animate={
-            transition
-              ? {
-                  top: 28,
-                  right: 20,
-                  opacity: 1,
-                }
-              : {
-                  top: 28,
-                  right: -43,
-                  opacity: 0,
-                }
-          }
-          transition={{ type: "spring", stiffness: 200, damping: 30 }}
-          className="absolute z-110 flex items-center gap-x-4"
-        >
-          <Socials className="items-center gap-x-1" />
-
-          <ModeToggle />
-        </motion.div>
-      </div>
-    </motion.div>
+      </AnimatePresence>
+    </motion.header>
   );
 };
+
+// Helper to render icons based on text label if needed, 
+// though passing the Icon component in config is better.
+const ArrowUpRightIcon = ({ label }: { label: string }) => {
+   // Mapping logic or just return a generic link icon for cleanliness
+   // Realistically, you should import Github/Linkedin icons
+   if (label.toLowerCase().includes('github')) return <Github className="size-4" />;
+   if (label.toLowerCase().includes('linkedin')) return <Linkedin className="size-4" />;
+   if (label.toLowerCase().includes('twitter') || label.toLowerCase().includes('x')) return <Twitter className="size-4" />;
+   return <div className="size-2 rounded-full bg-foreground" />;
+}

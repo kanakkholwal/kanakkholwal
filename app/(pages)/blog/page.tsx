@@ -1,6 +1,5 @@
 import { GlowFillButton } from "@/components/animated/button.fill";
-import { ButtonLink } from "@/components/utils/link";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, BookOpen } from "lucide-react";
 import Link from "next/link";
 import { FaMedium } from "react-icons/fa6";
 import { appConfig } from "root/project.config";
@@ -8,73 +7,61 @@ import { getMediumPosts } from "~/api/medium";
 import { generateMetadata } from "~/utils/seo";
 import AnimatedMediumPosts from "./client";
 
+export const metadata = generateMetadata({
+  title: "Blog ",
+  description: "Technical deep dives, tutorials, and thoughts on software engineering.",
+  url: "/blog",
+});
+
 export default async function MediumPage() {
   const posts = await getMediumPosts();
   const now = Date.now();
 
   return (
-    <main className="mx-auto flex flex-col justify-center px-4 py-16 md:px-6 max-w-7xl">
-      {/* Heading */}
-      <div className="mx-auto">
-        <h2 className="text-shadow-glow relative z-2 text-5xl font-medium tracking-tight sm:text-5xl md:text-6xl text-center max-w-2xl text-balance mx-auto mb-10">
-          <p className="mb-3 font-mono text-xs font-normal tracking-widest text-black/80 uppercase md:text-sm dark:text-white/70">
-            The Blog
-          </p>
-          <span className="font-instrument-serif">
-            <span>Handpicked insights from</span>{" "}
-            <span className="text-colorful animate-gradient-x italic pe-2">
-              the pensieve
-            </span>
-          </span>
-        </h2>
-        <div className="flex justify-center mx-auto">
-          <ButtonLink
-            href={appConfig.social.medium}
-            target="_blank"
-            variant="dark"
-            rounded="full"
-            className="mx-auto"
-            effect="shine"
-            rel="noreferrer noopener"
-          >
-            <FaMedium />
-            Checkout Medium Profile
-            <ArrowUpRight />
-          </ButtonLink>
-        </div>
-      </div>
+    <main className="min-h-screen w-full relative overflow-hidden">
+      {/* Background Texture */}
+      <div className="fixed inset-0 -z-50 h-full w-full bg-background opacity-40 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] dark:bg-[radial-gradient(#1f2937_1px,transparent_1px)] mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)" />
 
-      {/* Posts List */}
-      <AnimatedMediumPosts posts={posts} now={now} />
-      <div className="flex justify-center mx-auto">
-        <GlowFillButton icon={ArrowUpRight}>
-          <Link
-            target="_blank"
-            rel="noreferrer noopener"
-            href={appConfig.social.medium}
-          >
-            <FaMedium className="size-6 inline-block mr-2" />
-            Checkout Medium Profile
-          </Link>
-        </GlowFillButton>
+      <div className="mx-auto max-w-5xl px-6 md:px-12 py-24">
+        
+        {/* --- HEADER --- */}
+        <div className="flex flex-col items-center text-center space-y-8 mb-24">
+          <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-border/50 text-xs font-mono text-muted-foreground uppercase tracking-widest backdrop-blur-md">
+             <BookOpen className="size-3" />
+             The Engineering Log
+          </span>
+          
+          <h1 className="text-5xl md:text-7xl font-bold tracking-tighter text-foreground leading-[1.1]">
+            Handpicked insights from
+            <br />
+            <span className="text-colorful-titanium italic">
+              the pensieve.
+            </span>
+          </h1>
+
+          <p className="text-lg text-muted-foreground max-w-xl mx-auto leading-relaxed">
+             Thoughts on distributed systems, frontend architecture, and the evolving landscape of web development.
+          </p>
+        </div>
+
+        {/* --- POSTS LIST --- */}
+        <AnimatedMediumPosts posts={posts} now={now} />
+
+        {/* --- FOOTER CTA --- */}
+        <div className="flex justify-center mx-auto mt-24 pt-16 border-t border-border/50">
+          <GlowFillButton icon={ArrowUpRight}>
+            <Link
+              target="_blank"
+              rel="noreferrer noopener"
+              href={appConfig.social.medium}
+            >
+              <FaMedium className="size-5 inline-block mr-2" />
+              Read more on Medium
+            </Link>
+          </GlowFillButton>
+        </div>
+
       </div>
     </main>
   );
 }
-
-export const metadata = generateMetadata({
-  title: "Blog",
-  description:
-    "Read Kanak's latest articles on web development, programming, and technology trends. Stay updated with insights and tutorials from his Medium blog.",
-  url: "/blog",
-  keywords: [
-    "blog",
-    "articles",
-    "web development",
-    "programming",
-    "technology",
-    "medium",
-    "tutorials",
-    "insights",
-  ],
-});

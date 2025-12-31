@@ -5,32 +5,46 @@
 
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
-:root,
-[data-theme="light"] {
 
+:root,
+[data-theme="light"],
+[data-theme="glass_soft"] {
   --background: hsl(0deg 0% 96.08%);
   --foreground: hsl(0deg 0% 9.8%);
   --card: hsl(0, 0%, 100%);
   --card-foreground: hsl(0deg 0% 9.8%);
   --popover: hsl(0 0% 100%);
   --popover-foreground: hsl(0deg 0% 9.8%);
-  --primary: hsla(262.1 83.3% 57.8%);
+  --primary: hsl(175, 84%, 32%);
   --primary-foreground: hsl(0deg 0% 92.16%);
-  --secondary: hsla(217deg 61% 51%);
+  --secondary: hsl(86, 100%, 32%);
   --secondary-foreground: hsl(0deg 0% 92.16%);
+  --tertiary: #20adee;
+  --tertiary-foreground: hsl(0deg 0% 92.16%);
 
-  --muted: hsl(210deg 40% 98.04%);
+  --muted: hsl(0, 0%, 92%);
   --muted-foreground: hsl(220 8.9% 46.1%);
 
-  --accent: hsl(0deg 0% 96.08%);
+  --accent: hsl(344.79deg 33.25% 96.34%);
   --accent-foreground: hsl(220.9 39.3% 11%);
   --destructive: hsl(0 84.2% 60.2%);
   --destructive-foreground: hsl(0deg 0% 92.16%);
+
+  /* proposed */
+  /* --destructive: oklch(0.577 0.245 27.325);
+    --destructive-foreground: oklch(0.985 0 0);
+    --success: oklch(0.646 0.222 142.495);
+    --success-foreground: oklch(0.985 0 0);
+    --warning: oklch(0.828 0.189 84.429);
+    --warning-foreground: oklch(0.145 0 0);
+    --info: oklch(0.6 0.118 184.704);
+    --info-foreground: oklch(0.985 0 0); */
+
   --border: hsl(220 13% 91%);
   --input: hsl(220 13% 91%);
   --input: oklch(.922 0 0);
 
-  --ring: hsl(262.1 83.3% 57.8%);
+  --ring: var(--primary, hsl(262.1 83.3% 57.8%));
   --radius: 0.75rem;
 
   --sidebar: oklch(0.985 0 0);
@@ -56,12 +70,12 @@
   --border-secondary: hsla(0, 0%, 100%, 0.08);
   --button-shadow: 0px -1px 0px 0px hsla(0, 0%, 100%, 0.04), 0px 0px 0px 1px hsla(0, 0%, 100%, 0.12), 0px 0px 1px 0px rgba(0, 0, 0, 0.04), 0px 2px 2px 0px rgba(0, 0, 0, 0.04), 0px 4px 2px 0px rgba(0, 0, 0, 0.04), 0px 6px 3px 0px rgba(0, 0, 0, 0.04);
 
-  /* chart colors */
-  --chart-1: hsl(238.73deg 83.53% 66.67%);
-  --chart-2: hsl(349.72deg 89.16% 60.2%);
-  --chart-3: hsl(16.79deg 86.55% 56.27%);
-  --chart-4: hsl(160.12deg 84.08% 39.41%);
-  --chart-5: hsl(43 74% 66%);
+  /* Charts: Adjusted for harmony with the violet theme */
+  --chart-1: hsl(262 80% 50%);
+  --chart-2: hsl(199 89% 48%);
+  --chart-3: hsl(340 75% 55%);
+  --chart-4: hsl(160 84% 39%);
+  --chart-5: hsl(43 90% 55%);
   --chart-6: hsl(27 87% 67%);
   --chart-7: hsl(188.74deg 94.5% 42.75%);
   --chart-8: hsl(33.3 5.5% 32.4%);
@@ -95,7 +109,8 @@
 }
 
 .dark,
-[data-theme="dark"] {
+[data-theme="dark"],
+[data-theme="glass_dark"] {
   --background: hsl(0deg 0% 7.06%);
   --foreground: hsl(0deg 0% 92.16%);
   --card: hsl(0deg 0% 9.8%);
@@ -103,30 +118,43 @@
   --popover: hsl(0deg 0% 9.8%);
   --popover-foreground: hsl(0deg 0% 92.16%);
 
-  --primary: hsl(250deg 46.29% 54.26%);
+  --primary: hsl(175, 84%, 32%);
   --primary-foreground: hsl(0deg 0% 92.16%);
-  --secondary: hsl(217deg 61% 51%);
-  --secondary-foreground: hsl(0deg 0% 92.16%);
 
   --warning: hsl(37deg, 87%, 41%);
   --muted: hsl(0deg 0.01% 12.16%);
   --muted-foreground: hsl(217.9 10.6% 64.9%);
 
-  --accent: hsl(0deg 0% 9.8%);
+  --accent: hsl(240 3.7% 15.9%);
   --accent-foreground: hsl(0, 0%, 61%);
   --destructive: hsl(0 62.8% 30.6%);
   --destructive-foreground: hsl(0deg 0% 92.16%);
+
+
+  /* proposed */
+  /* --destructive: oklch(0.704 0.191 22.216);
+    --destructive-foreground: oklch(0.985 0 0);
+    --success: oklch(0.488 0.243 142.495);
+    --success-foreground: oklch(0.985 0 0);
+    --warning: oklch(0.627 0.265 84.429);
+    --warning-foreground: oklch(0.145 0 0);
+    --info: oklch(0.696 0.17 184.704);
+    --info-foreground: oklch(0.985 0 0); */
+
+
+
   --border: hsl(0, 0%, 14%);
   /* --input: hsl(0, 0%, 14%); */
   --input: oklch(1 0 0/15%);
   --ring: var(--primary, hsl(250deg 100% 80%));
 
   /* dark:chart colors */
-  --chart-1: hsl(238.73deg 83.53% 66.67%);
-  --chart-2: hsl(349.72deg 89.16% 60.2%);
-  --chart-3: hsl(16.79deg 86.55% 56.27%);
-  --chart-4: hsl(160.12deg 84.08% 39.41%);
-  --chart-5: hsl(43 74% 66%);
+  /* Charts: Bright Pastels for dark mode */
+  --chart-1: hsl(263 70% 65%);
+  --chart-2: hsl(199 80% 60%);
+  --chart-3: hsl(340 80% 65%);
+  --chart-4: hsl(160 70% 50%);
+  --chart-5: hsl(43 90% 65%);
   --chart-6: hsl(27 87% 67%);
   --chart-7: hsl(188.74deg 94.5% 42.75%);
   --chart-8: hsl(210 20% 98%);
@@ -168,6 +196,10 @@
 }
 
 @theme inline {
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-serif: var(--font-instrument-serif);
+
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -482,7 +514,7 @@ body {
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
   position: relative;
-  font-family: var(--font-sans, 'Inter','Poppins', 'Helvetica', 'Arial', sans-serif);
+  font-family: var(--font-sans, 'Inter', 'Poppins', 'Helvetica', 'Arial', sans-serif);
   /* Fluid max width that:
        - starts from 1024px (for tablets/small desktops)
        - scales with viewport
@@ -514,6 +546,7 @@ body {
 .text-shadow-glow {
   text-shadow: rgba(255, 255, 255, 0.05) 0px 4px 8px, rgba(255, 255, 255, 0.25) 0px 8px 30px;
 }
+
 .box-shadow-glow {
   box-shadow: rgba(255, 255, 255, 0.05) 0px 4px 8px, rgba(255, 255, 255, 0.25) 0px 8px 30px;
 }
@@ -631,8 +664,24 @@ body {
 
 .text-colorful {
   -webkit-text-fill-color: transparent;
-  background: linear-gradient(288deg, #ff8000, #f0c 53.2394%, #04f);
+  background: linear-gradient(288deg, var(--color-primary), var(--color-pink-600));
   -webkit-background-clip: text;
+  background-clip: text;
+}
+
+@layer utilities {
+  .text-metallic {
+    color: transparent;
+    background: linear-gradient(180deg,
+        var(--color-foreground) 0%,
+        var(--color-slate-400) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    /* Optional: Add a subtle drop shadow to make it pop */
+    filter: drop-shadow(0px 2px 10px var(--color-slate-900) * 0.2);
+  }
+
+
 }
 
 :root {

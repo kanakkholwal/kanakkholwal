@@ -1,167 +1,180 @@
-import { MagicCard } from "@/components/animated/bg.card";
+import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
+import { ArrowUpRight, Globe, Mail } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { appConfig } from "root/project.config";
 import { DATA } from "~/data/resume";
 import { generateMetadata } from "~/utils/seo";
 
-export default function LinksPage() {
+export const metadata = generateMetadata({
+  title: `Links | ${appConfig.name}`,
+  description: `Connect with ${appConfig.name}. Socials, portfolio, and contact info.`,
+  url: "/links",
+});
+
+function LinkCard({
+  href,
+  icon: Icon,
+  label,
+  sublabel,
+  variant = "default",
+}: {
+  href: string;
+  icon: any;
+  label: string;
+  sublabel?: string;
+  variant?: "default" | "primary";
+}) {
   return (
-    <section className="mx-auto w-full max-w-7xl overflow-x-hidden">
-      <div className="relative mx-auto min-h-screen max-w-lg overflow-x-hidden px-4">
-        <div className="relative mx-auto flex flex-col items-center justify-center gap-4 overflow-hidden pt-24 pb-6">
-          <Image
-            src={appConfig.logo}
-            width={120}
-            height={120}
-            alt={appConfig.name}
-            className="rounded-full"
-          />
-          <h1 className="text-xl font-semibold">{appConfig.name}</h1>
-          <div className="flex flex-wrap gap-x-2 gap-y-1 text-xs md:text-sm">
-            <span className="rounded-full px-2 py-1 bg-primary/10 text-blue-600 dark:text-primary">
-              Developer
+    <Link
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="block w-full"
+    >
+      <div
+        className={cn(
+          "group relative flex items-center justify-between p-4 rounded-2xl border transition-all duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)] hover:scale-[1.02] active:scale-[0.98]",
+          variant === "primary"
+            ? "bg-foreground text-background border-foreground hover:opacity-90 shadow-xl"
+            : "bg-card/50 hover:bg-card border-border hover:border-foreground/20 backdrop-blur-sm"
+        )}
+      >
+        <div className="flex items-center gap-4">
+          <div
+            className={cn(
+              "flex items-center justify-center size-10 rounded-full",
+              variant === "primary"
+                ? "bg-background/20 text-background"
+                : "bg-primary text-white"
+            )}
+          >
+            <Icon className="size-5" />
+          </div>
+          <div className="flex flex-col text-left">
+            <span className={cn("font-medium leading-none", variant === "primary" ? "text-lg" : "text-base")}>
+              {label}
             </span>
-            <span className="rounded-full px-2 py-1 bg-green-500/10 text-green-600 dark:text-green-500">
-              Freelancer
-            </span>
-            <span className="rounded-full px-2 py-1 bg-violet-500/10 text-violet-600 dark:text-violet-500">
-              Problem Solver
-            </span>
+            {sublabel && (
+              <span className={cn("text-xs mt-1", variant === "primary" ? "text-background/80" : "text-muted-foreground")}>
+                {sublabel}
+              </span>
+            )}
           </div>
         </div>
-        <div className="mx-auto mb-4 flex w-fit gap-x-2 md:text-sm">
-          <a
-            href={appConfig.url}
-            referrerPolicy="no-referrer"
-            target="_blank"
-            className="group relative flex w-fit items-center justify-between rounded-full bg-black text-white opacity-90 hover:bg-black/80 dark:bg-neutral-200 dark:text-black dark:hover:bg-neutral-300"
-          >
-            <span className="pl-4 text-base font-light">Website</span>
-            <div className="relative mr-1 size-9 overflow-hidden rounded-full bg-transparent">
-              <div className="absolute top-[0.85em] left-[-0.1em] grid size-full place-content-center transition-all duration-200 group-hover:translate-x-4 group-hover:-translate-y-5">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width={24}
-                  height={24}
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="lucide lucide-arrow-up-right size-5"
-                  aria-hidden="true"
-                >
-                  <path d="M7 7h10v10" />
-                  <path d="M7 17 17 7" />
-                </svg>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width={24}
-                  height={24}
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="lucide lucide-arrow-up-right mb-1 size-5 -translate-x-4"
-                  aria-hidden="true"
-                >
-                  <path d="M7 7h10v10" />
-                  <path d="M7 17 17 7" />
-                </svg>
-              </div>
-            </div>
-          </a>
-          <a
-            href={`mailto:${appConfig.emails[0]}`}
-            referrerPolicy="no-referrer"
-            target="_blank"
-            className="group relative flex w-fit items-center justify-between rounded-full bg-black/20 text-black opacity-90 hover:bg-black/30 dark:bg-white/20 dark:text-white dark:hover:bg-white/30"
-          >
-            <span className="pl-4 text-base font-light">
-              {appConfig.emails[0]}
-            </span>
-            <div className="relative mr-1 size-9 overflow-hidden rounded-full bg-transparent">
-              <div className="absolute top-[0.85em] left-[-0.1em] grid size-full place-content-center transition-all duration-200 group-hover:translate-x-4 group-hover:-translate-y-5">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width={24}
-                  height={24}
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="lucide lucide-arrow-up-right size-5"
-                  aria-hidden="true"
-                >
-                  <path d="M7 7h10v10" />
-                  <path d="M7 17 17 7" />
-                </svg>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width={24}
-                  height={24}
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="lucide lucide-arrow-up-right mb-1 size-5 -translate-x-4"
-                  aria-hidden="true"
-                >
-                  <path d="M7 7h10v10" />
-                  <path d="M7 17 17 7" />
-                </svg>
-              </div>
-            </div>
-          </a>
-        </div>
-        <div className="flex flex-col gap-4 py-3">
-          {Object.entries(DATA.contact.social).map(([name, social]) => {
-            if (!social.navbar) return null;
-            return (
-              <a
-                key={name}
-                href={social.url}
-                referrerPolicy="no-referrer"
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                <MagicCard
-                  className="relative flex h-14 w-full items-center justify-between gap-5 rounded-xl border px-8 py-4"
-                  layerClassName="bg-card"
-                  wrapperClassName="relative flex w-full items-center justify-center gap-5"
-                >
-                  <social.icon className="text-black dark:text-neutral-300 size-5 inline-block ml-0" />
-                  <span className="mx-auto">{social.name}</span>
-                </MagicCard>
-              </a>
-            );
-          })}
-        </div>
+
+        <ArrowUpRight
+          className={cn(
+            "size-5 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1",
+            variant === "primary" ? "text-background/70" : "text-muted-foreground"
+          )}
+        />
       </div>
-    </section>
+    </Link>
   );
 }
 
-export const metadata = generateMetadata({
-  title: "Links - " + appConfig.name,
-  description: `Connect with ${appConfig.name} on various platforms. Find links to social media, portfolio, and more.`,
-  url: "/links",
-  keywords: [
-    "links",
-    "social media",
-    "portfolio",
-    "contact",
-    "connect",
-    appConfig.name,
-    "developer",
-    "freelancer",
-    "problem solver",
-  ],
-});
+// --- MAIN PAGE ---
+export default function LinksPage() {
+  return (
+    <main className="min-h-screen w-full relative overflow-hidden flex flex-col items-center py-20 px-4">
+      
+      {/* Background Texture */}
+      <div className="fixed inset-0 -z-50 h-full w-full bg-background opacity-40 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] dark:bg-[radial-gradient(#1f2937_1px,transparent_1px)] mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)" />
+      
+      {/* Ambient Glow */}
+      <div className="fixed top-[-20%] left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-primary/10 blur-[120px] rounded-full -z-40 pointer-events-none" />
+
+      <div className="w-full max-w-md space-y-10">
+        
+        {/* --- HEADER PROFILE --- */}
+        <div className="flex flex-col items-center text-center space-y-6">
+          
+          {/* Avatar with Glow Ring */}
+          <div className="relative group">
+            <div className="absolute -inset-1 rounded-full bg-gradient-to-tr from-primary to-purple-500 opacity-50 blur-md group-hover:opacity-75 transition-opacity duration-500" />
+            <div className="relative p-1 bg-background rounded-full">
+               <Image
+                 src={appConfig.logo}
+                 width={110}
+                 height={110}
+                 alt={appConfig.name}
+                 className="rounded-full border border-border"
+                 priority
+               />
+            </div>
+            {/* Online Status Dot */}
+            <div className="absolute bottom-1 right-1 size-5 bg-background rounded-full flex items-center justify-center">
+               <div className="size-3 bg-emerald-500 rounded-full border border-background animate-pulse" />
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <h1 className="text-3xl font-bold tracking-tight">
+               <span className="text-colorful-titanium">{appConfig.name}</span>
+            </h1>
+            <p className="text-muted-foreground font-medium">
+               Full Stack Engineer & UI/UX Designer
+            </p>
+          </div>
+
+          {/* Tags */}
+          <div className="flex flex-wrap justify-center gap-2">
+             {["Developer", "Freelancer", "Builder"].map((tag) => (
+                <Badge key={tag} variant="secondary" className="px-3 py-1 bg-secondary/50 border border-border/50 text-muted-foreground">
+                   {tag}
+                </Badge>
+             ))}
+          </div>
+        </div>
+
+        {/* --- LINKS SECTION --- */}
+        <div className="space-y-8 animate-in slide-in-from-bottom-4 fade-in duration-700">
+           
+           {/* 1. Primary Actions */}
+           <div className="space-y-3">
+              <h2 className="text-xs font-mono uppercase tracking-widest text-muted-foreground ml-1">Connect</h2>
+              <div className="grid gap-3">
+                 <LinkCard 
+                    href={appConfig.url} 
+                    icon={Globe} 
+                    label="Portfolio Website" 
+                    sublabel="View my work & case studies"
+                    variant="primary"
+                 />
+                 <LinkCard 
+                    href={`mailto:${appConfig.emails[0]}`} 
+                    icon={Mail} 
+                    label="Email Me" 
+                    sublabel={appConfig.emails[0]}
+                 />
+              </div>
+           </div>
+
+           {/* 2. Socials */}
+           <div className="space-y-3">
+              <h2 className="text-xs font-mono uppercase tracking-widest text-muted-foreground ml-1">Social Presence</h2>
+              <div className="grid gap-3">
+                 {Object.entries(DATA.contact.social).map(([name, social]) => {
+                    if (!social.navbar) return null;
+                    return (
+                       <LinkCard
+                          key={name}
+                          href={social.url}
+                          icon={social.icon}
+                          label={social.name}
+                       />
+                    );
+                 })}
+              </div>
+           </div>
+
+        </div>
+
+      
+
+      </div>
+    </main>
+  );
+}

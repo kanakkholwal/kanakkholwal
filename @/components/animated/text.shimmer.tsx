@@ -71,6 +71,7 @@ function ShimmeringText({
             ease: "easeInOut",
             ...transition,
           }}
+          className="text-titanium"
         >
           {char}
         </motion.span>
@@ -80,3 +81,4 @@ function ShimmeringText({
 }
 
 export { ShimmeringText, type ShimmeringTextProps };
+

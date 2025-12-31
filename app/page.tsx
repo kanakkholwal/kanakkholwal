@@ -8,6 +8,7 @@ import {
 } from "@/components/project-card";
 import { ButtonTransitionLink } from "@/components/utils/link";
 import Wrapper from "@/components/wrapper";
+import { cn } from "@/lib/utils";
 import { Suspense } from "react";
 import Markdown from "react-markdown";
 import { appConfig } from "root/project.config";
@@ -18,24 +19,60 @@ import { GithubSection, HeroSection, SkillSection } from "./client";
 
 const BLUR_FADE_DELAY = 0.04;
 
+const SectionHeader = ({
+  label,
+  serifText,
+  mainText,
+  description,
+  align = "center",
+}: {
+  label: string;
+  serifText: string;
+  mainText: string;
+  description?: string;
+  align?: "center" | "left";
+}) => (
+  <div className={cn("flex flex-col mb-16 space-y-4", align === "center" ? "items-center text-center" : "items-start text-left")}>
+    <span className="text-sm font-mono text-muted-foreground uppercase tracking-widest">
+     {` //`} {label}
+    </span>
+    <h2 className="text-4xl md:text-6xl font-bold tracking-tighter text-foreground">
+      <span className="font-instrument-serif italic font-normal text-muted-foreground/80 mr-3">
+        {serifText}
+      </span>
+      <span className="text-colorful-titanium">
+        {mainText}
+      </span>
+    </h2>
+    {description && (
+      <p className="max-w-xl text-muted-foreground text-lg leading-relaxed">
+        {description}
+      </p>
+    )}
+  </div>
+);
+
 export default async function HomePage() {
   const data = await getCachedContributions(appConfig.usernames.github);
 
   return (
-    <Wrapper>
-      {/* Hero */}
+    <Wrapper className="overflow-hidden">
+      <div className="fixed inset-0 -z-50 h-full w-full bg-background opacity-50 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] dark:bg-[radial-gradient(#1f2937_1px,transparent_1px)] mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)" />
+
       <HeroSection />
-      {/* About */}
-      <section
-        className="w-full backdrop-blur-2xl py-12 px-6 md:px-12 hidden"
-        id="about"
-      >
-        <div className="max-w-4xl mx-auto flex flex-col gap-6 text-center md:text-left">
+
+      <section id="about" className="w-full py-24 px-6 md:px-12 relative">
+        <div className="max-w-4xl mx-auto">
           <BlurFade delay={BLUR_FADE_DELAY * 2}>
-            <h2 className="text-2xl font-semibold">About Me</h2>
+            <SectionHeader
+              label="Philosophy"
+              serifText="My Approach"
+              mainText="to Engineering"
+              align="left"
+            />
           </BlurFade>
           <BlurFade delay={BLUR_FADE_DELAY * 3}>
-            <div className="prose dark:prose-invert text-muted-foreground max-w-none">
+            <div className="prose prose-lg dark:prose-invert text-muted-foreground max-w-none leading-loose">
               <Markdown>{appConfig.summary}</Markdown>
             </div>
           </BlurFade>
@@ -43,27 +80,24 @@ export default async function HomePage() {
       </section>
 
       {/* Work Experience */}
-      <section
-        id="work"
-        className="max-w-7xl mx-auto w-full px-6 md:px-12 py-16"
-      >
-        <h2 className="text-shadow-glow relative text-5xl font-medium tracking-tight text-balance sm:text-5xl md:text-6xl text-center z-30 mb-5 md:mb-0 size-full -translate-y-10">
-          <p className="mb-3 font-mono text-xs font-normal tracking-widest text-foreground uppercase md:text-sm">
-            Jobs & Roles
-          </p>
-          <span className="font-instrument-serif">
-            <span className="">Work </span>{" "}
-            <span className="text-colorful animate-gradient-x font-instrument-serif pe-2 tracking-tight italic">
-              {" "}
-              Experience
-            </span>
-          </span>
-        </h2>
-        <div className="grid gap-6">
+      <section id="work" className="max-w-7xl mx-auto w-full px-6 md:px-12 py-24">
+        <BlurFade delay={BLUR_FADE_DELAY * 4}>
+          <SectionHeader
+            label="Career"
+            serifText="Professional"
+            mainText="Journey"
+            description="A timeline of my professional roles and the impact I've delivered."
+          />
+        </BlurFade>
+
+        <div className="grid gap-8 relative">
+          <div className="absolute left-0 md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-border to-transparent hidden md:block" />
+
           {workExperiences.map((work, id) => (
             <BlurFade
               key={work.company}
               delay={BLUR_FADE_DELAY * 6 + id * 0.05}
+              className="z-10"
             >
               <WorkExperienceCard work={work} />
             </BlurFade>
@@ -71,62 +105,63 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Skills */}
       <SkillSection />
 
-      {/* Github Activity */}
-      <Suspense
-        fallback={
-          <>
-            <div className="h-96 w-full animate-pulse rounded-md bg-muted" />
-          </>
-        }
-      >
-        <GithubSection data={data} />
-      </Suspense>
       {/* Projects */}
-      <section id="projects" className="w-full py-16 px-6 md:px-12">
-        <div className="max-w-7xl mx-auto space-y-12">
+      <section id="projects" className="w-full py-32 px-6 md:px-12">
+        <div className="max-w-7xl mx-auto space-y-16">
           <BlurFade delay={BLUR_FADE_DELAY * 11}>
-            <h2 className="text-shadow-glow relative text-5xl font-medium tracking-tight text-balance sm:text-5xl md:text-6xl text-center z-30 mb-5 md:mb-0 size-full -translate-y-10">
-              <p className="mb-3 font-mono text-xs font-normal tracking-widest text-black/80 uppercase md:text-sm dark:text-white/70">
-                From web apps, packages to low-code platforms
-              </p>
-              <span className="font-instrument-serif">
-                <span className="">Curated </span>{" "}
-                <span className="text-colorful animate-gradient-x font-instrument-serif pe-2 tracking-tight italic">
-                  {" "}
-                  Projects
-                </span>
-              </span>
-            </h2>
+            <SectionHeader
+              label="Portfolio"
+              serifText="Selected"
+              mainText="Works"
+              description="From full-stack applications to open-source libraries. A curation of my best engineering efforts."
+            />
           </BlurFade>
+
           <ExpandableProjectCards
             cards={projectsList as unknown as ExpandableCardProps["cards"]}
           />
-          <div className="flex mx-auto justify-center gap-2">
+
+          <div className="flex flex-col sm:flex-row mx-auto justify-center gap-4 pt-8">
             <ButtonTransitionLink
               href="/stats"
               variant="outline"
               rounded="full"
+              className="h-12 px-8"
             >
               <Icon name="trend-up" />
-              View Stats
+              View Project Stats
             </ButtonTransitionLink>
+
             <ButtonTransitionLink
               href="/projects"
-              variant="rainbow"
+              variant="default" // Changed from rainbow to default for cleaner look
               rounded="full"
+              className="h-12 px-8 transition-all shadow-lg"
             >
               View All Projects
-              <Icon name="arrow-right" />
+              <Icon name="arrow-right"  />
             </ButtonTransitionLink>
           </div>
         </div>
       </section>
 
+      {/* Github Activity (Already Redesigned) */}
+      <Suspense
+        fallback={
+          <div className="max-w-7xl mx-auto px-6 md:px-12 py-24">
+            <div className="h-96 w-full animate-pulse rounded-3xl bg-muted/50 border border-border" />
+          </div>
+        }
+      >
+        <GithubSection data={data} />
+      </Suspense>
+
       {/* Contact */}
-      <ContactSection />
+      <div className="py-24">
+        <ContactSection />
+      </div>
     </Wrapper>
   );
 }

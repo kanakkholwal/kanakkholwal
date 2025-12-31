@@ -1,88 +1,126 @@
 "use client";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Briefcase } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { ArrowUpRight, MapPin } from "lucide-react";
+import Link from "next/link";
 import Markdown from "react-markdown";
 import { WorkExperience } from "~/data/work";
-import { HyperText } from "./animated/text.hyper";
-import { TextReveal } from "./animated/text.reveal";
 
 interface WorkExperienceCardProps {
   work: WorkExperience;
 }
+
 export function WorkExperienceCard({ work }: WorkExperienceCardProps) {
   return (
-    <div className="flex flex-col md:flex-row justify-start gap-6 md:gap-10 pt-10 md:pt-32">
-      {/* Left Title Section (sticky on desktop) */}
-      <div className="flex flex-col items-start gap-y-3 text-sm font-light md:flex  md:sticky md:top-32 self-start z-40 w-full max-w-sm lg:max-w-md">
-        <time
-          className="text-muted-foreground text-xs font-medium tracking-wide uppercase"
-          dateTime={work.start + (work.end ? `-${work.end}` : "-present")}
-        >
-          {work.start} - {work.end ?? "Present"}
-        </time>
-        <div className="flex items-center gap-2">
-          <Avatar className="border size-10 m-auto bg-muted-background dark:bg-foreground">
+    <div className="group relative grid md:grid-cols-[200px_1fr] gap-x-12 gap-y-8 transition-all">
+      
+      {/* --- TIMELINE THREAD (Desktop Only) --- */}
+      <div className="hidden md:block absolute left-[217px] top-2 bottom-0 w-px bg-gradient-to-b from-border via-border/40 to-transparent" />
+      
+      {/* --- LEFT COLUMN: METADATA (Sticky) --- */}
+      <div className="flex flex-col items-start gap-4 md:sticky md:top-32 self-start z-10">
+        
+        {/* Date Range */}
+        <div className="flex items-center gap-2 relative">
+           {/* Timeline Node Dot */}
+           <div className="hidden md:block size-2.5 rounded-full border-[3px] border-background bg-border group-hover:bg-primary group-hover:scale-125 transition-all duration-300 absolute -right-[19.5px] top-1.5 z-10" />
+           <time
+            className="font-mono text-xs font-medium text-muted-foreground/80 uppercase tracking-wider"
+            dateTime={work.start}
+          >
+            {work.start} — {work.end ?? "Present"}
+          </time>
+        </div>
+
+        {/* Company Identity */}
+        <div className="flex items-center gap-3">
+          <Avatar className="size-10 border border-border bg-background shadow-sm group-hover:border-primary/30 transition-colors">
             <AvatarImage
               src={work.logoUrl}
               alt={work.company}
-              className="object-contain"
+              className="object-contain p-1.5"
             />
-            <AvatarFallback>{work.company[0]}</AvatarFallback>
+            <AvatarFallback className="text-xs font-bold text-muted-foreground">
+              {work.company[0]}
+            </AvatarFallback>
           </Avatar>
-          <div className="flex flex-col justify-center gap-0">
-            <TextReveal
-              aria-labelledby="company"
-              className="font-logo text-md font-bold text-foreground md:text-xl text-shadow-glow tracking-wide"
-            >
+
+          <div className="flex flex-col">
+            <h3 className="font-semibold text-sm text-foreground leading-none mb-1">
               {work.company}
-            </TextReveal>
-            <a
-              className="font-sans text-xs text-primary hover:underline flex-auto"
+            </h3>
+            <Link
               href={work.href}
-              rel="noreferrer"
-              aria-label={`Visit ${work.company} website`}
               target="_blank"
+              className="text-xs text-muted-foreground hover:text-primary transition-colors flex items-center gap-1"
             >
-              {work.href.replace(/(^\w+:|^)\/\//, "").replace(/www\./, "")}
-            </a>
+              {work.href.replace(/(^\w+:|^)\/\//, "").replace(/www\./, "").split('/')[0]}
+              <ArrowUpRight className="size-3" />
+            </Link>
           </div>
         </div>
-        <div className="flex flex-col gap-2">
-          {/* <div className="text-muted-foreground flex items-center gap-1.5">
-            <MapPin
-              className="lucide lucide-map-pin size-3.5 flex-shrink-0"
-              aria-hidden="true"
-            />
-            <span className="text-sm">{work.location}</span>
-          </div> */}
-          <div className="text-muted-foreground flex items-center gap-1.5">
-            <Briefcase
-              className="lucide lucide-briefcase size-3.5 flex-shrink-0"
-              aria-hidden="true"
-            />
-            <span className="text-sm font-medium">
+
+        {/* Location & Type Badges */}
+        <div className="flex flex-wrap gap-2">
+           <Badge variant="outline" className="px-2 py-0 h-5 text-[10px] font-mono font-normal text-muted-foreground bg-background">
               {work.locationType === "remote" ? "Remote" : "On-site"}
-            </span>
-          </div>
+           </Badge>
+           {work.location && (
+             <span className="flex items-center text-[10px] text-muted-foreground/60 font-medium sr-only">
+                <MapPin className="size-3 mr-1" />
+                {work.location}
+             </span>
+           )}
         </div>
       </div>
 
-      {/* Right Content Section */}
-      <div className="relative w-full">
-        {/* Mobile Title */}
-        <div className="mb-3 text-colorful animate-gradient-x">
-          <HyperText
-            startOnView
-            className="text-2xl sm:text-3xl font-bold  font-instrument-serif"
-          >
-            {work.title}
-          </HyperText>
-        </div>
+      <div className="relative pb-12 md:pb-20">
+        {/* Role Title with "Titanium" Hover Effect */}
+        <h3 className="text-xl md:text-2xl font-bold text-metallic tracking-tight mb-4 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-foreground group-hover:to-slate-500 transition-all duration-300 ease-out">
+          {work.title}
+        </h3>
 
-        {/* Description */}
-        <div className="mt-2 text-sm sm:text-base prose max-w-none text-pretty font-sans dark:prose-invert text-muted-foreground">
-          <Markdown>{work.description}</Markdown>
+        {/* Description: Perfectly Aligned Lists */}
+        <div className="text-muted-foreground leading-relaxed max-w-none text-base">
+          <Markdown
+            components={{
+              // 1. Remove default list padding/margin
+              ul: ({ children }) => (
+                <ul className="flex flex-col gap-3 my-0 list-none pl-0">{children}</ul>
+              ),
+              // 2. Custom List Item Layout
+              li: ({ children }) => (
+                <li className="flex items-start gap-3">
+                  {/* The "Arrow" Bullet - Fixed width ensures alignment */}
+                  <span className="mt-[5px] shrink-0 text-muted-foreground/40 group-hover:text-primary transition-colors duration-300">
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M3.5 1.5L7 5L3.5 8.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </span>
+                  {/* The Content */}
+                  <span className="prose-sm dark:prose-invert text-pretty">
+                    {children}
+                  </span>
+                </li>
+              ),
+              // 3. High-Contrast Strong Text
+              strong: ({ children }) => (
+                <strong className="font-semibold text-foreground">{children}</strong>
+              ),
+              // 4. Subtle Links
+              a: ({ href, children }) => (
+                 <Link href={href || "#"} target="_blank" className="text-foreground underline underline-offset-4 decoration-border hover:decoration-primary transition-all">
+                    {children}
+                 </Link>
+              ),
+              p: ({ children }) => (
+                <p className="mb-4 last:mb-0">{children}</p>
+              )
+            }}
+          >
+            {work.description}
+          </Markdown>
         </div>
       </div>
     </div>
