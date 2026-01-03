@@ -15,7 +15,7 @@
 
 ## Summary
 
-- **Software Engineer** with full-stack development, scalable systems, and **devops/cloud computing ** experience. 
+- **Software Engineer** with full-stack development, scalable systems, and **devops/cloud computing** experience. 
 - Shipped **high-impact OSS projects** (**1.1M+ visitors,** 300+ weekly npm downloads) and delivered production features at SaaS startups.
 - Skilled in **Reactjs, Next.js, TypeScript, Node.js, React Native, Docker, Python, Go, AWS/GCP/Azure**. 
 - Achieved +220% engagement, +150% SEO traffic, 60% faster builds.
@@ -55,8 +55,8 @@
 [GitHub](https://github.com/kanakkholwal/nexonauts) | [Live](https://nexonauts.com)  
 *Ecosystem for developers (Next.js, Shadcn UI, MongoDB)*
 - Launched mentorship program connecting developers; improved satisfaction to 90%.
-- Designed **marketplace**, tools engine, and** developer utilities** for productivity.
-- Architected scalable frontend, integrating **CI/CD pipelines **for rapid feature delivery.
+- Designed **marketplace**, tools engine, and **developer utilities** for productivity.
+- Architected scalable frontend, integrating **CI/CD pipelines** for rapid feature delivery.
 -  Orchestrated microservices for **email delivery system** for transactional emails and newsletter.
 
 ### College Ecosystem
