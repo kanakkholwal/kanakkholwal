@@ -64,7 +64,7 @@ export function WorkExperienceCard({ work }: WorkExperienceCardProps) {
         {/* Location & Type Badges */}
         <div className="flex flex-wrap gap-2">
            <Badge variant="outline" className="px-2 py-0 h-5 text-[10px] font-mono font-normal text-muted-foreground bg-background">
-              {work.locationType === "remote" ? "Remote" : "On-site"}
+              {work.locationType === "Remote" ? "Remote" : "On-site"}
            </Badge>
            {work.location && (
              <span className="flex items-center text-[10px] text-muted-foreground/60 font-medium sr-only">

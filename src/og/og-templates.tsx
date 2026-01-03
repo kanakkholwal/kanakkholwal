@@ -1,3 +1,6 @@
+/* eslint-disable @next/next/no-img-element */
+
+
 import { appConfig } from "root/project.config";
 import { ProjectType } from "~/data/projects";
 
@@ -314,7 +317,6 @@ export const PortfolioProfileTemplate = ({
 );
 
 // --- TEMPLATE 3: PROJECT CASE STUDY ---
-// Aesthetic: Product Launch Spec Sheet
 export const ProjectOgTemplate = ({
   siteName = "CASE STUDY",
   title,
@@ -335,7 +337,7 @@ export const ProjectOgTemplate = ({
           tw="text-xl font-bold uppercase tracking-widest text-black"
           style={{ fontFamily: 'JetBrains Mono' }}
         >
-          {status} // {dates}
+          {status} {`//`} {dates}
         </span>
       </div>
       <span tw="text-zinc-400 font-bold tracking-widest uppercase text-xl">
