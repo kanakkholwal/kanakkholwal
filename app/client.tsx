@@ -43,7 +43,7 @@ export function HeroSection() {
       id="hero"
       className={"relative grid lg:grid-cols-12 items-center gap-12 px-6 lg:px-12 min-h-[92vh] max-w-7xl mx-auto w-full pt-24 md:pt-0 overflow-hidden lg:overflow-visible"}
     >
-      <div className="flex flex-col gap-8 justify-center text-center md:text-left lg:col-span-7 z-20">
+      <div className="flex flex-col gap-8 justify-center text-center md:text-left lg:col-span-7 z-20 pt-10">
 
 
         {/* 1. Identity Kicker (The "Hi, I'm Kanak" part) */}
@@ -52,7 +52,7 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="flex items-center gap-2"
+            className="flex items-center gap-2 flex-wrap"
           >
             {/* Stripe-style Status Badge */}
             <Badge
@@ -63,11 +63,11 @@ export function HeroSection() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
               </span>
-              <span className="text-xs font-semibold tracking-wide">AVAILABLE FOR WORK</span>
+              <span className="text-xs font-semibold tracking-wide whitespace-nowrap">AVAILABLE FOR WORK</span>
             </Badge>
 
             <span className="text-sm font-mono text-slate-500 dark:text-slate-400 font-medium tracking-wide">
-             {`// Hi, I am ${appConfig.name}`}
+              {`// Hi, I am ${appConfig.name}`}
             </span>
           </motion.div>
 
@@ -76,7 +76,7 @@ export function HeroSection() {
               Building digital products for
               <br />
               <span className="text-titanium">
-               modern web.
+                modern web.
               </span>
             </h1>
           </div>
@@ -187,7 +187,7 @@ const STATS_CONFIG = [
     label: "Followers",
     icon: Users,
     key: "followers",
-    hoverColor: "group-hover:text-purple-500", 
+    hoverColor: "group-hover:text-purple-500",
   },
   {
     label: "Total Stars",
@@ -214,18 +214,18 @@ export function GithubSection({ data }: { data: Contributions }) {
 
   return (
     <section id="github" className="mx-auto my-32 w-full max-w-7xl px-6 md:px-12 space-y-16">
-      
+
       {/* --- HEADER: TITANIUM STYLE --- */}
       <div className="flex flex-col items-center text-center space-y-4">
         <span className="text-sm font-mono text-muted-foreground uppercase tracking-widest">
-           {`// Open Source`}
+          {`// Open Source`}
         </span>
         <h2 className="text-4xl md:text-6xl font-bold tracking-tighter text-foreground">
           <span className="font-instrument-serif italic font-normal text-muted-foreground/80 mr-3">
             Code
           </span>
           <span className="text-colorful-titanium">
-             Contributions
+            Contributions
           </span>
         </h2>
         <p className="max-w-xl text-muted-foreground text-lg">
@@ -235,22 +235,22 @@ export function GithubSection({ data }: { data: Contributions }) {
 
       {/* --- THE DASHBOARD CONTAINER --- */}
       <div className="rounded-3xl border border-border bg-card/50 backdrop-blur-sm overflow-hidden shadow-sm">
-        
+
         {/* 1. TOP ROW: KPI STATS (The "Ticker") */}
         <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-border border-b border-border">
           {STATS_CONFIG.map((stat) => (
-            <div 
-              key={stat.key} 
+            <div
+              key={stat.key}
               className="group flex flex-col items-center justify-center p-8 bg-background/50 hover:bg-background transition-colors duration-300"
             >
               <div className={cn("mb-3 transition-colors duration-300 text-muted-foreground", stat.hoverColor)}>
                 <stat.icon className="size-5 md:size-6" />
               </div>
               <p className="text-2xl md:text-4xl font-bold tracking-tight text-foreground font-mono">
-                <CountingNumber 
-                  from={0} 
-                  to={data.stats[stat.key as keyof typeof data.stats]} 
-                  duration={2.5} 
+                <CountingNumber
+                  from={0}
+                  to={data.stats[stat.key as keyof typeof data.stats]}
+                  duration={2.5}
                 />
               </p>
               <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mt-2">
@@ -263,18 +263,18 @@ export function GithubSection({ data }: { data: Contributions }) {
         {/* 2. MAIN CONTENT: THE GRAPH */}
         <div className="p-6 md:p-10 bg-card">
           <ContributionGraph data={data.contributions[year]} className="mx-auto w-full">
-            
+
             {/* Graph Header / Controls */}
             <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-8">
-               <div className="flex items-center gap-2">
-                 <span className="relative flex h-2.5 w-2.5">
-                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                   <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
-                 </span>
-                 <span className="text-sm font-medium text-foreground">Live Activity Map</span>
-               </div>
-               
-               <Select defaultValue={year} onValueChange={(year) => setYear(year)}>
+              <div className="flex items-center gap-2">
+                <span className="relative flex h-2.5 w-2.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                </span>
+                <span className="text-sm font-medium text-foreground">Live Activity Map</span>
+              </div>
+
+              <Select defaultValue={year} onValueChange={(year) => setYear(year)}>
                 <SelectTrigger className="w-[120px] bg-background border-border text-foreground font-mono text-xs h-9">
                   <SelectValue placeholder="Year" />
                 </SelectTrigger>
@@ -301,7 +301,7 @@ export function GithubSection({ data }: { data: Contributions }) {
                     // CUSTOM COLOR MAP: Using semantic opacity steps instead of hex codes
                     // This ensures it looks perfect in both Light (Green) and Dark (Glowing Green) modes
                     "rounded-[2px] transition-all duration-300 hover:scale-125",
-                    'data-[level="0"]:fill-muted/20 dark:data-[level="0"]:fill-muted/10', 
+                    'data-[level="0"]:fill-muted/20 dark:data-[level="0"]:fill-muted/10',
                     'data-[level="1"]:fill-emerald-400/30 dark:data-[level="1"]:fill-emerald-900/40',
                     'data-[level="2"]:fill-emerald-400/60 dark:data-[level="2"]:fill-emerald-700/60',
                     'data-[level="3"]:fill-emerald-500 dark:data-[level="3"]:fill-emerald-600',
@@ -310,10 +310,10 @@ export function GithubSection({ data }: { data: Contributions }) {
                 />
               )}
             </ContributionGraphCalendar>
-            
+
             {/* Footer / Summary */}
             <div className="mt-8 pt-6 border-t border-border flex flex-col sm:flex-row justify-between items-center gap-4">
-               <ContributionGraphTotalCount>
+              <ContributionGraphTotalCount>
                 {({ totalCount, year }) => (
                   <div className="flex items-center gap-3">
                     <span className="text-muted-foreground text-sm font-medium">
@@ -325,14 +325,14 @@ export function GithubSection({ data }: { data: Contributions }) {
                   </div>
                 )}
               </ContributionGraphTotalCount>
-              
+
               <ContributionGraphLegend>
                 {({ level }) => (
                   <div
                     className="flex h-3 w-3 items-center justify-center rounded-[1px]"
                     data-level={level}
                   >
-                     <div
+                    <div
                       className={cn(
                         "h-full w-full rounded-[1px]",
                         level === 0 && "bg-muted/20",
@@ -356,12 +356,12 @@ export function GithubSection({ data }: { data: Contributions }) {
 
 
 
-function SpotlightCard({ 
-  children, 
-  className = "" 
-}: { 
-  children: React.ReactNode; 
-  className?: string; 
+function SpotlightCard({
+  children,
+  className = ""
+}: {
+  children: React.ReactNode;
+  className?: string;
 }) {
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -412,7 +412,7 @@ export function SkillSection() {
       {/* --- HEADER --- */}
       <div className="flex flex-col items-center text-center mb-16 space-y-4">
         <span className="text-sm font-mono text-muted-foreground uppercase tracking-widest">
-           {`// The Toolkit`}
+          {`// The Toolkit`}
         </span>
         <h2 className="text-4xl md:text-6xl font-bold tracking-tighter text-foreground">
           <span className="font-instrument-serif italic font-normal text-muted-foreground/80 mr-3">
@@ -420,7 +420,7 @@ export function SkillSection() {
           </span>
           {/* Kept the titanium class as requested previously, or use text-foreground if preferred */}
           <span className="text-colorful-titanium">
-             Arsenal
+            Arsenal
           </span>
         </h2>
         <p className="max-w-xl text-muted-foreground text-lg">
@@ -433,7 +433,7 @@ export function SkillSection() {
         {appConfig.skill_icons.map((skill, index) => (
           <SpotlightCard key={skill} className="aspect-square">
             <div className="flex flex-col items-center justify-center h-full p-4 transition-all duration-300">
-              
+
               {/* Icon Container */}
               <div className="relative size-14 md:size-16 flex items-center justify-center rounded-2xl bg-background shadow-sm border border-border mb-3 group-hover:scale-110 group-hover:-translate-y-1 transition-transform duration-500">
                 <Image

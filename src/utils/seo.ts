@@ -23,7 +23,7 @@ export function generateMetadata({
       description,
       url,
       images: image ? [image] : undefined,
-      siteName: title,
+      siteName: appConfig.siteName,
     },
     twitter: {
       card: "summary_large_image",

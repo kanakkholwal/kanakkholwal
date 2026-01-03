@@ -25,7 +25,7 @@ const badgeVariants = cva(
     variants: {
       variant: {
         default: "bg-muted text-muted-foreground",
-        default_light:
+        default_soft:
           "border-primary/5 bg-primary/5 text-primary hover:bg-primary/20 dark:backdrop-blur",
         secondary:
           "bg-neutral-100 [&>svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-black dark:text-white font-mono border-border dark:bg-neutral-900 dark:border-white/[0.14] [a&]:hover:bg-primary/90",
@@ -37,10 +37,10 @@ const badgeVariants = cva(
         outline: "bg-transparent border border-border text-foreground",
         destructive: "bg-destructive text-destructive-foreground",
 
-        success_light: "bg-green-500/5 text-green-500 hover:bg-green-500/20",
-        warning_light: "bg-yellow-500/5 text-yellow-500 hover:bg-yellow-500/20",
-        info_light: "bg-sky-500/5 text-sky-500 hover:bg-sky-500/20",
-        destructive_light:
+        success_soft: "bg-green-500/5 text-green-500 hover:bg-green-500/20",
+        warning_soft: "bg-yellow-500/5 text-yellow-500 hover:bg-yellow-500/20",
+        info_soft: "bg-sky-500/5 text-sky-500 hover:bg-sky-500/20",
+        destructive_soft:
           "bg-red-500/5 text-red-500 hover:bg-red-500/20 dark:bg-red-500/20 dark:text-red-500 hover:dark:bg-red-500/5 hover:dark:text-red-500",
 
         // legacy
@@ -274,3 +274,4 @@ function BadgeDot({ className, ...props }: React.ComponentProps<"span">) {
 }
 
 export { Badge, BadgeButton, BadgeDot, badgeVariants };
+

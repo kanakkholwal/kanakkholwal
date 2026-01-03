@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import { cn } from "@/lib/utils";
 import {
   animate,
   motion,
@@ -8,7 +8,8 @@ import {
   UseInViewOptions,
   useMotionValue,
 } from "motion/react";
-import { cn } from "@/lib/utils";
+import { useEffect, useRef, useState } from "react";
+import { formatNumber } from "~/utils/number";
 
 interface CountingNumberProps {
   from?: number;
@@ -21,6 +22,7 @@ interface CountingNumberProps {
   inViewMargin?: UseInViewOptions["margin"];
   onComplete?: () => void;
   format?: (value: number) => string;
+  suffix?: string;
 }
 
 export function CountingNumber({
@@ -34,6 +36,7 @@ export function CountingNumber({
   inViewMargin,
   onComplete,
   format,
+  suffix,
   ...props
 }: CountingNumberProps) {
   const ref = useRef<HTMLSpanElement>(null);
@@ -62,7 +65,7 @@ export function CountingNumber({
 
   return (
     <motion.span ref={ref} className={cn("inline-block", className)} {...props}>
-      {format ? format(display) : Math.round(display)}
+      {format ? format(display) : formatNumber(display)}{suffix}
     </motion.span>
   );
 }

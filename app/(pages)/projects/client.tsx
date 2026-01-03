@@ -1,7 +1,7 @@
 "use client";
 
 import { FloatingElements } from "@/components/animated/floating-elements";
-import { ExpandableProjectCards } from "@/components/project-card"; // The component we just built
+import { SimpleProjectCards } from "@/components/project-card"; // The component we just built
 import { ButtonTransitionLink } from "@/components/utils/link";
 import { motion } from "framer-motion";
 import { ArrowRight, TrendingUp } from "lucide-react";
@@ -17,14 +17,14 @@ function ProjectPageHeader() {
       >
         <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-border/50 text-xs font-mono text-muted-foreground uppercase tracking-widest backdrop-blur-md">
           <span className="relative flex h-2 w-2">
-             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary/80 opacity-75"></span>
-             <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary/80 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
           </span>
           Ship / Iterate / Scale
         </span>
       </motion.div>
 
-      <motion.h1 
+      <motion.h1
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.1 }}
@@ -37,13 +37,13 @@ function ProjectPageHeader() {
         </span>
       </motion.h1>
 
-      <motion.p 
+      <motion.p
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
         className="text-lg md:text-xl text-muted-foreground max-w-2xl leading-relaxed"
       >
-        A curated archive of applications, open-source libraries, and experiments. 
+        A curated archive of applications, open-source libraries, and experiments.
         Focusing on scalable architecture and intuitive user experiences.
       </motion.p>
     </div>
@@ -56,7 +56,7 @@ export default function ProjectsShowcase() {
   const normalizedProjects = projectsList.map((project) => ({
     ...project,
     // Ensure tags exist (map technologies to tags if tags are missing)
-    tags:  project.technologies || [],
+    tags: project.technologies || [],
     // Ensure links exist
     links: project.links || [],
     // Provide defaults for optional fields
@@ -69,14 +69,14 @@ export default function ProjectsShowcase() {
     <div className="relative min-h-screen w-full overflow-hidden">
       {/* 1. Background Texture (Consistent with Home) */}
       <div className="fixed inset-0 -z-50 h-full w-full bg-background opacity-40 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] dark:bg-[radial-gradient(#1f2937_1px,transparent_1px)] mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)" />
-      
+
       {/* 2. Floating Elements (Optional subtle motion) */}
       <div className="opacity-50 pointer-events-none">
-         <FloatingElements />
+        <FloatingElements />
       </div>
 
       <div className="relative max-w-[1400px] mx-auto px-6 md:px-12 pb-24">
-        
+
         {/* Header */}
         <ProjectPageHeader />
 
@@ -86,11 +86,11 @@ export default function ProjectsShowcase() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
         >
-          <ExpandableProjectCards cards={normalizedProjects} />
+          <SimpleProjectCards cards={normalizedProjects} />
         </motion.div>
 
         {/* 4. Footer CTA */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
@@ -98,25 +98,26 @@ export default function ProjectsShowcase() {
         >
           <h3 className="text-2xl font-semibold tracking-tight">Interested in the metrics?</h3>
           <div className="flex gap-4">
-             <ButtonTransitionLink 
-               href="/stats" 
-               variant="outline" 
-               rounded="full"
-               className="h-12 px-8 border-zinc-200 dark:border-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
-             >
-               <TrendingUp className="size-4 mr-2 text-indigo-500" />
-               View Github Stats
-             </ButtonTransitionLink>
-             
-             <ButtonTransitionLink 
-               href="/" 
-               variant="default" 
-               rounded="full"
-               className="h-12 px-8"
-             >
-               Back to Home
-               <ArrowRight className="size-4 ml-2" />
-             </ButtonTransitionLink>
+            <ButtonTransitionLink
+              href="/stats"
+              variant="outline"
+              rounded="full"
+              className="h-12 px-8"
+            >
+              <TrendingUp className="text-indigo-500" />
+              View Github Stats
+            </ButtonTransitionLink>
+
+            <ButtonTransitionLink
+              href="/"
+              variant="default"
+              rounded="full"
+              shadow="default_soft"
+              className="h-12 px-8"
+            >
+              Back to Home
+              <ArrowRight />
+            </ButtonTransitionLink>
           </div>
         </motion.div>
 

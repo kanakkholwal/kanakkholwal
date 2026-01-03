@@ -2,45 +2,39 @@ export const workExperiences = [
   {
     company: "Textify AI",
     href: "https://textify.ai",
-    badges: [],
+    badges: ["Full Stack", "DevOps"],
     location: "Indore, MP, India",
-    locationType: "remote",
+    locationType: "Remote",
     title: "Software Developer",
     logoUrl:
       "https://2hy7y2bvb4.ufs.sh/f/zWIvIoJSZF4QYH4HQCOnd4FsWwGtc1QjmblpSJE5xBn6y73Y",
     start: "Dec 2022",
     end: "Jun 2024",
     description: `
-- Re-architected legacy hard-coded apps into modular tools with centralized schema handling, improving developer efficiency and scalability.
-- Developed **no-code AI tool builder** with drag-and-drop support, enabling dynamic prompt structures and schema-driven LLM requests (text, markdown, image outputs).
-- Implemented authentication with **AWS Cognito**, later migrating to NextAuth for streamlined cross-database user/session management.
-- Fortified platform security by integrating **multi-factor authentication** through AWS Cognito; reduced unauthorized access attempts and improved overall platform reliability, addressing top security vulnerabilities.
-- Managed cloud deployments across **AWS Amplify → Azure (GitHub Actions CI/CD) → GCP (Cloud Run, Artifact Registry, Docker)** ensuring reliable and cost-effective infrastructure.
-- Developed RESTful APIs and microservices following **Agile practices and CI/CD pipelines**, enhancing system scalability on Azure and GCP, reducing deployment time by 30%.
-- Contributed majorly to rewriting and stabilizing the legacy codebase, establishing a foundation for future features.
-
+- Architected a **No-Code AI Workflow Engine** featuring a drag-and-drop interface, enabling users to build dynamic, schema-driven LLM chains (Text/Image/Markdown) without writing code.
+- Orchestrated a complex multi-cloud infrastructure migration **(AWS Amplify → Azure → GCP Cloud Run)**, utilizing **Docker** and **GitHub Actions** to establish a scalable, containerized CI/CD pipeline.
+- Hardened platform security by implementing **RBAC and Multi-Factor Authentication (MFA)** via AWS Cognito, later migrating to **NextAuth** to unify session management across microservices.
+- Re-engineered legacy monolithic codebases into modular **RESTful microservices**, reducing API latency and cutting deployment build times by **30%**.
+- Designed centralized schema handling systems that decoupled frontend logic from backend data structures, significantly improving developer velocity.
       `,
   },
   {
     company: "KoinX",
     href: "https://koinx.com",
-    badges: ["Internship"],
+    badges: ["Frontend", "Performance"],
     location: "Bhubaneswar, India",
-    locationType: "remote",
-    title: "Frontend Engineer",
+    locationType: "Remote",
+    title: "Frontend Engineer Intern",
     logoUrl:
       "https://2hy7y2bvb4.ufs.sh/f/zWIvIoJSZF4QPeYl8N26Hz53wg87YeZxFt9WfbvpIQLVAXau",
     start: "Mar 2024",
     end: "Jun 2024",
     description: `
-- Built and optimized client-side applications for **B2B and customer-facing platforms**, ensuring high performance and responsiveness.
-- Contributed to development of the **internal UI component library**, leveraging **strong UI/UX design sense** to improve team productivity.
-- Optimized SEO and page speed, boosting organic traffic by 150%.
-- Initiated and led the **migration of 4–5 legacy CRA apps to Vite/TS**, significantly enhancing build times and performance by 60%.
-- Optimized landing page **SEO and page load times** by centralizing localized versions across countries/languages, significantly improving search ranking and user experience.
-- Collaborated closely with product and design teams to deliver **scalable, production-ready frontend solutions**.
-
-
+- Spearheaded the architectural migration of legacy **Create-React-App (CRA)** repositories to **Vite + TypeScript**, slashing build times by **60%** and optimizing HMR (Hot Module Replacement) for the team.
+- Engineered a centralized **Internationalization (i18n)** and SEO architecture, enabling localized landing pages that drove a **150% increase in organic traffic**.
+- Co-developed the **internal UI Component Library**, enforcing strict design system tokens to ensure visual consistency across B2B and consumer-facing crypto dashboards.
+- Optimized core web vitals and page load speeds for high-traffic pages, directly improving user retention and SERP rankings.
+- Collaborated with product teams to ship production-ready features for a high-growth Fintech platform.
 `,
   },
 ] as const;

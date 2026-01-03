@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     siteName: appConfig.name,
     images: [
       {
-        url: "/social/og-image.jpg",
+        url: "/opengraph-image",
         width: 1200,
         height: 630,
         alt: `${appConfig.name} - UI/UX & Full Stack Engineer`,
@@ -53,7 +53,9 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: appConfig.name,
     description: appConfig.description,
-    images: [appConfig.logo],
+    images: [{
+      url: "/twitter-image", width: 1200, height: 630, alt: `${appConfig.name} - UI/UX & Full Stack Engineer`
+    }],
     creator: `@${appConfig.usernames.twitter}`,
   },
   icons: {

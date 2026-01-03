@@ -6,7 +6,7 @@
  * @example formatNumber(1500000) // "1.5M"
  */
 export function formatNumber(num: number) {
-  const formatter = new Intl.NumberFormat("en-IN", {
+  const formatter = new Intl.NumberFormat("en-US", {
     notation: "compact",
     compactDisplay: "short",
   });
