@@ -63,7 +63,7 @@
 [GitHub](https://github.com/kanakkholwal/college-ecosystem) | [Live](https://app.nith.eu.org)  
 *Multi-feature college portal (Next.js, Typescript, Node.js, PostgreSQL, MongoDB, Docker)*
 - Scaled to **1,200,000+ visits** & **740+ active users** with features like rankings, attendance, real-time polling.
-- Implemented **subreddit-like communities **and live announcements.
+- Implemented **subreddit-like communities** and live announcements.
 - Optimized database queries and caching for scalability & fault tolerance.
 - Orchestrated microservices for scraping and **email delivery system**.
 
