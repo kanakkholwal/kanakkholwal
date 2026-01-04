@@ -76,7 +76,7 @@
 - Designed **vector similarity search** for efficient personalization.
 - Integrated **scalable** APIs and database queries with **indexing** for performance.
 - Orchestrated **Continous Integration** of publishing Docker Images on **Github Container Registry**.
-- Orchestrated **Continous Deployement** of** Docker images from GHCR to Google Cloud Run**.
+- Orchestrated **Continous Deployement** of **Docker images from GHCR to Google Cloud Run**.
 - Handled **Application Load balancer** to handle point custom domains to Google Cloud Run Instances which doesn't support Domain mapping yet.
 
 
