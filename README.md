@@ -15,7 +15,7 @@
 
 ## Summary
 
-- **Software Engineer** with full-stack development, scalable systems, and **devops/cloud computing ** experience. 
+- **Software Engineer** with full-stack development, scalable systems, and **devops/cloud computing** experience. 
 - Shipped **high-impact OSS projects** (**1.1M+ visitors,** 300+ weekly npm downloads) and delivered production features at SaaS startups.
 - Skilled in **Reactjs, Next.js, TypeScript, Node.js, React Native, Docker, Python, Go, AWS/GCP/Azure**. 
 - Achieved +220% engagement, +150% SEO traffic, 60% faster builds.
@@ -55,15 +55,15 @@
 [GitHub](https://github.com/kanakkholwal/nexonauts) | [Live](https://nexonauts.com)  
 *Ecosystem for developers (Next.js, Shadcn UI, MongoDB)*
 - Launched mentorship program connecting developers; improved satisfaction to 90%.
-- Designed **marketplace**, tools engine, and** developer utilities** for productivity.
-- Architected scalable frontend, integrating **CI/CD pipelines **for rapid feature delivery.
+- Designed **marketplace**, tools engine, and **developer utilities** for productivity.
+- Architected scalable frontend, integrating **CI/CD pipelines** for rapid feature delivery.
 -  Orchestrated microservices for **email delivery system** for transactional emails and newsletter.
 
 ### College Ecosystem
 [GitHub](https://github.com/kanakkholwal/college-ecosystem) | [Live](https://app.nith.eu.org)  
 *Multi-feature college portal (Next.js, Typescript, Node.js, PostgreSQL, MongoDB, Docker)*
 - Scaled to **1,200,000+ visits** & **740+ active users** with features like rankings, attendance, real-time polling.
-- Implemented **subreddit-like communities **and live announcements.
+- Implemented **subreddit-like communities** and live announcements.
 - Optimized database queries and caching for scalability & fault tolerance.
 - Orchestrated microservices for scraping and **email delivery system**.
 
@@ -76,7 +76,7 @@
 - Designed **vector similarity search** for efficient personalization.
 - Integrated **scalable** APIs and database queries with **indexing** for performance.
 - Orchestrated **Continous Integration** of publishing Docker Images on **Github Container Registry**.
-- Orchestrated **Continous Deployement** of** Docker images from GHCR to Google Cloud Run**.
+- Orchestrated **Continous Deployement** of **Docker images from GHCR to Google Cloud Run**.
 - Handled **Application Load balancer** to handle point custom domains to Google Cloud Run Instances which doesn't support Domain mapping yet.
 
 
