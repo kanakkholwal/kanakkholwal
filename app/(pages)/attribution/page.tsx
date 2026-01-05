@@ -9,7 +9,7 @@ import { generateMetadata } from "~/utils/seo";
 export const metadata = generateMetadata({
   title: "Attribution | Credits",
   description: "Acknowledging the open-source giants and designers who inspired this portfolio.",
-  url: "/attribution",
+  path: "/attribution",
 });
 
 function CreditItem({ person, attribute, index }: { person: string; attribute: string; index: number }) {

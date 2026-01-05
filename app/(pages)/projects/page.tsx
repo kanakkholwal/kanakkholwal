@@ -9,7 +9,7 @@ export const metadata = generateMetadata({
   title: "Projects Showcase",
   description:
     "Explore Kanak's most impactful and innovative projects — full-stack apps, AI integrations, and cloud-native solutions built with Next.js, AWS, Docker, and GCP.",
-  url: "/projects",
+  path: "/projects",
   keywords: [
     "projects",
     "portfolio",

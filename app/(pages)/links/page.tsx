@@ -10,7 +10,7 @@ import { generateMetadata } from "~/utils/seo";
 export const metadata = generateMetadata({
   title: `Links | ${appConfig.name}`,
   description: `Connect with ${appConfig.name}. Socials, portfolio, and contact info.`,
-  url: "/links",
+  path: "/links",
 });
 
 function LinkCard({

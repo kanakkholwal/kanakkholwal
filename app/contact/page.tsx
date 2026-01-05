@@ -48,7 +48,7 @@ export default function ContactPage() {
 export const metadata = generateMetadata({
   title: "Contact ",
   description: `Get in touch with ${appConfig.name} — reach out for collaborations, freelance opportunities, or professional inquiries. Book a call or fill out the contact form to connect directly.`,
-  url: "/contact",
+  path: "/contact",
   keywords: [
     "contact",
     "get in touch",

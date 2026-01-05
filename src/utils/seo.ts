@@ -4,24 +4,29 @@ import { appConfig } from "root/project.config";
 export function generateMetadata({
   title,
   description,
-  url,
+  path,
   image,
   keywords,
 }: {
   title: string;
   description: string;
-  url: string;
+  path: string;
   image?: string;
   keywords?: string[];
 }): Metadata {
   return {
     title,
     description,
-    metadataBase: new URL(appConfig.url + url),
+    metadataBase: new URL(appConfig.url + path),
+    applicationName: appConfig.siteName,
+    authors: appConfig.authors as unknown as { name: string; url?: string }[],
+    alternates: {
+      canonical: appConfig.url + path,
+    },
     openGraph: {
       title,
       description,
-      url,
+      url: appConfig.url + path,
       images: image ? [image] : undefined,
       siteName: appConfig.siteName,
     },

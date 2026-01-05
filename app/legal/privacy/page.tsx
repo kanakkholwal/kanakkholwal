@@ -5,7 +5,7 @@ export const metadata = generateMetadata({
   title: "Privacy Policy",
   description:
     "Privacy Policy for Your Name — portfolio site. Explains what data is collected and how it is used.",
-  url: "/legal/privacy",
+  path: "/legal/privacy",
   keywords: [
     "privacy policy",
     "portfolio",

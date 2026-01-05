@@ -10,7 +10,7 @@ import AnimatedMediumPosts from "./client";
 export const metadata = generateMetadata({
   title: "Blog ",
   description: "Technical deep dives, tutorials, and thoughts on software engineering.",
-  url: "/blog",
+  path: "/blog",
 });
 
 export default async function MediumPage() {

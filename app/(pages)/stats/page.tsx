@@ -3,15 +3,15 @@ import { SearchParams } from "nuqs/server";
 import { Suspense } from "react";
 import { generateMetadata } from "~/utils/seo";
 import {
-  NPMDownloads,
-  NPMDownloadsSkeleton,
-  NPMStats,
-  NPMStatsSkeleton,
+    NPMDownloads,
+    NPMDownloadsSkeleton,
+    NPMStats,
+    NPMStatsSkeleton,
 } from "./_components/downloads";
 import { InsightStats } from "./_components/insight";
 import {
-  StarHistoryGraph,
-  StarHistoryGraphSkeleton,
+    StarHistoryGraph,
+    StarHistoryGraphSkeleton,
 } from "./_components/stars";
 import { RepoBeatsActivityGraph } from "./_components/stars.client";
 import { Versions } from "./_components/versions";
@@ -106,7 +106,7 @@ export const metadata = generateMetadata({
   title: "Project Statistics & Insights",
   description:
     "Explore detailed visual analytics of Kanak’s open-source projects — GitHub star growth, NPM downloads, version adoption, and repository activity visualized in real-time.",
-  url: "/stats",
+  path: "/stats",
   keywords: [
     "project statistics",
     "github stars",

@@ -75,7 +75,7 @@ export default function ToolKitPage() {
 export const metadata = generateMetadata({
   title: "My ToolKit  ",
   description: `Explore the software and tools used by ${appConfig.name} for development, design, and productivity.`,
-  url: "/toolkit",
+  path: "/toolkit",
   keywords: [
     "toolkit",
     "software",

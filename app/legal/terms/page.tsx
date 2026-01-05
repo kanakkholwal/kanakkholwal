@@ -5,7 +5,7 @@ export const metadata = generateMetadata({
   title: "Terms & Conditions",
   description:
     "Terms and Conditions for Your Name — portfolio site. Rules for using this website.",
-  url: "/legal/terms",
+  path: "/legal/terms",
   keywords: ["terms and conditions", "portfolio terms", "legal"],
 });
 

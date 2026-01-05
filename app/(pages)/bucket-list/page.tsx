@@ -9,7 +9,7 @@ import { generateMetadata } from "~/utils/seo";
 export const metadata = generateMetadata({
   title: "Bucket List",
   description: "A roadmap of my life's adventures, goals, and shipped experiences.",
-  url: "/bucket-list",
+  path: "/bucket-list",
 });
 
 // --- COMPONENT: BUCKET CARD ---
