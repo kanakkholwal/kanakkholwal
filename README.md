@@ -41,12 +41,12 @@
 
 ### Open Source — *Global*
 **Contributor & Maintainer** | *2022 – Present*
-- **College Ecosystem** - Next.js/TS platform; 100k+ visits; realtime polls, rankings, communities.
-- **Muse** - AI fashion discovery (vector search); reduced user selection time 40%.
-- **Mailing system** - An extendable serverless mailing system with Nextjs and React mail
-- **Markdown Editor** - plugin-based Markdown Editor with React + TS + shadcn UI / Tailwind css ; rendering speed +35%; 300+ weekly downloads.
-- **Rich Text Editor** - A lightweight, customizable React Rich Text Editor built on TipTap
-- **Remark Plugins** - A collection of remark plugins for markdown processing.
+- [**College Ecosystem**](https://github.com/kanakkholwal/college-ecosystem) - Next.js/TS platform; 1M+ visits; realtime polls, rankings, communities.
+- [**Muse**](https://github.com/kanakkholwal/muse-mvp) - AI fashion discovery (vector search); reduced user selection time 40%.
+- [**Mailing system**](https://github.com/kanakkholwal/mail-system) - An extendable serverless mailing system with Nextjs and React mail
+- [**Markdown Editor**](https://github.com/kanakkholwal/nexo-mdx) - plugin-based Markdown Editor with React + TS + shadcn UI / Tailwind css ; rendering speed +35%; 300+ weekly downloads.
+- [**Rich Text Editor**](https://github.com/kanakkholwal/nexo-editor) - A lightweight, customizable React Rich Text Editor built on TipTap
+- [**Remark Plugins**](https://github.com/kanakkholwal/remark-plugins) - A collection of remark plugins for markdown processing.
 ---
 
 ## Projects
