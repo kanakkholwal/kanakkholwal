@@ -47,6 +47,7 @@
 - [**Markdown Editor**](https://github.com/kanakkholwal/nexo-mdx) - plugin-based Markdown Editor with React + TS + shadcn UI / Tailwind css ; rendering speed +35%; 300+ weekly downloads.
 - [**Rich Text Editor**](https://github.com/kanakkholwal/nexo-editor) - A lightweight, customizable React Rich Text Editor built on TipTap
 - [**Remark Plugins**](https://github.com/kanakkholwal/remark-plugins) - A collection of remark plugins for markdown processing.
+- [Bruno](https://github.com/usebruno/bruno/issues?q=sort%3Aupdated-desc%20is%3Aopen%20is%3Apr%20author%3Akanakkholwal) - Opensource IDE For Exploring and Testing API's (lightweight alternative to Postman/Insomnia)
 ---
 
 ## Projects
