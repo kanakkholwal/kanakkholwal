@@ -2,6 +2,7 @@
 "use client";
 import { Toaster } from "@/components/ui/sonner";
 import { cn } from "@/lib/utils";
+import { RootProvider } from 'fumadocs-ui/provider/next';
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { ViewTransitions } from "next-view-transitions";
 import { Next13ProgressBar } from "next13-progressbar";
@@ -11,27 +12,29 @@ import type React from "react";
 export function Provider({ children }: { children: React.ReactNode }) {
   return (
     <ViewTransitions>
-      <Next13ProgressBar
-        height="4px"
-        color="var(--primary)"
-        options={{ showSpinner: true, trickle: true }}
-        showOnShallow={true}
-      />
+      <RootProvider theme={{ enabled: false }}>
+        <Next13ProgressBar
+          height="4px"
+          color="var(--primary)"
+          options={{ showSpinner: true, trickle: true }}
+          showOnShallow={true}
+        />
 
-      <NextThemesProvider
-        themes={["light", "dark", "system"]}
-        defaultTheme="dark"
-      >
-        <div
-          className={cn(
-            "min-h-screen w-full h-full overflow-x-hidden no-scrollbar",
-          )}
+        <NextThemesProvider
+          themes={["light", "dark", "system"]}
+          defaultTheme="dark"
         >
-          <NuqsAdapter>{children}</NuqsAdapter>
-        </div>
-      </NextThemesProvider>
+          <div
+            className={cn(
+              "min-h-screen w-full h-full overflow-x-hidden no-scrollbar",
+            )}
+          >
+            <NuqsAdapter>{children}</NuqsAdapter>
+          </div>
+        </NextThemesProvider>
 
-      <Toaster position="bottom-right" richColors />
+        <Toaster position="bottom-right" richColors />
+      </RootProvider>
     </ViewTransitions>
   );
 }

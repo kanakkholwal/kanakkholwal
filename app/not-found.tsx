@@ -9,7 +9,7 @@ import { Home } from "lucide-react";
 export default function NotFound() {
   return (
     <PageWrapper>
-      <main className="flex flex-col items-center justify-center w-full gap-5 text-center lg:text-left">
+      <main className="flex flex-col h-full min-h-150 items-center justify-center w-full gap-5 text-center lg:text-left">
         <NotFoundSvg className="max-w-sm lg:max-w-md w-full pointer-events-none select-none" />
         <h1 className="text-xl lg:text-4xl font-semibold lg:font-bold">
           Oops! Page Not Found
