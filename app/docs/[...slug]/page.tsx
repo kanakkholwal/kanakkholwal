@@ -1,15 +1,17 @@
 import { source } from "@/lib/source";
 import defaultMdxComponents from "fumadocs-ui/mdx";
-import { ArrowLeft, Calendar, Clock, Hash, User } from "lucide-react";
+import { ArrowLeft, Hash } from "lucide-react";
 import Link from 'next/link';
 import { notFound } from "next/navigation";
 
 // --- COMPONENTS ---
+import { Icon } from "@/components/icons";
+import { cn } from "@/lib/utils";
 import { InlineTOC } from 'fumadocs-ui/components/inline-toc';
 
-export default async function Page(props: { params: Promise<{ slug: string }> }) {
+export default async function Page(props: { params: Promise<{ slug: string[] }> }) {
   const params = await props.params;
-  const page = source.getPage([params.slug]);
+  const page = source.getPage(params.slug);
 
   if (!page) notFound();
 
@@ -31,15 +33,14 @@ export default async function Page(props: { params: Promise<{ slug: string }> })
         {/* 2. Navigation & Breadcrumbs */}
         <div className="mb-8 md:mb-12">
           <Link
-            href="/blog"
+            href="/docs"
             className="group inline-flex items-center text-sm font-mono text-muted-foreground hover:text-foreground transition-colors"
           >
             <ArrowLeft className="mr-2 size-4 group-hover:-translate-x-1 transition-transform" />
-            / INDEX / BLOG
+            / INDEX / DOCS
           </Link>
         </div>
 
-        {/* 3. Header Section (The Blueprint) */}
         <header className="mb-16 border-b border-border/60 pb-12">
 
           {/* Tags / Category (Optional) */}
@@ -58,19 +59,18 @@ export default async function Page(props: { params: Promise<{ slug: string }> })
             {page.data.title}
           </h1>
 
-          <p className="text-xl md:text-2xl text-muted-foreground font-light leading-relaxed max-w-3xl font-serif">
+          <p className="text-xl md:text-2xl text-muted-foreground font-light leading-relaxed max-w-3xl font-mono">
             {page.data.description}
           </p>
 
-          {/* Metadata Bar */}
           <div className="flex flex-wrap items-center gap-6 mt-8 pt-8 border-t border-dashed border-border/50 text-sm font-mono text-muted-foreground">
             <div className="flex items-center gap-2">
-              <User className="size-4 text-primary" />
+              <Icon name="person-speaking" className="size-4 text-primary" />
               <span className="text-foreground font-medium">{page.data.author}</span>
             </div>
             <div className="h-4 w-px bg-border" />
             <div className="flex items-center gap-2">
-              <Calendar className="size-4" />
+              <Icon name="calendar" className="size-4" />
               <time dateTime={new Date(page.data.lastModified || new Date()).toISOString()}>
                 {new Date(page.data.lastModified || new Date()).toLocaleDateString("en-US", {
                   year: "numeric",
@@ -81,31 +81,34 @@ export default async function Page(props: { params: Promise<{ slug: string }> })
             </div>
             <div className="h-4 w-px bg-border" />
             <div className="flex items-center gap-2">
-              <Clock className="size-4" />
+              <Icon name="clock" className="size-4" />
               <span>{readTime} min read</span>
             </div>
           </div>
         </header>
 
-        {/* 4. Content Layout: Sidebar + Main */}
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_250px] gap-12">
 
-          {/* Left: The Article */}
           <article className="min-w-0">
 
-            {/* Mobile TOC (Visible only on small screens) */}
-            <div className="lg:hidden mb-8 p-4 bg-secondary/20 rounded-lg border border-border">
-              <span className="text-xs font-bold uppercase text-muted-foreground mb-2 block">Table of Contents</span>
+            <div className="lg:hidden mb-8">
               <InlineTOC items={page.data.toc} />
             </div>
 
-            <div className="prose prose-zinc dark:prose-invert prose-lg max-w-none 
-                    prose-headings:font-sans prose-headings:tracking-tight prose-headings:font-bold
-                    prose-p:font-serif prose-p:leading-8 prose-p:text-zinc-600 dark:prose-p:text-zinc-300
-                    prose-li:font-serif
-                    prose-pre:border prose-pre:border-border/50 prose-pre:bg-zinc-950
-                    prose-code:px-1 prose-code:py-0.5 prose-code:bg-secondary/50 prose-code:rounded-sm prose-code:font-mono prose-code:text-sm prose-code:before:content-none prose-code:after:content-none
-                ">
+            <div
+              className={cn(
+                "prose prose-zinc dark:prose-invert prose-lg max-w-none",
+                "prose-headings:font-mono prose-headings:tracking-tight prose-headings:font-bold",
+                "prose-p:font-mono prose-p:leading-8 prose-p:text-zinc-600 dark:prose-p:text-zinc-300",
+                "prose-li:font-mono",
+
+                // override typography anchor underline
+                "[&_a[data-card].peer]:no-underline",
+
+                "prose-pre:border prose-pre:border-border/50 prose-pre:bg-zinc-950",
+                "prose-code:px-1 prose-code:py-0.5 prose-code:rounded-sm prose-code:font-mono prose-code:text-sm prose-code:before:content-none prose-code:after:content-none"
+              )}
+            >
               <Mdx components={defaultMdxComponents} />
             </div>
 
@@ -153,7 +156,8 @@ export async function generateStaticParams() {
   return source.generateParams();
 }
 
-export function generateMetadata({ params }: { params: { slug?: string[] } }) {
+export async function generateMetadata(props: { params: Promise<{ slug?: string[] }> }) {
+  const params = await props.params;
   const page = source.getPage(params.slug);
   if (!page) return;
   return {

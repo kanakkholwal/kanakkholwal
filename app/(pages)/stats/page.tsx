@@ -27,7 +27,8 @@ type StatsPageProps = {
   searchParams: Promise<SearchParams>;
 };
 
-export default async function StatsPage({ searchParams }: StatsPageProps) {
+export default async function StatsPage(props: StatsPageProps) {
+  const searchParams = await props.searchParams;
 
 
 

@@ -89,25 +89,6 @@
   --chart-14: hsl(333.3 71.4% 50.6%);
   --chart-15: hsl(346.8 77.2% 49.8%);
 
-  /* syntax highlighting */
-  --sh-class: #4d9ef6;
-  /* Brighter blue for class */
-  --sh-identifier: #6caedd;
-  /* Lighter blue for identifiers */
-  --sh-sign: #cdd3de;
-  /* Lighter gray to ensure signs are visible */
-  --sh-property: #3182ce;
-  /* Brighter blue for properties */
-  --sh-entity: #2db1bc;
-  /* Lighter teal for entities */
-  --sh-jsxliterals: #939dfd;
-  /* Lighter purple for JSX literals */
-  --sh-string: #26dabd;
-  /* Lighter teal for strings */
-  --sh-keyword: #ff6b6b;
-  /* Brighter red for keywords */
-  --sh-comment: #cbc3c3;
-  /* Lighter gray for comments */
 }
 
 .dark,
@@ -198,9 +179,10 @@
 }
 
 @theme inline {
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-geist-sans, 'Inter', 'Helvetica', 'Arial', sans-serif);
+  --font-mono: var(--font-geist-mono, 'Space Mono', 'Fira Code', 'Courier New', 'Courier', 'monospace');
   --font-serif: var(--font-instrument-serif);
+  --font-logo: var(--font-logo, 'Quicksand', 'Helvetica', 'Arial', sans-serif);
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -242,8 +224,7 @@
 
   --width-app: var(--max-app-width);
 
-  --font-mono: 'Space Mono', 'Fira Code', 'Courier New', 'Courier', 'monospace';
-  --font-sans: 'Inter', 'Helvetica', 'Arial', sans-serif;
+
 
   --shadow-button: 0px -1px 0px 0px hsla(0, 0%, 100%, 0.04), 0px 0px 0px 1px hsla(0, 0%, 100%, 0.12), 0px 0px 1px 0px rgba(0, 0, 0, 0.04), 0px 2px 2px 0px rgba(0, 0, 0, 0.04), 0px 4px 2px 0px rgba(0, 0, 0, 0.04), 0px 6px 3px 0px rgba(0, 0, 0, 0.04);
 

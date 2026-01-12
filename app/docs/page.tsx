@@ -13,12 +13,12 @@ export default function DocsIndex() {
         .slice(0, 3);
 
     return (
-        <main className="container max-w-[72ch] py-20 mx-auto font-mono">
+        <main className="container max-w-[72ch] py-20 mx-auto">
             <div className="mb-16 border-b border-zinc-200 dark:border-zinc-800 pb-8">
-                <h1 className="text-4xl font-sans font-bold tracking-tighter mb-4">
+                <h1 className="text-4xl font-sans font-bold tracking-tighter mb-4 font-logo">
                     Engineering Notes & System Designs
                 </h1>
-                <p className="text-lg text-zinc-600 dark:text-zinc-400 leading-relaxed">
+                <p className="text-lg text-zinc-600 dark:text-zinc-400 leading-relaxed font-mono">
                     A collection of technical decisions, architectural patterns, and incident analyses.
                     Written to prove operational competence, not for SEO.
                 </p>
@@ -34,14 +34,14 @@ export default function DocsIndex() {
                         <Link
                             key={page.url}
                             href={page.url}
-                            className="group block p-6 border border-zinc-200 dark:border-zinc-800 hover:border-zinc-400 dark:hover:border-zinc-600 transition-colors bg-zinc-50/50 dark:bg-zinc-900/50"
+                            className="group font-mono block p-6 border border-zinc-200 dark:border-zinc-800 hover:border-zinc-400 dark:hover:border-zinc-600 transition-colors bg-zinc-50/50 dark:bg-zinc-900/50"
                         >
                             <div className="flex items-start justify-between">
                                 <div>
-                                    <h3 className="font-sans font-bold text-lg group-hover:underline decoration-1 underline-offset-4">
+                                    <h3 className="font-bold text-lg group-hover:underline decoration-1 underline-offset-4">
                                         {page.data.title}
                                     </h3>
-                                    <p className="text-sm text-zinc-500 mt-2 font-serif">
+                                    <p className="text-sm text-zinc-500 mt-2">
                                         {page.data.description}
                                     </p>
                                 </div>

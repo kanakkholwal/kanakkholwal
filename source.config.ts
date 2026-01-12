@@ -1,3 +1,4 @@
+import { remarkImage, remarkNpm, remarkStructure } from 'fumadocs-core/mdx-plugins';
 import { defineConfig, defineDocs, frontmatterSchema, metaSchema } from 'fumadocs-mdx/config';
 import lastModified from 'fumadocs-mdx/plugins/last-modified';
 import z from 'zod';
@@ -26,7 +27,21 @@ export const docs = defineDocs({
 export default defineConfig({
   mdxOptions: {
     // MDX options
+    remarkPlugins: [remarkImage, remarkStructure, remarkNpm],
+    remarkNpmOptions: {
+      persist: {
+        id: 'package-manager',
+      },
+    },
+    rehypeCodeOptions: {
+      themes: {
+        light: 'github-light',
+        dark: 'github-dark',
+      },
+
+    },
   },
   plugins: [lastModified()],
+
 
 });

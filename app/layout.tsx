@@ -94,8 +94,8 @@ export default function RootLayout({
           // Colors: Ensure these are defined in your Tailwind CSS
           "bg-background text-foreground",
           // Typography Variables
-          GeistSans.className,
-          GeistMono.className,
+          GeistSans.variable,
+          GeistMono.variable,
           logoFont.variable,
           fontInstrumentSerif.variable,
           // Premium Feel: Custom Selection Color (Stripe-like)
@@ -103,11 +103,11 @@ export default function RootLayout({
         )}
       >
 
-          <Provider>
-               <div className="fixed inset-0 z-50 pointer-events-none opacity-[0.03] bg-[url('/noise.svg')] mix-blend-overlay"></div>
-           
-            {children}
-          </Provider>
+        <Provider>
+          <div className="fixed inset-0 z-50 pointer-events-none opacity-[0.03] bg-[url('/noise.svg')] mix-blend-overlay"></div>
+
+          {children}
+        </Provider>
 
         {/* JSON-LD for SEO */}
         <script
