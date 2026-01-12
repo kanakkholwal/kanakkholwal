@@ -118,7 +118,7 @@ export default async function ArticlePage(props: { slug: string[] }) {
                             <div className="text-xs font-mono text-muted-foreground">
                                 LAST UPDATED: <span className="text-foreground">{new Date(page.data.lastModified || new Date()).toISOString().split('T')[0]}</span>
                             </div>
-                            <Link href="/blog" className="text-sm font-medium hover:underline underline-offset-4">
+                            <Link href="/docs" className="text-sm font-medium hover:underline underline-offset-4">
                                 ← Back to Index
                             </Link>
                         </div>

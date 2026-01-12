@@ -4,7 +4,7 @@ export const appConfig = {
   initials: "KK",
   role: "Software Engineer",
   description:
-  "Software Engineer | Passionate about building scalable solutions, automation, and AI-driven products.",
+    "Software Engineer | Passionate about building scalable solutions, automation, and AI-driven products.",
   summary: `I thrive on solving complex problems and building impactful products. From developing scalable architectures to integrating AI solutions, my goal is to create software that makes a real difference. Always eager to learn, contribute to open source, and collaborate with like-minded developers. Check out my work below, and feel free to reach out.`,
   siteName: "Kanak Kholwal Portfolio",
   siteUrl: "kanak.eu.org",
@@ -262,6 +262,10 @@ export const appConfig = {
       {
         label: "Blog",
         href: "/blog",
+      },
+      {
+        label: "Docs",
+        href: "/docs",
       },
     ],
     specifics: [

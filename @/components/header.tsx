@@ -13,6 +13,7 @@ const NAV_ITEMS = [
   { label: "Projects", href: "/projects" },
   { label: "Stack", href: "/#skills" },
   { label: "Blog", href: "/blog" },
+  { label: "Docs", href: "/docs" },
 ];
 
 export const Header = ({ transition }: { transition: boolean }) => {
@@ -23,7 +24,7 @@ export const Header = ({ transition }: { transition: boolean }) => {
       className="fixed top-0 left-0 right-0 z-50 flex justify-center pt-6 px-4 pointer-events-none"
     >
       <AnimatePresence mode="popLayout">
-        
+
         {!transition ? (
           <motion.div
             key="splash-logo"
@@ -37,7 +38,7 @@ export const Header = ({ transition }: { transition: boolean }) => {
             </motion.div>
           </motion.div>
         ) : (
-          
+
           /* --- STATE 2: THE FLOATING HEADER (Logo Left, Nav Center, Tools Right) --- */
           <motion.div
             key="header-nav"
@@ -46,7 +47,7 @@ export const Header = ({ transition }: { transition: boolean }) => {
             transition={{ type: "spring", stiffness: 260, damping: 20, delay: 0.1 }}
             className="pointer-events-auto relative flex items-center justify-between w-full max-w-5xl rounded-full border border-border/40 bg-background/60 backdrop-blur-md shadow-sm px-4 py-2"
           >
-            
+
             {/* LEFT: LOGO */}
             <div className="flex items-center gap-2">
               <TransitionLink href="/" className="flex items-center gap-2 group">
@@ -73,11 +74,11 @@ export const Header = ({ transition }: { transition: boolean }) => {
 
             {/* RIGHT: TOOLS & SOCIALS */}
             <div className="flex items-center gap-2">
-              
-                <Socials className="items-center gap-x-1 hidden sm:flex border-r border-border/50 pr-2 mr-1" />
+
+              <Socials className="items-center gap-x-1 hidden sm:flex border-r border-border/50 pr-2 mr-1" />
 
               <ModeToggle />
-              
+
               {/* Mobile Menu Trigger could go here if needed */}
               {/* <MobileMenuButton /> */}
             </div>
@@ -92,10 +93,10 @@ export const Header = ({ transition }: { transition: boolean }) => {
 // Helper to render icons based on text label if needed, 
 // though passing the Icon component in config is better.
 const ArrowUpRightIcon = ({ label }: { label: string }) => {
-   // Mapping logic or just return a generic link icon for cleanliness
-   // Realistically, you should import Github/Linkedin icons
-   if (label.toLowerCase().includes('github')) return <Github className="size-4" />;
-   if (label.toLowerCase().includes('linkedin')) return <Linkedin className="size-4" />;
-   if (label.toLowerCase().includes('twitter') || label.toLowerCase().includes('x')) return <Twitter className="size-4" />;
-   return <div className="size-2 rounded-full bg-foreground" />;
+  // Mapping logic or just return a generic link icon for cleanliness
+  // Realistically, you should import Github/Linkedin icons
+  if (label.toLowerCase().includes('github')) return <Github className="size-4" />;
+  if (label.toLowerCase().includes('linkedin')) return <Linkedin className="size-4" />;
+  if (label.toLowerCase().includes('twitter') || label.toLowerCase().includes('x')) return <Twitter className="size-4" />;
+  return <div className="size-2 rounded-full bg-foreground" />;
 }
