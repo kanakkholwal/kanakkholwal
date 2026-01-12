@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import {
   FaEdge,
   FaFirefoxBrowser,
@@ -33,6 +34,7 @@ import {
   PiDotsThreeVerticalDuotone,
   PiEyeDuotone,
   PiFacebookLogoDuotone,
+  PiFolderOpenDuotone,
   PiGameControllerDuotone,
   PiGithubLogoDuotone,
   PiGlobeDuotone,
@@ -132,7 +134,7 @@ export const IconComponent = {
   podcast: PiMicrophoneStageDuotone,
   heart: PiHeartDuotone,
   "heart-empty": PiHeartDuotone, // Phosphor Duotone style is consistent
-
+  "folder-open": PiFolderOpenDuotone,
   // --- Devices & Browsers ---
   safari: FaSafari, // No Phosphor equivalent
   chrome: PiGoogleChromeLogoDuotone,
@@ -199,5 +201,5 @@ export function Icon({
   if (!Icon) {
     return null;
   }
-  return <Icon className={className} />;
+  return <Icon className={cn("inline-block", className)} />;
 }

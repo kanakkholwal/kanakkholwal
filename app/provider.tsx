@@ -23,6 +23,8 @@ export function Provider({ children }: { children: React.ReactNode }) {
         <NextThemesProvider
           themes={["light", "dark", "system"]}
           defaultTheme="dark"
+          attribute={["class", "data-theme"]}
+
         >
           <div
             className={cn(

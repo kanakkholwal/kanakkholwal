@@ -34,10 +34,14 @@ export default defineConfig({
       },
     },
     rehypeCodeOptions: {
+      lazy: true,
       themes: {
         light: 'github-light',
         dark: 'github-dark',
       },
+      langs:
+        ["js", "json", "sql", "bash", "shell", "html", "css", "ts", "tsx", "jsx", "py", "python", "go", "rust", "yaml", "cmd"],
+      tab: true,
 
     },
   },
