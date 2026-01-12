@@ -4,13 +4,10 @@ on:
   push:
     branches:
       - main
-    paths:
-      - 'apps/platform/**'
+
   pull_request:
     branches:
       - main
-    paths:
-      - 'apps/platform/**'
   workflow_dispatch:
 
 env:
