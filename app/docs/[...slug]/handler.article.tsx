@@ -32,7 +32,7 @@ export default async function ArticlePage(props: { slug: string[] }) {
         <main className="min-h-screen relative">
 
 
-            <div className="relative z-10 w-full max-w-[1200px] mx-auto px-4 md:px-8 py-12 md:py-20">
+            <div className="relative z-10 w-full max-w-7xl mx-auto px-4 md:px-8 py-12 md:py-20">
 
                 {/* 2. Navigation & Breadcrumbs */}
                 <div className="mb-8 md:mb-12">
@@ -148,11 +148,16 @@ export default async function ArticlePage(props: { slug: string[] }) {
                     </aside>
 
                 </div>
-                <div>
-                    <h5>Other articles</h5>
+                <div className="mt-12">
+                    <h5 className="font-semibold text-metallic text-lg mb-5 flex items-center gap-2">
+                        <Icon name="book" className="size-5 text-primary" />
+                        Other articles
+                    </h5>
                     <Cards>
                         {otherArticles.map((page) => (
-                            <Card key={`${page?.slugs.join('/')}`} title={page?.data.title} href={`/docs/${page?.slugs.join('/')}`}>
+                            <Card key={`${page?.slugs.join('/')}`}
+                                title={page?.data.title}
+                                href={`/docs/${page?.slugs.join('/')}`}>
                                 {page?.data.description}
                             </Card>
                         ))}

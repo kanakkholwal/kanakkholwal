@@ -13,12 +13,14 @@ export default async function Page(props: { params: Promise<{ slug: string[] }> 
     return <ArticlePage slug={params.slug} />
   }
   if (params.slug.length === 1) {
-    return <CategoryPage slug={params.slug[0]} />
+    return <CategoryPage category={params.slug[0]} />
   }
   notFound();
 }
 
 export async function generateStaticParams() {
+
+
   return source.generateParams()
 }
 

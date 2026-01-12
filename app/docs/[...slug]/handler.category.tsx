@@ -1,77 +1,129 @@
-import { Icon } from "@/components/icons";
+import DocsSearch from "@/components/docs.search";
 import { source } from "@/lib/source";
-import { Card } from "fumadocs-ui/components/card";
+import { ArrowLeft, FileText, FolderOpen, Terminal } from "lucide-react";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 
-export default function CategoryPage(props: { slug: string }) {
-    const allPages = source.getPages();
+// optional: Map category slugs to nice titles/descriptions
+const CATEGORY_META: Record<string, { title: string; description: string }> = {
+    architecture: {
+        title: "System Architecture",
+        description: "High-level design decisions, trade-offs, and structural diagrams.",
+    },
+    performance: {
+        title: "Performance Engineering",
+        description: "Benchmarks, latency analysis, and optimization strategies.",
+    },
+    reliability: {
+        title: "Reliability & Uptime",
+        description: "Incident reports, chaos engineering, and failure mode analysis.",
+    },
+    security: {
+        title: "Security Models",
+        description: "Auth flows, threat modeling, and compliance notes.",
+    },
+    systems: {
+        title: "Systems & Infra",
+        description: "CI/CD pipelines, container orchestration, and dev-tools.",
+    },
+};
 
-    // Quick filter for "Featured" (You would tag these in frontmatter ideally)
-    const featured = allPages
-        // .filter(p =>
-        //     ["architecture", "performance", "reliability"].some(tag => p.url.includes(tag))
-        // )
-        .slice(0, 3);
+export default async function CategoryPage(props: {
+    category: string;
+}) {
+    const categorySlug = props.category;
+
+    // 1. Filter pages belonging to this category
+    // We check if the page URL starts with /docs/[category]
+    const categoryPages = source.getPages().filter((page) => {
+        const pathParts = page.url.split("/");
+        // Assuming url is /docs/category/slug
+        return pathParts[2] === categorySlug && pathParts.length > 3;
+    });
+
+    if (categoryPages.length === 0) {
+        return notFound();
+    }
+
+    // Get nice meta or fallback to slug
+    const meta = CATEGORY_META[categorySlug] || {
+        title: categorySlug.charAt(0).toUpperCase() + categorySlug.slice(1),
+        description: "Engineering notes and documentation.",
+    };
 
     return (
-        <main className="container max-w-[72ch] py-20 mx-auto">
-            <div className="mb-16 border-b border-zinc-200 dark:border-zinc-800 pb-8">
-                <h1 className="text-4xl font-sans font-bold tracking-tighter mb-4 font-logo">
-                    Engineering Notes & System Designs
-                </h1>
-                <p className="text-lg text-zinc-600 dark:text-zinc-400 leading-relaxed font-mono">
-                    A collection of technical decisions, architectural patterns, and incident analyses.
-                    Written to prove operational competence, not for SEO.
-                </p>
-            </div>
+        <main className="min-h-screen relative">
 
-            {/* FEATURED SECTION */}
-            <section className="mb-16">
-                <h2 className="text-xs font-mono font-bold uppercase tracking-widest text-zinc-500 mb-6">
-                    <Icon name="pin" className="size-5 mr-2" />
-                    Featured Documents
-                </h2>
-                <div className="grid gap-4">
-                    {featured.map((page) => (
-                        <Card
+            <div className="fixed inset-0 z-0 pointer-events-none h-full w-full bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:24px_24px]" />
+
+            <div className="relative z-10 max-w-7xl mx-auto px-6 py-20">
+
+                <div className="mb-12">
+                    <Link
+                        href="/docs"
+                        className="group inline-flex items-center text-sm font-mono text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                        <ArrowLeft className="mr-2 size-4 group-hover:-translate-x-1 transition-transform" />
+                        / DOCS / INDEX
+                    </Link>
+                </div>
+
+                <header className="mb-16 pb-8">
+                    <div className="flex items-center gap-3 mb-4 text-primary">
+                        <FolderOpen className="size-6" />
+                        <span className="font-mono text-sm tracking-widest uppercase">Directory</span>
+                        <DocsSearch iconOnly />
+                    </div>
+                    <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
+                        {meta.title}
+                    </h1>
+                    <p className="text-xl text-muted-foreground font-mono leading-relaxed max-w-2xl">
+                        {meta.description}
+                    </p>
+                </header>
+
+                <div className="space-y-2">
+
+                    <div className="grid grid-cols-[1fr_120px] px-4 py-2 border-b border-border text-xs font-mono text-muted-foreground uppercase tracking-wider">
+                        <span>Document Name</span>
+                        <span className="text-right">Est. Read</span>
+                    </div>
+
+                    {categoryPages.map((page) => (
+                        <Link
                             key={page.url}
                             href={page.url}
-                            title={page.data.title}
-                            description={page.data.description}
-                            icon={<Icon name="book" />}
-                        />
-                    ))}
-                </div>
-            </section>
-
-            {/* SECTIONS LIST */}
-            <section>
-                <h2 className="text-sm font-mono font-bold uppercase tracking-widest text-zinc-500 mb-6">
-                    <Icon name="folder-open" className="size-5 mr-2" />
-                    Knowledge Base
-                </h2>
-                <div className="grid grid-cols-2 gap-y-4 gap-x-8">
-                    {[
-                        { label: "Architecture", path: "/docs/architecture" },
-                        { label: "Systems & Infra", path: "/docs/systems" },
-                        { label: "Performance", path: "/docs/performance" },
-                        { label: "Reliability", path: "/docs/reliability" },
-                        { label: "Security", path: "/docs/security" },
-                        { label: "Data Engineering", path: "/docs/data" },
-                    ].map((section) => (
-                        <Link
-                            key={section.path}
-                            href={section.path}
-                            className="flex items-center justify-between py-3 border-b border-zinc-100 dark:border-zinc-800/50 hover:pl-2 transition-all group"
+                            className="group grid grid-cols-[1fr_120px] items-center px-4 py-4 rounded-lg hover:bg-primary/5 transition-colors border border-transparent hover:border-border/50"
                         >
-                            <span className="font-sans text-sm font-medium">{section.label}</span>
-                            <span className="text-xs text-zinc-400 font-mono group-hover:text-zinc-800 dark:group-hover:text-zinc-200">
-                                /DIR
-                            </span>
+                            <div className="flex flex-col gap-1 min-w-0 pr-4">
+                                <div className="flex items-center gap-3">
+                                    <FileText className="size-4 text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
+                                    <span className="font-medium text-foreground text-lg group-hover:underline decoration-1 underline-offset-4 truncate">
+                                        {page.data.title}
+                                    </span>
+                                </div>
+                                <p className="text-sm text-muted-foreground font-mono line-clamp-1 pl-7">
+                                    {page.data.description}
+                                </p>
+                            </div>
+
+                            <div className="text-right font-mono text-xs text-muted-foreground group-hover:text-foreground transition-colors">
+                                {Math.ceil((page.data.body.toString().length || 1000) / 1000)} min
+                            </div>
                         </Link>
                     ))}
                 </div>
-            </section>
+
+                {/* Empty State / Footer */}
+                <div className="mt-12 pt-8 border-t border-dashed border-border/50 text-center">
+                    <p className="text-sm font-mono text-muted-foreground">
+                        <Terminal className="inline-block size-3 mr-2 align-middle" />
+                        END OF DIRECTORY LISTING
+                    </p>
+                </div>
+
+            </div>
         </main>
     );
 }
+

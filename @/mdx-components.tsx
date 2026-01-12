@@ -1,4 +1,6 @@
+import { Mermaid } from '@/components/mdx/mermaid';
 import { CodeBlock, Pre } from 'fumadocs-ui/components/codeblock';
+import { GithubInfo } from 'fumadocs-ui/components/github-info';
 import defaultMdxComponents from 'fumadocs-ui/mdx';
 import type { MDXComponents } from 'mdx/types';
 
@@ -10,6 +12,8 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
         <Pre>{props.children}</Pre>
       </CodeBlock>
     ),
+    Mermaid,
+    GithubInfo,
     ...components,
   };
 }

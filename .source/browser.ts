@@ -17,6 +17,6 @@ const create = browser<typeof Config, import("fumadocs-mdx/runtime/types").Inter
   }
 }>();
 const browserCollections = {
-  docs: create.doc("docs", {"mail-system.mdx": () => import("../content/mail-system.mdx?collection=docs"), "engineering/mail-system.mdx": () => import("../content/engineering/mail-system.mdx?collection=docs"), }),
+  docs: create.doc("docs", {"engineering/workflow-for-vercel.mdx": () => import("../content/engineering/workflow-for-vercel.mdx?collection=docs"), }),
 };
 export default browserCollections;

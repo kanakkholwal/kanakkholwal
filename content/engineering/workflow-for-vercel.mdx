@@ -1,0 +1,162 @@
+---
+title: "Shipping to Vercel Without Paying the Build Tax"
+description: "Decoupling build and deploy to eliminate unnecessary Vercel compute usage in monorepos."
+category: systems
+tags:
+  - ci-cd
+  - cost-optimization
+  - vercel
+  - github-actions
+  - nextjs
+  - monorepo
+  
+author: 'Kanak Kholwal'
+---
+
+import { Mermaid } from '@/components/mdx/mermaid';
+import { GithubInfo } from 'fumadocs-ui/components/github-info';
+
+# Shipping to Vercel Without Paying the Build Tax
+
+## Context
+
+Vercel’s default deployment model couples source control events directly to remote builds.  
+Every qualifying change in a repository triggers a build on Vercel infrastructure.
+
+This model optimizes for immediacy, not efficiency.  
+In monorepos and free tier environments, that distinction becomes expensive.
+
+---
+
+## Problem Statement
+
+In the default configuration:
+
+- Every push triggers a build
+- Every build consumes Vercel compute minutes
+- Builds are serialized on the free tier
+- Unrelated changes still incur cost
+
+This results in delayed deployments, blocked previews, and rapid exhaustion of free tier limits.  
+On paid tiers, the same behavior quietly inflates monthly usage.
+
+---
+
+## Constraints
+
+- Monorepo with multiple applications
+- Only `apps/platform` should trigger deployments
+- Preview deployments must remain functional
+- Production deployments must be deterministic
+- Free tier usage must remain viable
+
+---
+
+## Rejected Approach
+
+### Vercel Automatic Builds
+
+Allowing Vercel to build on every push was rejected for the following reasons:
+
+- No path level filtering
+- No build reuse across deployments
+- No control over when compute is consumed
+- Cost is incurred at build time, not at deploy time
+
+This approach optimizes for convenience, not system efficiency.
+
+---
+
+## Correct Mental Model
+
+Vercel charges for build compute, not for serving prebuilt artifacts.
+
+Once build and deploy are separated, Vercel becomes a hosting layer rather than a CI system.  
+This separation is the primary leverage point for cost control.
+
+---
+
+## Architecture Overview
+
+<Mermaid chart={`
+flowchart TD
+    A[GitHub Push or Pull Request] --> B[GitHub Actions Runner]
+    B --> C[Application Build]
+    C --> D[Prebuilt Output]
+    D --> E[Vercel Deployment]
+`} />
+
+The build executes in GitHub Actions.  
+Vercel receives only compiled output.
+
+---
+
+## Workflow Implementation
+
+<GithubInfo owner="kanakkholwal" repo="github-workflows" className="lg:-mx-2" />
+
+```yaml title="nextjs-to-vercel.yml"
+name: Deploy to Vercel - Platform
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'apps/platform/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'apps/platform/**'
+  workflow_dispatch:
+
+env:
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: apps/platform
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Run linter
+        run: bun run lint
+        continue-on-error: true
+
+      - name: Run tests
+        run: bun test
+        continue-on-error: true
+
+      - name: Install Vercel CLI
+        run: bun install --global vercel@latest
+        working-directory: .
+
+      - name: Deploy to Vercel Production
+        if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+        run: |
+          vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+          vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+          vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Deploy to Vercel Preview
+        if: github.event_name == 'pull_request' && github.ref == 'refs/heads/main'
+        run: |
+          vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
+          vercel build --token=${{ secrets.VERCEL_TOKEN }}
+          vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
