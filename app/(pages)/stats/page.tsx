@@ -3,15 +3,15 @@ import { SearchParams } from "nuqs/server";
 import { Suspense } from "react";
 import { generateMetadata } from "~/utils/seo";
 import {
-    NPMDownloads,
-    NPMDownloadsSkeleton,
-    NPMStats,
-    NPMStatsSkeleton,
+  NPMDownloads,
+  NPMDownloadsSkeleton,
+  NPMStats,
+  NPMStatsSkeleton,
 } from "./_components/downloads";
 import { InsightStats } from "./_components/insight";
 import {
-    StarHistoryGraph,
-    StarHistoryGraphSkeleton,
+  StarHistoryGraph,
+  StarHistoryGraphSkeleton,
 } from "./_components/stars";
 import { RepoBeatsActivityGraph } from "./_components/stars.client";
 import { Versions } from "./_components/versions";
@@ -69,7 +69,7 @@ export default async function StatsPage(props: StatsPageProps) {
           </div>
         </Widget>
       </section>
-        <section className="my-4 grid grid-cols-1 gap-4 lg:grid-cols-2 max-w-(--max-app-width) mt-10">
+      <section className="my-4 grid grid-cols-1 gap-4 lg:grid-cols-2 max-w-(--max-app-width) mt-10">
         <h3 className="grid-cols-1 text-left lg:col-span-2 font-instrument-serif text-lg lg:text-3xl border-l-4 ps-4 border-colorful/30">
           <span className="text-colorful animate-gradient-x font-instrument-serif">Packages</span>{"'s "}
           <span className="pe-2 tracking-tight italic">
@@ -81,7 +81,7 @@ export default async function StatsPage(props: StatsPageProps) {
         </Suspense>
         {statsConfig.flags.versionAdoptionGraph && (
           <Suspense fallback={<WidgetSkeleton />}>
-            <VersionsLoader searchParams={searchParams} />
+            <VersionsLoader searchParams={props.searchParams} />
           </Suspense>
         )}
 
