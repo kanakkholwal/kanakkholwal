@@ -8,7 +8,8 @@
 .open-next
 # testing
 /coverage
-
+# generated content
+.source
 # next.js
 /.next/
 /out/
