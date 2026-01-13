@@ -25,8 +25,8 @@ function DocsSearchDialog(props: SharedProps) {
 
     return (
         <SearchDialog search={search} onSearchChange={setSearch} isLoading={query.isLoading} {...props}>
-            <SearchDialogOverlay />
-            <SearchDialogContent>
+            <SearchDialogOverlay className="z-100" />
+            <SearchDialogContent className="z-100 mt-20">
                 <SearchDialogHeader>
                     <SearchDialogIcon />
                     <SearchDialogInput />

@@ -4,6 +4,7 @@ import {
   FaFirefoxBrowser,
   FaSafari,
 } from "react-icons/fa";
+import { FcGoogle } from "react-icons/fc";
 
 import {
   PiArrowClockwiseDuotone,
@@ -34,6 +35,7 @@ import {
   PiDotsThreeVerticalDuotone,
   PiEyeDuotone,
   PiFacebookLogoDuotone,
+  PiFileDocDuotone,
   PiFolderOpenDuotone,
   PiGameControllerDuotone,
   PiGithubLogoDuotone,
@@ -41,6 +43,7 @@ import {
   PiGoogleChromeLogoDuotone,
   PiGoogleLogoDuotone,
   PiHeartDuotone,
+  PiInfinityDuotone,
   PiInstagramLogoDuotone,
   PiLayoutDuotone,
   PiLightningDuotone,
@@ -49,9 +52,11 @@ import {
   PiLockKeyDuotone,
   PiMagnifyingGlassDuotone,
   PiMailboxDuotone,
+  PiMediumLogoDuotone,
   PiMicrophoneStageDuotone, // For Podcast
   PiMonitorDuotone,
   PiMoonDuotone,
+  PiPackageDuotone,
   PiPaletteDuotone,
   PiPaperPlaneRightDuotone, // For Send/Share
   PiPencilSimpleDuotone,
@@ -126,7 +131,7 @@ export const IconComponent = {
   "rotate-cw": PiArrowClockwiseDuotone,
   "check:bold": PiCheckBold,
   "person-speaking": PiUserSoundDuotone,
-
+  "infinity": PiInfinityDuotone,
 
   // --- Content & Media ---
   articles: PiArticleDuotone,
@@ -168,10 +173,13 @@ export const IconComponent = {
   shield: PiShieldCheckDuotone,
   terminal: PiTerminalWindowDuotone,
   twitter: PiXLogoDuotone,
+  medium: PiMediumLogoDuotone,
   "twitter-bird": PiTwitterLogoDuotone,
-  "google-fc": PiGoogleLogoDuotone,
+  "google": PiGoogleLogoDuotone,
+  "google:colored": FcGoogle,
+  package: PiPackageDuotone,
   users: PiUsersDuotone,
-
+  docs: PiFileDocDuotone,
   // --- Navigation & Status ---
   "arrow-up-right": PiArrowUpRightDuotone,
   "arrow-right": PiArrowRightDuotone,

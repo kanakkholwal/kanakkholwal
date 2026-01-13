@@ -51,11 +51,10 @@ export default async function ArticlePage(props: { slug: string[] }) {
                         {page.data.title}
                     </h1>
 
-                    {/* Tags / Category (Optional) */}
-                    {page.data.tags && (
-                        <div className="flex gap-2 mb-4">
+                    {page.data?.tags && (
+                        <div className="flex flex-wrap items-center gap-2 mb-4">
                             {page.data.tags.map((tag: string) => (
-                                <Badge key={tag}>
+                                <Badge key={tag} className="whitespace-nowrap">
                                     #{tag}
                                 </Badge>
                             ))}

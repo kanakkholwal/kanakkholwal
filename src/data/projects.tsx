@@ -1,4 +1,4 @@
-import { Icons } from "@/components/icons/icons";
+import { Icon } from "@/components/icons";
 
 export type ProjectType = {
   id: string;
@@ -18,7 +18,7 @@ export type ProjectType = {
   image: string;
   video: string;
   tags?: string[];
-  metrics?: { label: string; value: number}[];
+  metrics?: { label: string; value: number }[];
 }
 
 export const projectsList: ProjectType[] = [
@@ -65,21 +65,17 @@ The **College Ecosystem** is engineered as a scalable **Monorepo** using **Turbo
         label: "Active Users",
         value: 740
       },
-       {
-        label: "Uptime",
-        value: 99.9
-      },
     ],
     links: [
       {
         type: "Website",
         href: "https://nith.eu.org",
-        icon: <Icons.globe className="size-3" />,
+        icon: <Icon name="globe" className="size-3" />,
       },
       {
         type: "Source",
         href: "https://github.com/kanakkholwal/college-ecosystem",
-        icon: <Icons.github className="size-3" />,
+        icon: <Icon name="github" className="size-3" />,
       },
     ],
     image:
@@ -128,28 +124,27 @@ export function Editor() {
       "TailwindCSS",
       "Shadcn UI",
       "NPM Package",
-      "a11y"
     ],
     links: [
       {
         type: "Docs",
         href: "https://docs.nexonauts.com/packages/nexo-mdx",
-        icon: <Icons.package className="size-3" />,
+        icon: <Icon name="docs" className="size-3" />,
       },
       {
         type: "NPM",
         href: "https://www.npmjs.com/package/nexo-mdx",
-        icon: <Icons.npm className="size-3" />,
+        icon: <Icon name="package" className="size-3" />,
       },
       {
         type: "Source",
         href: "https://github.com/kanakkholwal/nexo-mdx",
-        icon: <Icons.github className="size-3" />,
+        icon: <Icon name="github" className="size-3" />,
       },
       {
         type: "Demo",
         href: "https://nexo-editor.netlify.app",
-        icon: <Icons.globe className="size-3" />,
+        icon: <Icon name="globe" className="size-3" />,
       },
     ],
     image:
@@ -186,12 +181,12 @@ Nexonauts is a **dual-sided marketplace** designed to streamline the "concept-to
       {
         type: "Website",
         href: "https://nexonauts.com",
-        icon: <Icons.globe className="size-3" />,
+        icon: <Icon name="globe" className="size-3" />,
       },
       {
         type: "Source",
         href: "https://github.com/kanakkholwal/nexonauts",
-        icon: <Icons.github className="size-3" />,
+        icon: <Icon name="github" className="size-3" />,
       },
     ],
     image:
@@ -227,7 +222,7 @@ This tool addresses the data bottleneck in **Retrieval-Augmented Generation (RAG
       {
         type: "Source",
         href: "https://github.com/kanakkholwal/crawler-for-llms",
-        icon: <Icons.github className="size-3" />,
+        icon: <Icon name="github" className="size-3" />,
       },
     ],
     image: "",
@@ -262,7 +257,7 @@ Built to replace expensive marketing email tools, this system leverages **Server
       {
         type: "Source",
         href: "https://github.com/kanakkholwal/mail-system",
-        icon: <Icons.github className="size-3" />,
+        icon: <Icon name="github" className="size-3" />,
       },
     ],
     image: "",

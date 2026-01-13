@@ -196,8 +196,8 @@ export const appConfig = {
     linkedin: "https://www.linkedin.com/in/kanak-kholwal",
     twitter: "https://twitter.com/kanakkholwal",
     medium: "https://medium.com/@kanakkholwal",
-    instagram: "https://www.instagram.com/kanakkholwal",
-    youtube: "https://www.youtube.com/@kanakkholwal",
+    // instagram: "https://www.instagram.com/kanakkholwal",
+    // youtube: "https://www.youtube.com/@kanakkholwal",
   },
   usernames: {
     github: "kanakkholwal",

@@ -5,7 +5,6 @@ import { ModeToggle } from "@/components/mode-toggle";
 import { TransitionLink } from "@/components/utils/link"; // Assuming you have this
 import { useIsMobile } from "@/hooks/use-mobile";
 import { AnimatePresence, motion } from "framer-motion";
-import { Github, Linkedin, Twitter } from "lucide-react";
 import { Socials } from "./socials";
 
 const NAV_ITEMS = [
@@ -89,14 +88,3 @@ export const Header = ({ transition }: { transition: boolean }) => {
     </motion.header>
   );
 };
-
-// Helper to render icons based on text label if needed, 
-// though passing the Icon component in config is better.
-const ArrowUpRightIcon = ({ label }: { label: string }) => {
-  // Mapping logic or just return a generic link icon for cleanliness
-  // Realistically, you should import Github/Linkedin icons
-  if (label.toLowerCase().includes('github')) return <Github className="size-4" />;
-  if (label.toLowerCase().includes('linkedin')) return <Linkedin className="size-4" />;
-  if (label.toLowerCase().includes('twitter') || label.toLowerCase().includes('x')) return <Twitter className="size-4" />;
-  return <div className="size-2 rounded-full bg-foreground" />;
-}

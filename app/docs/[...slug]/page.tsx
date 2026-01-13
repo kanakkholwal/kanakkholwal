@@ -2,6 +2,8 @@ import { source } from "@/lib/source";
 import { notFound } from "next/navigation";
 
 // --- COMPONENTS ---
+import { Metadata } from "next";
+import { appConfig } from "root/project.config";
 import ArticlePage from "./handler.article";
 import CategoryPage from "./handler.category";
 
@@ -24,12 +26,22 @@ export async function generateStaticParams() {
   return source.generateParams()
 }
 
-export async function generateMetadata(props: { params: Promise<{ slug?: string[] }> }) {
+export async function generateMetadata(props: { params: Promise<{ slug?: string[] }> }): Promise<Metadata | null> {
   const params = await props.params;
   const page = source.getPage(params.slug);
-  if (!page) return;
+  if (!page) return null;
   return {
     title: `${page.data.title} | Engineering Blog`,
     description: page.data.description,
+    openGraph: {
+      title: `${page.data.title} | Engineering Blog`,
+      description: page.data.description,
+      images: [{
+        url: appConfig.url + `/api/og/docs/${params.slug?.join("/")}`,
+        width: 800,
+        height: 600,
+        alt: page.data.title
+      }]
+    }
   };
 }
