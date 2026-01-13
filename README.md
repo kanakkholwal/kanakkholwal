@@ -106,9 +106,9 @@
 
 
 <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/kanakkholwal/kanakkholwal/main/public/pacman-contribution-graph-dark.svg">
-    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/kanakkholwal/kanakkholwal/main/public/pacman-contribution-graph.svg">
-    <img alt="pacman contribution graph" src="https://raw.githubusercontent.com/kanakkholwal/kanakkholwal/main/public/pacman-contribution-graph.svg">
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/kanakkholwal/kanakkholwal/pacmangraph/pacman-contribution-graph-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/kanakkholwal/kanakkholwal/pacmangraph/pacman-contribution-graph.svg">
+    <img alt="pacman contribution graph" src="https://raw.githubusercontent.com/kanakkholwal/kanakkholwal/pacmangraph/pacman-contribution-graph.svg">
 </picture>
 
 ### 📔 Latest Blog posts
