@@ -11,7 +11,11 @@
 **LeetCode:** [leetcode.com/u/kanakkholwal](https://leetcode.com/u/kanakkholwal)    
 **Portfolio:** [kanakkholwal.eu.org](https://kanakkholwal.eu.org)
 
----
+<picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/kanakkholwal/kanakkholwal/pacmangraph/pacman-contribution-graph-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/kanakkholwal/kanakkholwal/pacmangraph/pacman-contribution-graph.svg">
+    <img alt="pacman contribution graph" src="https://raw.githubusercontent.com/kanakkholwal/kanakkholwal/pacmangraph/pacman-contribution-graph.svg">
+</picture>
 
 ## Summary
 
@@ -21,9 +25,6 @@
 - Achieved +220% engagement, +150% SEO traffic, 60% faster builds.
 - Active in algorithms & data structures.
 - Actively learning **System Design, Devops**
-
----
-
 
 ## Experience
 
@@ -48,7 +49,7 @@
 - [**Rich Text Editor**](https://github.com/kanakkholwal/nexo-editor) - A lightweight, customizable React Rich Text Editor built on TipTap
 - [**Remark Plugins**](https://github.com/kanakkholwal/remark-plugins) - A collection of remark plugins for markdown processing.
 - [**Bruno**](https://github.com/usebruno/bruno/issues?q=sort%3Aupdated-desc%20is%3Apr%20author%3Akanakkholwal%20-state%3Aclosed) - Opensource IDE For Exploring and Testing API's (lightweight alternative to Postman/Insomnia)
----
+
 
 ## Projects
 
@@ -81,7 +82,6 @@
 - Handled **Application Load balancer** to handle point custom domains to Google Cloud Run Instances which doesn't support Domain mapping yet.
 
 
----
 
 ## Skills
 
@@ -105,11 +105,8 @@
 [![My Skills](https://skillicons.dev/icons?i=js,ts,go,python,docker,postgres,mongodb,redis,firebase,npm,pnpm,git,github,gcp,svg,vercel,nextjs,vite,tailwind,notion,react,express,nodejs,postman,figma,bootstrap,html,css,sass)](https://kanakkholwal.eu.org)
 
 
-<picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/kanakkholwal/kanakkholwal/pacmangraph/pacman-contribution-graph-dark.svg">
-    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/kanakkholwal/kanakkholwal/pacmangraph/pacman-contribution-graph.svg">
-    <img alt="pacman contribution graph" src="https://raw.githubusercontent.com/kanakkholwal/kanakkholwal/pacmangraph/pacman-contribution-graph.svg">
-</picture>
+--- 
+
 
 ### 📔 Latest Blog posts
 
