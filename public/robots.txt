@@ -1,1 +1,11 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://kanakkholwal.eu.org
+
+# Sitemaps
+Sitemap: https://kanakkholwal.eu.org/sitemap.xml
+
 Allow: /api/og/*
