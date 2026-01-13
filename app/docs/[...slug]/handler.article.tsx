@@ -34,7 +34,6 @@ export default async function ArticlePage(props: { slug: string[] }) {
 
             <div className="relative z-10 w-full max-w-7xl mx-auto px-4 md:px-8 py-12 md:py-20">
 
-                {/* 2. Navigation & Breadcrumbs */}
                 <div className="mb-8 md:mb-12">
                     <Link
                         href="/docs"
@@ -123,14 +122,13 @@ export default async function ArticlePage(props: { slug: string[] }) {
                         </div>
                     </article>
 
-                    {/* Right: Sticky Sidebar (Desktop TOC) */}
+                    {/* Desktop TOC */}
                     <aside className="hidden lg:block relative">
                         <div className="sticky top-24 space-y-8">
                             <div className="space-y-4">
                                 <h3 className="text-xs font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2">
                                     On This Page
                                 </h3>
-                                {/* We reuse InlineTOC but style it as a sidebar list */}
                                 <div className="text-sm">
                                     <InlineTOC items={page.data.toc} />
                                 </div>
@@ -140,7 +138,7 @@ export default async function ArticlePage(props: { slug: string[] }) {
                             <div className="p-4 rounded-xl bg-primary/5 border border-primary/10">
                                 <p className="text-xs font-medium text-muted-foreground mb-2">Like this engineering deep dive?</p>
                                 <Link href="/contact" className="text-xs font-bold text-primary hover:underline">
-                                    I'm open for contracts →
+                                    I'm open for opportunities →
                                 </Link>
                             </div>
                         </div>

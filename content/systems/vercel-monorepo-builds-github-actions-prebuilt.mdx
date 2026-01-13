@@ -1,5 +1,5 @@
 ---
-title: "Shipping to Vercel Without Paying the Build Tax"
+title: "Decoupling Builds from Vercel Saved My Free Tier"
 description: "Decoupling build and deploy to eliminate unnecessary Vercel compute usage in monorepos."
 category: systems
 tags:
@@ -15,20 +15,16 @@ author: 'Kanak Kholwal'
 
 import { Mermaid } from '@/components/mdx/mermaid';
 import { GithubInfo } from 'fumadocs-ui/components/github-info';
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 
-# Shipping to Vercel Without Paying the Build Tax
+## What's the problem?
 
-## Context
+In a monorepo, Vercel runs a build on every push. It doesn’t care what changed.
 
-Vercel’s default deployment model couples source control events directly to remote builds.  
-Every qualifying change in a repository triggers a build on Vercel infrastructure.
+If you update a backend service or touch something unrelated, the frontend still gets rebuilt. That’s fine in small repos. Once the repo grows, it becomes wasteful. Builds pile up, previews get blocked, and free tier limits disappear fast.
 
-This model optimizes for immediacy, not efficiency.  
-In monorepos and free tier environments, that distinction becomes expensive.
+I hit this while deploying a Next.js app from a monorepo that also contains a few microservices running on Google Cloud Run.
 
----
-
-## Problem Statement
 
 In the default configuration:
 
@@ -40,21 +36,7 @@ In the default configuration:
 This results in delayed deployments, blocked previews, and rapid exhaustion of free tier limits.  
 On paid tiers, the same behavior quietly inflates monthly usage.
 
----
-
-## Constraints
-
-- Monorepo with multiple applications
-- Only `apps/platform` should trigger deployments
-- Preview deployments must remain functional
-- Production deployments must be deterministic
-- Free tier usage must remain viable
-
----
-
-## Rejected Approach
-
-### Vercel Automatic Builds
+## Why not use Vercel's automatic builds?
 
 Allowing Vercel to build on every push was rejected for the following reasons:
 
@@ -65,36 +47,56 @@ Allowing Vercel to build on every push was rejected for the following reasons:
 
 This approach optimizes for convenience, not system efficiency.
 
----
+## Why not use Ignore Build step?
 
-## Correct Mental Model
+We can use the ignore build step to prevent Vercel from building the project on every push, but it still have some drawbacks, especially for someone who is low on budget,
+and want to keep thier application portable to any platform, instead of using bunch of script with Vercel's environment variables and tracking. 
 
-Vercel charges for build compute, not for serving prebuilt artifacts.
+Also, it does clone the repository once and evently <code>cancelling</code> the build process, adding up to the limited compute for the tier.
+
+
+## What constraints I had?
+
+- Monorepo with multiple applications
+- Only `apps/platform` should trigger deployments
+- Can also have preview deployments
+- Production deployments must be deterministic
+- Free tier usage must remain viable
+
+
+
+## What's the solution then?
+
+**Vercel charges for build compute, not for serving prebuilt artifacts.**
 
 Once build and deploy are separated, Vercel becomes a hosting layer rather than a CI system.  
 This separation is the primary leverage point for cost control.
 
----
-
-## Architecture Overview
+### Architecture Overview
 
 <Mermaid chart={`
-flowchart TD
+flowchart
     A[GitHub Push or Pull Request] --> B[GitHub Actions Runner]
     B --> C[Application Build]
     C --> D[Prebuilt Output]
-    D --> E[Vercel Deployment]
 `} />
 
-The build executes in GitHub Actions.  
-Vercel receives only compiled output.
+#### Actual process
 
----
+```mermaid
+flowchart
+    A[The build executes in GitHub Actions] --> B[Vercel receives only compiled output]
+```
 
-## Workflow Implementation
+### Workflow Implementation
 
-<GithubInfo owner="kanakkholwal" repo="github-workflows" className="lg:-mx-2" />
+<Tabs items={['Github', 'Code']}>
+  <Tab value="github">
+  <GithubInfo owner="kanakkholwal" repo="github-workflows" className="lg:-mx-2 flex-row" />
 
+  </Tab>
+  <Tab value="code">
+    
 ```yaml title="nextjs-to-vercel.yml"
 name: Deploy to Vercel - Platform
 
@@ -160,3 +162,15 @@ jobs:
           vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
           vercel build --token=${{ secrets.VERCEL_TOKEN }}
           vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
+
+```
+  </Tab>
+</Tabs>
+
+## Conclusion
+
+Vercel’s defaults are convenient, but they assume every commit deserves a build. In a monorepo, that’s rarely true.
+
+Moving the build step into GitHub Actions lets you decide when a build should happen. Vercel only receives the output and deploys it. That alone cuts down wasted compute and avoids blocked deployments.
+
+But if you’re running a monorepo and trying to keep build usage under control, separating build and deploy is hard to avoid.
