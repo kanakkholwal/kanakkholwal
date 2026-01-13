@@ -104,6 +104,13 @@
 
 [![My Skills](https://skillicons.dev/icons?i=js,ts,go,python,docker,postgres,mongodb,redis,firebase,npm,pnpm,git,github,gcp,svg,vercel,nextjs,vite,tailwind,notion,react,express,nodejs,postman,figma,bootstrap,html,css,sass)](https://kanakkholwal.eu.org)
 
+
+<picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/kanakkholwal/kanakkholwal/main/public/pacman-contribution-graph-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/kanakkholwal/kanakkholwal/main/public/pacman-contribution-graph.svg">
+    <img alt="pacman contribution graph" src="https://raw.githubusercontent.com/kanakkholwal/kanakkholwal/main/public/pacman-contribution-graph.svg">
+</picture>
+
 ### 📔 Latest Blog posts
 
 <!-- BLOG-POST-LIST:START -->
