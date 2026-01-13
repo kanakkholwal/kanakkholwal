@@ -13,6 +13,10 @@ on:
 env:
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
   VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+  # application secrets
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  PROJECTS_CE_TOKEN: ${{ secrets.PROJECTS_CE_TOKEN }}
+
 
 jobs:
   deploy:

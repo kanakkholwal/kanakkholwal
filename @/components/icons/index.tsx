@@ -132,6 +132,7 @@ export const IconComponent = {
   "check:bold": PiCheckBold,
   "person-speaking": PiUserSoundDuotone,
   "infinity": PiInfinityDuotone,
+  "list": PiListDuotone,
 
   // --- Content & Media ---
   articles: PiArticleDuotone,
