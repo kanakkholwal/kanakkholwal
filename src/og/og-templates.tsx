@@ -9,8 +9,8 @@ interface BaseTemplateProps {
   siteName?: string;
   authorName?: string;
   authorImage?: string;
+  isDark?: boolean;
 }
-
 interface PortfolioTemplateProps extends BaseTemplateProps {
   title?: string;
   role?: string;
@@ -25,34 +25,140 @@ interface ArticleTemplateProps extends BaseTemplateProps {
   tags?: string[];
 }
 
-// --- SHARED LAYOUT (Light Mode Architecture) ---
-const SharedLayout = ({ children }: { children: React.ReactNode }) => (
+
+
+
+const SharedLayout = ({ children, isDark = false }: { children: React.ReactNode; isDark?: boolean }) => (
   <div
-    tw="flex flex-col w-full h-full bg-white relative overflow-hidden"
-  // style={{ fontFamily: 'Inter' }}
+    tw={`flex flex-col w-full h-full relative overflow-hidden ${isDark ? 'bg-[#09090b]' : 'bg-white'}`}
   >
-    {/* Abstract Architectural Grid */}
     <div
       tw="absolute inset-0 bg-transparent"
       style={{
-        backgroundImage: 'linear-gradient(#e5e7eb 1px, transparent 1px), linear-gradient(90deg, #e5e7eb 1px, transparent 1px)',
+        // Uses a crisp white alpha for dark mode (tech/blueprint look) instead of muddy grey
+        backgroundImage: `linear-gradient(${isDark ? 'rgba(255, 255, 255, 0.08)' : '#e5e7eb'} 1px, transparent 1px), linear-gradient(90deg, ${isDark ? 'rgba(255, 255, 255, 0.08)' : '#e5e7eb'} 1px, transparent 1px)`,
         backgroundSize: '80px 80px',
-        opacity: 0.6,
+        opacity: isDark ? 1 : 0.6, // Full opacity in dark mode for crisp lines, lower in light mode
       }}
     />
 
-    {/* Main Content Container with Padding */}
     <div tw="flex flex-col w-full h-full p-16 relative z-10 justify-between">
       {children}
     </div>
 
-    {/* Decorative corner accent */}
-    <div tw="absolute top-0 right-0 w-40 h-40 bg-zinc-100 rounded-bl-full opacity-50" />
+    <div tw={`absolute top-0 right-0 w-40 h-40 rounded-bl-full opacity-50 ${isDark ? 'bg-zinc-900' : 'bg-zinc-100'}`} />
   </div>
 );
 
-// --- TEMPLATE 1: PORTFOLIO IDENTITY ---
-// Usage: Home page, About page
+export const ArticleOgTemplate = ({
+  siteName = appConfig.url.replace("https://", ""),
+  title,
+  date,
+  meta,
+  tags = [],
+  authorName = appConfig.name,
+  authorImage = appConfig.logo,
+  isDark = false,
+}: ArticleTemplateProps) => (
+  <SharedLayout isDark={isDark}>
+
+    <div tw={`flex items-center justify-between w-full border-b pb-6 ${isDark ? 'border-zinc-800' : 'border-zinc-100'}`}>
+      <div tw="flex items-center">
+        <div tw={`w-2 h-2 rounded-full mr-3 ${isDark ? 'bg-white' : 'bg-black'}`} />
+        <span
+          tw={`text-sm font-bold uppercase tracking-[0.2em] ${isDark ? 'text-zinc-100' : 'text-zinc-900'}`}
+          style={{ fontFamily: 'JetBrains Mono' }}
+        >
+          {siteName}
+        </span>
+      </div>
+
+      <div tw={`flex items-center text-sm font-mono ${isDark ? 'text-zinc-500' : 'text-zinc-400'}`}>
+        {date && <span tw="mr-4">{date}</span>}
+        {meta && (
+          <div tw="flex items-center">
+            <span tw={`mr-4 ${isDark ? 'text-zinc-700' : 'text-zinc-300'}`}>/</span>
+            <span>{meta}</span>
+          </div>
+        )}
+      </div>
+    </div>
+
+    <div tw="flex flex-col justify-center flex-grow py-8 relative">
+
+      <div
+        tw={`absolute top-0 -left-4 text-9xl font-black -z-10 ${isDark ? 'text-zinc-900' : 'text-zinc-50'}`}
+        style={{ fontFamily: 'Inter' }}
+      >
+        01
+      </div>
+
+      <h1 tw={`text-7xl font-bold leading-[1.1] tracking-tight m-0 line-clamp-3 ${isDark ? 'text-white' : 'text-zinc-900'}`}>
+        {title}
+      </h1>
+
+      {tags.length > 0 && (
+        <div tw="flex flex-wrap mt-8">
+          {tags.slice(0, 3).map((tag) => (
+            <span
+              key={tag}
+              tw={`px-3 py-1 mr-2 border rounded-md text-sm font-medium ${isDark
+                ? 'bg-zinc-900 border-zinc-800 text-zinc-400'
+                : 'bg-zinc-50 border-zinc-100 text-zinc-500'
+                }`}
+              style={{ fontFamily: 'Instrument Serif', fontStyle: 'italic' }}
+            >
+              #{tag}
+            </span>
+          ))}
+        </div>
+      )}
+    </div>
+
+    <div tw="flex items-end justify-between w-full">
+
+      <div tw="flex flex-col">
+        <span tw={`text-xs font-mono uppercase tracking-widest mb-1 ${isDark ? 'text-zinc-600' : 'text-zinc-300'}`}>
+          Read the full article at
+        </span>
+        <span tw={`text-sm font-medium ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>
+          {appConfig.url}/docs/...
+        </span>
+      </div>
+
+      <div tw={`flex items-center pl-6 py-2 pr-2 border rounded-full shadow-sm ${isDark
+        ? 'bg-zinc-900 border-zinc-800'
+        : 'bg-white border-zinc-100'
+        }`}>
+
+        <div tw="flex flex-col items-end justify-center mr-3">
+          <span tw={`text-xs font-bold uppercase tracking-wide ${isDark ? 'text-zinc-100' : 'text-zinc-900'}`}>
+            {authorName}
+          </span>
+          <span
+            tw={`text-[10px] uppercase tracking-widest ${isDark ? 'text-zinc-500' : 'text-zinc-400'}`}
+            style={{ fontFamily: 'JetBrains Mono' }}
+          >
+            Author
+          </span>
+        </div>
+
+        {authorImage && (
+          <img
+            src={authorImage}
+            width="42"
+            height="42"
+            tw={`rounded-full border ${isDark ? 'bg-zinc-800 border-zinc-800' : 'bg-zinc-100 border-zinc-100'}`}
+            alt={authorName}
+          />
+        )}
+      </div>
+
+    </div>
+  </SharedLayout>
+);
+
+
 export const PortfolioOgTemplate = ({
   siteName = appConfig.url.replace("https://", ""),
   title = appConfig.name,
@@ -107,91 +213,9 @@ export const PortfolioOgTemplate = ({
   </SharedLayout>
 );
 
-// --- TEMPLATE 2: CONTENT & ARTICLES ---
-// Usage: Blog posts, Project details
-export const ArticleOgTemplate = ({
-  siteName = appConfig.url.replace("https://", ""),
-  title,
-  date,
-  meta,
-  tags = [],
-  authorName = appConfig.name,
-  authorImage = appConfig.logo,
-}: ArticleTemplateProps) => (
-  <SharedLayout>
-    {/* Top: Navigation/Breadcrumb look */}
-    <div tw="flex items-center gap-3 text-zinc-400 text-xl font-mono">
-      <span tw="text-zinc-800 font-semibold">{siteName}</span>
-      <span>/</span>
-      <span>blog</span>
-      <span>/</span>
-      <span>{new Date().getFullYear()}</span>
-    </div>
-
-    {/* Middle: Content Card */}
-    <div tw="flex flex-col justify-center flex-grow py-10">
-      {/* Date & Meta Pill */}
-      <div tw="flex gap-4 mb-6">
-        {(date || meta) && (
-          <div tw="px-3 py-1 bg-zinc-100 rounded-md text-zinc-500 font-medium text-lg">
-            {date} {meta && `• ${meta}`}
-          </div>
-        )}
-      </div>
-
-      <h1 tw="text-7xl font-bold text-black m-0 leading-[1.1] tracking-tight line-clamp-2">
-        {title}
-      </h1>
-
-      {/* Tags Row */}
-      {tags.length > 0 && (
-        <div tw="flex flex-wrap gap-3 mt-8">
-          {tags.map((tag) => (
-            <span
-              key={tag}
-              tw="text-2xl text-zinc-400 italic"
-              style={{ fontFamily: 'Instrument Serif' }}
-            >
-              #{tag}
-            </span>
-          ))}
-        </div>
-      )}
-    </div>
-
-    {/* Bottom: Author Signature */}
-    <div tw="flex items-center justify-between border-t border-zinc-100 pt-6">
-      <div tw="flex items-center gap-4">
-        {/* We use a standard img tag for Satori */}
-        {authorImage && (
-          <img
-            src={authorImage}
-            width="48"
-            height="48"
-            tw="rounded-full bg-zinc-100"
-            alt={authorName}
-          />
-        )}
-        <div tw="flex flex-col">
-          <span tw="text-lg font-bold text-zinc-900">{authorName}</span>
-          <span tw="text-sm text-zinc-500 uppercase tracking-wider">Author</span>
-        </div>
-      </div>
-
-      {/* Visual flourish */}
-      <div tw="flex gap-1">
-        <div tw="w-2 h-2 rounded-full bg-zinc-200" />
-        <div tw="w-2 h-2 rounded-full bg-zinc-300" />
-        <div tw="w-2 h-2 rounded-full bg-zinc-900" />
-      </div>
-    </div>
-  </SharedLayout>
-);
-// ... existing imports
-
 // --- NEW TYPES ---
-interface ProjectTemplateProps extends BaseTemplateProps, 
-Pick<ProjectType, 'description' | 'dates' | 'status' | 'metrics'> {
+interface ProjectTemplateProps extends BaseTemplateProps,
+  Pick<ProjectType, 'description' | 'dates' | 'status' | 'metrics'> {
   title: string;
   year?: string;
 }
@@ -213,48 +237,48 @@ export const PortfolioProfileTemplate = ({
   <SharedLayout>
 
 
-   <div tw="flex flex-row w-full h-full items-center justify-between">
-        
+    <div tw="flex flex-row w-full h-full items-center justify-between">
+
       {/* LEFT COL: Image Area 
          FIX: Added 'flex' and 'shrink-0' explicit styling.
          Reduced width slightly to 380px to ensure fit.
       */}
       <div tw="flex relative w-[380px] h-[380px] shrink-0 mr-12">
-        
+
         {/* Decorative Corners (Absolute) */}
         <div tw="absolute -top-4 -left-4 w-8 h-8 border-t-4 border-l-4 border-zinc-400" />
         <div tw="absolute -bottom-4 -right-4 w-8 h-8 border-b-4 border-r-4 border-zinc-400" />
-        
+
         {/* Image Container */}
         <div tw="flex w-full h-full border-4 border-black bg-zinc-200 relative overflow-hidden">
-            {authorImage ? (
-                <img 
-                  src={authorImage} 
-                  width="512"
-                  height="512"
-                  tw="w-full h-full object-cover" 
-                  alt="Profile" 
-                />
-            ) : (
-                <div tw="flex items-center justify-center w-full h-full text-zinc-400 font-bold text-xl uppercase tracking-widest font-mono">
-                    NO_DATA
-                </div>
-            )}
-            
-            {/* Scan Line Overlay */}
-            <div tw="absolute inset-0 bg-black opacity-10" />
-            <div 
-                tw="absolute top-[80%] left-0 right-0 h-1 bg-emerald-500 opacity-60" 
+          {authorImage ? (
+            <img
+              src={authorImage}
+              width="512"
+              height="512"
+              tw="w-full h-full object-cover"
+              alt="Profile"
             />
+          ) : (
+            <div tw="flex items-center justify-center w-full h-full text-zinc-400 font-bold text-xl uppercase tracking-widest font-mono">
+              NO_DATA
+            </div>
+          )}
+
+          {/* Scan Line Overlay */}
+          <div tw="absolute inset-0 bg-black opacity-10" />
+          <div
+            tw="absolute top-[80%] left-0 right-0 h-1 bg-emerald-500 opacity-60"
+          />
         </div>
 
         {/* Caption below image */}
-        <div 
-            tw="absolute -bottom-10 left-0 flex w-full justify-between text-xs text-zinc-500 font-bold uppercase tracking-widest"
-            style={{ fontFamily: 'JetBrains Mono' }}
+        <div
+          tw="absolute -bottom-10 left-0 flex w-full justify-between text-xs text-zinc-500 font-bold uppercase tracking-widest"
+          style={{ fontFamily: 'JetBrains Mono' }}
         >
-            <span>ID: {siteName.substring(0, 5)}</span>
-            <span>VERIFIED</span>
+          <span>ID: {siteName.substring(0, 5)}</span>
+          <span>VERIFIED</span>
         </div>
       </div>
 
@@ -387,7 +411,6 @@ export const ProjectOgTemplate = ({
 );
 
 // --- TEMPLATE 4: TOPIC / TAG AGGREGATION ---
-// Aesthetic: Minimalist Typography Art
 export const TopicOgTemplate = ({
   topic,
   count,

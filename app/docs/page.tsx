@@ -67,7 +67,7 @@ export default function BlogIndexPage() {
                                         {new Date(post.data.lastModified || "").toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                                     </time>
                                     <span>/</span>
-                                    <span>ENGINEERING</span>
+                                    <span>{post.data.category}</span>
                                 </div>
 
                                 <h3 className="text-xl font-semibold tracking-tight text-foreground group-hover:text-primary transition-colors duration-300 leading-tight">
