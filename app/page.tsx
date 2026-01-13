@@ -19,6 +19,7 @@ import { GithubSection, HeroSection, SkillSection } from "./client";
 
 const BLUR_FADE_DELAY = 0.04;
 
+export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
   const data = await getCachedContributions(appConfig.usernames.github);
@@ -110,7 +111,7 @@ export default async function HomePage() {
               className="h-12 px-8 transition-all"
             >
               View All Projects
-              <Icon name="arrow-right"  />
+              <Icon name="arrow-right" />
             </ButtonTransitionLink>
           </div>
         </div>
@@ -151,7 +152,7 @@ const SectionHeader = ({
 }) => (
   <div className={cn("flex flex-col mb-16 space-y-4", align === "center" ? "items-center text-center" : "items-start text-left")}>
     <span className="text-sm font-mono text-muted-foreground uppercase tracking-widest">
-     {` //`} {label}
+      {` //`} {label}
     </span>
     <h2 className="text-4xl md:text-6xl font-bold tracking-tighter text-foreground">
       <span className="font-instrument-serif italic font-normal text-muted-foreground/80 mr-3">
