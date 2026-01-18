@@ -16,6 +16,7 @@ import { GraphSkeleton } from "./graph.skeleton";
 import { WidgetSkeleton } from "./widget.skeleton";
 
 import { Fragment } from "react";
+import { PiPackageDuotone } from "react-icons/pi";
 import { statsConfig } from "../config";
 
 export async function NPMStats() {
@@ -31,35 +32,45 @@ export async function NPMStats() {
       {} as Record<string, NpmPackageStatsData>,
     ),
   );
-  return (
-    <>
-      <dl className="flex items-center gap-3 text-3xl font-bold lg:text-4xl">
-        <Download className="size-7 lg:size-9" />
-        <dt className="sr-only">combined</dt>
-        <dd title="All time, combined">{formatStatNumber(all.allTime)}</dd>
-        <span className="font-light text-zinc-500" aria-hidden>
-          |
-        </span>
 
-        {statsConfig.npmPackages.map((pkg, index) => {
-          return (
-            <Fragment key={pkg}>
-              {index > 0 && (
-                <span className="font-light text-zinc-500" aria-hidden>
-                  |
-                </span>
-              )}
-              <dt className="sr-only">{pkg}</dt>
-              <dd className="text-zinc-500/50" title={`All time, ${pkg}`}>
-                {formatStatNumber(npmStats[index].allTime)}
-              </dd>
-            </Fragment>
-          );
-        })}
-      </dl>
-    </>
+  return (
+    <div className="w-full p-6 border border-border rounded-xl bg-muted/5 flex flex-col md:flex-row items-center justify-between gap-6">
+
+      {/* Primary Metric: Total Downloads */}
+      <div className="flex items-center gap-4">
+        <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-background border border-border text-foreground shadow-sm">
+          <PiPackageDuotone className="size-6" />
+        </div>
+        <div className="flex flex-col">
+          <span className="text-[10px] uppercase font-mono text-muted-foreground tracking-widest">
+            Total_Aggregated_Downloads
+          </span>
+          <div className="text-3xl lg:text-4xl font-bold font-sans tracking-tight flex items-baseline gap-1">
+            {formatStatNumber(all.allTime)}
+            <span className="text-sm font-normal text-muted-foreground font-instrument-serif italic">
+              all time
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Breakdown Ticker */}
+      <div className="flex flex-wrap justify-center md:justify-end gap-3">
+        {statsConfig.npmPackages.map((pkg, index) => (
+          <div key={pkg} className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-background border border-border shadow-sm">
+            <span className="w-1.5 h-1.5 rounded-full bg-indigo-500" />
+            <span className="text-xs font-medium text-foreground">{pkg}</span>
+            <span className="h-3 w-px bg-border mx-1" />
+            <span className="text-xs font-mono text-muted-foreground">
+              {formatStatNumber(npmStats[index].allTime)}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
+
 
 export const NPMStatsSkeleton = () => (
   <div className="bg-muted h-9 w-64 animate-pulse rounded-md lg:h-12" />
@@ -85,7 +96,7 @@ export async function NPMDownloads() {
     },
     {} as Record<string, NpmPackageStatsData>,
   )
-  const [all,allWithoutKeys] = [combineStats(data),combineStats(data,false)];
+  const [all, allWithoutKeys] = [combineStats(data), combineStats(data, false)];
   const allLast30Days = all.last30Days.reduce(
     (sum, d) => sum + sumPastPeriodCallback(d, 0, all.last30Days),
     0,

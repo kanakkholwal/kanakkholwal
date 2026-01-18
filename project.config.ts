@@ -241,7 +241,7 @@ export const appConfig = {
       },
     ],
     flags: {
-      repoBeats: true,
+      repoBeats: false,
       versionAdoptionGraph: false,
     },
   },

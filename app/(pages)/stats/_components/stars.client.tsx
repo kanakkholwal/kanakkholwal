@@ -13,7 +13,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Star } from "lucide-react";
 import Image from "next/image";
 import { parseAsStringLiteral, useQueryState } from "nuqs";
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
@@ -21,6 +20,14 @@ import { statsConfig } from "../config";
 import { formatDate } from "../lib/format";
 import { GitHubStarHistory } from "../lib/github";
 import { Widget } from "./widget";
+
+// --- ICONS (Phosphor Duotone) ---
+import {
+  PiChartBarDuotone,
+  PiGitBranchDuotone,
+  PiListDuotone,
+  PiStarDuotone
+} from "react-icons/pi";
 
 type StarsGraphProps = {
   data: Record<string, GitHubStarHistory>;
@@ -44,88 +51,125 @@ export function StarsGraph({ data, stargazersTab }: StarsGraphProps) {
 
   return (
     <Widget
-      className="px-0 pb-0"
+      className="p-0 overflow-hidden" // Reset default padding for edge-to-edge feel
       title={
-        <div className="flex w-full items-center gap-2 pb-1 flex-wrap">
-          <Star size={20} className="ml-2" /> {data[activeRepo].count} stars
-          <Select defaultValue={activeRepo} onValueChange={setActiveRepo}>
-            <SelectTrigger className="w-auto min-w-[8rem] h-8 text-sm text-muted-foreground font-light">
-              <SelectValue placeholder="Select a repository" />
-            </SelectTrigger>
-            <SelectContent>
-              {statsConfig.repositories.map((repo) => {
-                return (
-                  <SelectItem key={repo.name} value={repo.repo}>
-                    {repo.name}
-                  </SelectItem>
-                );
-              })}
-            </SelectContent>
-          </Select>
-          <Tabs
-            className="mr-2 ml-auto w-auto"
-            value={activeTab}
-            onValueChange={(value) => setActiveTab(value as StarTab)}
-          >
-            <TabsList>
-              <TabsTrigger
-                className="data-[state=active]:text-amber-700 dark:data-[state=active]:text-amber-500"
-                value="earned"
-              >
-                Stars earned
-              </TabsTrigger>
-              <TabsTrigger
-                className="data-[state=active]:text-amber-700 dark:data-[state=active]:text-amber-500"
-                value="gazers"
-              >
-                Stargazers
-              </TabsTrigger>
-            </TabsList>
-          </Tabs>
+        <div className="flex flex-col sm:flex-row w-full sm:items-center justify-between gap-4">
+
+          {/* LEFT: Repo Selector & Identity */}
+          <div className="flex items-center gap-3">
+            <div className="flex h-8 w-8 items-center justify-center rounded bg-amber-500/10 border border-amber-500/20 text-amber-500">
+              <PiStarDuotone className="text-lg" />
+            </div>
+
+            <div className="flex flex-col">
+              <span className="text-[10px] font-mono uppercase text-muted-foreground tracking-widest leading-none mb-1">
+                Repository
+              </span>
+              <Select defaultValue={activeRepo} onValueChange={setActiveRepo}>
+                <SelectTrigger className="h-auto p-0 px-2 border-none bg-transparent shadow-none text-lg font-instrument-serif font-medium hover:bg-card focus:ring-0 gap-2 data-[placeholder]:text-foreground">
+                  <SelectValue placeholder="Select a repository" />
+                </SelectTrigger>
+                <SelectContent>
+                  {statsConfig.repositories.map((repo) => (
+                    <SelectItem key={repo.name} value={repo.repo} className="font-mono text-xs">
+                      <span className="flex items-center gap-2">
+                        <PiGitBranchDuotone className="text-muted-foreground" />
+                        {repo.name}
+                      </span>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-4 self-end sm:self-auto">
+            <div className="inline-flex flex-col items-end gap-1 mr-2">
+              <span className="text-[10px] font-mono uppercase text-muted-foreground tracking-widest leading-none mb-1">
+                Total_Stars
+              </span>
+              <span className="font-mono font-bold text-lg leading-none">
+                {data[activeRepo].count.toLocaleString()}
+              </span>
+            </div>
+
+            <Tabs
+              value={activeTab}
+              onValueChange={(value) => setActiveTab(value as StarTab)}
+              className="h-8"
+            >
+              <TabsList className="h-9 p-1 gap-1">
+                <TabsTrigger
+                  value="earned"
+                  className="h-7 px-3 text-[10px] font-mono uppercase tracking-wider data-[state=active]:bg-background data-[state=active]:shadow-sm data-[state=active]:text-amber-600"
+                >
+                  <PiChartBarDuotone className="mr-1.5 text-sm" /> Graph
+                </TabsTrigger>
+                <TabsTrigger
+                  value="gazers"
+                  className="h-7 px-3 text-[10px] font-mono uppercase tracking-wider data-[state=active]:bg-background data-[state=active]:shadow-sm data-[state=active]:text-amber-600"
+                >
+                  <PiListDuotone className="mr-1.5 text-sm" /> List
+                </TabsTrigger>
+              </TabsList>
+            </Tabs>
+          </div>
         </div>
       }
     >
-      {activeTab === "earned" && (
-        <ChartContainer className="mt-2 h-82 w-full px-2">
-          <BarChart
-            // accessibilityLayer // note: Causes a bug with Recharts 2.15.4 where a click on the chart moves the cursor to the first data point.
-            data={data[activeRepo].bins
-              .toReversed()
-              .map((b) => ({ ...b, Stars: b.diff }))}
-          >
-            <YAxis
-              axisLine={false}
-              width={30}
-              tickLine={false}
-              fillOpacity={0.75}
-            />
-            <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey="date"
-              tickLine={false}
-              tickMargin={10}
-              axisLine={false}
-              fillOpacity={0.75}
-              tickFormatter={(value) =>
-                formatDate(value, "", { day: "2-digit", month: "short" })
-              }
-            />
-            <ChartTooltip
-              content={<ChartTooltipContent />}
-              cursor={{ fillOpacity: 0.5 }}
-              isAnimationActive={false}
-              position={{ y: 20 }}
-            />
-            <Bar
-              isAnimationActive={false}
-              shape={<CustomGradientBar />}
-              dataKey="Stars"
-              fill="var(--color-amber-500)"
-            />
-          </BarChart>
-        </ChartContainer>
-      )}
-      {activeTab === "gazers" && stargazersTab}
+      <div className="border-t border-border/40 bg-background/30 backdrop-blur-sm min-h-[350px]">
+        {activeTab === "earned" && (
+          <ChartContainer className="h-[350px] w-full pt-6 pr-4 pb-2">
+            <BarChart
+              data={data[activeRepo].bins
+                .toReversed()
+                .map((b) => ({ ...b, Stars: b.diff }))}
+            >
+              <YAxis
+                axisLine={false}
+                width={40}
+                tickLine={false}
+                tick={{ fill: 'var(--muted-foreground)', fontSize: 10, fontFamily: 'var(--font-mono)' }}
+                tickFormatter={(value) => value.toString()}
+              />
+              <CartesianGrid vertical={false} strokeDasharray="3 3" stroke="var(--border)" opacity={0.4} />
+              <XAxis
+                dataKey="date"
+                tickLine={false}
+                tickMargin={10}
+                axisLine={false}
+                tick={{ fill: 'var(--muted-foreground)', fontSize: 10, fontFamily: 'var(--font-mono)' }}
+                tickFormatter={(value) =>
+                  formatDate(value, "", { day: "2-digit", month: "short" })
+                }
+                minTickGap={30}
+              />
+              <ChartTooltip
+                content={
+                  <ChartTooltipContent
+                    className="bg-background/90 backdrop-blur border border-border font-mono text-xs uppercase shadow-xl"
+                    indicator="line"
+                  />
+                }
+                cursor={{ fill: 'var(--muted)', opacity: 0.2 }}
+                isAnimationActive={false}
+              />
+              <Bar
+                isAnimationActive={true}
+                animationDuration={1000}
+                shape={<CustomGradientBar />}
+                dataKey="Stars"
+                fill="var(--chart-1)" // Ensure your CSS vars have this, or use specific color
+              />
+            </BarChart>
+          </ChartContainer>
+        )}
+        {activeTab === "gazers" && (
+          <div className="h-[350px] overflow-hidden flex flex-col">
+            {stargazersTab}
+          </div>
+        )}
+      </div>
     </Widget>
   );
 }
@@ -142,14 +186,18 @@ export function RepoBeatsActivityGraph() {
   );
 
   return (
-    <Image
-      width={814}
-      height={318}
-      alt="Project analytics and stats"
-      src={statsConfig.repositories[repoIdx].repoBeatsUri}
-      draggable={false}
-      unselectable="on"
-    />
+    <div className="relative rounded-lg overflow-hidden border border-border/50 bg-background/50 shadow-sm group">
+      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-emerald-500/50 to-transparent opacity-50" />
+      <Image
+        width={814}
+        height={318}
+        alt="Project analytics and stats"
+        src={statsConfig.repositories[repoIdx].repoBeatsUri}
+        draggable={false}
+        unselectable="on"
+        className="w-full h-auto opacity-90 transition-opacity group-hover:opacity-100"
+      />
+    </div>
   );
 }
 
@@ -166,8 +214,8 @@ const CustomGradientBar = (
         height={height}
         stroke="none"
         fill={`url(#gradient-bar-pattern-${dataKey})`}
+        rx={2} // Subtle rounded corners on bars
       />
-      <rect x={x} y={y} width={width} height={2} stroke="none" fill={fill} />
       <defs>
         <linearGradient
           id={`gradient-bar-pattern-${dataKey}`}
@@ -176,8 +224,9 @@ const CustomGradientBar = (
           x2="0"
           y2="1"
         >
-          <stop offset="0%" stopColor={fill} stopOpacity={0.2} />
-          <stop offset="100%" stopColor={fill} stopOpacity={0} />
+          {/* Amber Gradient to match Star theme */}
+          <stop offset="0%" stopColor="#f59e0b" stopOpacity={0.8} />
+          <stop offset="100%" stopColor="#f59e0b" stopOpacity={0.2} />
         </linearGradient>
       </defs>
     </>

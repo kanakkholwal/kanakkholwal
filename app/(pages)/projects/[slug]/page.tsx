@@ -11,6 +11,36 @@ import { appConfig } from "root/project.config";
 import { projectsList } from "~/data/projects";
 import { OtherProjects } from "./other-projects";
 
+
+
+type Props = {
+    params: Promise<{ slug: string }>;
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+    const projectId = (await params).slug;
+    const project = projectsList.find((p) => p.id === projectId);
+    if (!project) return { title: "Project Not Found" };
+
+    return {
+        title: `${project.title} | Projects`,
+        description: project.description,
+        openGraph: {
+            title: `${project.title} | Projects`,
+            description: project.description,
+            images:
+                (process.env.NODE_ENV === "production" ? appConfig.url : `http://localhost:${process.env.PORT || 3000}`)
+                + `/api/og?gen_type=project&slug=${project.id}`,
+        },
+    };
+}
+
+export async function generateStaticParams() {
+    return projectsList.map((project) => ({
+        slug: project.id,
+    }));
+}
+
 // --- UTILITY: GENERATIVE FALLBACK ---
 const stringToColor = (str: string) => {
     let hash = 0;
@@ -55,37 +85,6 @@ const getStatusStyles = (status: string) => {
         default: return "bg-primary/10 text-primary border-primary/20";
     }
 };
-
-// --- METADATA ---
-type Props = {
-    params: Promise<{ slug: string }>;
-};
-
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-    const projectId = (await params).slug;
-    const project = projectsList.find((p) => p.id === projectId);
-    if (!project) return { title: "Project Not Found" };
-
-    return {
-        title: `${project.title} | Projects`,
-        description: project.description,
-        openGraph: {
-            title: `${project.title} | Projects`,
-            description: project.description,
-            images:
-                (process.env.NODE_ENV === "production" ? appConfig.url : `http://localhost:${process.env.PORT || 3000}`)
-                + `/projects/og?slug${project.id}`,
-        },
-    };
-}
-
-export async function generateStaticParams() {
-    return projectsList.map((project) => ({
-        slug: project.id,
-    }));
-}
-
-// --- MAIN PAGE COMPONENT ---
 export default async function ProjectPage({ params }: Props) {
     const projectId = (await params).slug;
     const project = projectsList.find((p) => p.id === projectId);

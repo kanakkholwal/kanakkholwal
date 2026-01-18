@@ -215,7 +215,6 @@ export function GithubSection({ data }: { data: Contributions }) {
   return (
     <section id="github" className="mx-auto my-32 w-full max-w-7xl px-6 md:px-12 space-y-16">
 
-      {/* --- HEADER: TITANIUM STYLE --- */}
       <div className="flex flex-col items-center text-center space-y-4">
         <span className="text-sm font-mono text-muted-foreground uppercase tracking-widest">
           {`// Open Source`}
@@ -233,10 +232,8 @@ export function GithubSection({ data }: { data: Contributions }) {
         </p>
       </div>
 
-      {/* --- THE DASHBOARD CONTAINER --- */}
       <div className="rounded-3xl border border-border bg-card/50 backdrop-blur-sm overflow-hidden shadow-sm">
 
-        {/* 1. TOP ROW: KPI STATS (The "Ticker") */}
         <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-border border-b border-border">
           {STATS_CONFIG.map((stat) => (
             <div
@@ -260,11 +257,9 @@ export function GithubSection({ data }: { data: Contributions }) {
           ))}
         </div>
 
-        {/* 2. MAIN CONTENT: THE GRAPH */}
         <div className="p-6 md:p-10 bg-card">
           <ContributionGraph data={data.contributions[year]} className="mx-auto w-full">
 
-            {/* Graph Header / Controls */}
             <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-8">
               <div className="flex items-center gap-2">
                 <span className="relative flex h-2.5 w-2.5">
@@ -290,7 +285,6 @@ export function GithubSection({ data }: { data: Contributions }) {
               </Select>
             </div>
 
-            {/* The Visual Graph */}
             <ContributionGraphCalendar>
               {({ activity, dayIndex, weekIndex }) => (
                 <ContributionGraphBlock
@@ -300,7 +294,7 @@ export function GithubSection({ data }: { data: Contributions }) {
                   className={cn(
                     // CUSTOM COLOR MAP: Using semantic opacity steps instead of hex codes
                     // This ensures it looks perfect in both Light (Green) and Dark (Glowing Green) modes
-                    "rounded-[2px] transition-all duration-300 hover:scale-125",
+                    "rounded-[20px] transition-all duration-300 hover:scale-125",
                     'data-[level="0"]:fill-muted/20 dark:data-[level="0"]:fill-muted/10',
                     'data-[level="1"]:fill-emerald-400/30 dark:data-[level="1"]:fill-emerald-900/40',
                     'data-[level="2"]:fill-emerald-400/60 dark:data-[level="2"]:fill-emerald-700/60',

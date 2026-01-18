@@ -21,14 +21,15 @@ export function generateMetadata({
     applicationName: appConfig.siteName,
     authors: appConfig.authors as unknown as { name: string; url?: string }[],
     alternates: {
-      canonical: appConfig.url + path,
+      canonical: path,
     },
     openGraph: {
       title,
       description,
-      url: appConfig.url + path,
+      url: path,
       images: image ? [image] : undefined,
       siteName: appConfig.siteName,
+      type: "website",
     },
     twitter: {
       card: "summary_large_image",

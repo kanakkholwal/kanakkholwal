@@ -24,8 +24,8 @@ export function MagicCard({
   gradientSize = 200,
   gradientColor,
   gradientOpacity = 0.8,
-  gradientFrom = "#9E7AFF",
-  gradientTo = "#FE8BBB",
+  gradientFrom = "var(--color-1,#9E7AFF)",
+  gradientTo = "var(--color-2,#FE8BBB)",
   layerClassName = "bg-background",
   wrapperClassName,
 }: MagicCardProps) {

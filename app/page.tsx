@@ -117,7 +117,6 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Github Activity (Already Redesigned) */}
       <Suspense
         fallback={
           <div className="max-w-7xl mx-auto px-6 md:px-12 py-24">
