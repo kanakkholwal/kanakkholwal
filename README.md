@@ -29,7 +29,7 @@
 ## Experience
 
 ### Textify AI — *Remote*
-**Software Developer Intern** | *Jan 2023 – Feb 2024*
+**Software Developer** | *Jan 2023 – Feb 2024*
 - Architected a **No-Code AI Workflow Engine** featuring a drag-and-drop interface, enabling users to build dynamic, schema-driven **LLM chains (Text/Image/Markdown)** without writing code..
 - Orchestrated a complex multi-cloud infrastructure migration **(AWS Amplify → Azure → GCP Cloud Run)**, utilizing **Docker** and **GitHub Actions** to establish a scalable, containerized CI/CD pipeline..
 - Hardened platform security by implementing **RBAC and Multi-Factor Authentication (MFA)** via AWS Cognito, later migrating to NextAuth to unify session management across microservices.
@@ -38,7 +38,7 @@
 
 
 ### KoinX — *Remote*
-**Frontend Developer Intern** | *Mar 2024 – Jun 2024*
+**Frontend Developer** | *Mar 2024 – Jun 2024*
 - Spearheaded the architectural **migration** of **legacy Create-React-App (CRA)** repositories to** Vite + TypeScript**, slashing build times by **60%** and optimizing HMR (Hot Module Replacement) for the team.
 - Engineered a centralized **Internationalization** (i18n) and **SEO** architecture, enabling localized landing pages that drove a **150% increase in organic traffic**.
 - Co-developed the **internal UI Component Library**, enforcing strict design system tokens to ensure visual consistency across B2B and consumer-facing crypto dashboards.
@@ -48,13 +48,13 @@
 
 ### Open Source — *Global*
 **Contributor & Maintainer** | *2022 – Present*
+- [**Bruno**](https://github.com/usebruno/bruno/issues?q=sort%3Aupdated-desc%20is%3Apr%20author%3Akanakkholwal%20-state%3Aclosed) - Opensource IDE For Exploring and Testing API's (lightweight alternative to Postman/Insomnia)
 - [**College Ecosystem**](https://github.com/kanakkholwal/college-ecosystem) - Next.js/TS platform; 1M+ visits; realtime polls, rankings, communities.
 - [**Muse**](https://github.com/kanakkholwal/muse-mvp) - AI fashion discovery (vector search); reduced user selection time 40%.
 - [**Mailing system**](https://github.com/kanakkholwal/mail-system) - A modern, type-safe & portable email service built with Typescript, React Email, and Nodemailer.
 - [**Markdown Editor**](https://github.com/kanakkholwal/nexo-mdx) - plugin-based Markdown Editor with React + TS + shadcn UI / Tailwind css ; rendering speed +35%; 300+ weekly downloads.
 - [**Rich Text Editor**](https://github.com/kanakkholwal/nexo-editor) - A lightweight, customizable React Rich Text Editor built on TipTap
 - [**Remark Plugins**](https://github.com/kanakkholwal/remark-plugins) - A collection of remark plugins for markdown processing.
-- [**Bruno**](https://github.com/usebruno/bruno/issues?q=sort%3Aupdated-desc%20is%3Apr%20author%3Akanakkholwal%20-state%3Aclosed) - Opensource IDE For Exploring and Testing API's (lightweight alternative to Postman/Insomnia)
 
 
 ## Projects
