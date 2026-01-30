@@ -89,7 +89,7 @@ export default async function HomePage() {
           </BlurFade>
 
           <ExpandableProjectCards
-            cards={projectsList as unknown as ExpandableCardProps["cards"]}
+            cards={projectsList}
           />
 
           <div className="flex flex-col sm:flex-row mx-auto justify-center gap-4 pt-8">

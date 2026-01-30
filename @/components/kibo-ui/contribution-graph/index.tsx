@@ -1,5 +1,6 @@
 "use client";
 
+import { cn } from "@/lib/utils";
 import type { Day as WeekDay } from "date-fns";
 import {
   differenceInCalendarDays,
@@ -13,15 +14,14 @@ import {
   subWeeks,
 } from "date-fns";
 import {
-  type CSSProperties,
   createContext,
+  type CSSProperties,
   Fragment,
   type HTMLAttributes,
   type ReactNode,
   useContext,
   useMemo,
 } from "react";
-import { cn } from "@/lib/utils";
 
 export type Activity = {
   date: string;
@@ -378,11 +378,11 @@ export const ContributionGraphCalendar = ({
 
   return (
     <div
-      className={cn("max-w-full overflow-x-auto overflow-y-hidden", className)}
+      className={cn("max-w-full overflow-x-auto overflow-y-hidden no-scrollbar", className)}
       {...props}
     >
       <svg
-        className="block overflow-visible"
+        className="block overflow-visible lg:w-full"
         height={height}
         viewBox={`0 0 ${width} ${height}`}
         width={width}
@@ -456,8 +456,8 @@ export const ContributionGraphTotalCount = ({
     <div className={cn("text-muted-foreground", className)} {...props}>
       {labels.totalCount
         ? labels.totalCount
-            .replace("{{count}}", String(totalCount))
-            .replace("{{year}}", String(year))
+          .replace("{{count}}", String(totalCount))
+          .replace("{{year}}", String(year))
         : `${totalCount} activities in ${year}`}
     </div>
   );

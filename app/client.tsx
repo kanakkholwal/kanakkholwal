@@ -28,12 +28,23 @@ import { ArrowRight, BookOpen, GitFork, Star, Users } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { appConfig, resume_link } from "root/project.config";
-import { Contributions } from "~/api/github";
+import { ContributionActivity, Contributions } from "~/api/github";
 
 import { OrbitingCircles } from "@/components/animated/elements.orbiting";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useMotionTemplate, useMotionValue } from "framer-motion";
 import { MouseEvent } from "react";
+
+import { CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import * as React from "react";
+import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
 
 
@@ -211,6 +222,10 @@ const STATS_CONFIG = [
 
 export function GithubSection({ data }: { data: Contributions }) {
   const [year, setYear] = useState(Object.keys(data.total).toReversed()[0]);
+  const weeklyData = React.useMemo(() => getWeeklyData(data.contributions[year]), [data, year]);
+
+  // Calculate total for the subtitle
+  const totalInPeriod = weeklyData.reduce((acc, curr) => acc + curr.count, 0);
 
   return (
     <section id="github" className="mx-auto my-32 w-full max-w-7xl px-6 md:px-12 space-y-16">
@@ -257,70 +272,76 @@ export function GithubSection({ data }: { data: Contributions }) {
           ))}
         </div>
 
-        <div className="p-6 md:p-10 bg-card">
+        <Tabs defaultValue="graph" className="p-6 md:p-10 bg-card">
           <ContributionGraph data={data.contributions[year]} className="mx-auto w-full">
 
-            <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-8">
+            <div className="flex flex-col sm:flex-row justify-between items-center gap-4 pb-5 border-b border-border">
+              <CardHeader className="pb-0">
+                <CardTitle className="text-lg font-medium inline-flex items-center gap-2">
+                  <span className="relative flex h-2.5 w-2.5">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                  </span>
+                  Live Activity Map
+                </CardTitle>
+                <CardDescription>
+                  <ContributionGraphTotalCount>
+                    {({ totalCount, year }) => (
+                      <div className="flex items-center gap-3">
+                        <span className="text-muted-foreground text-sm font-medium">
+                          Total commits in {year}
+                        </span>
+                        <Badge variant="secondary" size="sm" className="font-mono">
+                          {totalCount.toLocaleString()}
+                        </Badge>
+                      </div>
+                    )}
+                  </ContributionGraphTotalCount>
+                </CardDescription>
+              </CardHeader>
               <div className="flex items-center gap-2">
-                <span className="relative flex h-2.5 w-2.5">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
-                </span>
-                <span className="text-sm font-medium text-foreground">Live Activity Map</span>
+                <TabsList>
+                  <TabsTrigger value="graph">Graph</TabsTrigger>
+                  <TabsTrigger value="chart">Chart</TabsTrigger>
+                </TabsList>
+                <Select defaultValue={year} onValueChange={(year) => setYear(year)}>
+                  <SelectTrigger className="w-[120px] bg-background border-border text-foreground font-mono text-xs h-9">
+                    <SelectValue placeholder="Year" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {Object.keys(data.total)
+                      .toReversed()
+                      .map((y) => (
+                        <SelectItem key={y} value={y} className="font-mono text-xs">
+                          {y}
+                        </SelectItem>
+                      ))}
+                  </SelectContent>
+                </Select>
+
               </div>
-
-              <Select defaultValue={year} onValueChange={(year) => setYear(year)}>
-                <SelectTrigger className="w-[120px] bg-background border-border text-foreground font-mono text-xs h-9">
-                  <SelectValue placeholder="Year" />
-                </SelectTrigger>
-                <SelectContent>
-                  {Object.keys(data.total)
-                    .toReversed()
-                    .map((y) => (
-                      <SelectItem key={y} value={y} className="font-mono text-xs">
-                        {y}
-                      </SelectItem>
-                    ))}
-                </SelectContent>
-              </Select>
             </div>
-
-            <ContributionGraphCalendar>
-              {({ activity, dayIndex, weekIndex }) => (
-                <ContributionGraphBlock
-                  activity={activity}
-                  dayIndex={dayIndex}
-                  weekIndex={weekIndex}
-                  className={cn(
-                    // CUSTOM COLOR MAP: Using semantic opacity steps instead of hex codes
-                    // This ensures it looks perfect in both Light (Green) and Dark (Glowing Green) modes
-                    "rounded-[20px] transition-all duration-300 hover:scale-125",
-                    'data-[level="0"]:fill-muted/20 dark:data-[level="0"]:fill-muted/10',
-                    'data-[level="1"]:fill-emerald-400/30 dark:data-[level="1"]:fill-emerald-900/40',
-                    'data-[level="2"]:fill-emerald-400/60 dark:data-[level="2"]:fill-emerald-700/60',
-                    'data-[level="3"]:fill-emerald-500 dark:data-[level="3"]:fill-emerald-600',
-                    'data-[level="4"]:fill-emerald-600 dark:data-[level="4"]:fill-emerald-500',
-                  )}
-                />
-              )}
-            </ContributionGraphCalendar>
-
-            {/* Footer / Summary */}
-            <div className="mt-8 pt-6 border-t border-border flex flex-col sm:flex-row justify-between items-center gap-4">
-              <ContributionGraphTotalCount>
-                {({ totalCount, year }) => (
-                  <div className="flex items-center gap-3">
-                    <span className="text-muted-foreground text-sm font-medium">
-                      Total commits in {year}
-                    </span>
-                    <Badge variant="secondary" className="font-mono text-xs px-2 py-0.5 h-6">
-                      {totalCount.toLocaleString()}
-                    </Badge>
-                  </div>
+            <TabsContent value="graph" className="w-full p-3">
+              <ContributionGraphCalendar className="w-full">
+                {({ activity, dayIndex, weekIndex }) => (
+                  <ContributionGraphBlock
+                    activity={activity}
+                    dayIndex={dayIndex}
+                    weekIndex={weekIndex}
+                    className={cn(
+                      // CUSTOM COLOR MAP: Using semantic opacity steps instead of hex codes
+                      // This ensures it looks perfect in both Light (Green) and Dark (Glowing Green) modes
+                      "rounded-[20px] transition-all duration-300 hover:scale-125",
+                      'data-[level="0"]:fill-muted dark:data-[level="0"]:fill-muted',
+                      'data-[level="1"]:fill-emerald-400/30 dark:data-[level="1"]:fill-emerald-900/40',
+                      'data-[level="2"]:fill-emerald-400/60 dark:data-[level="2"]:fill-emerald-700/60',
+                      'data-[level="3"]:fill-emerald-500 dark:data-[level="3"]:fill-emerald-600',
+                      'data-[level="4"]:fill-emerald-600 dark:data-[level="4"]:fill-emerald-500',
+                    )}
+                  />
                 )}
-              </ContributionGraphTotalCount>
-
-              <ContributionGraphLegend>
+              </ContributionGraphCalendar>
+              <ContributionGraphLegend className="mt-4">
                 {({ level }) => (
                   <div
                     className="flex h-3 w-3 items-center justify-center rounded-[1px]"
@@ -339,16 +360,119 @@ export function GithubSection({ data }: { data: Contributions }) {
                   </div>
                 )}
               </ContributionGraphLegend>
-            </div>
+            </TabsContent>
+            <TabsContent value="chart">
+              <WeeklyChart data={data.contributions[year]} />
+            </TabsContent>
 
           </ContributionGraph>
-        </div>
+        </Tabs>
       </div>
-    </section>
+    </section >
   );
 }
 
 
+// --- Helper: Aggregates Daily -> Weekly ---
+function getWeeklyData(daily: ContributionActivity[]) {
+  const weeklyMap = new Map<string, { date: string; count: number; label: string }>();
+
+  // Sort by date to ensure order
+  const sorted = [...daily].sort(
+    (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+  );
+
+  sorted.forEach((day) => {
+    const dateObj = new Date(day.date);
+    // Calculate the Sunday of this week
+    const dayOfWeek = dateObj.getDay(); // 0 = Sunday
+    const startOfWeek = new Date(dateObj);
+    startOfWeek.setDate(dateObj.getDate() - dayOfWeek);
+
+    const key = startOfWeek.toISOString().split("T")[0]; // YYYY-MM-DD
+
+    // Create label (e.g., "Jan 22")
+    const label = startOfWeek.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+
+    if (weeklyMap.has(key)) {
+      weeklyMap.get(key)!.count += day.count;
+    } else {
+      weeklyMap.set(key, { date: key, count: day.count, label });
+    }
+  });
+
+  return Array.from(weeklyMap.values());
+}
+
+
+const chartConfig = {
+  contributions: {
+    label: "Contributions",
+    color: "var(--primary)",
+  },
+} satisfies ChartConfig;
+
+type WeeklyData = {
+  date: string;
+  count: number;
+  label: string;
+}
+
+export function WeeklyChart({ data }: { data: ContributionActivity[] }) {
+  const weeklyData = React.useMemo(() => getWeeklyData(data), [data]);
+
+  // Calculate total for the subtitle
+  const totalInPeriod = weeklyData.reduce((acc, curr) => acc + curr.count, 0);
+
+  return (
+
+    <CardContent>
+      <ChartContainer config={chartConfig} className="h-[200px] w-full">
+        <BarChart
+          data={weeklyData}
+          margin={{ top: 10, right: 0, left: 0, bottom: 0 }}
+        >
+          <CartesianGrid
+            vertical={false}
+            strokeDasharray="3 3"
+            className="stroke-muted/30"
+          />
+          <XAxis
+            dataKey="label"
+            tickLine={false}
+            axisLine={false}
+            tickMargin={10}
+            minTickGap={30} // Prevents labels from overlapping
+            className="text-xs text-muted-foreground"
+          />
+          <ChartTooltip
+            cursor={{ fill: "hsl(var(--muted)/0.2)" }}
+            content={
+              <ChartTooltipContent
+                hideLabel
+                className="w-40"
+                formatter={(value, name, item) => (
+                  <>
+                    <div className="flex w-full justify-between items-center">
+                      <span className="text-muted-foreground font-medium">Week of {item.payload.label}</span>
+                      <span className="font-bold text-foreground">{value}</span>
+                    </div>
+                  </>
+                )}
+              />
+            }
+          />
+          <Bar
+            dataKey="count"
+            fill="var(--color-contributions)"
+            radius={[4, 4, 0, 0]} // Rounded top corners
+            maxBarSize={50}
+          />
+        </BarChart>
+      </ChartContainer>
+    </CardContent>
+  );
+}
 
 function SpotlightCard({
   children,
