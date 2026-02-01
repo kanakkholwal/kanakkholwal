@@ -41,7 +41,7 @@ export function ContactSection() {
         >
 
           {/* Top "Window" Bar */}
-          <div className="flex items-center justify-between px-8 py-6 border-b border-border/10 bg-card/50">
+          <div className="flex items-center justify-between px-3 md:px-8 py-6 border-b border-border/10 bg-card/50">
             <div className="flex gap-2">
               <div className="size-3 rounded-full bg-red-500/20 border border-red-500/50" />
               <div className="size-3 rounded-full bg-amber-500/20 border border-amber-500/50" />

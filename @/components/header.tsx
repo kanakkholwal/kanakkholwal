@@ -166,6 +166,8 @@ export const DynamicIslandNavbar = () => {
                 </div>
 
                 <div className="w-full h-px bg-border/50" />
+                <Socials className="items-center gap-x-1 border-r border-border/50 mx-auto inline-flex md:hidden" />
+
               </motion.div>
             )}
           </AnimatePresence>
@@ -173,7 +175,7 @@ export const DynamicIslandNavbar = () => {
             <TransitionLink href="/">
               <Logo size="sm" />
             </TransitionLink>
-            <Socials className="items-center gap-x-1 border-r border-border/50" />
+            <Socials className="items-center gap-x-1 border-r border-border/50 hidden md:inline-flex" />
 
 
             <div className="flex items-center gap-1">

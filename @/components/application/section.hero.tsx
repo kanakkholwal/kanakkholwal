@@ -249,11 +249,12 @@ export function HeroSection() {
                                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75" />
                                         <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
                                     </span>
-                                    <span className="text-xs font-semibold tracking-wide text-muted-foreground group-hover:text-foreground transition-colors">
-                                        AVAILABLE FOR WORK
-                                    </span>
+
 
                                 </Badge>
+                                <span className="text-xs font-semibold tracking-wide text-muted-foreground group-hover:text-foreground transition-colors">
+                                    AVAILABLE FOR WORK
+                                </span>
                                 <span className="text-sm font-mono text-slate-500 dark:text-slate-400 font-medium tracking-wide">
                                     {`// Hi, I am ${appConfig.name}`}
                                 </span>
