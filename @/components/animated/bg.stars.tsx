@@ -1,14 +1,14 @@
 "use client";
 
-import * as React from "react";
 import {
-  type HTMLMotionProps,
   motion,
   useMotionValue,
   useSpring,
+  type HTMLMotionProps,
   type SpringOptions,
   type Transition,
 } from "motion/react";
+import * as React from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -77,6 +77,7 @@ type StarsBackgroundProps = React.ComponentProps<"div"> & {
   transition?: SpringOptions;
   starColor?: string;
   pointerEvents?: boolean;
+  defaultBg?: boolean;
 };
 
 function StarsBackground({
@@ -87,6 +88,7 @@ function StarsBackground({
   transition = { stiffness: 50, damping: 20 },
   starColor = "#fff",
   pointerEvents = true,
+  defaultBg = true,
   ...props
 }: StarsBackgroundProps) {
   const offsetX = useMotionValue(1);
@@ -111,7 +113,8 @@ function StarsBackground({
     <div
       data-slot="stars-background"
       className={cn(
-        "relative size-full overflow-hidden bg-[radial-gradient(ellipse_at_bottom,_#262626_0%,_#000_100%)]",
+        "relative size-full overflow-hidden",
+        defaultBg && "dark:bg-[radial-gradient(ellipse_at_bottom,_#1c1c1c_0%,_#171717_100%)] bg-[radial-gradient(ellipse_at_bottom,_#f5f5f5_0%,_#f1f1f1_100%)]",
         className,
       )}
       onMouseMove={handleMouseMove}
@@ -157,5 +160,6 @@ export {
   StarLayer,
   StarsBackground,
   type StarLayerProps,
-  type StarsBackgroundProps,
+  type StarsBackgroundProps
 };
+

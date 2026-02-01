@@ -5,7 +5,9 @@ import {
   FaSafari,
 } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
+import { SiCaldotcom } from "react-icons/si";
 
+import { DownloadCloud } from "lucide-react";
 import {
   PiArrowClockwiseDuotone,
   PiArrowCounterClockwiseDuotone,
@@ -18,6 +20,7 @@ import {
   PiBookmarkSimpleDuotone,
   PiBrowserDuotone,
   PiCalendarBlankDuotone,
+  PiCalendarDuotone,
   PiCameraDuotone,
   PiChartBarDuotone,
   PiChartLineUpDuotone, PiCheckBold, // Best fit for candlestick
@@ -87,11 +90,9 @@ import {
   PiYoutubeLogoDuotone
 } from "react-icons/pi";
 
-export type IconComponentType = {
-  [key: string]: React.ComponentType<React.SVGProps<SVGSVGElement>>;
-};
 
-export const IconComponent = {
+
+export const IconComponentCollection = {
   // --- General UI ---
   activity: PiWaveTriangleDuotone,
   barchart: PiChartBarDuotone,
@@ -162,6 +163,8 @@ export const IconComponent = {
   send: PiPaperPlaneRightDuotone,
   bookmark: PiBookmarkSimpleDuotone,
   "bookmark-check": PiCheckCircleDuotone,
+  "cal.com": SiCaldotcom,
+  cal: PiCalendarDuotone,
 
   // --- Social & Communication ---
   facebook: PiFacebookLogoDuotone,
@@ -188,14 +191,19 @@ export const IconComponent = {
   "arrow-up": PiArrowUpDuotone,
   "loader-circle": PiCircleNotchDuotone,
   "alert-circle": PiWarningCircleDuotone,
-
+  download: DownloadCloud,
   // bodies
   moon: PiMoonDuotone,
   sun: PiSunDuotone
 
 } as const;
+export type IconComponent = React.ComponentType<React.SVGProps<SVGSVGElement>>;
+export type IconNode = React.ReactElement<React.SVGProps<SVGSVGElement>>;
 
-export type IconType = keyof typeof IconComponent;
+export type IconComponentType = {
+  [key: string]: React.ComponentType<React.SVGProps<SVGSVGElement>>;
+};
+export type IconType = keyof typeof IconComponentCollection;
 
 interface IconProps extends React.SVGProps<SVGSVGElement> {
   name: IconType;
@@ -206,7 +214,7 @@ export function Icon({
   name,
   className,
 }: IconProps): React.ReactElement | null {
-  const Icon = IconComponent[name];
+  const Icon = IconComponentCollection[name];
   if (!Icon) {
     return null;
   }

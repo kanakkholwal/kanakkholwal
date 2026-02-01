@@ -1,7 +1,7 @@
 "use client";
 
 import { FloatingElements } from "@/components/animated/floating-elements";
-import { SimpleProjectCards } from "@/components/project-card"; // The component we just built
+import { SimpleProjectCards } from "@/components/application/projects.card";
 import { ButtonTransitionLink } from "@/components/utils/link";
 import { motion } from "framer-motion";
 import { ArrowRight, TrendingUp } from "lucide-react";

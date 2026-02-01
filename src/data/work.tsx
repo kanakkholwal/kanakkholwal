@@ -1,4 +1,18 @@
-export const workExperiences = [
+
+export type WorkExperience = {
+  company: string;
+  href: string;
+  badges: string[];
+  location: string;
+  locationType: "Remote" | "On-site";
+  title: string;
+  logoUrl: string;
+  start: string;
+  end: string | null;
+  description: string;
+  
+}
+export const workExperiences:WorkExperience[] = [
   {
     company: "Textify AI",
     href: "https://textify.ai",
@@ -39,4 +53,3 @@ export const workExperiences = [
   },
 ] as const;
 
-export type WorkExperience = (typeof workExperiences)[number];

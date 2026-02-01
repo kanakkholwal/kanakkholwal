@@ -10,7 +10,7 @@
 
 :root,
 [data-theme="light"] {
-  --background: hsl(0deg 0% 96.08%);
+  --background: hsl(0, 0%, 98%);
   --foreground: hsl(0deg 0% 9.8%);
   --card: hsl(0, 0%, 100%);
   --card-foreground: hsl(0deg 0% 9.8%);
@@ -18,8 +18,10 @@
   --popover-foreground: hsl(0deg 0% 9.8%);
   --primary: hsl(175, 84%, 32%);
   --primary-foreground: hsl(0deg 0% 92.16%);
-  --secondary: hsl(86, 100%, 32%);
-  --secondary-foreground: hsl(0deg 0% 92.16%);
+
+  --secondary: hsla(240 4.8% 95.9%);
+  --secondary-foreground: hsla(240 5.9% 10%);
+
   --tertiary: #20adee;
   --tertiary-foreground: hsl(0deg 0% 92.16%);
 
@@ -31,6 +33,8 @@
   --destructive: hsl(0 84.2% 60.2%);
   --destructive-foreground: hsl(0deg 0% 92.16%);
 
+  /* Subtle shadow for Light Mode */
+  --spotlight-color: rgba(0, 0, 0, 0.05);
   /* proposed */
   /* --destructive: oklch(0.577 0.245 27.325);
     --destructive-foreground: oklch(0.985 0 0);
@@ -92,7 +96,7 @@
 
 .dark,
 [data-theme="dark"] {
-  --background: hsl(0deg 0% 7.06%);
+  --background: hsl(0deg 0% 9.02%);
   --foreground: hsl(0deg 0% 92.16%);
   --card: hsl(0deg 0% 9.8%);
   --card-foreground: hsl(0deg 0% 92.16%);
@@ -110,7 +114,11 @@
   --accent-foreground: hsl(0, 0%, 61%);
   --destructive: hsl(0 62.8% 30.6%);
   --destructive-foreground: hsl(0deg 0% 92.16%);
+  --secondary: hsla(240 3.7% 15.9%);
+  --secondary-foreground: hsla(0 0% 98%);
 
+  /* Subtle glow for Dark Mode */
+  --spotlight-color: rgba(255, 255, 255, 0.08);
 
   /* proposed */
   /* --destructive: oklch(0.704 0.191 22.216);

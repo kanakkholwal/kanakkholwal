@@ -2,13 +2,14 @@
 
 import { StarsBackground } from "@/components/animated/bg.stars";
 import { Header } from "@/components/header";
+import useStorage from "@/hooks/use-storage";
 import { cn } from "@/lib/utils";
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { FooterSection } from "./footer";
 
-const CONTENT_VARIANTS = {
+const CONTENT_VARIANTS:Variants = {
   hidden: {
     opacity: 0,
   },
@@ -16,7 +17,7 @@ const CONTENT_VARIANTS = {
     opacity: 1,
     transition: { type: "spring", stiffness: 100, damping: 30 },
   },
-} as const;
+}
 
 export default function PageWrapper({
   children,
@@ -28,6 +29,8 @@ export default function PageWrapper({
   const [transition, setTransition] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const { resolvedTheme } = useTheme();
+  const [animationEnabled] = useStorage("animations.enabled", false);
+  const [animationMode] = useStorage("animations.mode", "stars");
 
   useEffect(() => {
     const timer = setTimeout(() => setTransition(true), 1250);
@@ -41,22 +44,25 @@ export default function PageWrapper({
     <div className={cn("relative h-dvh", !isLoaded && "overflow-y-hidden")}>
       <Header transition={transition} />
       <motion.div
-        className={cn("min-h-dvh w-full py-20 md:py-24 lg:py-28",className)}
+        className={cn(
+          "min-h-dvh w-full",
+          "py-20 md:py-24 lg:py-28 pt-0!",
+          className)}
         initial="hidden"
         animate={transition ? "visible" : "hidden"}
         variants={CONTENT_VARIANTS}
       >
         {children}
       </motion.div>
-
-
-      <StarsBackground
-        starColor={resolvedTheme === "dark" ? "#FFF" : "#000"}
-        className={cn(
-          "fixed inset-0 flex items-center justify-center rounded-xl -z-1",
-          "dark:bg-[radial-gradient(ellipse_at_bottom,_#262626_0%,_#000_100%)] bg-[radial-gradient(ellipse_at_bottom,_#f5f5f5_0%,_#fff_100%)]",
-        )}
-      />
+      {animationEnabled &&
+        animationMode === "stars" && (
+          <StarsBackground
+            starColor={resolvedTheme === "dark" ? "#f1f1f1" : "#1c1c1c"}
+            defaultBg={false}
+            className={cn("fixed inset-0 flex items-center justify-center rounded-xl -z-1",)}
+          />
+        )
+      }
       <FooterSection />
     </div>
   );

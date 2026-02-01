@@ -1,8 +1,6 @@
 "use client";
 import { GlowFillButton } from "@/components/animated/button.fill";
 import { CountingNumber } from "@/components/animated/text.counter";
-import { RollingText } from "@/components/animated/text.rolling";
-import { Icon } from "@/components/icons";
 import {
   ContributionGraph,
   ContributionGraphBlock,
@@ -23,18 +21,17 @@ import {
   TransitionLink
 } from "@/components/utils/link";
 import { cn } from "@/lib/utils";
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import { ArrowRight, BookOpen, GitFork, Star, Users } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { appConfig, resume_link } from "root/project.config";
 import { ContributionActivity, Contributions } from "~/api/github";
 
-import { OrbitingCircles } from "@/components/animated/elements.orbiting";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useMotionTemplate, useMotionValue } from "framer-motion";
 import { MouseEvent } from "react";
 
+import { OrbitingIdentity } from "@/components/application/hero.orbiting";
 import { CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   ChartConfig,
@@ -48,147 +45,165 @@ import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
 
 
+import { Icon } from "@/components/icons";
+import { useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
+
+
+
 export function HeroSection() {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Parallax effect for the background grid
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end start"],
+  });
+
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
+  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+
   return (
     <section
+      ref={containerRef}
       id="hero"
-      className={"relative grid lg:grid-cols-12 items-center gap-12 px-6 lg:px-12 min-h-[92vh] max-w-7xl mx-auto w-full pt-24 md:pt-0 overflow-hidden lg:overflow-visible"}
+      className="relative w-full min-h-[95vh] flex items-center justify-center overflow-hidden bg-background selection:bg-primary/20"
     >
-      <div className="flex flex-col gap-8 justify-center text-center md:text-left lg:col-span-7 z-20 pt-10">
 
+      {/* 1. Subtle Grid Pattern */}
+      <motion.div
+        style={{ y, opacity }}
+        className="absolute inset-0 z-0 h-[120%] w-full bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"
+      />
 
-        {/* 1. Identity Kicker (The "Hi, I'm Kanak" part) */}
-        <div className="flex flex-col items-center md:items-start space-y-4">
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="flex items-center gap-2 flex-wrap"
-          >
-            {/* Stripe-style Status Badge */}
-            <Badge
-              variant="outline"
-              className="pl-2 pr-4 py-1.5 rounded-full border-slate-200 dark:border-slate-800 bg-white/70 dark:bg-slate-900/70 backdrop-blur-md text-slate-700 dark:text-slate-300 shadow-sm"
+      {/* 2. Top Spotlight/Glow */}
+      <div className="absolute top-0 z-0 h-screen w-screen bg-transparent [background:radial-gradient(circle_at_50%_0%,rgba(120,119,198,0.15),transparent_50%)]" />
+
+      {/* --- Main Content Grid --- */}
+      <div className="container relative z-10 px-6 md:px-12 mx-auto">
+        <div className="grid lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+
+          <div className="lg:col-span-7 flex flex-col justify-center text-center lg:text-left pt-12 md:pt-0">
+            <motion.div
+              initial="hidden"
+              animate="visible"
+              variants={{
+                hidden: { opacity: 0 },
+                visible: {
+                  opacity: 1,
+                  transition: { staggerChildren: 0.15, delayChildren: 0.2 },
+                },
+              }}
+              className="space-y-8"
             >
-              <span className="relative flex h-2 w-2 mr-3">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-              </span>
-              <span className="text-xs font-semibold tracking-wide whitespace-nowrap">AVAILABLE FOR WORK</span>
-            </Badge>
 
-            <span className="text-sm font-mono text-slate-500 dark:text-slate-400 font-medium tracking-wide">
-              {`// Hi, I am ${appConfig.name}`}
-            </span>
+              <motion.div variants={fadeInUp} className="flex justify-center lg:justify-start">
+                <Badge
+                  variant="outline"
+                  className="group relative pl-2 pr-4 py-1.5 rounded-full border-border/40 bg-background/50 backdrop-blur-md shadow-[0_0_20px_-10px_rgba(0,0,0,0.1)] hover:border-primary/30 transition-colors"
+                >
+                  <span className="relative flex h-2 w-2 mr-3">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75" />
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+                  </span>
+                  <span className="text-xs font-semibold tracking-wide text-muted-foreground group-hover:text-foreground transition-colors">
+                    AVAILABLE FOR WORK
+                  </span>
+
+                </Badge>
+                  <span className="text-sm font-mono text-slate-500 dark:text-slate-400 font-medium tracking-wide">
+                    {`// Hi, I am ${appConfig.name}`}
+                  </span>
+              </motion.div>
+
+              <motion.div variants={fadeInUp} className="space-y-4">
+                <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tighter leading-[0.9] text-foreground">
+                  Building digital
+                  <br />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-br from-foreground to-muted-foreground/60 pb-2">
+                    products for
+                  </span>
+                  <br />
+                  <span className="relative inline-block">
+                    <span className="relative z-10 text-foreground">modern web.</span>
+                    {/* Subtle underline highlight */}
+                    <span className="absolute -bottom-1 left-0 w-full h-3 bg-primary/10 -rotate-1 rounded-full -z-10" />
+                  </span>
+                </h1>
+              </motion.div>
+
+              <motion.p
+                variants={fadeInUp}
+                className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-xl mx-auto lg:mx-0 font-medium text-balance"
+              >
+                {appConfig.description}
+              </motion.p>
+
+              <motion.div
+                variants={fadeInUp}
+                className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2"
+              >
+                <ButtonLink
+                  href={resume_link}
+                  target="_blank"
+                  size="lg"
+                  rounded="full"
+                  variant="light"
+                  className="h-12 px-8"
+                >
+                  Download Resume
+                  <Icon name="arrow-right" />
+                </ButtonLink>
+
+                <GlowFillButton
+                  icon={ArrowRight}
+                  className="h-12 px-8 rounded-full font-medium text-foreground bg-secondary/50 hover:bg-secondary/80 border border-border/50 backdrop-blur-sm"
+                >
+                  <TransitionLink href="/projects">View Projects</TransitionLink>
+                </GlowFillButton>
+              </motion.div>
+
+            </motion.div>
+          </div>
+
+          {/* RIGHT: Visual / Orbiting Identity */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9, x: 20 }}
+            animate={{ opacity: 1, scale: 1, x: 0 }}
+            transition={{ duration: 1, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
+            className="lg:col-span-5 relative hidden md:flex items-center justify-center lg:justify-end"
+          >
+            {/* The Glass Container for the visual */}
+            <div className="relative w-full aspect-square max-w-[600px] flex items-center justify-center">
+
+              {/* Background Glow behind the visual */}
+              <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 via-transparent to-transparent blur-[80px] rounded-full opacity-60" />
+
+              <div className="relative z-10 w-full h-full">
+                <OrbitingIdentity />
+              </div>
+            </div>
           </motion.div>
 
-          <div className="space-y-2">
-            <h1 className="text-5xl md:text-7xl font-bold tracking-tighter text-metallic leading-[0.9]">
-              Building digital products for
-              <br />
-              <span className="text-titanium">
-                modern web.
-              </span>
-            </h1>
-          </div>
         </div>
-        <RollingText
-          className="text-slate-600 dark:text-slate-400 text-lg md:text-xl max-w-xl leading-relaxed mx-auto md:mx-0 font-medium"
-          text={appConfig.description}
-          delay={0.3}
-        />
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4, duration: 0.6 }}
-          className="flex flex-wrap justify-center md:justify-start gap-4 mt-4"
-        >
-          <ButtonLink
-            variant="dark"
-            href={resume_link}
-            target="_blank"
-            size="lg"
-            rounded="full"
-            className="h-12 px-8 text-base shadow-xl shadow-slate-900/10 dark:shadow-black/20 transition-transform hover:scale-105 active:scale-95"
-          >
-            Download Resume <Icon name="arrow-up-right" className="ml-2 w-5 h-5" />
-          </ButtonLink>
-
-          <GlowFillButton
-            icon={ArrowRight}
-            className="h-12 px-8 my-0 bg-transparent rounded-full font-semibold"
-          >
-            <TransitionLink href="/projects">View Projects</TransitionLink>
-          </GlowFillButton>
-        </motion.div>
       </div>
-
-      <motion.div
-        initial={{ opacity: 0, scale: 0.9, filter: "blur(10px)" }}
-        animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-        transition={{ delay: 0.2, duration: 1, ease: [0.22, 1, 0.36, 1] }}
-        className="hidden lg:col-span-5 md:flex justify-center lg:justify-end z-10 pointer-events-none lg:pointer-events-auto"
-      >
-        <OrbitingIdentity />
-      </motion.div>
     </section>
   );
 }
-function OrbitingIdentity() {
-  return (
-    <div className="relative flex h-[500px] w-full max-w-[500px] flex-col items-center justify-center overflow-visible">
 
-      <div className="absolute inset-0 bg-gradient-radial from-indigo-500/15 via-transparent to-transparent blur-3xl -z-10 scale-150" />
-
-      <div className="relative z-10 p-2 rounded-full bg-background/50 backdrop-blur-sm border border-border/50 shadow-2xl">
-        <Avatar className="size-36 md:size-48 border-4 border-background ring-4 ring-slate-100 dark:ring-slate-800">
-          <AvatarImage
-            alt={appConfig.name}
-            src={appConfig.logo}
-            className="object-cover"
-          />
-          <AvatarFallback className="text-2xl font-bold bg-slate-100 dark:bg-slate-900">
-            {appConfig.initials}
-          </AvatarFallback>
-        </Avatar>
-      </div>
-
-      <OrbitingCircles iconSize={50} radius={190} speed={0.8}>
-        {appConfig.skill_icons
-          .slice(0, appConfig.skill_icons.length / 2)
-          .map((skill, index) => (
-            // Wrap icons in glass containers for a premium feel
-            <div key={index} className="p-2 rounded-full bg-background/60 dark:bg-slate-900/60 backdrop-blur-md border border-white/20 dark:border-slate-700/30 shadow-sm">
-              <Image
-                width={40}
-                height={40}
-                alt={skill}
-                className="size-10 object-contain"
-                src={`https://skillicons.dev/icons?i=${skill}`}
-                unoptimized
-              />
-            </div>
-          ))}
-      </OrbitingCircles>
-
-      <OrbitingCircles iconSize={40} radius={260} reverse speed={1.2} className="opacity-70">
-        {appConfig.skill_icons
-          .slice(appConfig.skill_icons.length / 2)
-          .map((skill, index) => (
-            <div key={index} className="p-1.5 rounded-full bg-background/40 dark:bg-slate-900/40 backdrop-blur-md border border-white/10 dark:border-slate-800/20 shadow-sm">
-              <Image
-                width={30}
-                height={30}
-                alt={skill}
-                className="size-8 object-contain"
-                src={`https://skillicons.dev/icons?i=${skill}`}
-                unoptimized
-              />
-            </div>
-          ))}
-      </OrbitingCircles>
-    </div>
-  );
-}
+// Reusable Motion Variants for cleaner code
+const fadeInUp: Variants = {
+  hidden: { opacity: 0, y: 20, filter: "blur(5px)" },
+  visible: {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: {
+      duration: 0.6,
+      ease: [0.22, 1, 0.36, 1] // Custom cubic-bezier for "luxurious" feel
+    }
+  },
+};
 
 
 // Configuration for the stats to keep code clean
@@ -517,14 +532,12 @@ function SpotlightCard({
   );
 }
 
-// --- MAIN SECTION ---
 export function SkillSection() {
   return (
     <section
       id="skills"
       className="relative max-w-7xl mx-auto w-full px-6 md:px-12 py-32 overflow-hidden"
     >
-      {/* Background Engineering Grid (Using muted foreground for lines) */}
       <div className="absolute inset-0 -z-10 h-full w-full bg-[linear-gradient(to_right,hsl(var(--muted-foreground)/0.05)_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--muted-foreground)/0.05)_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
 
       {/* --- HEADER --- */}

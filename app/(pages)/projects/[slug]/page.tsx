@@ -1,7 +1,9 @@
 import { CountingNumber } from "@/components/animated/text.counter";
+import { ProjectFallback } from "@/components/application/projects.card.fallback";
 import { Badge } from "@/components/ui/badge";
 import { ButtonLink } from "@/components/utils/link";
-import { Activity, ArrowLeft, ArrowUpRight, Calendar } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { ArrowLeft, ArrowUpRight, Calendar, Globe, Layers, Layout } from "lucide-react";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -10,8 +12,6 @@ import Markdown from "react-markdown";
 import { appConfig } from "root/project.config";
 import { projectsList } from "~/data/projects";
 import { OtherProjects } from "./other-projects";
-
-
 
 type Props = {
     params: Promise<{ slug: string }>;
@@ -41,50 +41,37 @@ export async function generateStaticParams() {
     }));
 }
 
-// --- UTILITY: GENERATIVE FALLBACK ---
 const stringToColor = (str: string) => {
+    // Deterministic pastel color generator
+    const colors = ["bg-blue-500", "bg-emerald-500", "bg-violet-500", "bg-orange-500"];
     let hash = 0;
-    for (let i = 0; i < str.length; i++) {
-        hash = str.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    const c = (hash & 0x00ffffff).toString(16).toUpperCase();
-    return "#" + "00000".substring(0, 6 - c.length) + c;
+    for (let i = 0; i < str.length; i++) hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    return colors[Math.abs(hash) % colors.length];
 };
 
-function ProjectFallback({ title }: { title: string }) {
-    const color1 = stringToColor(title);
-    const color2 = stringToColor(title.split("").reverse().join(""));
+
+const StatusBadge = ({ status }: { status: string }) => {
+    const styles = {
+        shipped: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20",
+        "in progress": "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20",
+        archived: "bg-zinc-500/10 text-zinc-600 dark:text-zinc-400 border-zinc-500/20",
+        default: "bg-primary/10 text-primary border-primary/20"
+    };
+    const key = status?.toLowerCase() as keyof typeof styles;
+    const activeStyle = styles[key] || styles.default;
 
     return (
-        <div className="relative w-full h-full bg-zinc-50 dark:bg-zinc-900 overflow-hidden flex items-center justify-center border border-border/50 rounded-3xl group">
-            <div
-                className="absolute top-[-50%] left-[-20%] w-[100%] h-[100%] rounded-full blur-[80px] opacity-40 dark:opacity-20 mix-blend-multiply dark:mix-blend-screen transition-all duration-1000 group-hover:scale-110"
-                style={{ backgroundColor: color1 }}
-            />
-            <div
-                className="absolute bottom-[-20%] right-[-20%] w-[80%] h-[80%] rounded-full blur-[80px] opacity-40 dark:opacity-20 mix-blend-multiply dark:mix-blend-screen transition-all duration-1000 group-hover:scale-110"
-                style={{ backgroundColor: color2 }}
-            />
-            <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
-            <div className="relative z-10 flex items-center justify-center">
-                <div className="text-6xl md:text-8xl font-bold tracking-tighter text-foreground/10 select-none font-mono">
-                    {title.substring(0, 2).toUpperCase()}
-                </div>
-            </div>
-            <div className="absolute inset-0 opacity-20 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] brightness-100 contrast-150 mix-blend-overlay" />
+        <div className={cn("flex items-center gap-2 px-3 py-1 rounded-full border text-[10px] font-bold uppercase tracking-widest", activeStyle)}>
+            <span className="relative flex h-1.5 w-1.5">
+                <span className={cn("animate-ping absolute inline-flex h-full w-full rounded-full opacity-75", key === 'shipped' ? "bg-emerald-500" : "bg-zinc-500")}></span>
+                <span className={cn("relative inline-flex rounded-full h-1.5 w-1.5", key === 'shipped' ? "bg-emerald-500" : "bg-zinc-500")}></span>
+            </span>
+            {status}
         </div>
-    );
+    )
 }
 
-// --- HELPER: STATUS COLORS ---
-const getStatusStyles = (status: string) => {
-    switch (status?.toLowerCase()) {
-        case "shipped": return "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20";
-        case "in progress": return "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20";
-        case "archived": return "bg-zinc-500/10 text-zinc-600 dark:text-zinc-400 border-zinc-500/20";
-        default: return "bg-primary/10 text-primary border-primary/20";
-    }
-};
+// --- MAIN PAGE ---
 export default async function ProjectPage({ params }: Props) {
     const projectId = (await params).slug;
     const project = projectsList.find((p) => p.id === projectId);
@@ -94,100 +81,68 @@ export default async function ProjectPage({ params }: Props) {
     }
 
     return (
-        <main className="min-h-screen w-full relative overflow-hidden">
-            {/* Background Texture */}
-            <div className="fixed inset-0 -z-50 h-full w-full bg-background opacity-40 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] dark:bg-[radial-gradient(#1f2937_1px,transparent_1px)] mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)" />
+        <main className="min-h-screen w-full relative">
 
-            <div className="max-w-6xl mx-auto px-6 md:px-12 py-12 md:py-20">
+            {/* 1. Header / Hero Section */}
+            <header className="relative pt-24 pb-12 md:pb-20 border-b border-border/40">
+                {/* Background Grid */}
+                <div className="absolute inset-0 -z-10 h-full w-full bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
 
-                <ButtonLink
-                    href="/projects"
-                    variant="ghost"
-                    size="sm"
-                    className="mb-8 md:mb-12 group pl-0"
-                >
-                    <ArrowLeft className="group-hover:-translate-x-1 transition-transform" />
-                    Back to Projects
-                </ButtonLink>
+                <div className="max-w-7xl mx-auto px-6 md:px-12">
+                    <ButtonLink href="/projects" variant="ghost" size="sm" className="mb-8 pl-0 text-muted-foreground hover:text-foreground">
+                        <ArrowLeft className="w-4 h-4 mr-2" /> Back to Projects
+                    </ButtonLink>
 
-                {/* --- HEADER SECTION --- */}
-                <div className="space-y-8 mb-16">
-                    <div className="flex flex-col items-start gap-4">
-                        {/* Meta Top Row */}
-                        <div className="flex flex-wrap items-center gap-3">
-                            <div className={`px-3 py-1 rounded-full border text-xs font-bold uppercase tracking-wider ${getStatusStyles(project.status)}`}>
-                                {project.status}
-                            </div>
-                            <span className="flex items-center gap-2 text-xs font-mono text-muted-foreground px-3 py-1 rounded-full border border-border bg-background/50">
-                                <Calendar className="size-3" />
-                                {project.dates}
+                    <div className="flex flex-col gap-6">
+                        <div className="flex flex-wrap items-center gap-4">
+                            <StatusBadge status={project.status} />
+                            <div className="h-4 w-px bg-border" />
+                            <span className="flex items-center gap-2 text-xs font-mono text-muted-foreground">
+                                <Calendar className="w-3 h-3" /> {project.dates}
                             </span>
                         </div>
 
-                        {/* Title */}
-                        <h1 className="text-5xl md:text-7xl font-bold tracking-tighter text-metallic">
+                        <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter text-foreground">
                             {project.title}
                         </h1>
 
-                        {/* Quick Tags */}
-                        {project.tags && (
-                            <div className="flex flex-wrap gap-2 pt-2">
-                                {project.tags.map(tag => (
-                                    <span key={tag} className="text-muted-foreground text-sm font-medium italic">
-                                        #{tag}
-                                    </span>
-                                ))}
-                            </div>
-                        )}
+                        <div className="flex flex-wrap gap-2">
+                            {project.tags?.map(tag => (
+                                <Badge key={tag} variant="secondary" className="bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 font-mono text-xs font-normal">
+                                    {tag}
+                                </Badge>
+                            ))}
+                        </div>
                     </div>
                 </div>
+            </header>
 
-                <div className="w-full aspect-video rounded-3xl overflow-hidden border border-border/50 shadow-2xl mb-12 bg-card relative group">
-                    {project.active && (
-                        <div className="absolute top-4 right-4 z-20 flex items-center gap-2 px-3 py-1.5 bg-black/50 backdrop-blur-md rounded-full border border-white/10">
-                            <span className="relative flex h-2 w-2">
-                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                            </span>
-                            <span className="text-xs font-medium text-white">Live System</span>
-                        </div>
-                    )}
-
+            {/* 2. Cinematic Media Display */}
+            <section className="max-w-7xl mx-auto px-6 md:px-12 -mt-12 relative z-10">
+                <div className="relative aspect-video w-full overflow-hidden rounded-2xl md:rounded-3xl border border-white/20 shadow-2xl bg-zinc-900">
                     {project.video ? (
-                        <video
-                            src={project.video}
-                            autoPlay
-                            loop
-                            muted
-                            playsInline
-                            className="w-full h-full object-cover"
-                        />
+                        <video src={project.video} autoPlay loop muted playsInline className="w-full h-full object-cover" />
                     ) : project.image ? (
-                        <Image
-                            src={project.image}
-                            alt={project.title}
-                            width={1920}
-                            height={1080}
-                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.02]"
-                            priority
-                        />
+                        <Image src={project.image} alt={project.title} width={1920} height={1080} className="w-full h-full object-cover" priority />
                     ) : (
                         <ProjectFallback title={project.title} />
                     )}
+
+                    {/* Gradient Overlay */}
+                    <div className="absolute inset-0 ring-1 ring-inset ring-black/10 dark:ring-white/10 rounded-2xl md:rounded-3xl pointer-events-none" />
                 </div>
+            </section>
+
+            <div className="max-w-7xl mx-auto px-6 md:px-12 py-16 md:py-24">
 
                 {project.metrics && project.metrics.length > 0 && (
-                    <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-border border-y border-border mb-16 bg-card/30 backdrop-blur-sm">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-border border border-border rounded-xl overflow-hidden mb-24">
                         {project.metrics.map((metric, i) => (
-                            <div key={i} className="flex flex-col p-6 hover:bg-muted/50 transition-colors">
-                                <span className="text-xs font-mono uppercase tracking-widest text-muted-foreground mb-2">
-                                    {metric.label}
-                                </span>
+                            <div key={i} className="bg-background p-6 md:p-8 flex flex-col gap-2 group hover:bg-muted/30 transition-colors">
+                                <span className="text-xs font-mono uppercase tracking-widest text-muted-foreground">{metric.label}</span>
                                 <CountingNumber
-                                    from={0}
                                     to={metric.value}
-                                    duration={2.5}
-                                    className="text-2xl md:text-3xl font-bold tracking-tight text-primary"
+                                    className="text-3xl md:text-4xl font-bold tracking-tight text-foreground"
                                     suffix="+"
                                 />
                             </div>
@@ -195,73 +150,77 @@ export default async function ProjectPage({ params }: Props) {
                     </div>
                 )}
 
-                {/* --- CONTENT LAYOUT --- */}
-                <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr] gap-12 md:gap-24">
+                {/* 4. Two-Column Layout (Content + Sticky Sidebar) */}
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24">
 
-                    {/* Left Column: Narrative */}
-                    <div className="space-y-12">
-                        <div className="space-y-6">
-                            <h2 className="text-xl font-bold tracking-tight flex items-center gap-2 border-b pb-5">
-                                <Activity className="size-5 text-primary" />
-                                Project Overview
-                            </h2>
-                            <div className="prose dark:prose-invert text-muted-foreground leading-relaxed whitespace-pre-wrap">
-                                <Markdown>
-                                    {project.content}
-                                </Markdown>
+                    {/* LEFT: Narrative Content */}
+                    <div className="lg:col-span-8 space-y-12">
+                        <div className="prose prose-lg dark:prose-invert max-w-none text-zinc-600 dark:text-zinc-400 leading-relaxed">
+                            <div className="flex items-center gap-2 text-foreground font-semibold text-lg mb-6 border-b border-border pb-4">
+                                <Layout className="w-5 h-5" /> Project Overview
                             </div>
+                            <Markdown components={{
+                                // Customizing markdown components for better typography
+                                h1: ({ node, ...props }) => <h2 className="text-2xl font-bold tracking-tight text-foreground mt-8 mb-4" {...props} />,
+                                h2: ({ node, ...props }) => <h3 className="text-xl font-semibold tracking-tight text-foreground mt-8 mb-4" {...props} />,
+                                li: ({ node, ...props }) => <li className="marker:text-primary" {...props} />,
+                                a: ({ node, ...props }) => <a className="text-primary hover:underline font-medium" {...props} />
+                            }}>
+                                {project.content || project.description}
+                            </Markdown>
                         </div>
                     </div>
 
-                    {/* Right Column: Sidebar Spec Sheet */}
-                    <div className="space-y-10">
+                    {/* RIGHT: Sticky Sidebar */}
+                    <div className="lg:col-span-4 relative">
+                        <div className="sticky top-24 space-y-10">
 
-                        {/* Links Section */}
-                        <div className="space-y-4">
-                            <h3 className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
-                                Deployment & Repos
-                            </h3>
-                            <div className="flex flex-col gap-2">
-                                {project.links?.map((link, i) => (
-                                    <Link
-                                        key={i}
-                                        href={link.href}
-                                        target="_blank"
-                                        className="flex items-center justify-between p-3 rounded-lg border border-border/50 bg-card hover:bg-accent hover:border-border transition-all group"
-                                    >
-                                        <span className="flex items-center gap-3 text-sm font-medium">
-                                            {link.icon}
-                                            {link.type}
-                                        </span>
-                                        <ArrowUpRight className="size-4 text-muted-foreground group-hover:text-primary group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                                    </Link>
-                                ))}
+                            {/* Action Links */}
+                            <div className="space-y-4">
+                                <h3 className="text-xs font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2">
+                                    <Globe className="w-3 h-3" /> Deployment
+                                </h3>
+                                <div className="flex flex-col gap-2">
+                                    {project.links?.map((link, i) => (
+                                        <Link
+                                            key={i}
+                                            href={link.href}
+                                            target="_blank"
+                                            className="group flex items-center justify-between p-4 rounded-xl border border-border bg-background hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-all hover:border-primary/50 hover:shadow-sm"
+                                        >
+                                            <span className="flex items-center gap-3 font-medium text-sm">
+                                                {link.icon || <Globe className="w-4 h-4 text-muted-foreground" />}
+                                                {link.type}
+                                            </span>
+                                            <ArrowUpRight className="w-4 h-4 text-muted-foreground group-hover:text-primary group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                                        </Link>
+                                    ))}
+                                </div>
                             </div>
-                        </div>
 
-                        {/* Tech Stack */}
-                        <div className="space-y-4">
-                            <h3 className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
-                                Tech Stack
-                            </h3>
-                            <div className="flex flex-wrap gap-2">
-                                {project.technologies.map((tech) => (
-                                    <Badge
-                                        key={tech}
-                                        variant="outline"
-                                        className="px-3 py-1.5 font-mono text-xs bg-background hover:bg-muted transition-colors"
-                                    >
-                                        {tech}
-                                    </Badge>
-                                ))}
+                            {/* Tech Stack */}
+                            <div className="space-y-4">
+                                <h3 className="text-xs font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2">
+                                    <Layers className="w-3 h-3" /> Built With
+                                </h3>
+                                <div className="flex flex-wrap gap-2">
+                                    {project.technologies.map((tech) => (
+                                        <div key={tech} className="flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-border bg-muted/20 text-xs font-medium text-muted-foreground hover:text-foreground hover:border-foreground/20 transition-colors cursor-default">
+                                            {tech}
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
-                        </div>
 
+                        </div>
                     </div>
                 </div>
-
             </div>
-            <OtherProjects currentProjectId={project.id} />
+
+            {/* 5. More Projects (Footer) */}
+            <div className="border-t border-border bg-zinc-50/50 dark:bg-zinc-900/50">
+                <OtherProjects currentProjectId={project.id} />
+            </div>
         </main>
     );
 }

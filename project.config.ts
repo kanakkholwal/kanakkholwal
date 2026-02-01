@@ -1,8 +1,9 @@
-export const appConfig = {
+const appConfig = {
   name: "Kanak Kholwal",
   shortName: "Kanak",
   initials: "KK",
   role: "Software Engineer",
+  location: "Rajasthan, India",
   description:
     "Software Engineer | Passionate about building scalable solutions, automation, and AI-driven products.",
   summary: `I thrive on solving complex problems and building impactful products. From developing scalable architectures to integrating AI solutions, my goal is to create software that makes a real difference. Always eager to learn, contribute to open source, and collaborate with like-minded developers. Check out my work below, and feel free to reach out.`,
@@ -17,26 +18,31 @@ export const appConfig = {
     { name: "Kanak Kholwal", url: "https://kanak-kholwal.eu.org" },
     { name: "Kanak Kholwal", url: "https://kanak.eu.org" },
   ],
-  skills: [
-    "Next.js",
-    "TypeScript",
-    "Go",
-    "PostgreSQL",
-    "MongoDB",
-    "Docker",
-    "Node.js",
-    "React",
-    "Python",
-    "Google Cloud Platform",
-    "AI/ML",
-  ],
+
+  skills: {
+    frontend: [
+      "react", "nextjs", "typescript", "tailwindcss", "vite", "html", "css", "sass", "svg", "bootstrap",
+    ],
+    backend: [
+      "nodejs", "go", "python", "express", "graphql", "bun"
+    ],
+    database: [
+      "postgres", "mongodb", "redis", "firebase"
+    ],
+    devops: [
+      "docker", "gcp", "azure", "vercel", "cloudflare", "git", "github"
+    ],
+    tools: [
+      "figma", "notion", "postman", "npm", "pnpm", "yarn", "javascript"
+    ],
+  },
   skill_icons: [
-    "javascript",
     "typescript",
     "go",
-    "python",
-    "docker",
     "postgres",
+    "docker",
+    "python",
+    "javascript",
     "mongodb",
     "redis",
     "cloudflare",
@@ -191,8 +197,8 @@ export const appConfig = {
     github: "https://github.com/kanakkholwal",
     linkedin: "https://www.linkedin.com/in/kanak-kholwal",
     twitter: "https://twitter.com/kanakkholwal",
+    cal: "https://cal.com/kanakkholwal",
     medium: "https://medium.com/@kanakkholwal",
-
   },
   usernames: {
     github: "kanakkholwal",
@@ -298,5 +304,9 @@ export const appConfig = {
   },
 };
 
+// immutable export
+Object.freeze(appConfig);
+
+export { appConfig };
 export const resume_link =
   "https://drive.google.com/drive/folders/1dgEd1npDuh08nUtgmc1E4T2QvpeKYpA1?usp=sharing";
