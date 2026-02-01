@@ -51,7 +51,7 @@ export const DynamicIslandNavbar = () => {
         key="header-nav"
         layout
         className={cn(
-          "bg-background/80 backdrop-blur-xl border border-border shadow-lg pointer-events-auto overflow-hidden"
+          "bg-background/80 backdrop-blur-xl border border-border shadow-lg pointer-events-auto overflow-hidden min-w-sm"
         )}
         style={{ borderRadius: 24 }}
         initial={{ width: "auto", height: "auto" }}
