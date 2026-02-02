@@ -435,7 +435,7 @@ export const ContributionGraphFooter = ({
 );
 
 export type ContributionGraphTotalCountProps = Omit<
-  HTMLAttributes<HTMLDivElement>,
+  HTMLAttributes<HTMLSpanElement>,
   "children"
 > & {
   children?: (props: { totalCount: number; year: number }) => ReactNode;
@@ -453,13 +453,13 @@ export const ContributionGraphTotalCount = ({
   }
 
   return (
-    <div className={cn("text-muted-foreground", className)} {...props}>
+    <span className={cn("text-muted-foreground", className)} {...props}>
       {labels.totalCount
         ? labels.totalCount
           .replace("{{count}}", String(totalCount))
           .replace("{{year}}", String(year))
         : `${totalCount} activities in ${year}`}
-    </div>
+    </span>
   );
 };
 

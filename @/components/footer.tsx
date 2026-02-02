@@ -1,94 +1,116 @@
 import { appConfig } from "root/project.config";
+import { Icon } from "./icons";
 import { Logo } from "./logo";
 import { ModeToggle } from "./mode-toggle";
 import { Socials } from "./socials";
+import { Button } from "./ui/button";
 import { TransitionLink } from "./utils/link";
 
 export function FooterSection() {
+  const currentYear = new Date().getFullYear();
+
   return (
-    <footer className="mx-auto my-6 max-w-7xl px-3">
-      <div className="relative flex flex-col items-center gap-6 mb-10 md:flex-row">
-        <div className="flex flex-1 flex-col items-start gap-4 md:flex-row md:justify-between">
-          <div className="hidden flex-col gap-y-6 md:flex md:w-1/2">
-            <TransitionLink className="inline-block" href="/">
-              <Logo />
+    <footer className="w-full border-t border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="mx-auto max-w-7xl px-6 py-12 md:py-16 lg:px-8">
+        <div className="xl:grid xl:grid-cols-3 xl:gap-8">
+          
+          {/* 1. BRAND COLUMN */}
+          <div className="space-y-8 xl:col-span-1">
+            <TransitionLink href="/" className="inline-block">
+              <Logo className="h-9 w-auto" />
             </TransitionLink>
-            <p className="w-60 text-base leading-5 text-muted-foreground">
+            <p className="text-sm leading-6 text-muted-foreground max-w-sm">
               {appConfig.description}
             </p>
+            <div className="flex space-x-6">
+              <Socials />
+            </div>
           </div>
-          <div className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:gap-16 lg:gap-32 max-sm:bg-primary/[0.05] rounded-3xl p-5">
-            {Object.entries(appConfig.footerLinks).map(([key, links]) => {
-              return (
-                <div className="flex flex-col gap-2 sm:gap-4" key={key}>
-                  <h4 className="text-base text-neutral-700 dark:text-white/90 font-mono capitalize">
-                    {key}
-                  </h4>
-                  <ul className="flex flex-wrap items-start gap-x-4 gap-y-2 text-base sm:flex-col sm:gap-y-3 dark:text-neutral-50">
+
+          {/* 2. LINKS GRID */}
+          <div className="mt-16 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0">
+            {/* We map dynamically now to handle any number of categories */}
+            <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 md:gap-8 w-full">
+              {Object.entries(appConfig.footerLinks).map(([category, links]) => (
+                <div key={category}>
+                  <h3 className="text-sm font-semibold leading-6 text-foreground capitalize tracking-wider">
+                    {category}
+                  </h3>
+                  <ul role="list" className="mt-6 space-y-4">
                     {links.map((link) => (
                       <li key={link.href}>
+                        {/* RE-ADDED YOUR COOL ANIMATION 
+                           This fits a portfolio better than a simple hover color change.
+                        */}
                         <TransitionLink
-                          className="group relative inline-flex items-center before:pointer-events-none before:absolute before:top-[1.5em] before:left-0 before:h-[0.05em] before:w-full before:bg-current before:content-[''] before:origin-right before:scale-x-0 before:transition-transform before:duration-300 before:ease-[cubic-bezier(0.4,0,0.2,1)] hover:before:origin-left hover:before:scale-x-100"
+                          className="group relative inline-flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors"
                           href={link.href}
                         >
-                          {link.label}
+                          <span className="relative">
+                            {link.label}
+                            <span className="absolute -bottom-0.5 left-0 h-[1px] w-full origin-right scale-x-0 bg-current transition-transform duration-300 ease-out group-hover:origin-left group-hover:scale-x-100" />
+                          </span>
+                          
+                          {/* Subtle Arrow Reveal */}
                           <svg
-                            className="ml-[0.3em] size-[0.65em] -translate-x-1 opacity-0 transition-all duration-300 [motion-reduce:transition-none] group-hover:translate-x-0 group-hover:opacity-100"
+                            className="ml-1 size-3 -translate-x-2 opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100"
                             fill="none"
-                            viewBox="0 0 10 10"
-                            xmlns="http://www.w3.org/2000/svg"
-                            aria-hidden="true"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            strokeWidth="2"
                           >
-                            <path
-                              d="M1.667 5h6.666m0 0L5 1.667M8.333 5 5 8.333"
-                              stroke="currentColor"
-                              strokeWidth="1.25"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
                           </svg>
                         </TransitionLink>
                       </li>
                     ))}
                   </ul>
                 </div>
-              );
-            })}
+              ))}
+            </div>
           </div>
         </div>
-      </div>
-      <div className="mt-4 flex flex-col items-center justify-between gap-4 text-sm text-neutral-600 md:flex-row dark:text-neutral-400 pb-5">
-        <div className="flex flex-col items-center gap-3 sm:flex-row sm:gap-6">
-          <p className="whitespace-nowrap">
-            © {new Date().getFullYear()}{" "}
-            <TransitionLink
-              className="whitespace-nowrap transition-colors hover:text-black dark:hover:text-white"
-              href="/"
-            >
-              {appConfig.name}
-            </TransitionLink>
-            . All rights reserved
-          </p>
-          <div className="flex items-center justify-center gap-4 sm:gap-6">
-            <TransitionLink
-              className="whitespace-nowrap transition-colors hover:text-black dark:hover:text-white"
-              href="/legal/privacy"
-            >
-              Privacy Policy
-            </TransitionLink>
-            <TransitionLink
-              className="whitespace-nowrap transition-colors hover:text-black dark:hover:text-white"
-              href="/legal/terms"
-            >
-              Terms &amp; Conditions
-            </TransitionLink>
+
+        {/* 3. BOTTOM BAR (Legal & Toggle) */}
+        <div className="mt-16 border-t border-border/40 pt-8 sm:mt-20 lg:mt-24">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="flex flex-col md:flex-row items-center gap-4 md:gap-8 text-xs leading-5 text-muted-foreground">
+              <p>
+                &copy; {currentYear} {appConfig.name}. All rights reserved.
+              </p>
+              <div className="flex gap-6">
+                <TransitionLink href="/legal/privacy" className="hover:text-foreground transition-colors">
+                  Privacy
+                </TransitionLink>
+                <TransitionLink href="/legal/terms" className="hover:text-foreground transition-colors">
+                  Terms
+                </TransitionLink>
+              </div>
+            </div>
+            
+            <div className="flex items-center gap-4">
+              <ModeToggle />
+              <GoToTopButton />
+            </div>
           </div>
-        </div>
-        <div className="flex flex-col items-center gap-4 md:flex-row md:justify-end">
-          <Socials />
-          <ModeToggle />
         </div>
       </div>
     </footer>
+  );
+}
+export function GoToTopButton({ className }: { className?: string }) {
+  const handleClick = () => {
+    window?.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  return (
+    <Button
+      variant="ghost"
+      size="icon_sm"
+      rounded="full"
+      onClick={handleClick}
+    >
+      <Icon name="arrow-up" />
+    </Button>
   );
 }

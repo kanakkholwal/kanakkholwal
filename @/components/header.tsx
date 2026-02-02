@@ -51,7 +51,8 @@ export const DynamicIslandNavbar = () => {
         key="header-nav"
         layout
         className={cn(
-          "bg-background/80 backdrop-blur-xl border border-border shadow-lg pointer-events-auto overflow-hidden min-w-sm"
+          "bg-background/80 backdrop-blur-xl border border-border shadow-lg pointer-events-auto overflow-hidden min-w-sm",
+          "flex flex-col"
         )}
         style={{ borderRadius: 24 }}
         initial={{ width: "auto", height: "auto" }}
@@ -61,7 +62,6 @@ export const DynamicIslandNavbar = () => {
         }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
       >
-        <div className="flex flex-col">
           <AnimatePresence>
             {isOpen && (
               <motion.div
@@ -172,9 +172,11 @@ export const DynamicIslandNavbar = () => {
             )}
           </AnimatePresence>
           <div className="flex items-center justify-between px-2 pl-4 h-[56px] gap-4">
-            <TransitionLink href="/">
-              <Logo size="sm" />
-            </TransitionLink>
+            <motion.div layoutId="brand-logo" className="relative">
+              <TransitionLink href="/">
+                <Logo size="sm" />
+              </TransitionLink>
+            </motion.div>
             <Socials className="items-center gap-x-1 border-r border-border/50 hidden md:inline-flex" />
 
 
@@ -208,11 +210,9 @@ export const DynamicIslandNavbar = () => {
                   )}
                 </AnimatePresence>
               </button>
+              {/* <GoToTopButton/> */}
             </div>
           </div>
-
-
-        </div>
       </motion.div>
     </div>
   );
@@ -242,7 +242,7 @@ export function StaticNavbar() {
       <div className="flex items-center justify-between w-full z-20 bg-background/80 backdrop-blur-md px-3 py-2 rounded-xl border border-border">
         <div className="flex items-center gap-2">
           <TransitionLink href="/" className="flex items-center gap-2 group">
-            <motion.div layoutId="logo-icon" className="relative">
+            <motion.div layoutId="brand-logo" className="relative">
               <Logo size="sm" />
             </motion.div>
           </TransitionLink>
@@ -369,7 +369,7 @@ export const Header = ({ transition }: { transition: boolean }) => {
             initial={{ opacity: 1 }}
             exit={{ opacity: 0, transition: { duration: 0.5 } }}
           >
-            <motion.div layoutId="logo-icon" className="relative z-10">
+            <motion.div layoutId="brand-logo" className="relative z-10">
               <Logo size={isMobile ? "lg" : "xl"} draw />
             </motion.div>
           </motion.div>
@@ -382,3 +382,4 @@ export const Header = ({ transition }: { transition: boolean }) => {
     </motion.header>
   );
 };
+

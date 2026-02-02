@@ -1,4 +1,5 @@
 import { AboutSection } from "@/components/application/section.about";
+import GithubSection from "@/components/application/section.github";
 import { HeroSection } from "@/components/application/section.hero";
 import { ProjectsSection } from "@/components/application/section.projects";
 import { WorkSection } from "@/components/application/section.work";
@@ -7,15 +8,14 @@ import { ContactSection } from "@/components/contact";
 import Wrapper from "@/components/wrapper";
 import { Suspense } from "react";
 import { appConfig } from "root/project.config";
-import { getCachedContributions } from "~/api/github";
-import { GithubSection } from "./client";
+import { getGithubStats } from "~/api/github";
 
-const BLUR_FADE_DELAY = 0.04;
+
 
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  const data = await getCachedContributions(appConfig.usernames.github);
+  const data = await getGithubStats(appConfig.usernames.github);
 
   return (
     <Wrapper className="overflow-hidden">
