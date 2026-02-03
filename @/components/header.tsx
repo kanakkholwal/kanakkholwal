@@ -3,39 +3,17 @@
 import { Logo } from "@/components/logo";
 import { ModeToggle } from "@/components/mode-toggle";
 import { TransitionLink } from "@/components/utils/link";
+import { AnimationMode, animationModes, NAV_ITEMS, StyleModels, StylingModel } from "@/constants/ui";
 import { useIsMobile } from "@/hooks/use-mobile";
 import useStorage from "@/hooks/use-storage";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowRight, Box, LinkIcon, Menu, Minus, Palette, Sparkles, X } from "lucide-react"; // Make sure to install lucide-react
+import { ArrowRight, LinkIcon, Menu, Palette, X } from "lucide-react"; // Make sure to install lucide-react
 import { useState } from "react";
-import { IconComponent } from "./icons";
+import { Icon } from "./icons";
 import { Socials } from "./socials";
-
-type StylingModelOption = {
-  id: string;
-  label: string;
-  icon: IconComponent;
-  color: string;
-  disabled?: boolean;
-};
-export const StyleModels: StylingModelOption[] = [
-  { id: "dynamic", label: "Dynamic", icon: Sparkles, color: "text-blue-500" },
-  { id: "static", label: "Static", icon: Box, color: "text-orange-500" },
-  { id: "minimal", label: "Minimal", icon: Minus, color: "text-slate-500", disabled: true },
-  // { id: "3d", label: "3D", icon: BoxSelect, color: "text-purple-500", disabled: true },
-] as const;
-
-export type StylingModel = (typeof StyleModels)[number]["id"];
-
-const NAV_ITEMS = [
-  { label: "Work", href: "/#work" },
-  { label: "Projects", href: "/projects" },
-  { label: "Stack", href: "/#skills" },
-  { label: "Blog", href: "/blog" },
-  { label: "Docs", href: "/docs" },
-];
-
+import { Label } from "./ui/label";
+import { Switch } from "./ui/switch";
 
 
 
@@ -44,6 +22,9 @@ export const DynamicIslandNavbar = () => {
   // New State for Tabs and Style Selection
   const [activeTab, setActiveTab] = useState<"links" | "design">("links");
   const [selectedStyle, setSelectedStyle] = useStorage<StylingModel>("styling.model", StyleModels[0].id);
+  const [animationEnabled, setAnimationEnabled] = useStorage<boolean>("animations.enabled", false);
+  const [animationMode, setAnimationMode] = useStorage<AnimationMode["id"]>("animations.mode", "stars");
+
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50 flex justify-center pb-6 px-4 pointer-events-none">
@@ -62,157 +43,200 @@ export const DynamicIslandNavbar = () => {
         }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
       >
-          <AnimatePresence>
-            {isOpen && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="px-4 pb-2 pt-4 flex flex-col gap-4"
-              >
-                <div className="grid grid-cols-2 p-1 bg-muted/40 rounded-xl relative overflow-hidden">
-                  {(["links", "design"] as const).map((tab) => (
-                    <button
-                      key={tab}
-                      onClick={() => setActiveTab(tab)}
-                      className={cn(
-                        "relative z-10 py-2 text-sm font-medium transition-colors duration-200 flex items-center justify-center gap-2",
-                        activeTab === tab ? "text-foreground" : "text-muted-foreground"
-                      )}
-                    >
-                      {activeTab === tab && (
-                        <motion.div
-                          layoutId="active-tab-bg"
-                          className="absolute inset-0 bg-background rounded-lg shadow-sm border border-border/50"
-                          transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                        />
-                      )}
-                      <span className="relative z-10 flex items-center gap-2 capitalize">
-                        {tab === "links" ? <LinkIcon size={14} /> : <Palette size={14} />}
-                        {tab}
-                      </span>
-                    </button>
-                  ))}
-                </div>
-
-                <div className="overflow-hidden">
-                  <AnimatePresence mode="popLayout" initial={false}>
-                    {activeTab === "links" ? (
-                      <motion.div
-                        key="links-content"
-                        initial={{ x: -50, opacity: 0 }}
-                        animate={{ x: 0, opacity: 1 }}
-                        exit={{ x: -50, opacity: 0 }}
-                        className="flex flex-col gap-1"
-                      >
-                        {NAV_ITEMS.map((item, i) => (
-                          <motion.div
-                            key={item.href}
-                            initial={{ x: -10, opacity: 0 }}
-                            animate={{ x: 0, opacity: 1 }}
-                            transition={{ delay: i * 0.05 }}
-                          >
-                            <TransitionLink
-                              href={item.href}
-                              onClick={() => setIsOpen(false)}
-                              className="flex items-center justify-between p-3 rounded-xl hover:bg-muted/50 group transition-colors"
-                            >
-                              <span className="text-sm font-medium">{item.label}</span>
-                              <ArrowRight className="size-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-muted-foreground" />
-                            </TransitionLink>
-                          </motion.div>
-                        ))}
-                      </motion.div>
-                    ) : (
-                      <motion.div
-                        key="design-content"
-                        initial={{ x: 50, opacity: 0 }}
-                        animate={{ x: 0, opacity: 1 }}
-                        exit={{ x: 50, opacity: 0 }}
-                        className="grid grid-cols-2 gap-2"
-                      >
-                        {StyleModels.map((style) => (
-                          <button
-                            key={style.id}
-                            onClick={() => setSelectedStyle(style.id)}
-                            disabled={style?.disabled}
-                            className={cn(
-                              "flex flex-col items-center justify-center gap-2 p-3 rounded-xl border transition-all duration-200",
-                              selectedStyle === style.id
-                                ? "bg-muted/60 border-primary/20 shadow-inner"
-                                : "bg-transparent border-transparent hover:bg-muted/30"
-                            )}
-                          >
-                            <style.icon
-                              className={cn(
-                                "size-6 mb-1 transition-transform",
-                                selectedStyle === style.id ? style.color : "text-muted-foreground",
-                                selectedStyle === style.id && "scale-110"
-                              )}
-                            />
-                            <span
-                              className={cn(
-                                "text-xs font-medium",
-                                selectedStyle === style.id ? "text-foreground" : "text-muted-foreground"
-                              )}
-                            >
-                              {style.label}
-                            </span>
-                          </button>
-                        ))}
-                      </motion.div>
+        <AnimatePresence>
+          {isOpen && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="px-4 pb-2 pt-4 flex flex-col gap-4"
+            >
+              <div className="grid grid-cols-2 p-1 bg-muted/40 rounded-xl relative overflow-hidden">
+                {(["links", "design"] as const).map((tab) => (
+                  <button
+                    key={tab}
+                    onClick={() => setActiveTab(tab)}
+                    className={cn(
+                      "relative z-10 py-2 text-sm font-medium transition-colors duration-200 flex items-center justify-center gap-2",
+                      activeTab === tab ? "text-foreground" : "text-muted-foreground"
                     )}
-                  </AnimatePresence>
-                </div>
+                  >
+                    {activeTab === tab && (
+                      <motion.div
+                        layoutId="active-tab-bg"
+                        className="absolute inset-0 bg-background rounded-lg shadow-sm border border-border/50"
+                        transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                      />
+                    )}
+                    <span className="relative z-10 flex items-center gap-2 capitalize">
+                      {tab === "links" ? <LinkIcon size={14} /> : <Palette size={14} />}
+                      {tab}
+                    </span>
+                  </button>
+                ))}
+              </div>
 
-                <div className="w-full h-px bg-border/50" />
-                <Socials className="items-center gap-x-1 border-r border-border/50 mx-auto inline-flex md:hidden" />
-
-              </motion.div>
-            )}
-          </AnimatePresence>
-          <div className="flex items-center justify-between px-2 pl-4 h-[56px] gap-4">
-            <motion.div layoutId="brand-logo" className="relative">
-              <TransitionLink href="/">
-                <Logo size="sm" />
-              </TransitionLink>
-            </motion.div>
-            <Socials className="items-center gap-x-1 border-r border-border/50 hidden md:inline-flex" />
-
-
-            <div className="flex items-center gap-1">
-              <ModeToggle />
-              <button
-                onClick={() => setIsOpen(!isOpen)}
-                className="p-2 rounded-full hover:bg-muted/60 transition-colors bg-muted/20"
-              >
-                <AnimatePresence mode="wait" initial={false}>
-                  {isOpen ? (
+              <div className="overflow-hidden">
+                <AnimatePresence mode="popLayout" initial={false}>
+                  {activeTab === "links" ? (
                     <motion.div
-                      key="close"
-                      initial={{ rotate: -90, opacity: 0 }}
-                      animate={{ rotate: 0, opacity: 1 }}
-                      exit={{ rotate: 90, opacity: 0 }}
-                      transition={{ duration: 0.2 }}
+                      key="links-content"
+                      initial={{ x: -50, opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      exit={{ x: -50, opacity: 0 }}
+                      className="flex flex-col gap-1"
                     >
-                      <X className="size-4" />
+                      {NAV_ITEMS.map((item, i) => (
+                        <motion.div
+                          key={item.href}
+                          initial={{ x: -10, opacity: 0 }}
+                          animate={{ x: 0, opacity: 1 }}
+                          transition={{ delay: i * 0.05 }}
+                        >
+                          <TransitionLink
+                            href={item.href}
+                            onClick={() => setIsOpen(false)}
+                            className="flex items-center justify-between p-3 rounded-xl hover:bg-muted/50 group transition-colors"
+                          >
+                            <span className="text-sm font-medium">{item.label}</span>
+                            <ArrowRight className="size-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-muted-foreground" />
+                          </TransitionLink>
+                        </motion.div>
+                      ))}
                     </motion.div>
                   ) : (
                     <motion.div
-                      key="menu"
-                      initial={{ rotate: 90, opacity: 0 }}
-                      animate={{ rotate: 0, opacity: 1 }}
-                      exit={{ rotate: -90, opacity: 0 }}
-                      transition={{ duration: 0.2 }}
+                      key="design-content"
+                      initial={{ x: 50, opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      exit={{ x: 50, opacity: 0 }}
+                      className="grid grid-cols-2 gap-2"
                     >
-                      <Menu className="size-4" />
+                      {StyleModels.map((style) => (
+                        <button
+                          key={style.id}
+                          onClick={() => setSelectedStyle(style.id)}
+                          disabled={style?.disabled}
+                          className={cn(
+                            "flex flex-col items-center justify-center gap-2 p-3 rounded-xl border transition-all duration-200",
+                            selectedStyle === style.id
+                              ? "bg-muted/60 shadow shadow-foreground/5"
+                              : "bg-transparent border-transparent hover:bg-muted/30"
+                          )}
+                        >
+                          <style.icon
+                            className={cn(
+                              "size-6 mb-1 transition-transform",
+                              selectedStyle === style.id ? style.color : "text-muted-foreground",
+                              selectedStyle === style.id && "scale-110"
+                            )}
+                          />
+                          <span
+                            className={cn(
+                              "text-xs font-medium",
+                              selectedStyle === style.id ? "text-foreground" : "text-muted-foreground"
+                            )}
+                          >
+                            {style.label}
+                          </span>
+                        </button>
+                      ))}
+                      <div className="flex items-center justify-between space-x-2 col-span-2 text-xs text-muted-foreground text-center mt-1">
+                        <Label htmlFor="animations">
+                          Animations {animationEnabled ? "Enabled" : "Disabled"}
+                        </Label>
+                        <Switch id="animations" onCheckedChange={setAnimationEnabled} checked={animationEnabled} />
+                      </div>
+                      <AnimatePresence mode="popLayout" initial={false}>
+                        {animationEnabled && (
+                          <motion.div className="col-span-2 px-2 pt-1 flex flex-col gap-2"
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: "auto" }}
+                            exit={{ opacity: 0, height: 0 }}
+                            layout
+                            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                          >
+                            {animationModes.map((mode) => {
+                              if (mode.disabled) return null;
+                              return <div className="inline-flex items-center justify-between gap-2 w-full" key={mode.id}>
+                                <Label htmlFor={`animationMode.${mode.id}`} className={cn(
+                                  "inline-flex items-center gap-2",
+                                  animationMode === mode.id ? "text-foreground" : "text-muted-foreground"
+                                )}>
+                                  <Icon name={mode.icon} className="size-4" />
+                                  {mode.label}
+                                </Label>
+                                <Switch id="animationMode.stars"
+                                  onCheckedChange={(checked) => {
+                                    if (checked) {
+                                      setAnimationMode("stars");
+                                    } else {
+                                      setAnimationMode("none");
+                                    }
+                                  }}
+                                  checked={animationMode === "stars"}
+                                />
+
+                              </div>
+                            })}
+
+
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+
                     </motion.div>
                   )}
                 </AnimatePresence>
-              </button>
-              {/* <GoToTopButton/> */}
-            </div>
+              </div>
+
+              <div className="w-full h-px bg-border/50" />
+              <Socials className="items-center gap-x-1 border-r border-border/50 mx-auto inline-flex md:hidden" />
+
+            </motion.div>
+          )}
+        </AnimatePresence>
+        <div className="flex items-center justify-between px-2 pl-4 h-[56px] gap-4">
+          <motion.div layoutId="brand-logo" className="relative">
+            <TransitionLink href="/">
+              <Logo size="sm" />
+            </TransitionLink>
+          </motion.div>
+          <Socials className="items-center gap-x-1 border-r border-border/50 hidden md:inline-flex" />
+
+
+          <div className="flex items-center gap-1">
+            <ModeToggle />
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="p-2 rounded-full hover:bg-muted/60 transition-colors bg-muted/20"
+            >
+              <AnimatePresence mode="wait" initial={false}>
+                {isOpen ? (
+                  <motion.div
+                    key="close"
+                    initial={{ rotate: -90, opacity: 0 }}
+                    animate={{ rotate: 0, opacity: 1 }}
+                    exit={{ rotate: 90, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <X className="size-4" />
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="menu"
+                    initial={{ rotate: 90, opacity: 0 }}
+                    animate={{ rotate: 0, opacity: 1 }}
+                    exit={{ rotate: -90, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <Menu className="size-4" />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </button>
           </div>
+        </div>
       </motion.div>
     </div>
   );

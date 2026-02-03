@@ -5,7 +5,8 @@ import { appConfig } from "root/project.config";
 
 
 import useStorage from "@/hooks/use-storage";
-import { StyleModels, StylingModel } from "../header";
+import { StyleModels, StylingModel } from "@/constants/ui";
+
 import { BentoSkillsSection } from "./skills.bento";
 import { SpotLightSkillSection } from "./skills.spotlight";
 

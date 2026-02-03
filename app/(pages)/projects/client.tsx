@@ -1,6 +1,5 @@
 "use client";
 
-import { FloatingElements } from "@/components/animated/floating-elements";
 import { SimpleProjectCards } from "@/components/application/projects.card";
 import { ButtonTransitionLink } from "@/components/utils/link";
 import { motion } from "framer-motion";
@@ -67,14 +66,7 @@ export default function ProjectsShowcase() {
 
   return (
     <div className="relative min-h-screen w-full overflow-hidden">
-      {/* 1. Background Texture (Consistent with Home) */}
       <div className="fixed inset-0 -z-50 h-full w-full bg-background opacity-40 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] dark:bg-[radial-gradient(#1f2937_1px,transparent_1px)] mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)" />
-
-      {/* 2. Floating Elements (Optional subtle motion) */}
-      <div className="opacity-50 pointer-events-none">
-        <FloatingElements />
-      </div>
-
       <div className="relative max-w-[1400px] mx-auto px-6 md:px-12 pb-24">
 
         {/* Header */}

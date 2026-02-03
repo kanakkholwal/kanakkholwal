@@ -10,11 +10,10 @@ export function FooterSection() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="w-full border-t border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <footer className="w-full">
       <div className="mx-auto max-w-7xl px-6 py-12 md:py-16 lg:px-8">
         <div className="xl:grid xl:grid-cols-3 xl:gap-8">
-          
-          {/* 1. BRAND COLUMN */}
+
           <div className="space-y-8 xl:col-span-1">
             <TransitionLink href="/" className="inline-block">
               <Logo className="h-9 w-auto" />
@@ -27,9 +26,7 @@ export function FooterSection() {
             </div>
           </div>
 
-          {/* 2. LINKS GRID */}
           <div className="mt-16 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0">
-            {/* We map dynamically now to handle any number of categories */}
             <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 md:gap-8 w-full">
               {Object.entries(appConfig.footerLinks).map(([category, links]) => (
                 <div key={category}>
@@ -39,9 +36,6 @@ export function FooterSection() {
                   <ul role="list" className="mt-6 space-y-4">
                     {links.map((link) => (
                       <li key={link.href}>
-                        {/* RE-ADDED YOUR COOL ANIMATION 
-                           This fits a portfolio better than a simple hover color change.
-                        */}
                         <TransitionLink
                           className="group relative inline-flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors"
                           href={link.href}
@@ -50,17 +44,10 @@ export function FooterSection() {
                             {link.label}
                             <span className="absolute -bottom-0.5 left-0 h-[1px] w-full origin-right scale-x-0 bg-current transition-transform duration-300 ease-out group-hover:origin-left group-hover:scale-x-100" />
                           </span>
-                          
-                          {/* Subtle Arrow Reveal */}
-                          <svg
+
+                          <Icon name="arrow-up-right"
                             className="ml-1 size-3 -translate-x-2 opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                          >
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
-                          </svg>
+                          />
                         </TransitionLink>
                       </li>
                     ))}
@@ -87,7 +74,7 @@ export function FooterSection() {
                 </TransitionLink>
               </div>
             </div>
-            
+
             <div className="flex items-center gap-4">
               <ModeToggle />
               <GoToTopButton />

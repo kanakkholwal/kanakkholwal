@@ -1,11 +1,12 @@
 "use client";
 
+import { SpotlightReveal } from "@/components/animated/section.reveal";
 import { Button } from "@/components/ui/button";
+import { TransitionLink } from "@/components/utils/link";
 import { motion, useInView } from "framer-motion";
 import { Check, Copy, Sparkles, Terminal } from "lucide-react";
 import { useRef, useState } from "react";
 import { appConfig } from "root/project.config";
-import { TransitionLink } from "./utils/link";
 
 export function ContactSection() {
   const [copied, setCopied] = useState(false);
@@ -20,10 +21,10 @@ export function ContactSection() {
   };
 
   return (
-    <section id="contact" className="relative w-full py-32 px-4 overflow-hidden">
+    <SpotlightReveal id="contact" className="relative w-full py-32 px-4 overflow-hidden">
 
       {/* 1. Background Atmosphere */}
-      <div className="absolute inset-0 -z-10 bg-background">
+      <div className="absolute inset-0 -z-10">
         {/* Subtle Grid */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_50%,#000_70%,transparent_100%)]" />
         {/* Glow Blob */}
@@ -158,6 +159,6 @@ export function ContactSection() {
           </div>
         </motion.div>
       </div>
-    </section>
+    </SpotlightReveal>
   );
 }

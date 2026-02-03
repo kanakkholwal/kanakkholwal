@@ -10,7 +10,8 @@ import Markdown from "react-markdown";
 import { WorkExperience, workExperiences } from "~/data/work";
 
 import { WorkExperienceCard } from "@/components/card.work";
-import { StyleModels, StylingModel } from "@/components/header";
+import { StyleModels, StylingModel } from "@/constants/ui";
+
 import useStorage from "@/hooks/use-storage";
 import { motion } from "framer-motion";
 

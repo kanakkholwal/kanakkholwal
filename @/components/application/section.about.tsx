@@ -1,14 +1,15 @@
 "use client";
 
+import { SpotlightReveal } from "@/components/animated/section.reveal";
 import { SectionHeader } from "@/components/application/sections.header"; // Assuming you have this
 import BlurFade from "@/components/magicui/blur-fade";
+import { StyleModels, StylingModel } from "@/constants/ui";
 import useStorage from "@/hooks/use-storage";
 import { motion, useInView } from "framer-motion";
 import { Quote } from "lucide-react";
 import { useRef } from "react";
 import Markdown from "react-markdown";
 import { appConfig } from "root/project.config";
-import { StyleModels, StylingModel } from "../header";
 
 const BLUR_FADE_DELAY = 0.04;
 export function AboutSection() {
@@ -18,16 +19,13 @@ export function AboutSection() {
 
 
     return (
-        <section
+        <SpotlightReveal
             id="about"
             className="relative w-full py-24 md:py-32 px-6 md:px-12 overflow-hidden"
         >
-            <div className="absolute inset-0 -z-10 opacity-30 dark:opacity-10">
-                <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-primary/20 blur-[100px] rounded-full mix-blend-multiply animate-blob" />
-                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-purple-500/20 blur-[100px] rounded-full mix-blend-multiply animate-blob animation-delay-2000" />
-                <div className="absolute -bottom-32 left-20 w-[500px] h-[500px] bg-indigo-500/20 blur-[100px] rounded-full mix-blend-multiply animate-blob animation-delay-4000" />
-            </div>
-            {selectedStyle === "dynamic" ? <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-12 lg:gap-24 relative z-10">
+        
+            {selectedStyle === "dynamic" ? 
+            <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-12 lg:gap-24 relative z-10">
 
                 <div className="md:col-span-4 lg:col-span-3 relative">
                     <div className="sticky top-32 space-y-8">
@@ -98,7 +96,7 @@ export function AboutSection() {
             </div>
             }
 
-        </section>
+        </SpotlightReveal>
     );
 }
 

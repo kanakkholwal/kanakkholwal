@@ -16,7 +16,7 @@ import BlurFade from "@/components/magicui/blur-fade";
 import { ButtonTransitionLink } from "@/components/utils/link";
 import useStorage from "@/hooks/use-storage";
 import { projectsList } from "~/data/projects";
-import { StyleModels, StylingModel } from "../header";
+import { StyleModels, StylingModel } from "@/constants/ui";
 import { SectionHeader } from "./sections.header";
 
 const BLUR_FADE_DELAY = 0.04;

@@ -2,7 +2,7 @@
 
 import { StarsBackground } from "@/components/animated/bg.stars";
 import { Header } from "@/components/header";
-import { Logo } from "@/components/logo"; // Import Logo here directly
+import { Logo } from "@/components/logo"; 
 import useStorage from "@/hooks/use-storage";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, LayoutGroup, motion, Variants } from "framer-motion";
@@ -89,7 +89,6 @@ export default function PageWrapper({
           </motion.div>
         </motion.main>
 
-        {/* 4. Persistent Background */}
         {animationEnabled && animationMode === "stars" && (
           <div className="fixed inset-0 -z-10 pointer-events-none">
             <StarsBackground
@@ -102,7 +101,6 @@ export default function PageWrapper({
           </div>
         )}
 
-        {/* 5. Footer (Animates in with content) */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={isLoaded ? { opacity: 1 } : { opacity: 0 }}

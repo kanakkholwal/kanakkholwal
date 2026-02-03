@@ -1,14 +1,14 @@
 "use client";
+import { GlowFillButton } from "@/components/animated/button.fill";
+import { Icon } from "@/components/icons";
+import { Badge } from "@/components/ui/badge";
 import {
     ButtonLink,
     TransitionLink
 } from "@/components/utils/link";
-import { motion, useMotionTemplate, useMotionValue, useScroll, Variants } from "framer-motion";
+import { motion, useMotionValue, Variants } from "framer-motion";
 import { ArrowRight, MapPin } from "lucide-react";
 import { appConfig, resume_link } from "root/project.config";
-import { GlowFillButton } from "../animated/button.fill";
-import { Icon } from "../icons";
-import { Badge } from "../ui/badge";
 
 
 import * as React from "react";
@@ -16,10 +16,10 @@ import * as React from "react";
 
 
 
+import { SpotlightReveal } from "@/components/animated/section.reveal";
 import { useSpring, useTransform } from "framer-motion";
 import { Fingerprint, Wifi } from "lucide-react";
 import Image from "next/image";
-import { useRef } from "react";
 
 export const HeroVisual = () => {
     const x = useMotionValue(0);
@@ -167,159 +167,110 @@ const fadeInUp: Variants = {
 };
 
 export function HeroSection() {
-    const containerRef = useRef<HTMLDivElement>(null);
-    const mouseX = useMotionValue(0);
-    const mouseY = useMotionValue(0);
 
-    // Parallax for content
-    const { scrollYProgress } = useScroll({
-        target: containerRef,
-        offset: ["start start", "end start"],
-    });
-
-    const contentY = useTransform(scrollYProgress, [0, 1], [0, 100]);
-    const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-
-    // Mouse move handler for Spotlight effect
-    function handleMouseMove({ currentTarget, clientX, clientY }: React.MouseEvent) {
-        const { left, top } = currentTarget.getBoundingClientRect();
-        mouseX.set(clientX - left);
-        mouseY.set(clientY - top);
-    }
 
     return (
-        <section
-            ref={containerRef}
-            id="hero"
-            onMouseMove={handleMouseMove}
-            className="relative w-full min-h-screen overflow-hidden"
-        >
+        <SpotlightReveal className="min-h-[90dvh] w-full relative h-full z-10 px-6 md:px-12 mx-auto my-auto grid grid-cols-12 gap-12 lg:gap-8 items-center">
 
             <div className="absolute inset-0 z-0 h-full w-full bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
 
-            <motion.div
-                className="absolute inset-0 z-0 bg-[linear-gradient(to_right,#80808015_1px,transparent_1px),linear-gradient(to_bottom,#80808015_1px,transparent_1px)] bg-[size:40px_40px] opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-                style={{
-                    maskImage: useMotionTemplate`
-            radial-gradient(
-              350px circle at ${mouseX}px ${mouseY}px,
-              black 0%,
-              transparent 100%
-            )
-          `,
-                    WebkitMaskImage: useMotionTemplate`
-            radial-gradient(
-              350px circle at ${mouseX}px ${mouseY}px,
-              black 0%,
-              transparent 100%
-            )
-          `,
-                }}
-            />
-
             <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
 
-
             <motion.div
-                style={{ y: contentY, opacity }}
-                className="min-h-[90dvh] w-full relative h-full z-10 px-6 md:px-12 mx-auto my-auto grid grid-cols-12 gap-12 lg:gap-8 items-center">
-
-                <motion.div 
                 className="col-span-12 lg:col-span-7 flex flex-col justify-center text-left pt-12 lg:pt-0 space-y-8"
-                    initial="hidden"
-                    animate="visible"
-                    variants={{
-                        hidden: { opacity: 0 },
-                        visible: {
-                            opacity: 1,
-                            transition: { staggerChildren: 0.15, delayChildren: 0.2 },
-                        },
-                    }}
-                >
+                initial="hidden"
+                animate="visible"
+                variants={{
+                    hidden: { opacity: 0 },
+                    visible: {
+                        opacity: 1,
+                        transition: { staggerChildren: 0.15, delayChildren: 0.2 },
+                    },
+                }}
+            >
 
-                    <motion.div variants={fadeInUp}>
-                        <Badge
-                            variant="outline"
-                            className="group relative pl-2 pr-4 py-1.5 rounded-full"
-                        >
-                            <span className="relative flex h-2 w-2 mr-3">
-                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75" />
-                                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
-                            </span>
-
-                            <span className="text-xs font-semibold tracking-wide text-muted-foreground group-hover:text-foreground transition-colors">
-                                AVAILABLE FOR WORK
-                            </span>
-
-                        </Badge>
-                        <span className="text-sm font-mono text-muted-foreground font-medium tracking-wide">
-                            {`// Hi, I am ${appConfig.name}`}
+                <motion.div variants={fadeInUp}>
+                    <Badge
+                        variant="outline"
+                        className="group relative pl-2 pr-4 py-1.5 rounded-full"
+                    >
+                        <span className="relative flex h-2 w-2 mr-3">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75" />
+                            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
                         </span>
-                    </motion.div>
 
-                    <motion.div variants={fadeInUp} className="space-y-4">
-                        <h1 className="text-5xl sm:text-6xl md:text-7xl xl:text-8xl font-bold tracking-tighter leading-[0.9] text-foreground">
-                            Building digital
-                            <br />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-br from-foreground to-muted-foreground/60 pb-2">
-                                products for
-                            </span>
-                            <br />
-                            <span className="relative inline-block">
-                                <span className="relative z-10 text-foreground">modern web.</span>
-                                {/* Subtle underline highlight */}
-                                <span className="absolute -bottom-1 left-0 w-full h-3 bg-primary/10 -rotate-1 rounded-full -z-10" />
-                            </span>
-                        </h1>
-                    </motion.div>
+                        <span className="text-xs font-semibold tracking-wide text-muted-foreground group-hover:text-foreground transition-colors">
+                            AVAILABLE FOR WORK
+                        </span>
 
-                    <motion.p
-                        variants={fadeInUp}
-                        className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-xl mx-auto lg:mx-0 font-medium text-balance"
-                    >
-                        {appConfig.description}
-                    </motion.p>
-
-                    <motion.div
-                        variants={fadeInUp}
-                        className="flex flex-wrap items-center justify-start gap-4 pt-2"
-                    >
-                        <ButtonLink
-                            href={resume_link}
-                            target="_blank"
-                            size="lg"
-                            rounded="full"
-                            variant="light"
-                            className="h-12 px-8"
-                        >
-                            <Icon name="download" />
-                            Download Resume
-                        </ButtonLink>
-
-                        <GlowFillButton
-                            icon={ArrowRight}
-                            className="h-12 px-8 rounded-full font-medium text-foreground bg-muted border border-border/50 backdrop-blur-sm my-0"
-                        >
-                            <TransitionLink href="/projects">View Projects</TransitionLink>
-                        </GlowFillButton>
-                    </motion.div>
-
+                    </Badge>
+                    <span className="text-sm font-mono text-muted-foreground font-medium tracking-wide">
+                        {`// Hi, I am ${appConfig.name}`}
+                    </span>
                 </motion.div>
 
-                <div className="lg:col-span-5 relative hidden lg:flex items-center justify-center perspective-1000">
-                    <FloatingCard>
-                        {/* This wrapper gives it the 3D tilt and glass effect */}
-                        <div className="relative z-10 w-full aspect-square max-w-[500px] flex items-center justify-center">
-                            {/* Inner Glow */}
-                            <div className="absolute inset-0 bg-primary/10 blur-[100px] rounded-full" />
+                <motion.div variants={fadeInUp} className="space-y-4">
+                    <h1 className="text-5xl sm:text-6xl md:text-7xl xl:text-8xl font-bold tracking-tighter leading-[0.9] text-foreground">
+                        Building digital
+                        <br />
+                        <span className="text-transparent bg-clip-text bg-gradient-to-br from-foreground to-muted-foreground/60 pb-2">
+                            products for
+                        </span>
+                        <br />
+                        <span className="relative inline-block">
+                            <span className="relative z-10 text-foreground">modern web.</span>
+                            {/* Subtle underline highlight */}
+                            <span className="absolute -bottom-1 left-0 w-full h-3 bg-primary/10 -rotate-1 rounded-full -z-10" />
+                        </span>
+                    </h1>
+                </motion.div>
 
-                            {/* The Component */}
-                            <HeroVisual />
-                        </div>
-                    </FloatingCard>
-                </div>
+                <motion.p
+                    variants={fadeInUp}
+                    className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-xl mx-auto lg:mx-0 font-medium text-balance"
+                >
+                    {appConfig.description}
+                </motion.p>
+
+                <motion.div
+                    variants={fadeInUp}
+                    className="flex flex-wrap items-center justify-start gap-4 pt-2"
+                >
+                    <ButtonLink
+                        href={resume_link}
+                        target="_blank"
+                        size="lg"
+                        rounded="full"
+                        variant="light"
+                        className="h-12 px-8"
+                    >
+                        <Icon name="download" />
+                        Download Resume
+                    </ButtonLink>
+
+                    <GlowFillButton
+                        icon={ArrowRight}
+                        className="h-12 px-8 rounded-full font-medium text-foreground bg-muted border border-border/50 backdrop-blur-sm my-0"
+                    >
+                        <TransitionLink href="/projects">View Projects</TransitionLink>
+                    </GlowFillButton>
+                </motion.div>
 
             </motion.div>
+
+            <div className="lg:col-span-5 relative hidden lg:flex items-center justify-center perspective-1000">
+                <FloatingCard>
+                    {/* This wrapper gives it the 3D tilt and glass effect */}
+                    <div className="relative z-10 w-full aspect-square max-w-[500px] flex items-center justify-center">
+                        {/* Inner Glow */}
+                        <div className="absolute inset-0 bg-primary/10 blur-[100px] rounded-full" />
+
+                        {/* The Component */}
+                        <HeroVisual />
+                    </div>
+                </FloatingCard>
+            </div>
+
 
             {/* Scroll Indicator */}
             <motion.div
@@ -332,7 +283,7 @@ export function HeroSection() {
                 <div className="w-[1px] h-12 bg-gradient-to-b from-transparent via-muted-foreground/50 to-transparent" />
             </motion.div>
 
-        </section>
+        </SpotlightReveal>
     );
 }
 

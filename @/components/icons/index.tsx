@@ -8,6 +8,7 @@ import { FcGoogle } from "react-icons/fc";
 import { SiCaldotcom } from "react-icons/si";
 
 import { DownloadCloud } from "lucide-react";
+import { BsStars } from "react-icons/bs";
 import {
   PiArrowClockwiseDuotone,
   PiArrowCounterClockwiseDuotone,
@@ -31,6 +32,7 @@ import {
   PiClockAfternoonDuotone,
   PiCodeDuotone,
   PiCommandDuotone,
+  PiConfettiDuotone,
   PiCopyDuotone,
   PiCpuDuotone,
   PiDeviceMobileDuotone,
@@ -89,6 +91,7 @@ import {
   PiXLogoDuotone, // For New Twitter (X)
   PiYoutubeLogoDuotone
 } from "react-icons/pi";
+import { GiBubbles } from "react-icons/gi";
 
 
 
@@ -194,7 +197,11 @@ export const IconComponentCollection = {
   download: DownloadCloud,
   // bodies
   moon: PiMoonDuotone,
-  sun: PiSunDuotone
+  sun: PiSunDuotone,
+  stars: PiSparkleDuotone,
+  "stars:bs": BsStars ,
+  bubbles: GiBubbles,
+  confetti:PiConfettiDuotone,
 
 } as const;
 export type IconComponent = React.ComponentType<React.SVGProps<SVGSVGElement>>;

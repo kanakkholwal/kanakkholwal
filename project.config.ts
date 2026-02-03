@@ -33,7 +33,7 @@ const appConfig = {
       "docker", "gcp", "azure", "vercel", "cloudflare", "git", "github"
     ],
     tools: [
-      "figma", "notion", "postman", "npm", "pnpm", "yarn", "javascript"
+      "figma", "notion", "postman", "npm", "pnpm", "yarn", "git"
     ],
   },
   skill_icons: [
@@ -197,7 +197,7 @@ const appConfig = {
     github: "https://github.com/kanakkholwal",
     linkedin: "https://www.linkedin.com/in/kanak-kholwal",
     twitter: "https://twitter.com/kanakkholwal",
-    cal: "https://cal.com/kanakkholwal",
+    "cal.com": "https://cal.com/kanakkholwal",
     medium: "https://medium.com/@kanakkholwal",
   },
   usernames: {
