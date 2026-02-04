@@ -104,7 +104,7 @@ export default function PageWrapper({
 
           <motion.main
             className={cn(
-              "relative z-10 min-h-dvh w-full",
+              "relative z-10 min-h-dvh w-full overflow-x-hidden",
               "pb-20",
               className
             )}
@@ -114,9 +114,7 @@ export default function PageWrapper({
             // 6. Apply the Parallax Y value here
             style={{ y: parallaxY }} 
           >
-            <motion.div variants={ITEM_VARIANTS}>
               {children}
-            </motion.div>
           </motion.main>
 
           {animationEnabled && animationMode === "stars" && (

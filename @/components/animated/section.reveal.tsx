@@ -10,7 +10,7 @@ import {
 } from "framer-motion";
 import React, { useRef } from "react";
 
-interface SpotlightRevealProps extends React.HTMLAttributes<HTMLElement> {
+interface SpotlightRevealProps extends React.HTMLAttributes<HTMLDivElement> {
     children: React.ReactNode;
     className?: string;
     containerClassName?: string;
@@ -23,11 +23,11 @@ export function SpotlightReveal({
     containerClassName,
     spotlightSize = 350,
 }: SpotlightRevealProps) {
-    const containerRef = useRef<HTMLElement>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
     const mouseX = useMotionValue(0);
     const mouseY = useMotionValue(0);
 
-    // --- REMOVAL ANIMATION (Scroll Parallax) ---
+    //  REMOVAL ANIMATION (Scroll Parallax) 
     const { scrollYProgress } = useScroll({
         target: containerRef,
         offset: ["start start", "end start"],
@@ -36,7 +36,7 @@ export function SpotlightReveal({
     const contentY = useTransform(scrollYProgress, [0, 1], [0, 100]);
     const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
-    // --- REVEAL ANIMATION (Mouse Move Spotlight) ---
+    //  REVEAL ANIMATION (Mouse Move Spotlight) 
     function handleMouseMove({
         currentTarget,
         clientX,
@@ -48,7 +48,7 @@ export function SpotlightReveal({
     }
 
     return (
-        <section
+        <div
             ref={containerRef}
             onMouseMove={handleMouseMove}
             className={cn(
@@ -84,6 +84,6 @@ export function SpotlightReveal({
             >
                 {children}
             </motion.div>
-        </section>
+        </div>
     );
 }

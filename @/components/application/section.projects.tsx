@@ -43,7 +43,7 @@ export function ProjectsSection() {
             )}
 
             <BlurFade delay={BLUR_FADE_DELAY * 14}>
-                <div className="w-full max-w-4xl mx-auto mt-12 pt-12 border-t border-border/40">
+                <div className="w-full max-w-4xl mx-auto mt-12 pt-12 border-t border-border/40 relative">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
 
                         <ButtonTransitionLink

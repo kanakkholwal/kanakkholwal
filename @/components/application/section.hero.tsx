@@ -6,7 +6,7 @@ import {
     ButtonLink,
     TransitionLink
 } from "@/components/utils/link";
-import { motion, useMotionValue, Variants } from "framer-motion";
+import { motion, useMotionValue } from "framer-motion";
 import { ArrowRight, MapPin } from "lucide-react";
 import { appConfig, resume_link } from "root/project.config";
 
@@ -16,10 +16,136 @@ import * as React from "react";
 
 
 
-import { SpotlightReveal } from "@/components/animated/section.reveal";
+import { cn } from "@/lib/utils";
 import { useSpring, useTransform } from "framer-motion";
 import { Fingerprint, Wifi } from "lucide-react";
 import Image from "next/image";
+
+
+
+
+export function HeroSection() {
+
+
+    return (
+        <section id="hero"
+
+            className={cn(
+                "w-full relative h-full px-6 md:px-12 md:min-h-[60dvh] z-10 pt-16 min-h-[90dvh]",
+                "mx-auto my-auto grid lg:grid-cols-12 gap-12 lg:gap-8"
+            )}>
+
+            <div className="absolute inset-0 z-0 h-full w-full bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
+
+
+            <div
+                className="lg:col-span-7 flex flex-col justify-center text-left pt-12 lg:pt-0 space-y-4 z-2"
+
+            >
+
+                <div className="flex items-start lg:items-center flex-col lg:flex-row gap-2">
+                    <Badge
+                        variant="outline"
+                        className="group relative pl-2 pr-4 py-1.5 rounded-full"
+                    >
+                        <span className="relative flex h-2 w-2 mr-3">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75" />
+                            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+                        </span>
+
+                        <span className="text-xs font-semibold tracking-wide text-muted-foreground group-hover:text-foreground transition-colors">
+                            AVAILABLE FOR WORK
+                        </span>
+
+                    </Badge>
+                    <span className="text-sm font-mono text-muted-foreground font-medium tracking-wide">
+                        {`// Hi, I am ${appConfig.name}`}
+                    </span>
+                </div>
+
+                <div className="space-y-4">
+                    <h1 className="text-5xl sm:text-6xl md:text-7xl xl:text-8xl font-bold tracking-tighter leading-[0.9] text-foreground">
+                        Building digital
+                        <br />
+                        <span className="text-transparent bg-clip-text bg-gradient-to-br from-foreground to-muted-foreground/60 pb-2">
+                            products for
+                        </span>
+                        <br />
+                        <span className="relative inline-block">
+                            <span className="relative z-10 text-foreground">modern web.</span>
+                            {/* Subtle underline highlight */}
+                            <span className="absolute -bottom-1 left-0 w-full h-3 bg-primary/10 -rotate-1 rounded-full -z-10" />
+                        </span>
+                    </h1>
+                </div>
+
+                <p
+                    className="text-lg text-left md:text-xl text-muted-foreground leading-relaxed font-medium text-balance"
+                >
+                    {appConfig.description}
+                </p>
+
+                <div
+                    id="cta-buttons"
+                    className="flex flex-wrap items-start justify-start gap-4 p-2"
+                >
+                    <ButtonLink
+                        href={resume_link}
+                        target="_blank"
+                        size="lg"
+                        rounded="full"
+                        variant="light"
+                        className="h-12 px-6"
+                    >
+                        <Icon name="download" />
+                        Download Resume
+                    </ButtonLink>
+
+                    <GlowFillButton
+                        icon={ArrowRight}
+                        className="h-12 px-4 sm:px-8text-sm sm:text-base rounded-full font-medium text-foreground bg-muted border border-border/50 backdrop-blur-sm my-0 relative overflow-hidden"
+                    >
+                        <TransitionLink href="/projects">View Projects</TransitionLink>
+                    </GlowFillButton>
+                </div>
+
+            </div>
+
+            <div className="lg:col-span-5 relative hidden lg:flex items-center justify-center perspective-1000">
+                <FloatingCard>
+                    <div className="relative z-10 w-full aspect-square max-w-lg flex items-center justify-center">
+                        {/* Inner Glow */}
+                        <div className="absolute inset-0 bg-primary/10 blur-[100px] rounded-full" />
+
+                        <HeroVisual />
+                        {/* <ProfileCard
+                            avatarUrl={appConfig.logo}
+                            iconUrl={appConfig.logo}
+                            name={appConfig.name}
+                            title={appConfig.role}
+                            handle={appConfig.usernames.twitter}
+                            showUserInfo={false}
+                        /> */}
+                    </div>
+                </FloatingCard>
+            </div>
+
+
+            {/* Scroll Indicator */}
+            <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1, duration: 1 }}
+                className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-muted-foreground/50"
+            >
+                <span className="text-[10px] uppercase tracking-widest">Scroll</span>
+                <div className="w-[1px] h-12 bg-gradient-to-b from-transparent via-muted-foreground/50 to-transparent" />
+            </motion.div>
+
+        </section>
+    );
+}
+
 
 export const HeroVisual = () => {
     const x = useMotionValue(0);
@@ -153,142 +279,6 @@ export const HeroVisual = () => {
 };
 
 
-const fadeInUp: Variants = {
-    hidden: { opacity: 0, y: 20, filter: "blur(5px)" },
-    visible: {
-        opacity: 1,
-        y: 0,
-        filter: "blur(0px)",
-        transition: {
-            duration: 0.6,
-            ease: [0.22, 1, 0.36, 1]
-        }
-    },
-};
-
-export function HeroSection() {
-
-
-    return (
-        <SpotlightReveal className="min-h-[90dvh] w-full relative h-full z-10 px-6 md:px-12 mx-auto my-auto grid grid-cols-12 gap-12 lg:gap-8 items-center">
-
-            <div className="absolute inset-0 z-0 h-full w-full bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
-
-            <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
-
-            <motion.div
-                className="col-span-12 lg:col-span-7 flex flex-col justify-center text-left pt-12 lg:pt-0 space-y-8"
-                initial="hidden"
-                animate="visible"
-                variants={{
-                    hidden: { opacity: 0 },
-                    visible: {
-                        opacity: 1,
-                        transition: { staggerChildren: 0.15, delayChildren: 0.2 },
-                    },
-                }}
-            >
-
-                <motion.div variants={fadeInUp}>
-                    <Badge
-                        variant="outline"
-                        className="group relative pl-2 pr-4 py-1.5 rounded-full"
-                    >
-                        <span className="relative flex h-2 w-2 mr-3">
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75" />
-                            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
-                        </span>
-
-                        <span className="text-xs font-semibold tracking-wide text-muted-foreground group-hover:text-foreground transition-colors">
-                            AVAILABLE FOR WORK
-                        </span>
-
-                    </Badge>
-                    <span className="text-sm font-mono text-muted-foreground font-medium tracking-wide">
-                        {`// Hi, I am ${appConfig.name}`}
-                    </span>
-                </motion.div>
-
-                <motion.div variants={fadeInUp} className="space-y-4">
-                    <h1 className="text-5xl sm:text-6xl md:text-7xl xl:text-8xl font-bold tracking-tighter leading-[0.9] text-foreground">
-                        Building digital
-                        <br />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-br from-foreground to-muted-foreground/60 pb-2">
-                            products for
-                        </span>
-                        <br />
-                        <span className="relative inline-block">
-                            <span className="relative z-10 text-foreground">modern web.</span>
-                            {/* Subtle underline highlight */}
-                            <span className="absolute -bottom-1 left-0 w-full h-3 bg-primary/10 -rotate-1 rounded-full -z-10" />
-                        </span>
-                    </h1>
-                </motion.div>
-
-                <motion.p
-                    variants={fadeInUp}
-                    className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-xl mx-auto lg:mx-0 font-medium text-balance"
-                >
-                    {appConfig.description}
-                </motion.p>
-
-                <motion.div
-                    variants={fadeInUp}
-                    className="flex flex-wrap items-center justify-start gap-4 pt-2 relative"
-                >
-                    <ButtonLink
-                        href={resume_link}
-                        target="_blank"
-                        size="lg"
-                        rounded="full"
-                        variant="light"
-                        className="h-12 px-8"
-                    >
-                        <Icon name="download" />
-                        Download Resume
-                    </ButtonLink>
-
-                    <GlowFillButton
-                        icon={ArrowRight}
-                        className="h-12 px-8 rounded-full font-medium text-foreground bg-muted border border-border/50 backdrop-blur-sm my-0  relative overflow-hidden"
-                    >
-                        <TransitionLink href="/projects">View Projects</TransitionLink>
-                    </GlowFillButton>
-                </motion.div>
-
-            </motion.div>
-
-            <div className="lg:col-span-5 relative hidden lg:flex items-center justify-center perspective-1000">
-                <FloatingCard>
-                    {/* This wrapper gives it the 3D tilt and glass effect */}
-                    <div className="relative z-10 w-full aspect-square max-w-[500px] flex items-center justify-center">
-                        {/* Inner Glow */}
-                        <div className="absolute inset-0 bg-primary/10 blur-[100px] rounded-full" />
-
-                        {/* The Component */}
-                        <HeroVisual />
-                    </div>
-                </FloatingCard>
-            </div>
-
-
-            {/* Scroll Indicator */}
-            <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1, duration: 1 }}
-                className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-muted-foreground/50"
-            >
-                <span className="text-[10px] uppercase tracking-widest">Scroll</span>
-                <div className="w-[1px] h-12 bg-gradient-to-b from-transparent via-muted-foreground/50 to-transparent" />
-            </motion.div>
-
-        </SpotlightReveal>
-    );
-}
-
-
-
 // A simple 3D Tilt Wrapper for the right-side visual
 const FloatingCard = ({ children }: { children: React.ReactNode }) => {
     return (
@@ -296,7 +286,7 @@ const FloatingCard = ({ children }: { children: React.ReactNode }) => {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
-            className="relative"
+            className="relative overflow-hidden"
         >
             <motion.div
                 animate={{

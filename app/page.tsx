@@ -1,3 +1,4 @@
+import { SpotlightReveal } from "@/components/animated/section.reveal";
 import { AboutSection } from "@/components/application/section.about";
 import GithubSection from "@/components/application/section.github";
 import { HeroSection } from "@/components/application/section.hero";
@@ -18,14 +19,20 @@ export default async function HomePage() {
   const data = await getGithubStats(appConfig.usernames.github);
 
   return (
-    <Wrapper className="overflow-hidden">
+    <Wrapper>
+      <SpotlightReveal>
+        {/* Hero Section */}
+        <HeroSection />
+      </SpotlightReveal>
 
-      <HeroSection />
-
-      <AboutSection />
+      <SpotlightReveal>
+        {/* About Section */}
+        <AboutSection />
+      </SpotlightReveal>
 
       {/* Work Experience */}
       <WorkSection />
+
       {/* Skills */}
       <SkillSection />
       {/* Projects */}

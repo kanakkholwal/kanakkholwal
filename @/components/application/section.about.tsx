@@ -1,6 +1,5 @@
 "use client";
 
-import { SpotlightReveal } from "@/components/animated/section.reveal";
 import { SectionHeader } from "@/components/application/sections.header"; // Assuming you have this
 import BlurFade from "@/components/magicui/blur-fade";
 import { StyleModels, StylingModel } from "@/constants/ui";
@@ -19,7 +18,7 @@ export function AboutSection() {
 
 
     return (
-        <SpotlightReveal
+        <section
             id="about"
             className="relative w-full py-24 md:py-32 px-6 md:px-12 overflow-hidden"
         >
@@ -96,7 +95,7 @@ export function AboutSection() {
             </div>
             }
 
-        </SpotlightReveal>
+        </section>
     );
 }
 

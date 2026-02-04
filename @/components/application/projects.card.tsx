@@ -35,9 +35,9 @@ export function ExpandableProjectCards({ cards }: { cards: ProjectType[] }) {
   useOutsideClick(ref as React.RefObject<HTMLDivElement>, () => setActive(null));
 
   return (
-    <div className="w-full h-screen relative">
-   
-      <AnimatePresence>
+    <div className="w-full min-h-screen relative" id="project-list">
+
+      <AnimatePresence mode="wait">
         {active ? (
           <div className="absolute inset-0 z-[100] flex items-center justify-center p-4 sm:p-10 pointer-events-none">
             <motion.div
@@ -47,7 +47,6 @@ export function ExpandableProjectCards({ cards }: { cards: ProjectType[] }) {
                 "w-full max-w-5xl h-fit max-h-[80dvh] flex flex-col md:flex-row bg-card rounded-3xl overflow-hidden shadow-2xl border border-border pointer-events-auto"
               )}
             >
-              {/* --- LEFT SIDE: MEDIA (Has layoutId) --- */}
               <motion.div
                 layoutId={`media-${active.id}-${id}`}
                 className="relative w-full h-60 md:h-auto md:w-[50%] shrink-0 bg-card border-b md:border-b-0 md:border-r border-border"
@@ -79,7 +78,7 @@ export function ExpandableProjectCards({ cards }: { cards: ProjectType[] }) {
                   ) : (
                     <ProjectFallback title={active.title} />
                   )}
-                  
+
                   {/* Gradient overlay */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-80" />
 
@@ -91,12 +90,12 @@ export function ExpandableProjectCards({ cards }: { cards: ProjectType[] }) {
                     >
                       {active.title}
                     </motion.h3>
-                    
+
                     {/* Tags in expanded view - FADE IN only (No layoutId) */}
                     <motion.div
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 10 }} 
+                      exit={{ opacity: 0, y: 10 }}
                       transition={{ delay: 0.1 }}
                       className="flex flex-wrap gap-2"
                     >
@@ -118,7 +117,7 @@ export function ExpandableProjectCards({ cards }: { cards: ProjectType[] }) {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 // IMPORTANT: Quick exit to prevent squash effect
-                exit={{ opacity: 0, transition: { duration: 0.05 } }} 
+                exit={{ opacity: 0, transition: { duration: 0.05 } }}
                 className="flex-1 flex flex-col bg-card relative min-h-0"
               >
                 <ScrollArea className="flex-1 p-6 md:p-10 overflow-y-auto">
@@ -243,9 +242,9 @@ export function ExpandableProjectCards({ cards }: { cards: ProjectType[] }) {
   );
 }
 
-export function SimpleProjectCards({ cards }: { cards: ProjectType[] }) {
+export function SimpleProjectCards({ cards,className }: { cards: ProjectType[], className?: string }) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-7xl mx-auto">
+    <div className={cn("grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-7xl mx-auto", className)} id="project-list">
       {cards?.map((card, index) => (
         <ProjectCard key={card.id} card={card} index={index} />
       ))}

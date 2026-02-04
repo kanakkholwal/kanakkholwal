@@ -118,7 +118,6 @@ function WorkCard({ work }: { work: WorkExperience }) {
                                 {work.title}
                             </h3>
 
-                            {/* Desktop Company Meta (Hidden on Mobile since we showed it above) */}
                             <div className="hidden md:flex items-center flex-wrap gap-2 text-sm text-muted-foreground">
                                 <span className="flex items-center gap-1.5 font-medium text-foreground/80">
                                     <Building2 size={14} />
@@ -129,7 +128,7 @@ function WorkCard({ work }: { work: WorkExperience }) {
                                             target="_blank"
                                             className="p-2 rounded-full text-muted-foreground/50 hover:text-foreground hover:bg-muted/50 transition-all"
                                         >
-                                            <ArrowUpRight size={18} className="md:size-4" />
+                                            <ArrowUpRight size={18} className="size-4" />
                                         </Link>
                                     )}
                                 </span>

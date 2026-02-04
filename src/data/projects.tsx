@@ -194,6 +194,146 @@ Nexonauts is a **dual-sided marketplace** designed to streamline the "concept-to
     video: "",
   },
   {
+    id: "custom-domain-sdk",
+    title: "Custom Domain SDK",
+    href: "https://www.npmjs.com/package/custom-domain-sdk",
+    dates: "Feb 2025 - Feb 2025",
+    active: true,
+    status: "Shipped",
+    description:
+      "TypeScript SDK for managing custom domains using Cloudflare like Custom Hostnames",
+    content: `
+### **Custom Domain SDK**
+
+
+A production-grade TypeScript SDK for managing custom domains using Cloudflare like Custom Hostnames. This SDK is framework-agnostic, database-agnostic, and implements a strict domain lifecycle state machine.
+
+Features
+--------
+
+
+-   Strict State Machine: Ensures deterministic transitions .
+-   Framework Agnostic: Works in Node.js, Bun, or any other JS runtime.
+-   Provider Agnostic (Persistence): Abstracted behind a <code>DomainStore</code> interface.
+-   Provider Agnostic (DNS): Abstracted behind a <code>DnsResolver</code> interface.
+-   Typed Errors: Proper error handling for easier debugging.
+For detailed usage, architecture, and API reference, see [DOCUMENTATION.md](https://github.com/kanakkholwal/custom-domain-sdk/blob/main/DOCUMENTATION.md).
+
+
+
+- [Installation](https://github.com/kanakkholwal/custom-domain-sdk#installation)
+
+
+- [Quick Start](https://github.com/kanakkholwal/custom-domain-sdk#quick-start)
+
+- [Domain Lifecycle](https://github.com/kanakkholwal/custom-domain-sdk#domain-lifecycle)
+
+### **Domain Lifecycle**
+
+The SDK enforces the following state transitions:
+
+1.  created: Internal record created.
+2.  pending_verification: Waiting for TXT record verification.
+3.  verified: TXT record matched.
+4.  pending_dns: Waiting for CNAME/A record to point to our edge.
+5.  provisioning_ssl: Calling Cloudflare to issue certificates.
+6.  active: Domain is live.
+7.  failed: Terminating state for any step.
+
+Architecture
+------------
+
+[](https://github.com/kanakkholwal/custom-domain-sdk#architecture)
+
+Why this exists
+---------------
+
+[](https://github.com/kanakkholwal/custom-domain-sdk#why-this-exists)
+
+Custom domains look trivial until you try to ship them properly.
+
+At first it's just: "Add a TXT record, point a CNAME, redirect traffic."
+
+Then reality hits:
+
+-   Subdomains vs apex domains behave differently
+-   DNS propagation lies to you
+-   CNAME-only checks break with ALIAS / flattened records
+-   TLS provisioning is asynchronous and stateful
+-   Providers return half-documented statuses
+-   You end up rewriting the same glue code in every project
+
+Most implementations mix all of this directly into app code, with hidden assumptions and implicit state transitions. It works.. until it doesn't, and then it's painful to debug.
+
+This SDK exists to make that logic *explicit, deterministic, and reusable*.
+
+Non-goals
+---------
+
+[](https://github.com/kanakkholwal/custom-domain-sdk#non-goals)
+
+This project is intentionally scoped. If you're looking for an all-in-one platform, this is probably not it.
+
+This SDK does not:
+
+-   Try to be a DNS provider
+
+-   Serve HTTP traffic or handle redirects
+
+-   Automatically retry, poll, or "eventually fix" DNS issues
+
+-   Hide provider limitations or quota constraints
+
+-   Manage databases, background jobs, or cron workers
+
+-   Abstract away infrastructure reality
+
+It also does not attempt to:
+
+-   Guess DNS intent (CNAME vs A vs ALIAS)
+
+-   Verify ownership at parent domains for convenience
+
+-   Auto-advance states behind the scenes
+
+-   Paper over Cloudflare (or any provider) errors
+
+Every state transition is explicit.\
+Every failure is surfaced.\
+Retries and polling are the caller's responsibility by design.
+
+If you want something that "just works" by doing magic in the background, this SDK will feel strict.
+
+
+    `,
+    technologies: [
+      "TypeScript",
+      "Cloudflare API",
+      "DNS Management",
+      "NPM Package"
+    ],
+    links: [
+      {
+        type: "Documentation",
+        href: "https://docs.nexonauts.com/docs/packages/custom-domain-sdk",
+        icon: <Icon name="book" className="size-3" />,
+      },
+      {
+        type: "Source",
+        href: "https://github.com/kanakkholwal/custom-domain-sdk",
+        icon: <Icon name="github" className="size-3" />,
+      },
+      {
+        type: "Package",
+        href: "https://www.npmjs.com/package/custom-domain-sdk",
+        icon: <Icon name="package" className="size-3" />,
+      },
+    ],
+    image:
+      "",
+    video: "",
+  },
+  {
     id: "crawler-llms",
     title: "RAG Data Pipeline Crawler",
     href: "https://github.com/kanakkholwal/crawler-for-llms",
