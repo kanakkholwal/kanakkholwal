@@ -234,7 +234,7 @@ export function HeroSection() {
 
                 <motion.div
                     variants={fadeInUp}
-                    className="flex flex-wrap items-center justify-start gap-4 pt-2"
+                    className="flex flex-wrap items-center justify-start gap-4 pt-2 relative"
                 >
                     <ButtonLink
                         href={resume_link}
@@ -250,7 +250,7 @@ export function HeroSection() {
 
                     <GlowFillButton
                         icon={ArrowRight}
-                        className="h-12 px-8 rounded-full font-medium text-foreground bg-muted border border-border/50 backdrop-blur-sm my-0"
+                        className="h-12 px-8 rounded-full font-medium text-foreground bg-muted border border-border/50 backdrop-blur-sm my-0  relative overflow-hidden"
                     >
                         <TransitionLink href="/projects">View Projects</TransitionLink>
                     </GlowFillButton>

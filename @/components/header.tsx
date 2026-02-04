@@ -5,11 +5,12 @@ import { ModeToggle } from "@/components/mode-toggle";
 import { TransitionLink } from "@/components/utils/link";
 import { AnimationMode, animationModes, NAV_ITEMS, StyleModels, StylingModel } from "@/constants/ui";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useOutsideClick } from "@/hooks/use-outside-click";
 import useStorage from "@/hooks/use-storage";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, LinkIcon, Menu, Palette, X } from "lucide-react"; // Make sure to install lucide-react
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Icon } from "./icons";
 import { Socials } from "./socials";
 import { Label } from "./ui/label";
@@ -25,6 +26,8 @@ export const DynamicIslandNavbar = () => {
   const [animationEnabled, setAnimationEnabled] = useStorage<boolean>("animations.enabled", false);
   const [animationMode, setAnimationMode] = useStorage<AnimationMode["id"]>("animations.mode", "stars");
 
+  const ref = useRef<HTMLDivElement>(null);
+  useOutsideClick(ref as React.RefObject<HTMLDivElement>, () => setIsOpen(false));
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50 flex justify-center pb-6 px-4 pointer-events-none">
@@ -42,6 +45,7 @@ export const DynamicIslandNavbar = () => {
           height: isOpen ? "auto" : "56px" // Fixed height when closed
         }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
+        ref={ref}
       >
         <AnimatePresence>
           {isOpen && (
