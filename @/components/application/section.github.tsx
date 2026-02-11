@@ -94,7 +94,7 @@ export function StaticGithubSection({ data }: { data: Contributions }) {
                 </p>
             </div>
 
-            <div className="rounded-3xl border border-border bg-card/50 backdrop-blur-sm overflow-hidden shadow-sm">
+            <div className="rounded-3xl border border-border bg-card/50 backdrop-blur-sm overflow-hidden">
 
                 <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-border border-b border-border">
                     {STATS_CONFIG.map((stat) => (
@@ -188,25 +188,7 @@ export function StaticGithubSection({ data }: { data: Contributions }) {
                                     />
                                 )}
                             </ContributionGraphCalendar>
-                            <ContributionGraphLegend className="mt-4">
-                                {({ level }) => (
-                                    <div
-                                        className="flex h-3 w-3 items-center justify-center rounded-[1px]"
-                                        data-level={level}
-                                    >
-                                        <div
-                                            className={cn(
-                                                "h-full w-full rounded-[1px]",
-                                                level === 0 && "bg-muted/20",
-                                                level === 1 && "bg-emerald-400/30 dark:bg-emerald-900/40",
-                                                level === 2 && "bg-emerald-400/60 dark:bg-emerald-700/60",
-                                                level === 3 && "bg-emerald-500 dark:bg-emerald-600",
-                                                level === 4 && "bg-emerald-600 dark:bg-emerald-500"
-                                            )}
-                                        />
-                                    </div>
-                                )}
-                            </ContributionGraphLegend>
+                            <ContributionGraphLegend className="mt-4"/>
                         </TabsContent>
                         <TabsContent value="chart">
                             <WeeklyChart data={data.contributions[year]} />
@@ -266,7 +248,7 @@ export function DynamicGithubSection({ data }: {
             </BlurFade>
 
             <BlurFade delay={0.2} className="w-full max-w-(--max-app-width) mx-auto">
-                <div className="rounded-4xl border border-border/60 backdrop-blur-xl shadow-2xl overflow-hidden">
+                <div className="rounded-4xl border border-border/60 backdrop-blur-xl overflow-hidden">
 
                     <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-border border-b border-border bg-card ">
                         {STATS_CONFIG.map((stat, i) => (
@@ -288,7 +270,7 @@ export function DynamicGithubSection({ data }: {
                         ))}
                     </div>
 
-                    <div className="p-6 md:p-10 relative w-full bg-background">
+                    <div className="p-6 md:p-10 relative w-full bg-card/50">
                         <div className="absolute inset-0 -z-10 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] dark:bg-[radial-gradient(#ffffff08_1px,transparent_1px)] opacity-50" />
 
                         <ContributionGraph data={data.stats.contributions[year]} className="w-full">

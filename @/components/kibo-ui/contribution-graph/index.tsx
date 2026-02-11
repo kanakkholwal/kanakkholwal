@@ -494,11 +494,11 @@ export const ContributionGraphLegend = ({
             <rect
               className={cn(
                 "stroke-[1px] stroke-border",
-                'data-[level="0"]:fill-muted',
-                'data-[level="1"]:fill-muted-foreground/20',
-                'data-[level="2"]:fill-muted-foreground/40',
-                'data-[level="3"]:fill-muted-foreground/60',
-                'data-[level="4"]:fill-muted-foreground/80',
+                'data-[level="0"]:fill-muted/20 dark:data-[level="0"]:fill-zinc-800',
+                'data-[level="1"]:fill-emerald-900/40',
+                'data-[level="2"]:fill-emerald-700/60',
+                'data-[level="3"]:fill-emerald-500',
+                'data-[level="4"]:fill-emerald-400'
               )}
               data-level={level}
               height={blockSize}

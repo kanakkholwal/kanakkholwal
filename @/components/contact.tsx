@@ -23,11 +23,8 @@ export function ContactSection() {
   return (
     <SpotlightReveal id="contact" className="relative w-full py-32 px-4 overflow-hidden">
 
-      {/* 1. Background Atmosphere */}
       <div className="absolute inset-0 -z-10">
-        {/* Subtle Grid */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_50%,#000_70%,transparent_100%)]" />
-        {/* Glow Blob */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-primary/5 blur-[120px] rounded-full pointer-events-none" />
       </div>
 
@@ -38,7 +35,7 @@ export function ContactSection() {
           initial={{ opacity: 0, y: 40, scale: 0.95 }}
           animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="group relative overflow-hidden rounded-[40px] border border-border bg-card/50 backdrop-blur-2xl shadow-xl"
+          className="group relative overflow-hidden rounded-[40px] border border-border bg-card/50 backdrop-blur-2xl"
         >
 
           {/* Top "Window" Bar */}
