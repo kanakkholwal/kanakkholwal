@@ -214,7 +214,7 @@ const appConfig = {
     "google.analytics": "G-95KQZNMSSE",
   },
   statsConfig: {
-    npmPackages: ["nexo-editor", "nexo-mdx"],
+    npmPackages: ["custom-domain-sdk","nexo-editor", "nexo-mdx"],
     repositories: [
       {
         name: "college-ecosystem",
