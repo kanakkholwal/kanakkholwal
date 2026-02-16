@@ -403,4 +403,80 @@ Built to replace expensive marketing email tools, this system leverages **Server
     image: "",
     video: "",
   },
+   {
+    id: "nexo-pdf",
+    title: "Nexo PDF",
+    href: "https://github.com/kanakkholwal/nexo-pdf",
+    dates: "Feb 2026 - Present",
+    active: true,
+    status: "In Progress",
+    description:
+      "professional, high-performance PDF toolkit that runs entirely in your browser",
+    content: `
+NexoPDF is a professional, high-performance PDF toolkit that runs entirely in your browser. By leveraging powerful WebAssembly (WASM) engines, it ensures your documents never leave your device, providing world-class security and speed.
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Svelte](https://img.shields.io/badge/Svelte-5.0-ff3e00?logo=svelte)](https://svelte.dev)
+[![WASM](https://img.shields.io/badge/Engine-WASM-654ff0?logo=webassembly)](https://webassembly.org)
+
+## ✨ Why NexoPDF?
+
+*   **🔒 100% Private & Secure**: All processing happens locally in your browser's sandbox. Zero server uploads, zero data transfer.
+*   **⚡ Native Speed**: Powered by a high-performance WASM engine for desktop-class processing speeds.
+*   **📱 Offline Capable**: Fully functional without an internet connection. Install it as a PWA for a seamless desktop experience (available soon).
+*   **♾️ Unlimited Everything**: No daily quotas, no file size caps, and no subscriptions. Batch process as much as your hardware handles.
+
+## 🛠️ Essential Tools
+
+| Tool | Description |
+| :--- | :--- |
+| **Merge PDF** | Combine multiple files into one. Drag and drop to reorder. |
+| **Split PDF** | Extract pages, split ranges, or divide files into multiple documents. |
+| **Compress PDF** | Reduce file sizes while maintaining professional quality. |
+| **Image to PDF** | Instant conversion for JPG, PNG, and HEIC formats. |
+| **PDF Multi-Tool** | The ultimate workspace to rearrange, rotate, and export pages. |
+
+## 🚀 Tech Stack
+
+NexoPDF is built with cutting-edge technologies for maximum performance and reliability:
+
+- **Frontend**: [Svelte 5](https://svelte.dev/) (Runes), [SvelteKit](https://kit.svelte.dev/)
+- **Styling**: [Tailwind CSS 4.0](https://tailwindcss.com/)
+- **PDF Core**: [`pdf-lib`](https://pdf-lib.js.org/), [`pdfjs-dist`](https://mozilla.github.io/pdf.js/)
+- **WASM Engine**: [`@neslinesli93/qpdf-wasm`](https://github.com/neslinesli93/qpdf-wasm)
+- **Icons**: [Lucide Svelte](https://lucide.dev/)
+- **Linting**: [Biome](https://biomejs.dev/)
+
+
+
+    `,
+    technologies: [
+      "TypeScript",
+      "Svelte",
+     "Svelte 5 Runes",
+      "Sveltekit",
+      "WASM",
+      "Tailwind"
+    ],
+    links: [
+      {
+        type: "Documentation",
+        href: "https://docs.nexonauts.com/docs/packages/custom-domain-sdk",
+        icon: <Icon name="book" className="size-3" />,
+      },
+      {
+        type: "Source",
+        href: "https://github.com/kanakkholwal/custom-domain-sdk",
+        icon: <Icon name="github" className="size-3" />,
+      },
+      {
+        type: "Package",
+        href: "https://www.npmjs.com/package/custom-domain-sdk",
+        icon: <Icon name="package" className="size-3" />,
+      },
+    ],
+    image:
+      "",
+    video: "",
+  },
 ];
