@@ -459,20 +459,11 @@ NexoPDF is built with cutting-edge technologies for maximum performance and reli
       "Tailwind"
     ],
     links: [
-      {
-        type: "Documentation",
-        href: "https://docs.nexonauts.com/docs/packages/custom-domain-sdk",
-        icon: <Icon name="book" className="size-3" />,
-      },
+     
       {
         type: "Source",
-        href: "https://github.com/kanakkholwal/custom-domain-sdk",
+        href: "https://github.com/kanakkholwal/nexo-pdf",
         icon: <Icon name="github" className="size-3" />,
-      },
-      {
-        type: "Package",
-        href: "https://www.npmjs.com/package/custom-domain-sdk",
-        icon: <Icon name="package" className="size-3" />,
       },
     ],
     image:
