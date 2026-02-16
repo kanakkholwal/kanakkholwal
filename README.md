@@ -49,7 +49,9 @@
 ### Open Source — *Global*
 **Contributor & Maintainer** | *2022 – Present*
 - [**Bruno**](https://github.com/usebruno/bruno/issues?q=sort%3Aupdated-desc%20is%3Apr%20author%3Akanakkholwal%20-state%3Aclosed) - Opensource IDE For Exploring and Testing API's (lightweight alternative to Postman/Insomnia)
+- [**Optexity**](https://github.com/optexity/optexity/issues?q=sort%3Aupdated-desc%20author%3Akanakkholwal) - Build custom browser agents with AI-powered automation
 - [**College Ecosystem**](https://github.com/kanakkholwal/college-ecosystem) - Next.js/TS platform; 1M+ visits; realtime polls, rankings, communities.
+- [**Nexo PDF**](https://github.com/kanakkholwal/nexo-pdf) - browser-first pdf utility application
 - [**Muse**](https://github.com/kanakkholwal/muse-mvp) - AI fashion discovery (vector search); reduced user selection time 40%.
 - [**Mailing system**](https://github.com/kanakkholwal/mail-system) - A modern, type-safe & portable email service built with Typescript, React Email, and Nodemailer.
 - [**Markdown Editor**](https://github.com/kanakkholwal/nexo-mdx) - plugin-based Markdown Editor with React + TS + shadcn UI / Tailwind css ; rendering speed +35%; 300+ weekly downloads.
