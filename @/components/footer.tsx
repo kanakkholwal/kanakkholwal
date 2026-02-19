@@ -39,6 +39,7 @@ export function FooterSection() {
                           <TransitionLink
                             className="group relative inline-flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors"
                             href={link.href}
+                            prefetch={false}
                           >
                             <span className="relative">
                               {link.label}

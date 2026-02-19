@@ -234,6 +234,12 @@ const appConfig = {
           "https://repobeats.axiom.co/api/embed/e66720ef5fadf321ae59f5a9ae917ff738d6653d.svg",
       },
       {
+        name: "nexo-mdx",
+        repo: "kanakkholwal/nexo-pdf",
+        repoBeatsUri:
+          "https://repobeats.axiom.co/api/embed/e66720ef5fadf321ae59f5a9ae917ff738d6653d.svg",
+      },
+      {
         name: "nexonauts",
         repo: "kanakkholwal/nexonauts",
         repoBeatsUri:

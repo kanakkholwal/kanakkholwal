@@ -68,8 +68,8 @@
 ### Custom Domain Management SDK
 
 [GitHub](https://github.com/kanakkholwal/custom-domain-sdk)
-
 _Cloudflare Workers, DNS, Typescript, Go_
+
 • Engineered a framework-agnostic **SDK** for **multi-tenant domain** onboarding using strict lifecycle state machines.
 • Automated domain verification, DNS provisioning, and edge routing via **Cloudflare Custom Hostnames**.
 • Designed a **database-agnostic control plane** for **domain mapping** used in SaaS platforms.
