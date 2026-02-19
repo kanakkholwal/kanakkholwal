@@ -25,7 +25,7 @@ const pushAnimation = () => {
       easing: "cubic-bezier(0.32, 0.72, 0, 1)", // iOS-like spring
       fill: "forwards",
       pseudoElement: "::view-transition-old(root)",
-    }
+    },
   );
 
   // NEW PAGE: Slides in from the Right
@@ -44,7 +44,7 @@ const pushAnimation = () => {
       easing: "cubic-bezier(0.32, 0.72, 0, 1)",
       fill: "forwards",
       pseudoElement: "::view-transition-new(root)",
-    }
+    },
   );
 };
 
@@ -68,7 +68,7 @@ const backAnimation = () => {
       easing: "cubic-bezier(0.32, 0.72, 0, 1)",
       fill: "forwards",
       pseudoElement: "::view-transition-old(root)",
-    }
+    },
   );
 
   // NEW PAGE (The one reappearing): Slides in from Left (Parallax Reverse)
@@ -88,7 +88,7 @@ const backAnimation = () => {
       easing: "cubic-bezier(0.32, 0.72, 0, 1)",
       fill: "forwards",
       pseudoElement: "::view-transition-new(root)",
-    }
+    },
   );
 };
 
@@ -123,7 +123,7 @@ export function PreviousPageLink(props: ButtonProps) {
       onClick={() => {
         // Use Back Animation for going back
         const parentPath = pathname.split("/").slice(0, -1).join("/") || "/";
-        
+
         if (window?.history?.length > 1) {
           router.back();
         } else {
@@ -203,14 +203,14 @@ export function ButtonScroll(
   props: React.ComponentProps<typeof Button> & {
     targetId: string;
     offset?: number;
-  }
+  },
 ) {
   const { targetId, offset = 50, ...rest } = props;
 
   const handleScroll = () => {
     const element = document.getElementById(targetId);
     if (!element) return;
-    
+
     const y = element.getBoundingClientRect().top + window.scrollY - offset;
     window.scrollTo({ top: y, behavior: "smooth" });
   };

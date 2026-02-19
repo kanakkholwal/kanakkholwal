@@ -1,5 +1,5 @@
-import { ImageResponse } from 'next/og';
-import { getFonts } from './fonts';
+import { ImageResponse } from "next/og";
+import { getFonts } from "./fonts";
 
 export type OgImageOptions = {
   width?: number;
@@ -9,7 +9,7 @@ export type OgImageOptions = {
 
 export async function generateOgImage(
   element: React.ReactElement,
-  options: OgImageOptions = {}
+  options: OgImageOptions = {},
 ) {
   // Load fonts if not provided
   const fonts = options.fonts || (await getFonts());
@@ -19,6 +19,6 @@ export async function generateOgImage(
     height: options.height || 630,
     fonts: fonts as any, // Type casting for Satori fonts
     // Critical: Satori uses flexbox by default, but we ensure consistency
-    emoji: 'twemoji',
+    emoji: "twemoji",
   });
 }

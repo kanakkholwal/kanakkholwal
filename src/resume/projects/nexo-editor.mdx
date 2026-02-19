@@ -1,0 +1,49 @@
+---
+id: "nexo-editor"
+title: "Nexo MDX Editor"
+href: "https://github.com/kanakkholwal/nexo-mdx"
+dates: "Aug 2025"
+active: true
+status: "Shipped"
+description: "A headless, accessible-first React Markdown editor package designed to inherit your Tailwind/Shadcn themes via CSS modules."
+technologies:
+  - "React.js"
+  - "TypeScript"
+  - "TailwindCSS"
+  - "Shadcn UI"
+  - "NPM Package"
+links:
+  - label: "Docs"
+    url: "https://docs.nexonauts.com/packages/nexo-mdx"
+  - label: "NPM"
+    url: "https://www.npmjs.com/package/nexo-mdx"
+  - label: "Source"
+    url: "https://github.com/kanakkholwal/nexo-mdx"
+  - label: "Demo"
+    url: "https://nexo-editor.netlify.app"
+---
+
+### **Overview**
+**Nexo MDX** is a React-based Markdown editor built to solve the styling fragmentation in rich text editors. Unlike traditional editors that force their own styles, Nexo adopts a **"Headless UI" philosophy**, allowing developers to control the look and feel completely using their own utility classes.
+
+### **Key Technical Capabilities**
+- **Native Accessibility:** Built on top of native `textarea` elements to ensure full screen-reader compatibility and correct form submission behavior without hydration mismatches.
+- **Plugin Architecture:** Supports **Remark** and **Rehype** plugins, allowing developers to extend functionality (e.g., adding mathematical formulas or code highlighting) without forking the core library.
+- **CSS Module Injection:** Features a unique styling engine where developers can override internal component styles using global CSS variables or direct class targeting (e.g., `.nexo-mdx-editor .toolbar`).
+
+### **Implementation**
+```tsx
+import React, { useState } from 'react';
+import MdxEditor from 'nexo-mdx';
+
+export function Editor() {
+  const [mdValue, setMdValue] = useState('');
+
+  return (
+    <MdxEditor
+      value={mdValue}
+      onChange={(value, _) => setMdValue(value)}
+      className="border-zinc-800"
+    />
+  );
+}

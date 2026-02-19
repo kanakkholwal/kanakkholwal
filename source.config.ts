@@ -1,17 +1,28 @@
-import { remarkImage, remarkMdxMermaid, remarkNpm, remarkStructure } from 'fumadocs-core/mdx-plugins';
-import { defineConfig, defineDocs, frontmatterSchema, metaSchema } from 'fumadocs-mdx/config';
-import lastModified from 'fumadocs-mdx/plugins/last-modified';
-import z from 'zod';
+import { iconZodSchema } from "@/components/icons";
+import {
+  remarkImage,
+  remarkMdxMermaid,
+  remarkNpm,
+  remarkStructure,
+} from "fumadocs-core/mdx-plugins";
+import {
+  defineConfig,
+  defineDocs,
+  frontmatterSchema,
+  metaSchema,
+} from "fumadocs-mdx/config";
+import lastModified from "fumadocs-mdx/plugins/last-modified";
+import z from "zod";
 
 // You can customise Zod schemas for frontmatter and `meta.json` here
 // see https://fumadocs.dev/docs/mdx/collections
 export const docs = defineDocs({
-  dir: 'content',
+  dir: "content",
   docs: {
     schema: frontmatterSchema.extend({
       tags: z.array(z.string()).optional(),
       author: z.string().optional(),
-      category: z.string().default('General'),
+      category: z.string().default("General"),
       featured: z.boolean().optional(),
     }),
     postprocess: {
@@ -21,7 +32,67 @@ export const docs = defineDocs({
   meta: {
     schema: metaSchema,
   },
+});
 
+export const workExperiences = defineDocs({
+  dir: "src/resume/work",
+  docs: {
+    schema: frontmatterSchema.extend({
+      company: z.string(),
+      href: z.url(),
+      position: z.string(),
+      badges: z.array(z.string()).optional(),
+      location: z.string(),
+      locationType: z.enum(["Remote", "On-site"]),
+      logoUrl: z.url(),
+      startDate: z.string(),
+      endDate: z.string().optional(),
+    }),
+    postprocess: {
+      includeProcessedMarkdown: true,
+    },
+  },
+});
+export const projects = defineDocs({
+  dir: "src/resume/projects",
+  docs: {
+    schema: frontmatterSchema.extend({
+      id: z.string(),
+      title: z.string(),
+      href: z.url(),
+      dates: z.string(),
+      active: z.boolean(),
+      status: z.union([
+        z.enum(["Active", "Completed", "Archived"]),
+        z.string(),
+      ]),
+      description: z.string(),
+      technologies: z.array(z.string()),
+      links: z
+        .array(
+          z.object({
+            label: z.string(),
+            url: z.url(),
+            icon: iconZodSchema.optional(),
+          }),
+        )
+        .optional(),
+      image: z.url().optional(),
+      video: z.url().optional(),
+      tags: z.array(z.string()).optional(),
+      metrics: z
+        .array(
+          z.object({
+            label: z.string(),
+            value: z.number(),
+          }),
+        )
+        .optional(),
+    }),
+    postprocess: {
+      includeProcessedMarkdown: true,
+    },
+  },
 });
 
 export default defineConfig({
@@ -30,22 +101,35 @@ export default defineConfig({
     remarkPlugins: [remarkImage, remarkStructure, remarkNpm, remarkMdxMermaid],
     remarkNpmOptions: {
       persist: {
-        id: 'package-manager',
+        id: "package-manager",
       },
     },
     rehypeCodeOptions: {
       lazy: true,
       themes: {
-        light: 'github-light',
-        dark: 'github-dark',
+        light: "github-light",
+        dark: "github-dark",
       },
-      langs:
-        ["js", "json", "sql", "bash", "shell", "html", "css", "ts", "tsx", "jsx", "py", "python", "go", "rust", "yaml", "cmd"],
+      langs: [
+        "js",
+        "json",
+        "sql",
+        "bash",
+        "shell",
+        "html",
+        "css",
+        "ts",
+        "tsx",
+        "jsx",
+        "py",
+        "python",
+        "go",
+        "rust",
+        "yaml",
+        "cmd",
+      ],
       tab: true,
-
     },
   },
   plugins: [lastModified()],
-
-
 });

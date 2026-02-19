@@ -3,7 +3,13 @@
 import { Logo } from "@/components/logo";
 import { ModeToggle } from "@/components/mode-toggle";
 import { TransitionLink } from "@/components/utils/link";
-import { AnimationMode, animationModes, NAV_ITEMS, StyleModels, StylingModel } from "@/constants/ui";
+import {
+  AnimationMode,
+  animationModes,
+  NAV_ITEMS,
+  StyleModels,
+  StylingModel,
+} from "@/constants/ui";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useOutsideClick } from "@/hooks/use-outside-click";
 import useStorage from "@/hooks/use-storage";
@@ -16,18 +22,27 @@ import { Socials } from "./socials";
 import { Label } from "./ui/label";
 import { Switch } from "./ui/switch";
 
-
-
 export const DynamicIslandNavbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   // New State for Tabs and Style Selection
   const [activeTab, setActiveTab] = useState<"links" | "design">("links");
-  const [selectedStyle, setSelectedStyle] = useStorage<StylingModel>("styling.model", StyleModels[0].id);
-  const [animationEnabled, setAnimationEnabled] = useStorage<boolean>("animations.enabled", false);
-  const [animationMode, setAnimationMode] = useStorage<AnimationMode["id"]>("animations.mode", "stars");
+  const [selectedStyle, setSelectedStyle] = useStorage<StylingModel>(
+    "styling.model",
+    StyleModels[0].id,
+  );
+  const [animationEnabled, setAnimationEnabled] = useStorage<boolean>(
+    "animations.enabled",
+    false,
+  );
+  const [animationMode, setAnimationMode] = useStorage<AnimationMode["id"]>(
+    "animations.mode",
+    "stars",
+  );
 
   const ref = useRef<HTMLDivElement>(null);
-  useOutsideClick(ref as React.RefObject<HTMLDivElement>, () => setIsOpen(false));
+  useOutsideClick(ref as React.RefObject<HTMLDivElement>, () =>
+    setIsOpen(false),
+  );
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50 flex justify-center pb-6 px-4 pointer-events-none">
@@ -36,13 +51,13 @@ export const DynamicIslandNavbar = () => {
         layout
         className={cn(
           "bg-background/80 backdrop-blur-xl border border-border shadow-lg pointer-events-auto overflow-hidden min-w-sm",
-          "flex flex-col"
+          "flex flex-col",
         )}
         style={{ borderRadius: 24 }}
         initial={{ width: "auto", height: "auto" }}
         animate={{
           width: isOpen ? "min-content" : "auto",
-          height: isOpen ? "auto" : "56px" // Fixed height when closed
+          height: isOpen ? "auto" : "56px", // Fixed height when closed
         }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
         ref={ref}
@@ -62,18 +77,28 @@ export const DynamicIslandNavbar = () => {
                     onClick={() => setActiveTab(tab)}
                     className={cn(
                       "relative z-10 py-2 text-sm font-medium transition-colors duration-200 flex items-center justify-center gap-2",
-                      activeTab === tab ? "text-foreground" : "text-muted-foreground"
+                      activeTab === tab
+                        ? "text-foreground"
+                        : "text-muted-foreground",
                     )}
                   >
                     {activeTab === tab && (
                       <motion.div
                         layoutId="active-tab-bg"
                         className="absolute inset-0 bg-background rounded-lg shadow-sm border border-border/50"
-                        transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                        transition={{
+                          type: "spring",
+                          bounce: 0.2,
+                          duration: 0.6,
+                        }}
                       />
                     )}
                     <span className="relative z-10 flex items-center gap-2 capitalize">
-                      {tab === "links" ? <LinkIcon size={14} /> : <Palette size={14} />}
+                      {tab === "links" ? (
+                        <LinkIcon size={14} />
+                      ) : (
+                        <Palette size={14} />
+                      )}
                       {tab}
                     </span>
                   </button>
@@ -102,7 +127,9 @@ export const DynamicIslandNavbar = () => {
                             onClick={() => setIsOpen(false)}
                             className="flex items-center justify-between p-3 rounded-xl hover:bg-muted/50 group transition-colors"
                           >
-                            <span className="text-sm font-medium">{item.label}</span>
+                            <span className="text-sm font-medium">
+                              {item.label}
+                            </span>
                             <ArrowRight className="size-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-muted-foreground" />
                           </TransitionLink>
                         </motion.div>
@@ -125,20 +152,24 @@ export const DynamicIslandNavbar = () => {
                             "flex flex-col items-center justify-center gap-2 p-3 rounded-xl border transition-all duration-200",
                             selectedStyle === style.id
                               ? "bg-muted/60 shadow shadow-foreground/5"
-                              : "bg-transparent border-transparent hover:bg-muted/30"
+                              : "bg-transparent border-transparent hover:bg-muted/30",
                           )}
                         >
                           <style.icon
                             className={cn(
                               "size-6 mb-1 transition-transform",
-                              selectedStyle === style.id ? style.color : "text-muted-foreground",
-                              selectedStyle === style.id && "scale-110"
+                              selectedStyle === style.id
+                                ? style.color
+                                : "text-muted-foreground",
+                              selectedStyle === style.id && "scale-110",
                             )}
                           />
                           <span
                             className={cn(
                               "text-xs font-medium",
-                              selectedStyle === style.id ? "text-foreground" : "text-muted-foreground"
+                              selectedStyle === style.id
+                                ? "text-foreground"
+                                : "text-muted-foreground",
                             )}
                           >
                             {style.label}
@@ -149,46 +180,62 @@ export const DynamicIslandNavbar = () => {
                         <Label htmlFor="animations">
                           Animations {animationEnabled ? "Enabled" : "Disabled"}
                         </Label>
-                        <Switch id="animations" onCheckedChange={setAnimationEnabled} checked={animationEnabled} />
+                        <Switch
+                          id="animations"
+                          onCheckedChange={setAnimationEnabled}
+                          checked={animationEnabled}
+                        />
                       </div>
                       <AnimatePresence mode="popLayout" initial={false}>
                         {animationEnabled && (
-                          <motion.div className="col-span-2 px-2 pt-1 flex flex-col gap-2"
+                          <motion.div
+                            className="col-span-2 px-2 pt-1 flex flex-col gap-2"
                             initial={{ opacity: 0, height: 0 }}
                             animate={{ opacity: 1, height: "auto" }}
                             exit={{ opacity: 0, height: 0 }}
                             layout
-                            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                            transition={{
+                              type: "spring",
+                              stiffness: 300,
+                              damping: 30,
+                            }}
                           >
                             {animationModes.map((mode) => {
                               if (mode.disabled) return null;
-                              return <div className="inline-flex items-center justify-between gap-2 w-full" key={mode.id}>
-                                <Label htmlFor={`animationMode.${mode.id}`} className={cn(
-                                  "inline-flex items-center gap-2",
-                                  animationMode === mode.id ? "text-foreground" : "text-muted-foreground"
-                                )}>
-                                  <Icon name={mode.icon} className="size-4" />
-                                  {mode.label}
-                                </Label>
-                                <Switch id="animationMode.stars"
-                                  onCheckedChange={(checked) => {
-                                    if (checked) {
-                                      setAnimationMode("stars");
-                                    } else {
-                                      setAnimationMode("none");
-                                    }
-                                  }}
-                                  checked={animationMode === "stars"}
-                                />
-
-                              </div>
+                              return (
+                                <div
+                                  className="inline-flex items-center justify-between gap-2 w-full"
+                                  key={mode.id}
+                                >
+                                  <Label
+                                    htmlFor={`animationMode.${mode.id}`}
+                                    className={cn(
+                                      "inline-flex items-center gap-2",
+                                      animationMode === mode.id
+                                        ? "text-foreground"
+                                        : "text-muted-foreground",
+                                    )}
+                                  >
+                                    <Icon name={mode.icon} className="size-4" />
+                                    {mode.label}
+                                  </Label>
+                                  <Switch
+                                    id="animationMode.stars"
+                                    onCheckedChange={(checked) => {
+                                      if (checked) {
+                                        setAnimationMode("stars");
+                                      } else {
+                                        setAnimationMode("none");
+                                      }
+                                    }}
+                                    checked={animationMode === "stars"}
+                                  />
+                                </div>
+                              );
                             })}
-
-
                           </motion.div>
                         )}
                       </AnimatePresence>
-
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -196,7 +243,6 @@ export const DynamicIslandNavbar = () => {
 
               <div className="w-full h-px bg-border/50" />
               <Socials className="items-center gap-x-1 border-r border-border/50 mx-auto inline-flex md:hidden" />
-
             </motion.div>
           )}
         </AnimatePresence>
@@ -207,7 +253,6 @@ export const DynamicIslandNavbar = () => {
             </TransitionLink>
           </motion.div>
           <Socials className="items-center gap-x-1 border-r border-border/50 hidden md:inline-flex" />
-
 
           <div className="flex items-center gap-1">
             <ModeToggle />
@@ -256,17 +301,16 @@ export function StaticNavbar() {
       animate={{
         y: 0,
         opacity: 1,
-        borderRadius: "1.5rem"
+        borderRadius: "1.5rem",
       }}
       transition={{ type: "spring", stiffness: 260, damping: 20 }}
       className={cn(
         "pointer-events-auto relative flex flex-col w-full max-w-[calc(var(--max-app-width)*0.85)]",
       )}
       style={{
-        padding: isMobileMenuOpen ? "16px" : "8px 16px"
+        padding: isMobileMenuOpen ? "16px" : "8px 16px",
       }}
     >
-
       <div className="flex items-center justify-between w-full z-20 bg-background/80 backdrop-blur-md px-3 py-2 rounded-xl border border-border">
         <div className="flex items-center gap-2">
           <TransitionLink href="/" className="flex items-center gap-2 group">
@@ -350,7 +394,7 @@ export function StaticNavbar() {
                   <motion.span
                     initial={{ x: -10, opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
-                    transition={{ delay: 0.1 + (i * 0.05) }}
+                    transition={{ delay: 0.1 + i * 0.05 }}
                   >
                     {item.label}
                   </motion.span>
@@ -370,25 +414,22 @@ export function StaticNavbar() {
           </motion.div>
         )}
       </AnimatePresence>
-
     </motion.div>
-  )
-
+  );
 }
 
 export type NavbarType = "static" | "dynamic-island";
 
-
 export const Header = ({ transition }: { transition: boolean }) => {
   const isMobile = useIsMobile();
-  const [navbarModel] = useStorage<NavbarType>("navbar.model", "dynamic-island");
+  const [navbarModel] = useStorage<NavbarType>(
+    "navbar.model",
+    "dynamic-island",
+  );
 
   return (
-    <motion.header
-      className="fixed top-0 left-0 right-0 z-50 flex justify-center pt-6 px-4 pointer-events-none"
-    >
+    <motion.header className="fixed top-0 left-0 right-0 z-50 flex justify-center pt-6 px-4 pointer-events-none">
       <AnimatePresence mode="popLayout">
-
         {!transition ? (
           <motion.div
             key="splash-logo"
@@ -401,13 +442,12 @@ export const Header = ({ transition }: { transition: boolean }) => {
               <Logo size={isMobile ? "lg" : "xl"} draw />
             </motion.div>
           </motion.div>
-        ) :
-          (
-            navbarModel === "dynamic-island" ? <DynamicIslandNavbar /> : <StaticNavbar />
-          )
-        }
+        ) : navbarModel === "dynamic-island" ? (
+          <DynamicIslandNavbar />
+        ) : (
+          <StaticNavbar />
+        )}
       </AnimatePresence>
     </motion.header>
   );
 };
-

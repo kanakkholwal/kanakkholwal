@@ -65,7 +65,8 @@ export function CountingNumber({
 
   return (
     <motion.span ref={ref} className={cn("inline-block", className)} {...props}>
-      {format ? format(display) : formatNumber(display)}{suffix}
+      {format ? format(display) : formatNumber(display)}
+      {suffix}
     </motion.span>
   );
 }

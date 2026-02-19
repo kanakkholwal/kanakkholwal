@@ -7,9 +7,9 @@ import StargazersList from "./stars.gazers-list";
 import { WidgetSkeleton } from "./widget.skeleton";
 
 export async function StarHistoryGraph() {
-   const stars = await Promise.all(
-      statsConfig.repositories.map((r) => r.repo).map(getStarHistory),
-    );
+  const stars = await Promise.all(
+    statsConfig.repositories.map((r) => r.repo).map(getStarHistory),
+  );
   const starsByRepo: Record<string, GitHubStarHistory> = {};
   statsConfig.repositories.forEach((r, i) => {
     starsByRepo[r.repo] = stars[i];

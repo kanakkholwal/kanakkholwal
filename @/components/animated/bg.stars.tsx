@@ -114,7 +114,8 @@ function StarsBackground({
       data-slot="stars-background"
       className={cn(
         "relative size-full overflow-hidden",
-        defaultBg && "dark:bg-[radial-gradient(ellipse_at_bottom,_#1c1c1c_0%,_#171717_100%)] bg-[radial-gradient(ellipse_at_bottom,_#f5f5f5_0%,_#f1f1f1_100%)]",
+        defaultBg &&
+          "dark:bg-[radial-gradient(ellipse_at_bottom,_#1c1c1c_0%,_#171717_100%)] bg-[radial-gradient(ellipse_at_bottom,_#f5f5f5_0%,_#f1f1f1_100%)]",
         className,
       )}
       onMouseMove={handleMouseMove}
@@ -160,6 +161,5 @@ export {
   StarLayer,
   StarsBackground,
   type StarLayerProps,
-  type StarsBackgroundProps
+  type StarsBackgroundProps,
 };
-

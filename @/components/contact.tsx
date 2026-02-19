@@ -21,15 +21,16 @@ export function ContactSection() {
   };
 
   return (
-    <SpotlightReveal id="contact" className="relative w-full py-32 px-4 overflow-hidden">
-
+    <SpotlightReveal
+      id="contact"
+      className="relative w-full py-32 px-4 overflow-hidden"
+    >
       <div className="absolute inset-0 -z-10">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_50%,#000_70%,transparent_100%)]" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-primary/5 blur-[120px] rounded-full pointer-events-none" />
       </div>
 
       <div ref={ref} className="relative z-10 mx-auto max-w-4xl">
-
         {/* Main Glass Panel */}
         <motion.div
           initial={{ opacity: 0, y: 40, scale: 0.95 }}
@@ -37,7 +38,6 @@ export function ContactSection() {
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className="group relative overflow-hidden rounded-[40px] border border-border bg-card/50 backdrop-blur-2xl"
         >
-
           {/* Top "Window" Bar */}
           <div className="flex items-center justify-between px-3 md:px-8 py-6 border-b border-border/10 bg-card/50">
             <div className="flex gap-2">
@@ -51,16 +51,16 @@ export function ContactSection() {
           </div>
 
           <div className="p-8 md:p-16 flex flex-col md:flex-row items-center md:items-start gap-12">
-
             <div className="flex-1 space-y-8 text-center md:text-left">
-
               {/* Status Badge */}
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 backdrop-blur-md">
                 <span className="relative flex h-2 w-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                 </span>
-                <span className="text-xs font-medium text-emerald-500 tracking-wide">System Online & Available</span>
+                <span className="text-xs font-medium text-emerald-500 tracking-wide">
+                  System Online & Available
+                </span>
               </div>
 
               <div className="space-y-4">
@@ -71,7 +71,8 @@ export function ContactSection() {
                   </span>
                 </h2>
                 <p className="text-lg text-muted-foreground max-w-sm mx-auto md:mx-0 leading-relaxed">
-                  Have a project in mind? Let’s turn those requirements into a shipping product.
+                  Have a project in mind? Let’s turn those requirements into a
+                  shipping product.
                 </p>
               </div>
 
@@ -86,7 +87,7 @@ export function ContactSection() {
                   className="shadow-2xl shadow-foreground/10"
                 >
                   <TransitionLink href="/contact">
-                    <Sparkles className="size-5!"/>
+                    <Sparkles className="size-5!" />
                     Start a Project
                   </TransitionLink>
                 </Button>
@@ -95,13 +96,14 @@ export function ContactSection() {
 
             <div className="w-full md:w-[380px] shrink-0">
               <div className="relative group/terminal rounded-2xl bg-black border border-zinc-800 p-6 shadow-xl overflow-hidden">
-
                 <div className="absolute -inset-0.5 bg-gradient-to-br from-primary/50 to-purple-600/50 opacity-0 group-hover/terminal:opacity-100 blur transition-opacity duration-500" />
 
                 <div className="relative z-10 bg-zinc-950/90 rounded-xl p-5 space-y-6">
                   {/* Fake Code Lines */}
                   <div className="space-y-2 font-mono text-sm">
-                    <div className="text-zinc-500">// Initialize connection</div>
+                    <div className="text-zinc-500">
+                      // Initialize connection
+                    </div>
                     <div className="flex flex-wrap gap-2 text-zinc-300">
                       <span className="text-purple-400">const</span>
                       <span className="text-blue-400">contact</span>
@@ -128,21 +130,34 @@ export function ContactSection() {
                         <Terminal size={16} />
                       </div>
                       <div className="flex flex-col items-start truncate">
-                        <span className="text-xs text-zinc-500 font-mono uppercase">Copy Address</span>
-                        <span className="text-sm font-medium text-zinc-300 truncate max-w-[180px]">{email}</span>
+                        <span className="text-xs text-zinc-500 font-mono uppercase">
+                          Copy Address
+                        </span>
+                        <span className="text-sm font-medium text-zinc-300 truncate max-w-[180px]">
+                          {email}
+                        </span>
                       </div>
                     </div>
 
                     <div className="relative flex items-center justify-center size-8">
                       <motion.div
                         initial={false}
-                        animate={{ scale: copied ? 0 : 1, opacity: copied ? 0 : 1 }}
+                        animate={{
+                          scale: copied ? 0 : 1,
+                          opacity: copied ? 0 : 1,
+                        }}
                       >
-                        <Copy size={16} className="text-zinc-500 group-hover/btn:text-white" />
+                        <Copy
+                          size={16}
+                          className="text-zinc-500 group-hover/btn:text-white"
+                        />
                       </motion.div>
                       <motion.div
                         initial={false}
-                        animate={{ scale: copied ? 1 : 0, opacity: copied ? 1 : 0 }}
+                        animate={{
+                          scale: copied ? 1 : 0,
+                          opacity: copied ? 1 : 0,
+                        }}
                         className="absolute inset-0 flex items-center justify-center"
                       >
                         <Check size={18} className="text-emerald-500" />
@@ -152,7 +167,6 @@ export function ContactSection() {
                 </div>
               </div>
             </div>
-
           </div>
         </motion.div>
       </div>

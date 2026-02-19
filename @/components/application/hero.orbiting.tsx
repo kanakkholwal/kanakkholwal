@@ -40,7 +40,6 @@ export function OrbitingIdentity() {
 
   return (
     <div className="relative flex h-[500px] w-full items-center justify-center perspective-1000">
-
       {/* Background: Just a very faint dark radial gradient to ground the card */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[400px] bg-zinc-500/5 blur-[120px] -z-10 rounded-full pointer-events-none" />
 
@@ -56,8 +55,9 @@ export function OrbitingIdentity() {
           style={{
             background: useTransform(
               [glareX, glareY],
-              ([gx, gy]) => `radial-gradient(circle at ${gx} ${gy}, rgba(255,255,255,0.08), transparent 50%)`
-            )
+              ([gx, gy]) =>
+                `radial-gradient(circle at ${gx} ${gy}, rgba(255,255,255,0.08), transparent 50%)`,
+            ),
           }}
           className="absolute inset-0 z-50 rounded-[20px] pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500"
         />
@@ -65,8 +65,10 @@ export function OrbitingIdentity() {
         {/* Noise Texture Overlay for that "Linear" matte feel */}
         <div className="absolute inset-0 opacity-[0.03] pointer-events-none z-0 rounded-[20px] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] bg-repeat" />
 
-        <div className="relative h-full flex flex-col p-8 z-10" style={{ transform: "translateZ(20px)" }}>
-
+        <div
+          className="relative h-full flex flex-col p-8 z-10"
+          style={{ transform: "translateZ(20px)" }}
+        >
           {/* Header */}
           <div className="flex justify-between items-start mb-8">
             {/* Minimalist Status Badge */}
@@ -75,7 +77,9 @@ export function OrbitingIdentity() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-zinc-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-zinc-200"></span>
               </span>
-              <span className="text-[10px] font-medium tracking-tight text-zinc-400 uppercase">Available</span>
+              <span className="text-[10px] font-medium tracking-tight text-zinc-400 uppercase">
+                Available
+              </span>
             </div>
 
             {/* Resume Link Icon */}
@@ -98,7 +102,9 @@ export function OrbitingIdentity() {
             </div>
 
             <div className="space-y-2 text-left">
-              <h3 className="text-xl font-medium text-white tracking-tight">{appConfig.name}</h3>
+              <h3 className="text-xl font-medium text-white tracking-tight">
+                {appConfig.name}
+              </h3>
               <p className="text-sm text-zinc-500 leading-relaxed font-normal">
                 Design Engineer crafting pixel-perfect interfaces.
               </p>
@@ -115,7 +121,9 @@ export function OrbitingIdentity() {
                 <TechIcon key={i} icon={skill} />
               ))}
               <div className="flex-1 text-right">
-                <span className="text-[10px] text-zinc-600 font-mono">+More</span>
+                <span className="text-[10px] text-zinc-600 font-mono">
+                  +More
+                </span>
               </div>
             </div>
           </div>
@@ -139,5 +147,5 @@ const TechIcon = ({ icon }: { icon: string }) => {
         unoptimized
       />
     </div>
-  )
-}
+  );
+};

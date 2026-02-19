@@ -27,7 +27,7 @@ import {
   PiDatabaseDuotone,
   PiGitBranchDuotone,
   PiPulseDuotone,
-  PiStackDuotone
+  PiStackDuotone,
 } from "react-icons/pi";
 
 export const dynamic = "force-dynamic";
@@ -35,7 +35,6 @@ export const dynamic = "force-dynamic";
 type StatsPageProps = {
   searchParams: Promise<SearchParams>;
 };
-
 
 const DashboardHeader = () => (
   <div className="mb-12 border-b border-border pb-8">
@@ -54,18 +53,22 @@ const DashboardHeader = () => (
           Project <span className="italic text-muted-foreground">Metrics</span>
         </h1>
         <p className="max-w-xl text-muted-foreground text-sm leading-relaxed">
-          Real-time telemetry across open-source repositories, package registries,
-          and deployment infrastructure.
+          Real-time telemetry across open-source repositories, package
+          registries, and deployment infrastructure.
         </p>
       </div>
 
       <div className="flex divide-x divide-border border border-border bg-background/50 backdrop-blur-sm rounded-lg overflow-hidden">
         <div className="px-4 py-2 flex flex-col justify-center">
-          <span className="text-[10px] uppercase font-mono text-muted-foreground">Sources</span>
+          <span className="text-[10px] uppercase font-mono text-muted-foreground">
+            Sources
+          </span>
           <span className="font-medium text-sm">GitHub / NPM</span>
         </div>
         <div className="px-4 py-2 flex flex-col justify-center">
-          <span className="text-[10px] uppercase font-mono text-muted-foreground">Region</span>
+          <span className="text-[10px] uppercase font-mono text-muted-foreground">
+            Region
+          </span>
           <span className="font-medium text-sm">Global</span>
         </div>
       </div>
@@ -76,36 +79,34 @@ const DashboardHeader = () => (
 const SectionHeader = ({
   icon: Icon,
   title,
-  subtitle
+  subtitle,
 }: {
-  icon: React.ElementType,
-  title: string,
-  subtitle: string
+  icon: React.ElementType;
+  title: string;
+  subtitle: string;
 }) => (
   <div className="flex items-start gap-4 mb-6 pt-8 first:pt-0">
     <div className="p-2 rounded-md bg-primary/30 border border-border/50 text-primary">
       <Icon className="text-xl" />
     </div>
     <div className="space-y-0.5">
-      <h3 className="text-xl font-medium font-instrument-serif tracking-tight">{title}</h3>
-      <p className="text-xs font-mono uppercase tracking-wide text-muted-foreground">{subtitle}</p>
+      <h3 className="text-xl font-medium font-instrument-serif tracking-tight">
+        {title}
+      </h3>
+      <p className="text-xs font-mono uppercase tracking-wide text-muted-foreground">
+        {subtitle}
+      </p>
     </div>
   </div>
 );
 
-
-
 export default async function StatsPage(props: StatsPageProps) {
-
-
   return (
     <div className="mx-auto max-w-(--max-app-width) px-4 py-12 md:py-20 @container">
       <DashboardHeader />
 
       <div className="grid grid-cols-1 gap-8 md:gap-12">
-
         <div className="flex flex-col gap-12">
-
           <section>
             <SectionHeader
               icon={PiGitBranchDuotone}
@@ -180,7 +181,6 @@ export default async function StatsPage(props: StatsPageProps) {
             </div>
           </div>
         </div>
-
       </div>
     </div>
   );
@@ -216,7 +216,11 @@ async function VersionsLoader({ searchParams }: VersionsLoaderProps) {
     .map(([key, _]) => key);
   return (
     <Suspense
-      fallback={<div className="animate-pulse text-xs font-mono text-muted-foreground">Querying Registry...</div>}
+      fallback={
+        <div className="animate-pulse text-xs font-mono text-muted-foreground">
+          Querying Registry...
+        </div>
+      }
     >
       <Versions
         records={pkgVersions.map((v) => ({

@@ -1,0 +1,40 @@
+---
+id: "custom-domain-sdk"
+title: "Custom Domain SDK"
+href: "https://www.npmjs.com/package/custom-domain-sdk"
+dates: "Feb 2025 - Feb 2025"
+active: true
+status: "Shipped"
+description: "TypeScript SDK for managing custom domains using Cloudflare like Custom Hostnames"
+technologies:
+  - "TypeScript"
+  - "Cloudflare API"
+  - "DNS Management"
+  - "NPM Package"
+links:
+  - label: "Documentation"
+    url: "https://docs.nexonauts.com/docs/packages/custom-domain-sdk"
+  - label: "Source"
+    url: "https://github.com/kanakkholwal/custom-domain-sdk"
+  - label: "Package"
+    url: "https://www.npmjs.com/package/custom-domain-sdk"
+---
+
+### **Custom Domain SDK**
+
+A production-grade TypeScript SDK for managing custom domains using Cloudflare like Custom Hostnames. This SDK is framework-agnostic, database-agnostic, and implements a strict domain lifecycle state machine.
+
+### **Domain Lifecycle**
+
+The SDK enforces the following state transitions:
+
+1. **created**: Internal record created.
+2. **pending_verification**: Waiting for TXT record verification.
+3. **verified**: TXT record matched.
+4. **pending_dns**: Waiting for CNAME/A record to point to our edge.
+5. **provisioning_ssl**: Calling Cloudflare to issue certificates.
+6. **active**: Domain is live.
+7. **failed**: Terminating state for any step.
+
+### **Why this exists**
+Custom domains look trivial until you try to ship them properly. DNS propagation, TLS provisioning, and provider-specific quirks make it a painful process to debug. This SDK exists to make that logic *explicit, deterministic, and reusable*.

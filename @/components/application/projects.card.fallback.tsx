@@ -13,32 +13,39 @@ const getTheme = (str: string) => {
     "bg-emerald-500",
     "bg-orange-500",
     "bg-violet-500",
-    "bg-pink-500"
+    "bg-pink-500",
   ];
   const icons = [FileCode, FolderGit2, Terminal, Layers];
 
   let hash = 0;
-  for (let i = 0; i < str.length; i++) hash = str.charCodeAt(i) + ((hash << 5) - hash);
+  for (let i = 0; i < str.length; i++)
+    hash = str.charCodeAt(i) + ((hash << 5) - hash);
 
   const colorIndex = Math.abs(hash % colors.length);
   const iconIndex = Math.abs(hash % icons.length);
 
   return {
     color: colors[colorIndex],
-    Icon: icons[iconIndex]
+    Icon: icons[iconIndex],
   };
 };
-export function ProjectFallback({ title, type = "project" }: { title: string, type?: string }) {
+export function ProjectFallback({
+  title,
+  type = "project",
+}: {
+  title: string;
+  type?: string;
+}) {
   const { color, Icon } = useMemo(() => getTheme(title), [title]);
 
   return (
     <div className="relative w-full h-full bg-zinc-50 dark:bg-zinc-800/50 flex items-center justify-center overflow-hidden group-hover:bg-zinc-100 dark:group-hover:bg-zinc-800 transition-colors duration-500">
-
       <div
         className="absolute inset-0 opacity-[0.4]"
         style={{
-          backgroundImage: "radial-gradient(circle, #808080 1px, transparent 1px)",
-          backgroundSize: "20px 20px"
+          backgroundImage:
+            "radial-gradient(circle, #808080 1px, transparent 1px)",
+          backgroundSize: "20px 20px",
         }}
       />
 
@@ -47,7 +54,12 @@ export function ProjectFallback({ title, type = "project" }: { title: string, ty
       </div>
 
       <div className="relative z-5 flex flex-col items-center gap-3">
-        <div className={cn("w-12 h-12 rounded-xl flex items-center justify-center shadow-sm text-white", color)}>
+        <div
+          className={cn(
+            "w-12 h-12 rounded-xl flex items-center justify-center shadow-sm text-white",
+            color,
+          )}
+        >
           <Icon className="w-6 h-6" />
         </div>
 

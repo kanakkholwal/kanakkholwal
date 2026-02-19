@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,md}\"",
+    "format": "bun x prettier --write \"**/*.{ts,tsx,js,jsx,md}\"",
     "cf:build": "opennextjs-cloudflare build",
     "cf:deploy": "opennextjs-cloudflare deploy -- --keep-vars",
     "cf:preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",

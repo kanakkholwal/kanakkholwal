@@ -378,7 +378,10 @@ export const ContributionGraphCalendar = ({
 
   return (
     <div
-      className={cn("max-w-full overflow-x-auto overflow-y-hidden no-scrollbar", className)}
+      className={cn(
+        "max-w-full overflow-x-auto overflow-y-hidden no-scrollbar",
+        className,
+      )}
       {...props}
     >
       <svg
@@ -456,8 +459,8 @@ export const ContributionGraphTotalCount = ({
     <span className={cn("text-muted-foreground", className)} {...props}>
       {labels.totalCount
         ? labels.totalCount
-          .replace("{{count}}", String(totalCount))
-          .replace("{{year}}", String(year))
+            .replace("{{count}}", String(totalCount))
+            .replace("{{year}}", String(year))
         : `${totalCount} activities in ${year}`}
     </span>
   );
@@ -498,7 +501,7 @@ export const ContributionGraphLegend = ({
                 'data-[level="1"]:fill-emerald-900/40',
                 'data-[level="2"]:fill-emerald-700/60',
                 'data-[level="3"]:fill-emerald-500',
-                'data-[level="4"]:fill-emerald-400'
+                'data-[level="4"]:fill-emerald-400',
               )}
               data-level={level}
               height={blockSize}

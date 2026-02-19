@@ -1,6 +1,11 @@
 import { TimelineProjectGrid } from "@/components/extended/timeline";
+import { getProjectList } from "@/lib/project.source";
 import Link from "next/link";
-import { projectsList } from "./projects";
+
+const projectsList = getProjectList().map(({body,...rest}) => ({
+  ...rest,
+}));
+
 
 export const journey_data = [
   {
@@ -12,7 +17,10 @@ export const journey_data = [
           personal projects, Data Structures and Algorithms, System Design,
           learning new skills and also started contributing to Open Source.
         </p>
-        <TimelineProjectGrid yearFilter={["2024", "2025"]} projectsList={projectsList} />
+        <TimelineProjectGrid
+          yearFilter={["2024", "2025"]}
+          projectsList={projectsList}
+        />
       </>
     ),
   },
@@ -70,10 +78,11 @@ export const journey_data = [
           as a SDE Intern.
         </p>
         <div className="mt-4 p-4 rounded-xl bg-primary/30 border border-border/50 text-sm">
-           <p>
-             <strong>At Textify:</strong> I designed a drag-and-drop AI tool builder, 
-             migrated auth to NextAuth, and managed multi-cloud deployments (AWS, Azure, GCP).
-           </p>
+          <p>
+            <strong>At Textify:</strong> I designed a drag-and-drop AI tool
+            builder, migrated auth to NextAuth, and managed multi-cloud
+            deployments (AWS, Azure, GCP).
+          </p>
         </div>
       </>
     ),

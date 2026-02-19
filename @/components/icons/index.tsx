@@ -1,9 +1,5 @@
 import { cn } from "@/lib/utils";
-import {
-  FaEdge,
-  FaFirefoxBrowser,
-  FaSafari,
-} from "react-icons/fa";
+import { FaEdge, FaFirefoxBrowser, FaSafari } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { SiCaldotcom } from "react-icons/si";
 
@@ -24,7 +20,8 @@ import {
   PiCalendarDuotone,
   PiCameraDuotone,
   PiChartBarDuotone,
-  PiChartLineUpDuotone, PiCheckBold, // Best fit for candlestick
+  PiChartLineUpDuotone,
+  PiCheckBold, // Best fit for candlestick
   PiCheckCircleDuotone, // Best fit for copy-check
   PiCircleDuotone, // Fit for Dot/Circle
   PiCircleNotchDuotone, // Fit for loader
@@ -89,11 +86,10 @@ import {
   PiWaveTriangleDuotone,
   PiXDuotone,
   PiXLogoDuotone, // For New Twitter (X)
-  PiYoutubeLogoDuotone
+  PiYoutubeLogoDuotone,
 } from "react-icons/pi";
 import { GiBubbles } from "react-icons/gi";
-
-
+import z from "zod";
 
 export const IconComponentCollection = {
   // --- General UI ---
@@ -135,8 +131,8 @@ export const IconComponentCollection = {
   "rotate-cw": PiArrowClockwiseDuotone,
   "check:bold": PiCheckBold,
   "person-speaking": PiUserSoundDuotone,
-  "infinity": PiInfinityDuotone,
-  "list": PiListDuotone,
+  infinity: PiInfinityDuotone,
+  list: PiListDuotone,
 
   // --- Content & Media ---
   articles: PiArticleDuotone,
@@ -182,7 +178,7 @@ export const IconComponentCollection = {
   twitter: PiXLogoDuotone,
   medium: PiMediumLogoDuotone,
   "twitter-bird": PiTwitterLogoDuotone,
-  "google": PiGoogleLogoDuotone,
+  google: PiGoogleLogoDuotone,
   "google:colored": FcGoogle,
   package: PiPackageDuotone,
   users: PiUsersDuotone,
@@ -199,10 +195,9 @@ export const IconComponentCollection = {
   moon: PiMoonDuotone,
   sun: PiSunDuotone,
   stars: PiSparkleDuotone,
-  "stars:bs": BsStars ,
+  "stars:bs": BsStars,
   bubbles: GiBubbles,
-  confetti:PiConfettiDuotone,
-
+  confetti: PiConfettiDuotone,
 } as const;
 export type IconComponent = React.ComponentType<React.SVGProps<SVGSVGElement>>;
 export type IconNode = React.ReactElement<React.SVGProps<SVGSVGElement>>;
@@ -216,6 +211,8 @@ interface IconProps extends React.SVGProps<SVGSVGElement> {
   name: IconType;
   className?: string;
 }
+
+export const iconZodSchema = z.enum(Object.keys(IconComponentCollection));
 
 export function Icon({
   name,

@@ -2,9 +2,9 @@
 
 import { SimpleProjectCards } from "@/components/application/projects.card";
 import { ButtonTransitionLink } from "@/components/utils/link";
+import { getProjectList } from "@/lib/project.source";
 import { motion } from "framer-motion";
 import { ArrowRight, TrendingUp } from "lucide-react";
-import { projectsList } from "~/data/projects";
 
 function ProjectPageHeader() {
   return (
@@ -31,9 +31,7 @@ function ProjectPageHeader() {
       >
         Engineering with
         <br />
-        <span className="text-colorful-titanium">
-          Purpose & Precision.
-        </span>
+        <span className="text-colorful-titanium">Purpose & Precision.</span>
       </motion.h1>
 
       <motion.p
@@ -42,8 +40,9 @@ function ProjectPageHeader() {
         transition={{ duration: 0.5, delay: 0.2 }}
         className="text-lg md:text-xl text-muted-foreground max-w-2xl leading-relaxed"
       >
-        A curated archive of applications, open-source libraries, and experiments.
-        Focusing on scalable architecture and intuitive user experiences.
+        A curated archive of applications, open-source libraries, and
+        experiments. Focusing on scalable architecture and intuitive user
+        experiences.
       </motion.p>
     </div>
   );
@@ -52,23 +51,12 @@ function ProjectPageHeader() {
 export default function ProjectsShowcase() {
   // Data Transformation: Adapt 'projectsList' to fit the ExpandableCardProps interface
   // This ensures strict type safety and consistent rendering
-  const normalizedProjects = projectsList.map((project) => ({
-    ...project,
-    // Ensure tags exist (map technologies to tags if tags are missing)
-    tags: project.technologies || [],
-    // Ensure links exist
-    links: project.links || [],
-    // Provide defaults for optional fields
-    dates: project.dates || "Ongoing",
-    description: project.description || "",
-    title: project.title || "Untitled Project"
-  }));
+  const normalizedProjects = getProjectList();
 
   return (
     <div className="relative min-h-screen w-full overflow-hidden">
       <div className="fixed inset-0 -z-50 h-full w-full bg-background opacity-40 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] dark:bg-[radial-gradient(#1f2937_1px,transparent_1px)] mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)" />
       <div className="relative max-w-[1400px] mx-auto px-6 md:px-12 pb-24">
-
         {/* Header */}
         <ProjectPageHeader />
 
@@ -88,7 +76,9 @@ export default function ProjectsShowcase() {
           viewport={{ once: true }}
           className="flex flex-col items-center justify-center gap-6 mt-32 border-t border-border/50 pt-16"
         >
-          <h3 className="text-2xl font-semibold tracking-tight">Interested in the metrics?</h3>
+          <h3 className="text-2xl font-semibold tracking-tight">
+            Interested in the metrics?
+          </h3>
           <div className="flex gap-4">
             <ButtonTransitionLink
               href="/stats"
@@ -112,7 +102,6 @@ export default function ProjectsShowcase() {
             </ButtonTransitionLink>
           </div>
         </motion.div>
-
       </div>
     </div>
   );

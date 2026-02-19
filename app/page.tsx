@@ -11,8 +11,6 @@ import { Suspense } from "react";
 import { appConfig } from "root/project.config";
 import { getGithubStats } from "~/api/github";
 
-
-
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
@@ -54,5 +52,3 @@ export default async function HomePage() {
     </Wrapper>
   );
 }
-
-

@@ -7,7 +7,11 @@ import { appConfig } from "root/project.config";
 
 const pathVariants = {
   hidden: { pathLength: 0, fillOpacity: 0 },
-  visible: { pathLength: 1, fillOpacity: 1, transition: { duration: 1.5, ease: "easeInOut" } },
+  visible: {
+    pathLength: 1,
+    fillOpacity: 1,
+    transition: { duration: 1.5, ease: "easeInOut" },
+  },
 } as const;
 
 const pathLoaderVariants = {
@@ -20,7 +24,11 @@ const pathLoaderVariants = {
 
 const textVariants = {
   hidden: { opacity: 0, letterSpacing: "0.3em" },
-  visible: { opacity: 1, letterSpacing: "0em", transition: { duration: 1.5, ease: "easeInOut" } },
+  visible: {
+    opacity: 1,
+    letterSpacing: "0em",
+    transition: { duration: 1.5, ease: "easeInOut" },
+  },
 } as const;
 
 const textLoaderVariants = {

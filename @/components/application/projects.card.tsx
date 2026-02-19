@@ -3,18 +3,18 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ButtonLink, TransitionLink } from "@/components/utils/link";
 import { useOutsideClick } from "@/hooks/use-outside-click";
+import { ProjectType } from "@/lib/project.source";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight, Layers, Play, X } from "lucide-react";
 import Image from "next/image";
 import React, { useEffect, useId, useRef, useState } from "react";
 import Markdown from "react-markdown";
-import { ProjectType } from "~/data/projects";
 
 import { ProjectFallback } from "./projects.card.fallback";
 
 import { MousePointerClick } from "lucide-react";
-import { Icon } from "../icons";
+import { Icon, IconType } from "../icons";
 
 export function ExpandableProjectCards({ cards }: { cards: ProjectType[] }) {
   const [active, setActive] = useState<ProjectType | null>(null);
@@ -32,24 +32,25 @@ export function ExpandableProjectCards({ cards }: { cards: ProjectType[] }) {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [active]);
 
-  useOutsideClick(ref as React.RefObject<HTMLDivElement>, () => setActive(null));
+  useOutsideClick(ref as React.RefObject<HTMLDivElement>, () =>
+    setActive(null),
+  );
 
   return (
     <div className="w-full min-h-screen relative" id="project-list">
-
       <AnimatePresence mode="wait">
         {active ? (
-          <div className="absolute inset-0 z-[100] flex items-center justify-center p-4 sm:p-10 pointer-events-none">
+          <div className="absolute inset-0 z-[100] flex  items-center justify-center p-4 sm:p-10 pointer-events-none">
             <motion.div
               layoutId={`card-${active.id}-${id}`}
               ref={ref}
               className={cn(
-                "w-full max-w-5xl h-fit max-h-[80dvh] flex flex-col md:flex-row bg-card rounded-3xl overflow-hidden shadow-2xl border border-border pointer-events-auto"
+                "w-full h-fit max-h-[80dvh] max-w-xl flex flex-col bg-card rounded-3xl overflow-hidden shadow-2xl border border-border pointer-events-auto",
               )}
             >
               <motion.div
                 layoutId={`media-${active.id}-${id}`}
-                className="relative w-full h-60 md:h-auto md:w-[50%] shrink-0 bg-card border-b md:border-b-0 md:border-r border-border"
+                className="relative w-full h-60 aspect-video shrink-0 bg-card border-b md:border-b-0 md:border-r border-border"
               >
                 <button
                   className="absolute top-4 left-4 z-20 p-2 bg-black/50 backdrop-blur-md border border-white/10 rounded-full text-white hover:bg-black/70 transition-colors"
@@ -112,7 +113,6 @@ export function ExpandableProjectCards({ cards }: { cards: ProjectType[] }) {
                 </div>
               </motion.div>
 
-              {/* --- RIGHT SIDE: CONTENT (No layoutId) --- */}
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -122,7 +122,7 @@ export function ExpandableProjectCards({ cards }: { cards: ProjectType[] }) {
               >
                 <ScrollArea className="flex-1 p-6 md:p-10 overflow-y-auto">
                   <div className="prose prose-sm md:prose-base dark:prose-invert max-w-none text-muted-foreground">
-                    <Markdown>{active.content || active.description}</Markdown>
+                    <Markdown>{active.description}</Markdown>
                   </div>
                 </ScrollArea>
 
@@ -134,19 +134,20 @@ export function ExpandableProjectCards({ cards }: { cards: ProjectType[] }) {
                       variant="dark"
                       className="flex-1 w-full h-10 md:h-12 text-sm font-medium flex items-center justify-center rounded-lg"
                     >
-                      Visit Live Site <Icon name="arrow-up-right" className="ml-2" />
+                      Visit Live Site{" "}
+                      <Icon name="arrow-up-right" className="ml-2" />
                     </ButtonLink>
                   )}
                   {active.links?.map((link, i) => (
                     <ButtonLink
                       key={i}
-                      href={link.href}
+                      href={link.url}
                       target="_blank"
                       variant="glass"
                       size="icon"
                       className="h-10 w-10 md:h-12 md:w-12 flex items-center justify-center border rounded-lg"
                     >
-                      {link.icon}
+                      <Icon name={(link.icon as IconType) || "external-link"} />
                     </ButtonLink>
                   ))}
                 </div>
@@ -167,7 +168,10 @@ export function ExpandableProjectCards({ cards }: { cards: ProjectType[] }) {
           >
             {/* Media Chassis */}
             <div className="relative h-[60%] w-full overflow-hidden rounded-2xl bg-background border border-border/5">
-              <motion.div layoutId={`media-${card.id}-${id}`} className="h-full w-full">
+              <motion.div
+                layoutId={`media-${card.id}-${id}`}
+                className="h-full w-full"
+              >
                 {card.image ? (
                   <Image
                     src={card.image}
@@ -242,9 +246,21 @@ export function ExpandableProjectCards({ cards }: { cards: ProjectType[] }) {
   );
 }
 
-export function SimpleProjectCards({ cards,className }: { cards: ProjectType[], className?: string }) {
+export function SimpleProjectCards({
+  cards,
+  className,
+}: {
+  cards: ProjectType[];
+  className?: string;
+}) {
   return (
-    <div className={cn("grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-7xl mx-auto", className)} id="project-list">
+    <div
+      className={cn(
+        "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-7xl mx-auto",
+        className,
+      )}
+      id="project-list"
+    >
       {cards?.map((card, index) => (
         <ProjectCard key={card.id} card={card} index={index} />
       ))}
@@ -261,7 +277,7 @@ function ProjectCard({ card, index }: { card: ProjectType; index: number }) {
     setIsHovered(true);
     if (videoRef.current) {
       videoRef.current.currentTime = 0;
-      videoRef.current.play().catch(() => { }); // Ignore auto-play errors
+      videoRef.current.play().catch(() => {}); // Ignore auto-play errors
     }
   };
 
@@ -285,12 +301,10 @@ function ProjectCard({ card, index }: { card: ProjectType; index: number }) {
           "group relative h-full flex flex-col overflow-hidden rounded-3xl",
           "bg-zinc-50 dark:bg-zinc-900/40", // Chassis background
           "border border-zinc-200 dark:border-white/10", // Chassis border
-          "p-2 transition-all duration-300 hover:border-zinc-300 dark:hover:border-white/20 hover:shadow-xl dark:hover:shadow-2xl dark:hover:shadow-black/50"
+          "p-2 transition-all duration-300 hover:border-zinc-300 dark:hover:border-white/20 hover:shadow-xl dark:hover:shadow-2xl dark:hover:shadow-black/50",
         )}
       >
         <div className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl bg-zinc-200 dark:bg-zinc-800 border border-black/5 dark:border-white/5">
-
-
           {card.video ? (
             <motion.div
               initial={{ opacity: 0 }}
@@ -314,7 +328,7 @@ function ProjectCard({ card, index }: { card: ProjectType; index: number }) {
               fill
               className={cn(
                 "object-cover transition-transform duration-700 ease-out",
-                isHovered ? "scale-105" : "scale-100"
+                isHovered ? "scale-105" : "scale-100",
               )}
             />
           ) : (
@@ -362,7 +376,10 @@ function ProjectCard({ card, index }: { card: ProjectType; index: number }) {
           <div className="mt-auto pt-4 border-t border-dashed border-zinc-200 dark:border-white/10">
             <div className="flex flex-wrap gap-2">
               {card.tags?.slice(0, 3).map((tag, i) => (
-                <span key={i} className="inline-flex items-center px-2 py-1 rounded-md bg-zinc-100 dark:bg-zinc-800/50 text-[10px] font-medium text-zinc-500 dark:text-zinc-400 border border-transparent group-hover:border-zinc-200 group-hover:dark:border-white/10 transition-colors">
+                <span
+                  key={i}
+                  className="inline-flex items-center px-2 py-1 rounded-md bg-zinc-100 dark:bg-zinc-800/50 text-[10px] font-medium text-zinc-500 dark:text-zinc-400 border border-transparent group-hover:border-zinc-200 group-hover:dark:border-white/10 transition-colors"
+                >
                   {tag}
                 </span>
               ))}

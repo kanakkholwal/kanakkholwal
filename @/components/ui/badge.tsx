@@ -4,7 +4,8 @@ import { cva, type VariantProps } from "class-variance-authority";
 import * as React from "react";
 
 export interface BadgeProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends
+    React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof badgeVariants> {
   asChild?: boolean;
   dotClassName?: string;
@@ -12,7 +13,8 @@ export interface BadgeProps
 }
 
 export interface BadgeButtonProps
-  extends React.ButtonHTMLAttributes<HTMLDivElement>,
+  extends
+    React.ButtonHTMLAttributes<HTMLDivElement>,
     VariantProps<typeof badgeButtonVariants> {
   asChild?: boolean;
 }
@@ -275,4 +277,3 @@ function BadgeDot({ className, ...props }: React.ComponentProps<"span">) {
 }
 
 export { Badge, BadgeButton, BadgeDot, badgeVariants };
-

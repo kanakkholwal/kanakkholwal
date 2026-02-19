@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 // Geist is the new standard for "Engineering" aesthetics (replaces Inter)
 import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
-import { Instrument_Serif, Quicksand, } from "next/font/google";
+import { Instrument_Serif, Quicksand } from "next/font/google";
 import { appConfig } from "root/project.config";
 import "./global.css";
 import { Provider } from "./provider";
@@ -53,9 +53,14 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: appConfig.name,
     description: appConfig.description,
-    images: [{
-      url: "/twitter-image", width: 1200, height: 630, alt: `${appConfig.name} - UI/UX & Full Stack Engineer`
-    }],
+    images: [
+      {
+        url: "/twitter-image",
+        width: 1200,
+        height: 630,
+        alt: `${appConfig.name} - UI/UX & Full Stack Engineer`,
+      },
+    ],
     creator: `@${appConfig.usernames.twitter}`,
   },
   icons: {
@@ -101,10 +106,9 @@ export default function RootLayout({
           logoFont.variable,
           fontInstrumentSerif.variable,
           // Premium Feel: Custom Selection Color (Stripe-like)
-          "selection:bg-primary/20 selection:text-primary"
+          "selection:bg-primary/20 selection:text-primary",
         )}
       >
-
         <Provider>
           <div className="fixed inset-0 z-50 pointer-events-none opacity-[0.03] bg-[url('/noise.svg')] mix-blend-overlay"></div>
 

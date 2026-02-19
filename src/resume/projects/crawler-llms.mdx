@@ -1,0 +1,26 @@
+---
+id: "crawler-llms"
+title: "RAG Data Pipeline Crawler"
+href: "https://github.com/kanakkholwal/crawler-for-llms"
+dates: "Feb 2025"
+active: true
+status: "Shipped"
+description: "A high-throughput web crawler optimized for extracting and normalizing data for LLM fine-tuning and Vector DB ingestion."
+technologies:
+  - "Node.js"
+  - "Puppeteer"
+  - "Data Engineering"
+  - "Vector Embeddings"
+  - "RAG"
+links:
+  - label: "Source"
+    url: "https://github.com/kanakkholwal/crawler-for-llms"
+---
+
+### **Engineering the Pipeline**
+This tool addresses the data bottleneck in **Retrieval-Augmented Generation (RAG)** workflows. It is designed to navigate complex DOM structures, handle rate limits, and convert unstructured HTML into semantic JSONL datasets.
+
+### **Features**
+- **Puppeteer Clustering:** Manages a pool of headless browser instances to crawl pages concurrently without memory leaks.
+- **Data Normalization:** Automatically strips non-content DOM elements (ads, navbars) to reduce token usage during LLM ingestion.
+- **Resilience:** Implements exponential backoff strategies and proxy rotation to handle anti-bot measures.

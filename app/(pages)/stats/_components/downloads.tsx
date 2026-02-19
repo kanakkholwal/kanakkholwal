@@ -35,7 +35,6 @@ export async function NPMStats() {
 
   return (
     <div className="w-full p-6 border border-border rounded-xl bg-muted/5 flex flex-col md:flex-row items-center justify-between gap-6">
-
       {/* Primary Metric: Total Downloads */}
       <div className="flex items-center gap-4">
         <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-background border border-border text-foreground shadow-sm">
@@ -57,7 +56,10 @@ export async function NPMStats() {
       {/* Breakdown Ticker */}
       <div className="flex flex-wrap justify-center md:justify-end gap-3">
         {statsConfig.npmPackages.map((pkg, index) => (
-          <div key={pkg} className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-background border border-border shadow-sm">
+          <div
+            key={pkg}
+            className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-background border border-border shadow-sm"
+          >
             <span className="w-1.5 h-1.5 rounded-full bg-indigo-500" />
             <span className="text-xs font-medium text-foreground">{pkg}</span>
             <span className="h-3 w-px bg-border mx-1" />
@@ -71,11 +73,14 @@ export async function NPMStats() {
   );
 }
 
-
 export const NPMStatsSkeleton = () => (
   <div className="bg-muted h-9 w-64 animate-pulse rounded-md lg:h-12" />
 );
-function sumPastPeriodCallback(d: MultiDatum, index: number, array: MultiDatum[]) {
+function sumPastPeriodCallback(
+  d: MultiDatum,
+  index: number,
+  array: MultiDatum[],
+) {
   let sum = 0;
   for (const key in d) {
     if (key !== "date") {
@@ -95,7 +100,7 @@ export async function NPMDownloads() {
       return acc;
     },
     {} as Record<string, NpmPackageStatsData>,
-  )
+  );
   const [all, allWithoutKeys] = [combineStats(data), combineStats(data, false)];
   const allLast30Days = all.last30Days.reduce(
     (sum, d) => sum + sumPastPeriodCallback(d, 0, all.last30Days),
@@ -122,7 +127,7 @@ export async function NPMDownloads() {
             // to the first N days of the previous week.
             oldValue={getPartialPreviousWeekDownloads(
               allWithoutKeys.last30Days.reduce(
-                (sum, d) => (sum.concat(d as unknown as Datum[])),
+                (sum, d) => sum.concat(d as unknown as Datum[]),
                 [] as Datum[],
               ),
             )}
@@ -134,9 +139,7 @@ export async function NPMDownloads() {
             <Download size={20} /> Last 90 days
             <dl className="mr-1 ml-auto flex gap-2">
               <dt className="sr-only">combined</dt>
-              <dd>
-                {formatStatNumber(allLast90Days)}
-              </dd>
+              <dd>{formatStatNumber(allLast90Days)}</dd>
               <span className="font-light text-zinc-500" aria-hidden>
                 |
               </span>
@@ -182,9 +185,7 @@ export async function NPMDownloads() {
             <Download size={20} /> Last 30 days
             <dl className="mr-1 ml-auto flex gap-2">
               <dt className="sr-only">combined</dt>
-              <dd>
-                {formatStatNumber(allLast30Days)}
-              </dd>
+              <dd>{formatStatNumber(allLast30Days)}</dd>
               <span className="font-light text-zinc-500" aria-hidden>
                 |
               </span>

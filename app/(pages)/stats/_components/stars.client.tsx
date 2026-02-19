@@ -26,7 +26,7 @@ import {
   PiChartBarDuotone,
   PiGitBranchDuotone,
   PiListDuotone,
-  PiStarDuotone
+  PiStarDuotone,
 } from "react-icons/pi";
 
 type StarsGraphProps = {
@@ -54,7 +54,6 @@ export function StarsGraph({ data, stargazersTab }: StarsGraphProps) {
       className="p-0 overflow-hidden" // Reset default padding for edge-to-edge feel
       title={
         <div className="flex flex-col sm:flex-row w-full sm:items-center justify-between gap-4">
-
           {/* LEFT: Repo Selector & Identity */}
           <div className="flex items-center gap-3">
             <div className="flex h-8 w-8 items-center justify-center rounded bg-amber-500/10 border border-amber-500/20 text-amber-500">
@@ -71,7 +70,11 @@ export function StarsGraph({ data, stargazersTab }: StarsGraphProps) {
                 </SelectTrigger>
                 <SelectContent>
                   {statsConfig.repositories.map((repo) => (
-                    <SelectItem key={repo.name} value={repo.repo} className="font-mono text-xs">
+                    <SelectItem
+                      key={repo.name}
+                      value={repo.repo}
+                      className="font-mono text-xs"
+                    >
                       <span className="flex items-center gap-2">
                         <PiGitBranchDuotone className="text-muted-foreground" />
                         {repo.name}
@@ -129,16 +132,29 @@ export function StarsGraph({ data, stargazersTab }: StarsGraphProps) {
                 axisLine={false}
                 width={40}
                 tickLine={false}
-                tick={{ fill: 'var(--muted-foreground)', fontSize: 10, fontFamily: 'var(--font-mono)' }}
+                tick={{
+                  fill: "var(--muted-foreground)",
+                  fontSize: 10,
+                  fontFamily: "var(--font-mono)",
+                }}
                 tickFormatter={(value) => value.toString()}
               />
-              <CartesianGrid vertical={false} strokeDasharray="3 3" stroke="var(--border)" opacity={0.4} />
+              <CartesianGrid
+                vertical={false}
+                strokeDasharray="3 3"
+                stroke="var(--border)"
+                opacity={0.4}
+              />
               <XAxis
                 dataKey="date"
                 tickLine={false}
                 tickMargin={10}
                 axisLine={false}
-                tick={{ fill: 'var(--muted-foreground)', fontSize: 10, fontFamily: 'var(--font-mono)' }}
+                tick={{
+                  fill: "var(--muted-foreground)",
+                  fontSize: 10,
+                  fontFamily: "var(--font-mono)",
+                }}
                 tickFormatter={(value) =>
                   formatDate(value, "", { day: "2-digit", month: "short" })
                 }
@@ -151,7 +167,7 @@ export function StarsGraph({ data, stargazersTab }: StarsGraphProps) {
                     indicator="line"
                   />
                 }
-                cursor={{ fill: 'var(--muted)', opacity: 0.2 }}
+                cursor={{ fill: "var(--muted)", opacity: 0.2 }}
                 isAnimationActive={false}
               />
               <Bar

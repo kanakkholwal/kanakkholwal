@@ -1,3 +1,3 @@
 import PageWrapper from "@/components/wrapper";
 
-export default PageWrapper
+export default PageWrapper;

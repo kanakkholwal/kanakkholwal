@@ -5,7 +5,15 @@ import { Header } from "@/components/header";
 import { Logo } from "@/components/logo";
 import useStorage from "@/hooks/use-storage";
 import { cn } from "@/lib/utils";
-import { AnimatePresence, LayoutGroup, motion, useScroll, useSpring, useTransform, Variants } from "framer-motion";
+import {
+  AnimatePresence,
+  LayoutGroup,
+  motion,
+  useScroll,
+  useSpring,
+  useTransform,
+  Variants,
+} from "framer-motion";
 import { ReactLenis } from "lenis/react"; //
 import { useTheme } from "next-themes";
 import { useEffect, useRef, useState } from "react";
@@ -29,7 +37,7 @@ const ITEM_VARIANTS: Variants = {
     opacity: 1,
     y: 0,
     filter: "blur(0px)",
-    transition: { type: "spring", stiffness: 100, damping: 20 }
+    transition: { type: "spring", stiffness: 100, damping: 20 },
   },
 };
 
@@ -44,7 +52,7 @@ export default function PageWrapper({
   const { resolvedTheme } = useTheme();
   const [animationEnabled] = useStorage("animations.enabled", false);
   const [animationMode] = useStorage("animations.mode", "stars");
-  
+
   // 1. Ref for the scroll container
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -52,20 +60,20 @@ export default function PageWrapper({
   // We track the scroll progress of the viewport
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start start", "end end"]
+    offset: ["start start", "end end"],
   });
 
   // 3. Create a smooth spring physics for the parallax value to remove jitter
   const smoothY = useSpring(scrollYProgress, {
     stiffness: 100,
     damping: 30,
-    restDelta: 0.001
+    restDelta: 0.001,
   });
 
-  // 4. Transform scroll 0-1 into a Y pixel value. 
+  // 4. Transform scroll 0-1 into a Y pixel value.
   // This makes the children move slightly slower/faster than the actual scroll, creating depth.
   // Move from 0px to -50px over the course of the page.
-  const parallaxY = useTransform(smoothY, [0, 1], [0, -50]); 
+  const parallaxY = useTransform(smoothY, [0, 1], [0, -50]);
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoaded(true), 1800);
@@ -75,11 +83,13 @@ export default function PageWrapper({
   return (
     <ReactLenis root options={{ lerp: 0.1, duration: 1.5, smoothWheel: true }}>
       <LayoutGroup>
-        <div 
-            ref={containerRef} 
-            className={cn("relative min-h-dvh w-full overflow-x-hidden", !isLoaded && "h-dvh overflow-y-hidden")}
+        <div
+          ref={containerRef}
+          className={cn(
+            "relative min-h-dvh w-full overflow-x-hidden",
+            !isLoaded && "h-dvh overflow-y-hidden",
+          )}
         >
-          
           <div className="fixed top-0 left-0 right-0 z-50">
             <Header transition={isLoaded} />
           </div>
@@ -106,15 +116,15 @@ export default function PageWrapper({
             className={cn(
               "relative z-10 min-h-dvh w-full overflow-x-hidden",
               "pb-20",
-              className
+              className,
             )}
             initial="hidden"
             animate={isLoaded ? "visible" : "hidden"}
             variants={CONTAINER_VARIANTS}
             // 6. Apply the Parallax Y value here
-            style={{ y: parallaxY }} 
+            style={{ y: parallaxY }}
           >
-              {children}
+            {children}
           </motion.main>
 
           {animationEnabled && animationMode === "stars" && (
@@ -135,7 +145,6 @@ export default function PageWrapper({
           >
             <FooterSection />
           </motion.div>
-
         </div>
       </LayoutGroup>
     </ReactLenis>

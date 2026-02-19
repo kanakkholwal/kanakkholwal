@@ -2,7 +2,7 @@
 "use client";
 import { Toaster } from "@/components/ui/sonner";
 import { cn } from "@/lib/utils";
-import { RootProvider } from 'fumadocs-ui/provider/next';
+import { RootProvider } from "fumadocs-ui/provider/next";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { ViewTransitions } from "next-view-transitions";
 import { Next13ProgressBar } from "next13-progressbar";
@@ -24,7 +24,6 @@ export function Provider({ children }: { children: React.ReactNode }) {
           themes={["light", "dark", "system"]}
           defaultTheme="dark"
           attribute={["class", "data-theme"]}
-
         >
           <div
             className={cn(

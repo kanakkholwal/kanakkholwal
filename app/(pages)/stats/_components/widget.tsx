@@ -17,7 +17,7 @@ export function Widget({ title, children, className, ...props }: WidgetProps) {
         // Interactive states
         "transition-all duration-300 hover:shadow-md hover:border-primary/20",
         "h-auto min-h-[200px]",
-        className
+        className,
       )}
       {...props}
     >
@@ -29,9 +29,7 @@ export function Widget({ title, children, className, ...props }: WidgetProps) {
         </div>
       )}
 
-      <div className="flex-1 p-5 relative">
-        {children}
-      </div>
+      <div className="flex-1 p-5 relative">{children}</div>
     </Card>
   );
 }

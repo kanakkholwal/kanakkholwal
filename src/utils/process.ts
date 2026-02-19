@@ -1,4 +1,3 @@
-
 export const TIME_INTERVALS = [
   {
     value: "last_hour",
@@ -25,4 +24,4 @@ export const TIME_INTERVALS = [
     label: "Last Year",
     days: 365,
   },
-] 
+];

@@ -18,17 +18,19 @@ export type MultiDatum = {
   [key: string]: string | number;
 };
 
-export type NpmPackageStatsData = {
-  withKeys: false
-  allTime: number;
-  last30Days: Datum[];
-  last90Days: Datum[];
-} | {
-  withKeys: true
-  allTime: number;
-  last30Days: MultiDatum[];
-  last90Days: MultiDatum[];
-}
+export type NpmPackageStatsData =
+  | {
+      withKeys: false;
+      allTime: number;
+      last30Days: Datum[];
+      last90Days: Datum[];
+    }
+  | {
+      withKeys: true;
+      allTime: number;
+      last30Days: MultiDatum[];
+      last90Days: MultiDatum[];
+    };
 
 // const regexp = /https:\/\/npmjs\.com\/package\/([\w.-]+|@[\w.-]+\/[\w.-]+)/gm
 
@@ -118,24 +120,24 @@ async function getAllTime(pkg: string): Promise<number> {
   return downloads;
 }
 
-export const fetchNpmPackage = cache(async (
-  pkg: string,
-): Promise<NpmPackageStatsData> => {
-  // Ensure we cover 90 days + a full first week
-  const startOfFirstWeek = dayjs().subtract(90, "day").startOf("isoWeek");
-  const ninetyOrSoDays = dayjs().diff(startOfFirstWeek, "day");
-  const [allTime, last30Days, last90Days] = await Promise.all([
-    getAllTime(pkg),
-    getLastNDays(pkg, 30),
-    getLastNDays(pkg, ninetyOrSoDays),
-  ]);
-  return {
-    withKeys: false,
-    allTime,
-    last30Days,
-    last90Days: groupByWeek(last90Days),
-  };
-})
+export const fetchNpmPackage = cache(
+  async (pkg: string): Promise<NpmPackageStatsData> => {
+    // Ensure we cover 90 days + a full first week
+    const startOfFirstWeek = dayjs().subtract(90, "day").startOf("isoWeek");
+    const ninetyOrSoDays = dayjs().diff(startOfFirstWeek, "day");
+    const [allTime, last30Days, last90Days] = await Promise.all([
+      getAllTime(pkg),
+      getLastNDays(pkg, 30),
+      getLastNDays(pkg, ninetyOrSoDays),
+    ]);
+    return {
+      withKeys: false,
+      allTime,
+      last30Days,
+      last90Days: groupByWeek(last90Days),
+    };
+  },
+);
 
 async function get(url: string): Promise<unknown> {
   const res = await fetch(url, {
@@ -171,7 +173,7 @@ export function combineStats(
     const dateMap: Record<string, number> = {};
     for (const pkg of Object.values(args)) {
       for (const d of pkg[key]) {
-        dateMap[d.date] = (dateMap[d.date] ?? 0) + (d.downloads as number) ;
+        dateMap[d.date] = (dateMap[d.date] ?? 0) + (d.downloads as number);
       }
     }
     return Object.entries(dateMap)

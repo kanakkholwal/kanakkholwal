@@ -13,7 +13,7 @@ import {
   PiCalendarBlankDuotone,
   PiLinkSimpleDuotone,
   PiUserCircleDuotone,
-  PiUsersThreeDuotone
+  PiUsersThreeDuotone,
 } from "react-icons/pi";
 
 type Stargazer = GitHubStarHistory["bins"][number]["stargarzers"][number];
@@ -133,14 +133,16 @@ function Stargazer({
       </div>
 
       {/* Followers Metric */}
-      <div className={cn(
-        "flex items-center gap-1.5 px-2 py-1 rounded border text-[10px] font-mono font-medium",
-        followers > 500
-          ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-600"
-          : followers > 100
-            ? "bg-blue-500/10 border-blue-500/20 text-blue-600"
-            : "bg-muted/30 border-border/50 text-muted-foreground"
-      )}>
+      <div
+        className={cn(
+          "flex items-center gap-1.5 px-2 py-1 rounded border text-[10px] font-mono font-medium",
+          followers > 500
+            ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-600"
+            : followers > 100
+              ? "bg-blue-500/10 border-blue-500/20 text-blue-600"
+              : "bg-muted/30 border-border/50 text-muted-foreground",
+        )}
+      >
         <PiUsersThreeDuotone className="text-sm" />
         <span>{formatStatNumber(followers)}</span>
       </div>

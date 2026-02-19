@@ -11,7 +11,11 @@ const appConfig = {
   siteUrl: "kanakkholwal.eu.org",
   url: "https://kanakkholwal.eu.org",
   logo: "https://github.com/kanakkholwal.png",
-  emails: ["contact@kanak.eu.org", "me@kanak.eu.org", "contact@kanakkholwal.eu.org"],
+  emails: [
+    "contact@kanak.eu.org",
+    "me@kanak.eu.org",
+    "contact@kanakkholwal.eu.org",
+  ],
   creator: "Kanak Kholwal",
   authors: [
     { name: "Kanak Kholwal", url: "https://kanakkholwal.eu.org" },
@@ -21,20 +25,21 @@ const appConfig = {
 
   skills: {
     frontend: [
-      "react", "nextjs", "typescript", "tailwindcss", "vite", "html", "css", "sass", "svg", "bootstrap",
+      "react",
+      "nextjs",
+      "typescript",
+      "tailwindcss",
+      "vite",
+      "html",
+      "css",
+      "sass",
+      "svg",
+      "bootstrap",
     ],
-    backend: [
-      "nodejs", "go", "python", "express", "graphql", "bun"
-    ],
-    database: [
-      "postgres", "mongodb", "redis", "firebase"
-    ],
-    devops: [
-      "docker", "gcp", "azure", "vercel", "cloudflare", "git", "github"
-    ],
-    tools: [
-      "figma", "notion", "postman", "npm", "pnpm", "yarn", "git"
-    ],
+    backend: ["nodejs", "go", "python", "express", "graphql", "bun"],
+    database: ["postgres", "mongodb", "redis", "firebase"],
+    devops: ["docker", "gcp", "azure", "vercel", "cloudflare", "git", "github"],
+    tools: ["figma", "notion", "postman", "npm", "pnpm", "yarn", "git"],
   },
   skill_icons: [
     "typescript",
@@ -214,7 +219,7 @@ const appConfig = {
     "google.analytics": "G-95KQZNMSSE",
   },
   statsConfig: {
-    npmPackages: ["custom-domain-sdk","nexo-editor", "nexo-mdx"],
+    npmPackages: ["custom-domain-sdk", "nexo-editor", "nexo-mdx"],
     repositories: [
       {
         name: "college-ecosystem",

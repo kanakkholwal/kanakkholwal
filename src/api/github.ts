@@ -1,4 +1,3 @@
-
 import { cache } from "react";
 
 export type ContributionActivity = {
@@ -46,7 +45,6 @@ export type Organization = {
   avatarUrl: string;
   url: string;
 };
-
 
 export type ContributedOrganization = {
   login: string;
@@ -149,9 +147,9 @@ export const getContributedOrganizations = cache(
 
     // Convert to array and sort by number of repos contributed to
     return Array.from(orgMap.values()).sort(
-      (a, b) => b.repositoriesContributedTo - a.repositoriesContributedTo
+      (a, b) => b.repositoriesContributedTo - a.repositoriesContributedTo,
     );
-  }
+  },
 );
 
 export type DetailedActivity = {
@@ -159,7 +157,6 @@ export type DetailedActivity = {
   codeReviewDistribution: CodeReviewDistribution;
   contributedOrganizations: ContributedOrganization[];
   organizations: Organization[];
-
 };
 
 /**
@@ -188,7 +185,6 @@ export type DetailedActivity = {
  */
 export const getDetailedActivity = cache(
   async (username: string): Promise<DetailedActivity> => {
-
     const query = `
       query($login: String!) {
         user(login: $login) {
@@ -242,7 +238,6 @@ export const getDetailedActivity = cache(
         query,
         variables: {
           login: username,
-
         },
       }),
       next: { revalidate: 3600 },
@@ -293,7 +288,8 @@ export const getDetailedActivity = cache(
     const totalIssues = contributions.totalIssueContributions;
     const totalPRs = contributions.totalPullRequestContributions;
     const totalReviews = contributions.totalPullRequestReviewContributions;
-    const totalContributions = totalCommits + totalIssues + totalPRs + totalReviews;
+    const totalContributions =
+      totalCommits + totalIssues + totalPRs + totalReviews;
 
     return {
       activityOverview: {
@@ -308,7 +304,8 @@ export const getDetailedActivity = cache(
           isPrivate: repo.isPrivate,
           updatedAt: repo.updatedAt,
         })),
-        totalRepositoriesContributedTo: userData.repositoriesContributedTo.totalCount,
+        totalRepositoriesContributedTo:
+          userData.repositoriesContributedTo.totalCount,
       },
       codeReviewDistribution: {
         commits: totalCommits,
@@ -318,15 +315,12 @@ export const getDetailedActivity = cache(
         totalContributions,
       },
       contributedOrganizations: Array.from(orgMap.values()).sort(
-        (a, b) => b.repositoriesContributedTo - a.repositoriesContributedTo
+        (a, b) => b.repositoriesContributedTo - a.repositoriesContributedTo,
       ),
       organizations: [], // You can populate this if needed
     };
-  }
+  },
 );
-
-
-
 
 /**
  * Combines profile stats and detailed activity into a single API call.
@@ -349,33 +343,35 @@ export const getDetailedActivity = cache(
  * @throws {Error} If GITHUB_TOKEN is not defined, or if either underlying fetch fails.
  */
 
-export const getGithubStats = cache(async (username: string): Promise<{
-  stats: Contributions;
-  activity: DetailedActivity;
-}> => {
-  if (!GITHUB_TOKEN) {
-    throw new Error("GitHub token is not defined");
-  }
+export const getGithubStats = cache(
+  async (
+    username: string,
+  ): Promise<{
+    stats: Contributions;
+    activity: DetailedActivity;
+  }> => {
+    if (!GITHUB_TOKEN) {
+      throw new Error("GitHub token is not defined");
+    }
 
-  const [stats, activity] = await Promise.allSettled([
-    getCachedContributions(username),
-    getDetailedActivity(username),
-  ]);
+    const [stats, activity] = await Promise.allSettled([
+      getCachedContributions(username),
+      getDetailedActivity(username),
+    ]);
 
-  if (stats.status !== "fulfilled" || activity.status !== "fulfilled") {
-    console.log("Error fetching GitHub data:", {
-      statsError: stats.status === "rejected" ? stats.reason : null,
-      activityError: activity.status === "rejected" ? activity.reason : null,
-    });
-    throw new Error("Failed to fetch GitHub stats or activity");
-  }
-  return {
-    stats: stats.value,
-    activity: activity.value,
-  };
-})
-
-
+    if (stats.status !== "fulfilled" || activity.status !== "fulfilled") {
+      console.log("Error fetching GitHub data:", {
+        statsError: stats.status === "rejected" ? stats.reason : null,
+        activityError: activity.status === "rejected" ? activity.reason : null,
+      });
+      throw new Error("Failed to fetch GitHub stats or activity");
+    }
+    return {
+      stats: stats.value,
+      activity: activity.value,
+    };
+  },
+);
 
 /**
  * Maps GitHub contribution level strings to a numeric 0-4 scale.
@@ -390,11 +386,16 @@ export const getGithubStats = cache(async (username: string): Promise<{
 
 const getLevel = (level: string): number => {
   switch (level) {
-    case "FIRST_QUARTILE": return 1;
-    case "SECOND_QUARTILE": return 2;
-    case "THIRD_QUARTILE": return 3;
-    case "FOURTH_QUARTILE": return 4;
-    default: return 0;
+    case "FIRST_QUARTILE":
+      return 1;
+    case "SECOND_QUARTILE":
+      return 2;
+    case "THIRD_QUARTILE":
+      return 3;
+    case "FOURTH_QUARTILE":
+      return 4;
+    default:
+      return 0;
   }
 };
 
@@ -403,7 +404,6 @@ export type WeeklyContribution = {
   count: number;
   averageLevel: number; // Useful for coloring the graph
 };
-
 
 /**
  * Aggregates daily contributions into weekly buckets.
@@ -424,43 +424,44 @@ export type WeeklyContribution = {
  * @returns An array of WeeklyContribution objects ordered by week start (iteration order of the map).
  */
 
+export const getWeeklyContributions = cache(
+  (dailyContributions: ContributionActivity[]): WeeklyContribution[] => {
+    const weeklyMap = new Map<string, WeeklyContribution>();
 
-export const getWeeklyContributions = cache((dailyContributions: ContributionActivity[]): WeeklyContribution[] => {
-  const weeklyMap = new Map<string, WeeklyContribution>();
+    // Sort daily contributions by date first to ensure order
+    const sorted = [...dailyContributions].sort(
+      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
+    );
 
-  // Sort daily contributions by date first to ensure order
-  const sorted = [...dailyContributions].sort(
-    (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
-  );
+    for (const day of sorted) {
+      const dateObj = new Date(day.date);
+      // Get the day of the week (0 = Sunday, 1 = Monday, etc.)
+      const dayOfWeek = dateObj.getDay();
 
-  for (const day of sorted) {
-    const dateObj = new Date(day.date);
-    // Get the day of the week (0 = Sunday, 1 = Monday, etc.)
-    const dayOfWeek = dateObj.getDay();
+      // Calculate the start of the week (Sunday)
+      // We subtract the day of the week from the date to get the previous Sunday
+      const startOfWeek = new Date(dateObj);
+      startOfWeek.setDate(dateObj.getDate() - dayOfWeek);
+      const weekKey = startOfWeek.toISOString().split("T")[0];
 
-    // Calculate the start of the week (Sunday)
-    // We subtract the day of the week from the date to get the previous Sunday
-    const startOfWeek = new Date(dateObj);
-    startOfWeek.setDate(dateObj.getDate() - dayOfWeek);
-    const weekKey = startOfWeek.toISOString().split("T")[0];
+      const existing = weeklyMap.get(weekKey);
 
-    const existing = weeklyMap.get(weekKey);
-
-    if (existing) {
-      existing.count += day.count;
-      // Weighted average for level roughly
-      existing.averageLevel = Math.max(existing.averageLevel, day.level);
-    } else {
-      weeklyMap.set(weekKey, {
-        weekStart: weekKey,
-        count: day.count,
-        averageLevel: day.level,
-      });
+      if (existing) {
+        existing.count += day.count;
+        // Weighted average for level roughly
+        existing.averageLevel = Math.max(existing.averageLevel, day.level);
+      } else {
+        weeklyMap.set(weekKey, {
+          weekStart: weekKey,
+          count: day.count,
+          averageLevel: day.level,
+        });
+      }
     }
-  }
 
-  return Array.from(weeklyMap.values());
-})
+    return Array.from(weeklyMap.values());
+  },
+);
 
 /**
  * Fetches contributions from a public contributions API and supplements with GitHub GraphQL stats.
@@ -529,10 +530,16 @@ export const getCachedContributions = cache(
       throw new Error("Failed to fetch contributions or GitHub data");
     }
     // Type assertion for contributions response
-    if (!contribRes.value.headers.get("content-type")?.includes("application/json")) {
+    if (
+      !contribRes.value.headers
+        .get("content-type")
+        ?.includes("application/json")
+    ) {
       throw new Error("Invalid contributions response format");
     }
-    if (!githubRes.value.headers.get("content-type")?.includes("application/json")) {
+    if (
+      !githubRes.value.headers.get("content-type")?.includes("application/json")
+    ) {
       throw new Error("Invalid GitHub response format");
     }
     // Parse JSON responses
