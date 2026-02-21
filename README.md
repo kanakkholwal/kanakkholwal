@@ -130,15 +130,6 @@ _Ecosystem for developers (Next.js, Shadcn UI, MongoDB)_
 
 ---
 
-### 📔 Latest Blog posts
-
-<!-- BLOG-POST-LIST:START -->
-
-- [How to implement authentication across all subdomains using Next-Auth in Next.js](https://kanakkholwal.medium.com/how-to-implement-authentication-across-all-subdomains-using-next-auth-in-next-js-2ad8393c268d)
-- [Promise.all and Promise.allSettled -Unlocking JavaScript’s Hidden Secrets](https://kanakkholwal.medium.com/5-things-you-dont-know-about-promise-all-6ab469192b45)
-- [Guide to Recording Canvas Animations Using JavaScript](https://kanakkholwal.medium.com/guide-to-recording-canvas-animations-using-javascript-d2bb1b6e2523)
-- [10 JavaScript Tricks You Need To Know About](https://kanakkholwal.medium.com/25-javascript-tricks-you-need-to-know-about-c1979ea2ec2b)
-<!-- BLOG-POST-LIST:END -->
 
 <picture>
     <source media="(prefers-color-scheme: dark)" srcset="https://github-readme-stats-ouuan.vercel.app/api?username=kanakkholwal&theme=dark&show_icons=true">
