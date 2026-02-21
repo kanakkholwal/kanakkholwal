@@ -21,7 +21,7 @@
 ## Summary
 
 - **Software Engineer** with full-stack development, scalable systems, and **devops/cloud computing** experience.
-- Shipped **high-impact OSS projects** (**1.1M+ visitors,** 300+ weekly npm downloads) and delivered production features at SaaS startups.
+- Shipped **high-impact OSS projects** (**1.4M+ visitors,** 300+ weekly npm downloads) and delivered production features at SaaS startups.
 - Skilled in **Reactjs, Next.js, TypeScript, Node.js, React Native, Docker, Python, Go, AWS/GCP/Azure**.
 - Achieved +220% engagement, +150% SEO traffic, 60% faster builds.
 - Active in algorithms & data structures.
@@ -70,16 +70,16 @@
 [GitHub](https://github.com/kanakkholwal/custom-domain-sdk)
 _Cloudflare Workers, DNS, Typescript, Go_
 
-• Engineered a framework-agnostic **SDK** for **multi-tenant domain** onboarding using strict lifecycle state machines.
-• Automated domain verification, DNS provisioning, and edge routing via **Cloudflare Custom Hostnames**.
-• Designed a **database-agnostic control plane** for **domain mapping** used in SaaS platforms.
+- Engineered a framework-agnostic **SDK** for **multi-tenant domain** onboarding using strict lifecycle state machines.
+- Automated domain verification, DNS provisioning, and edge routing via **Cloudflare Custom Hostnames**.
+- Designed a **database-agnostic control plane** for **domain mapping** used in SaaS platforms.
 
 ### College Ecosystem
 
 [GitHub](https://github.com/kanakkholwal/college-ecosystem) | [Live](https://app.nith.eu.org)  
 _Multi-feature college portal (Next.js, Typescript, Node.js, PostgreSQL, MongoDB, Docker)_
 
-- Scaled to **1,200,000+ visits** & **740+ active users** with features like rankings, attendance, real-time polling.
+- Scaled to **1,400,000+ visits** & **740+ active users** with features like rankings, attendance, real-time polling.
 - Implemented **subreddit-like communities** and live announcements.
 - Optimized database queries and caching for scalability & fault tolerance.
 - Orchestrated microservices for scraping and **email delivery system**.
