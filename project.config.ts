@@ -41,6 +41,8 @@ const appConfig = {
     frontend: [
       "react",
       "nextjs",
+      "svelte",
+      "sveltekit",
       "typescript",
       "tailwindcss",
       "vite",
