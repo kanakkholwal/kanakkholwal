@@ -73,9 +73,9 @@ export type InsightResponse = {
 export const getProjectInsight = cache(
   async (project: ProjectConfig): Promise<InsightResponse> => {
     try {
-      // Placeholder implementation
       const res = await fetch(project.endpoint, {
         headers: project.headers || {},
+        next: { revalidate: 3600 }, // Revalidate every 60 minutes
       });
       if (!res.ok) {
         console.warn("No stats data received");

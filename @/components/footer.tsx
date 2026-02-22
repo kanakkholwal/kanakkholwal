@@ -66,7 +66,7 @@ export function FooterSection() {
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="flex flex-col md:flex-row items-center gap-4 md:gap-8 text-xs leading-5 text-muted-foreground">
               <p>
-                &copy; {currentYear} {appConfig.name}. All rights reserved.
+                &copy; {currentYear} {appConfig.displayName}. All rights reserved.
               </p>
               <div className="flex gap-6">
                 <TransitionLink

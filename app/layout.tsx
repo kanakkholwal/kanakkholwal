@@ -12,11 +12,11 @@ import { Provider } from "./provider";
 
 export const metadata: Metadata = {
   title: {
-    default: `${appConfig.name} | ${appConfig.role}`,
-    template: `%s | ${appConfig.name}`,
+    default: `${appConfig.displayName} | ${appConfig.role}`,
+    template: `%s | ${appConfig.displayName}`,
   },
   description: appConfig.description,
-  applicationName: appConfig.name,
+  applicationName: appConfig.displayName,
   authors: appConfig.authors as unknown as { name: string; url?: string }[],
   creator: appConfig.creator,
   keywords: appConfig.keywords,
@@ -37,28 +37,28 @@ export const metadata: Metadata = {
     type: "website",
     locale: appConfig.seo.locale,
     url: appConfig.url,
-    title: appConfig.name,
+    title: appConfig.displayName,
     description: appConfig.description,
-    siteName: appConfig.name,
+    siteName: appConfig.displayName,
     images: [
       {
         url: "/opengraph-image",
         width: 1200,
         height: 630,
-        alt: `${appConfig.name} - UI/UX & Full Stack Engineer`,
+        alt: `${appConfig.displayName} - UI/UX & Full Stack Engineer`,
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: appConfig.name,
+    title: appConfig.displayName,
     description: appConfig.description,
     images: [
       {
         url: "/twitter-image",
         width: 1200,
         height: 630,
-        alt: `${appConfig.name} - UI/UX & Full Stack Engineer`,
+        alt: `${appConfig.displayName} - UI/UX & Full Stack Engineer`,
       },
     ],
     creator: `@${appConfig.usernames.twitter}`,
@@ -75,6 +75,7 @@ const fontInstrumentSerif = Instrument_Serif({
   subsets: ["latin"],
   variable: "--font-instrument-serif",
   weight: "400",
+  
 });
 
 // Logo font (Playful accent)
@@ -92,7 +93,9 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <meta name="google-adsense-account" content="ca-pub-6988693445063744" />
+        {appConfig.verifications["google.adsense"] && (
+          <meta name="google-adsense-account" content={appConfig.verifications["google.adsense"]} />
+        )}
       </head>
       <body
         className={cn(
@@ -105,13 +108,11 @@ export default function RootLayout({
           GeistMono.variable,
           logoFont.variable,
           fontInstrumentSerif.variable,
-          // Premium Feel: Custom Selection Color (Stripe-like)
           "selection:bg-primary/20 selection:text-primary",
         )}
       >
         <Provider>
           <div className="fixed inset-0 z-50 pointer-events-none opacity-[0.03] bg-[url('/noise.svg')] mix-blend-overlay"></div>
-
           {children}
         </Provider>
 
@@ -125,7 +126,7 @@ export default function RootLayout({
           suppressHydrationWarning
         />
 
-        {process.env.NODE_ENV === "production" && (
+        {(process.env.NODE_ENV === "production" && appConfig.verifications["google.analytics"]) && (
           <GoogleAnalytics gaId={appConfig.verifications["google.analytics"]} />
         )}
       </body>

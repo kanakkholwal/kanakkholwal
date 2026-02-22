@@ -1,16 +1,30 @@
+import type { ProfilePage as ProfilePageSchema, WithContext } from "schema-dts";
+
+
 const appConfig = {
-  name: "Kanak Kholwal",
+  displayName: "Kanak Kholwal",
   shortName: "Kanak",
   initials: "KK",
-  role: "Software Engineer",
+  role: "Product Engineer",
+  avatar: "https://github.com/kanakkholwal.png",
   location: "Rajasthan, India",
   description:
-    "Software Engineer | Passionate about building scalable solutions, automation, and AI-driven products.",
+    "Product Engineer | Passionate about building scalable solutions, automation, and AI-driven products.",
   summary: `I thrive on solving complex problems and building impactful products. From developing scalable architectures to integrating AI solutions, my goal is to create software that makes a real difference. Always eager to learn, contribute to open source, and collaborate with like-minded developers. Check out my work below, and feel free to reach out.`,
+  applicableRoles: [
+    "Product Engineer",
+    "Software Developer",
+    "Open Source Contributor",
+    "Tech Blogger",
+    "Indie Hacker",
+    "Design Engineer",
+    "Creating with code. Small details matter."
+
+  ],
+  // site related
   siteName: "Kanak Kholwal Portfolio",
   siteUrl: "kanakkholwal.eu.org",
   url: "https://kanakkholwal.eu.org",
-  logo: "https://github.com/kanakkholwal.png",
   emails: [
     "contact@kanak.eu.org",
     "me@kanak.eu.org",
@@ -184,19 +198,25 @@ const appConfig = {
     },
     jsonLd: {
       "@context": "https://schema.org",
-      "@type": "Person",
-      name: "Kanak Kholwal",
-      url: "https://kanakkholwal.eu.org",
-      image: "https://github.com/kanakkholwal.png",
+      "@type": "ProfilePage",
+      dateCreated: new Date("2025-01-05").toISOString(), // YYYY-MM-DD
+      dateModified: new Date().toISOString(),
+      mainEntity: {
+        "@type": "Person",
+        name: "Kanak Kholwal",
+        identifier: "kanakkholwal",
+        image: "https://github.com/kanakkholwal.png",
+      },
+
       description:
-        "Personal Portfolio of Kanak Kholwal - Software Developer, Tech Enthusiast, and Lifelong Learner.",
+        "Personal Portfolio of Kanak Kholwal - Product Engineer.",
       sameAs: [
         "https://www.linkedin.com/in/kanak-kholwal/",
         "https://github.com/kanakkholwal",
       ],
-      jobTitle: "Software Developer",
+      jobTitle: "Product Engineer",
       worksFor: { "@type": "Organization", name: "Self-Employed" },
-    },
+    } as WithContext<ProfilePageSchema>,
   },
   social: {
     github: "https://github.com/kanakkholwal",
@@ -217,6 +237,7 @@ const appConfig = {
   },
   verifications: {
     "google.analytics": "G-95KQZNMSSE",
+    "google.adsense": "ca-pub-6988693445063744",
   },
   statsConfig: {
     npmPackages: ["custom-domain-sdk", "nexo-editor", "nexo-mdx"],
@@ -284,10 +305,6 @@ const appConfig = {
       {
         label: "OS Stats",
         href: "/stats",
-      },
-      {
-        label: "Toolkit",
-        href: "/toolkit",
       },
       // {
       //   label: "Tech Stack",

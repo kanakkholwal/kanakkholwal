@@ -18,7 +18,7 @@ const PrivacyPolicyPage: React.FC = () => {
           <p>
             Welcome to{" "}
             <strong>
-              {appConfig.name}
+              {appConfig.displayName}
               {"'"}s Portfolio
             </strong>{" "}
             ({`"Site"`}). By accessing or using the Site you agree to these
@@ -49,7 +49,7 @@ const PrivacyPolicyPage: React.FC = () => {
           <p>
             This Privacy Policy explains how{" "}
             <strong>
-              {appConfig.name}
+              {appConfig.displayName}
               {"'"}s Portfolio
             </strong>{" "}
             ({`"we", "us"`}) collects, uses, and shares information through this

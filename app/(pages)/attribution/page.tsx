@@ -23,10 +23,7 @@ function CreditItem({
 }) {
   return (
     <div
-      // initial={{ opacity: 0, x: -10 }}
-      // whileInView={{ opacity: 1, x: 0 }}
-      // transition={{ delay: index * 0.05 }}
-      // viewport={{ once: true }}
+
       className="group flex items-center justify-between py-4 border-b border-border/40 hover:bg-muted/30 px-2 rounded-lg transition-colors"
     >
       <div className="flex items-center gap-3">
@@ -112,7 +109,7 @@ export default function AttributionPage() {
                 Build with precision,
               </p>
               <div className="font-instrument-serif italic text-3xl text-foreground">
-                {appConfig.name}
+                {appConfig.displayName}
               </div>
             </div>
           </div>
@@ -131,7 +128,7 @@ export default function AttributionPage() {
             <div className="flex flex-col">
               {appConfig.attribution.list.map((attribution, idx) => (
                 <CreditItem
-                  key={idx}
+                  key={attribution.person + idx}
                   person={attribution.person}
                   attribute={attribution.attribute}
                   index={idx}

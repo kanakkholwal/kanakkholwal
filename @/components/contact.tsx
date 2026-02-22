@@ -3,12 +3,18 @@
 import { SpotlightReveal } from "@/components/animated/section.reveal";
 import { Button } from "@/components/ui/button";
 import { TransitionLink } from "@/components/utils/link";
+import { StyleModels, StylingModel } from "@/constants/ui";
+import useStorage from "@/hooks/use-storage";
 import { motion, useInView } from "framer-motion";
 import { Check, Copy, Sparkles, Terminal } from "lucide-react";
 import { useRef, useState } from "react";
 import { appConfig } from "root/project.config";
 
 export function ContactSection() {
+  const [selectedStyle] = useStorage<StylingModel>(
+    "styling.model",
+    StyleModels[0].id,
+  );
   const [copied, setCopied] = useState(false);
   const email = appConfig.emails[0];
   const ref = useRef(null);
@@ -19,6 +25,9 @@ export function ContactSection() {
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
+  if (selectedStyle === "minimal") {
+    return null
+  }
 
   return (
     <SpotlightReveal

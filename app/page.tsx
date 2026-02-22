@@ -1,7 +1,6 @@
-import { SpotlightReveal } from "@/components/animated/section.reveal";
-import { AboutSection } from "@/components/application/section.about";
+import AboutSection from "@/components/application/section.about";
 import GithubSection from "@/components/application/section.github";
-import { HeroSection } from "@/components/application/section.hero";
+import HeroSection from "@/components/application/section.hero";
 import { ProjectsSection } from "@/components/application/section.projects";
 import { WorkSection } from "@/components/application/section.work";
 import { SkillSection } from "@/components/application/sections.skills";
@@ -11,27 +10,15 @@ import { Suspense } from "react";
 import { appConfig } from "root/project.config";
 import { getGithubStats } from "~/api/github";
 
-export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
   const data = await getGithubStats(appConfig.usernames.github);
 
   return (
     <Wrapper>
-      <SpotlightReveal>
-        {/* Hero Section */}
-        <HeroSection />
-      </SpotlightReveal>
-
-      <SpotlightReveal>
-        {/* About Section */}
-        <AboutSection />
-      </SpotlightReveal>
-
-      {/* Work Experience */}
+      <HeroSection />
+      <AboutSection />
       <WorkSection />
-
-      {/* Skills */}
       <SkillSection />
       {/* Projects */}
       <ProjectsSection />

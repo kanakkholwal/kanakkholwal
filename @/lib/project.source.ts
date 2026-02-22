@@ -24,10 +24,7 @@ export function getOtherProjects(currentProjectId: string): ProjectType[] {
 }
 
 export function getPageImage(page: InferPageType<typeof source>) {
-  if (getEnvironmentDev()) {
-    return `http://localhost:${process.env.PORT || 3000}/api/og?gen_type=project&slug=${page.data.id}`;
-  }
-  return appConfig.url + `/api/og?gen_type=project&slug=${page.data.id}`;
+  return `/api/og?gen_type=project&slug=${page.data.id}`;
 }
 
 export async function getLLMText(page: InferPageType<typeof source>) {

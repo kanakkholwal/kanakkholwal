@@ -1,18 +1,26 @@
 "use client";
 import { GlowFillButton } from "@/components/animated/button.fill";
-import { Icon } from "@/components/icons";
+import { Icon, IconType } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
 import { ButtonLink, TransitionLink } from "@/components/utils/link";
+import { StyleModels, StylingModel } from "@/constants/ui";
 import { motion, useMotionValue } from "framer-motion";
 import { ArrowRight, MapPin } from "lucide-react";
 import { appConfig, resume_link } from "root/project.config";
 
+import useStorage from "@/hooks/use-storage";
 import * as React from "react";
 
 import { cn } from "@/lib/utils";
 import { useSpring, useTransform } from "framer-motion";
 import { Fingerprint, Wifi } from "lucide-react";
 import Image from "next/image";
+import Magnet from "../animated/elements.maginet";
+import { SpotlightReveal } from "../animated/section.reveal";
+import { TextFlip } from "../animated/text-flip";
+import { Logo } from "../logo";
+import { GreaterSeparator } from "../ui/separator";
+import { Panel } from "./panel";
 
 export function HeroSection() {
   return (
@@ -41,7 +49,7 @@ export function HeroSection() {
             </span>
           </Badge>
           <span className="text-sm font-mono text-muted-foreground font-medium tracking-wide">
-            {`// Hi, I am ${appConfig.name}`}
+            {`// Hi, I am ${appConfig.displayName}`}
           </span>
         </div>
 
@@ -94,13 +102,12 @@ export function HeroSection() {
         <FloatingCard>
           <div className="relative z-10 w-full aspect-square max-w-lg flex items-center justify-center">
             {/* Inner Glow */}
-            <div className="absolute inset-0 bg-primary/10 blur-[100px] rounded-full" />
 
             <HeroVisual />
             {/* <ProfileCard
-                            avatarUrl={appConfig.logo}
-                            iconUrl={appConfig.logo}
-                            name={appConfig.name}
+                            avatarUrl={appConfig.avatar}
+                            iconUrl={appConfig.avatar}
+                            name={appConfig.displayName}
                             title={appConfig.role}
                             handle={appConfig.usernames.twitter}
                             showUserInfo={false}
@@ -123,7 +130,7 @@ export function HeroSection() {
   );
 }
 
-export const HeroVisual = () => {
+const HeroVisual = () => {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
 
@@ -155,7 +162,6 @@ export const HeroVisual = () => {
         {/* Noise Texture */}
         <div className="absolute inset-0 opacity-15 bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
 
-        {/* Holographic Glare (Your existing code) */}
         <div
           className="absolute inset-0 rounded-[24px] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none overflow-hidden"
           style={{ mixBlendMode: "overlay" }}
@@ -175,31 +181,24 @@ export const HeroVisual = () => {
           className="relative z-10 h-full flex flex-col p-6 justify-between text-card-foreground"
           style={{ transform: "translateZ(30px)" }}
         >
-          {/* 1. HEADER: Chip & Status */}
-          <div className="flex justify-between items-start">
-            {/* The "EMV Chip" - Adds nice Gold Contrast */}
-            <div className="relative w-12 h-9 rounded bg-gradient-to-tr from-yellow-200 via-yellow-400 to-yellow-600 shadow-sm border border-yellow-600/50 flex items-center justify-center overflow-hidden">
-              <div className="absolute inset-0 border-[0.5px] border-black/20 rounded opacity-50" />
-              <div className="w-full h-[1px] bg-black/20 absolute top-1/2 -translate-y-1/2" />
-              <div className="h-full w-[1px] bg-black/20 absolute left-1/3" />
-              <div className="h-full w-[1px] bg-black/20 absolute right-1/3" />
-            </div>
+          <div className="flex justify-end items-start">
+
 
             <div className="flex flex-col items-end gap-1">
               <Wifi className="text-foreground/50" size={20} />
               <span className="text-[9px] font-mono tracking-widest text-muted-foreground">
-                NFC ACTIVE
+                OSS ACTIVE
               </span>
             </div>
           </div>
 
-          {/* 2. IDENTITY: Photo & Name */}
+          {/*  Photo & Name */}
           <div className="flex flex-col items-center text-center mt-4">
             <div className="relative w-28 h-28 mb-4 group-hover:scale-105 transition-transform duration-500">
               <div className="absolute inset-0 rounded-full border border-border/20 border-dashed animate-[spin_10s_linear_infinite]" />
               <div className="absolute inset-1 rounded-full bg-gradient-to-b from-card/10 to-transparent backdrop-blur-sm overflow-hidden border border-border/20">
                 <Image
-                  src={appConfig.logo}
+                  src={appConfig.avatar}
                   alt="Profile"
                   width={112}
                   height={112}
@@ -211,20 +210,19 @@ export const HeroVisual = () => {
             </div>
 
             <h2 className="text-2xl font-bold tracking-tight text-foreground mb-1">
-              {appConfig.name}
+              {appConfig.displayName}
             </h2>
             <div className="px-3 py-1 rounded-full bg-card/5 border border-border/10 text-xs font-medium text-muted-foreground">
               {appConfig.role}
             </div>
 
-            {/* Location Micro-detail */}
             <div className="flex items-center gap-1.5 mt-4 text-xs text-muted-foreground">
               <MapPin size={12} />
               <span>{appConfig.location}</span>
             </div>
           </div>
 
-          {/* 3. FOOTER: Barcode & ID */}
+          {/*Barcode & ID */}
           <div className="mt-auto space-y-4">
             {/* "Signature" or Motto Area */}
             <div className="flex justify-between items-center px-2">
@@ -237,7 +235,7 @@ export const HeroVisual = () => {
                 </span>
               </div>
               <div className="font-handwriting text-foreground/50 text-lg rotate-[-5deg] opacity-80">
-                {appConfig.name.split(" ")[0]}
+                {appConfig.displayName.split(" ")[0]}
               </div>
             </div>
 
@@ -300,8 +298,132 @@ const FloatingCard = ({ children }: { children: React.ReactNode }) => {
         {children}
       </motion.div>
 
-      {/* Mirror/Shadow Effect */}
-      <div className="absolute -bottom-12 left-1/2 -translate-x-1/2 w-[80%] h-4 bg-black/20 blur-xl rounded-[100%]" />
     </motion.div>
   );
 };
+
+
+export default function Section() {
+  const [selectedStyle] = useStorage<StylingModel>(
+    "styling.model",
+    StyleModels[0].id,
+  );
+  if (selectedStyle === "minimal") {
+    return <>
+      <div
+        className={cn(
+          "aspect-2/1 border-x border-edge select-none sm:aspect-3/1",
+          "flex items-center justify-center text-black dark:text-white",
+          "screen-line-before screen-line-after before:-top-px after:-bottom-px",
+          "bg-black/0.75 bg-[radial-gradient(var(--pattern-foreground)_1px,transparent_0)] bg-size-[10px_10px] bg-center [--pattern-foreground:var(--color-zinc-950)]/5 dark:bg-white/0.75 dark:[--pattern-foreground:var(--color-white)]/5"
+        )}
+      >
+        <Magnet magnetStrength={6}>
+          <Logo
+            id="js-cover-mark"
+            className="h-14 w-28 sm:h-16 sm:w-32"
+          />
+        </Magnet>
+      </div>
+      <div className="relative flex border-x border-edge">
+        {/* <div className="absolute top-[-3.5px] left-[-4.5px] size-2 rounded-xs border bg-popover" /> */}
+        {/* <div className="absolute top-[-3.5px] right-[-4.5px] size-2 rounded-xs border bg-popover" /> */}
+
+        <div className="shrink-0 border-r border-edge">
+          <div className="mx-0.5 my-0.75">
+            <img
+              className="size-30 rounded-full ring-1 ring-border ring-offset-2 ring-offset-background select-none sm:size-40"
+              alt={`${appConfig.displayName}'s avatar`}
+              src={appConfig.avatar}
+              fetchPriority="high"
+            />
+          </div>
+        </div>
+
+        <div className="flex flex-1 flex-col">
+          <div className="flex grow items-end pb-1 pl-4">
+            <div className="line-clamp-1 font-mono text-xs text-zinc-300 select-none max-sm:hidden dark:text-zinc-800">
+              {"text-3xl "}
+              <span className="inline dark:hidden">text-zinc-950</span>
+              <span className="hidden dark:inline">text-zinc-50</span>
+              {" font-medium"}
+            </div>
+          </div>
+
+          <div className="border-t border-edge">
+            <div className="flex items-center gap-2 pl-4">
+              <h1 className="-translate-y-px text-3xl font-semibold tracking-tight">
+                {appConfig.displayName}
+              </h1>
+
+              <Icon name="verified:color"
+                className="size-4.5 text-sky-500 select-none"
+                aria-label="Verified"
+              />
+
+
+            </div>
+
+            <div className="h-12.5 border-t border-edge py-1 pl-4 sm:h-9">
+              <TextFlip
+                className="font-pixel-square text-sm text-balance text-muted-foreground"
+                variants={{
+                  initial: { y: -10, opacity: 0 },
+                  animate: { y: -1, opacity: 1 },
+                  exit: { y: 10, opacity: 0 },
+                }}
+              >
+                {appConfig.applicableRoles}
+              </TextFlip>
+            </div>
+          </div>
+        </div>
+      </div>
+      <GreaterSeparator />
+      <Panel className="before:content-none after:content-none">
+        <h2 className="sr-only">Social Links</h2>
+
+        <div className="relative">
+          <div className="pointer-events-none absolute inset-0 -z-1 grid grid-cols-2 gap-2 md:grid-cols-3">
+            <div className="border-r border-edge" />
+            <div className="border-l border-edge md:border-x" />
+            <div className="border-l border-edge max-md:hidden" />
+          </div>
+
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-2 md:grid-cols-3">
+            {Object.entries(appConfig.social).map(([key, link], index) => {
+              return <a
+                key={key}
+                className={cn(
+                  "group flex cursor-pointer items-center gap-4 p-4 pr-2 transition-[background-color] ease-out hover:bg-accent-muted",
+                  "max-md:nth-[2n+1]:screen-line-before max-md:nth-[2n+1]:screen-line-after",
+                  "md:nth-[3n+1]:screen-line-before md:nth-[3n+1]:screen-line-after"
+                )}
+                href={link}
+                target="_blank"
+                rel="noopener"
+              >
+                <div className="relative size-8 shrink-0 inline-flex items-center justify-center">
+                  <Icon
+                    className="rounded-lg select-none corner-squircle supports-corner-shape:rounded-[50%]"
+                    name={key as IconType}
+                  />
+                  <div className="pointer-events-none absolute inset-0 rounded-lg ring-1 ring-black/10 corner-squircle ring-inset dark:ring-white/15 supports-corner-shape:rounded-[50%]" />
+                </div>
+
+                <h3 className="flex-1 font-medium underline-offset-4 group-hover:underline capitalize">
+                  {key}
+                </h3>
+
+                <Icon name="arrow-up-right" className="size-4 text-muted-foreground transition-[rotate] duration-300 group-hover:rotate-45" />
+              </a>
+            })}
+          </div>
+        </div>
+      </Panel>
+    </>;
+  }
+  return <SpotlightReveal>
+    <HeroSection />
+  </SpotlightReveal>
+}

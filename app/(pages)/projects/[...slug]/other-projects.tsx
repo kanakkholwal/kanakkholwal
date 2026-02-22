@@ -1,4 +1,3 @@
-"use client";
 
 import { SimpleProjectCards } from "@/components/application/projects.card";
 import { getOtherProjects } from "@/lib/project.source";

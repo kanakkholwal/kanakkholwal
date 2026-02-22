@@ -52,7 +52,7 @@ export function SpotlightReveal({
       ref={containerRef}
       onMouseMove={handleMouseMove}
       className={cn(
-        "group relative w-full overflow-hidden bg-background",
+        "group relative w-full overflow-hidden",
         containerClassName,
       )}
     >

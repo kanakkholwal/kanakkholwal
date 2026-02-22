@@ -4,14 +4,17 @@ import { SectionHeader } from "@/components/application/sections.header"; // Ass
 import BlurFade from "@/components/magicui/blur-fade";
 import { StyleModels, StylingModel } from "@/constants/ui";
 import useStorage from "@/hooks/use-storage";
+import { cn } from "@/lib/utils";
 import { motion, useInView } from "framer-motion";
 import { Quote } from "lucide-react";
 import { useRef } from "react";
 import Markdown from "react-markdown";
 import { appConfig } from "root/project.config";
+import { SpotlightReveal } from "../animated/section.reveal";
+import { Panel, PanelContent, PanelHeader, PanelTitle } from "./panel";
 
 const BLUR_FADE_DELAY = 0.04;
-export function AboutSection() {
+function AboutSection() {
   const [selectedStyle] = useStorage<StylingModel>(
     "styling.model",
     StyleModels[0].id,
@@ -29,7 +32,7 @@ export function AboutSection() {
               <BlurFade delay={0.2}>
                 <div className="relative">
                   <SectionHeader
-                    label="Philosophy"
+                    label="About Me"
                     serifText="My Approach"
                     mainText="to Engineering"
                     align="left"
@@ -87,7 +90,7 @@ export function AboutSection() {
         <div className="max-w-4xl mx-auto">
           <BlurFade delay={BLUR_FADE_DELAY * 2}>
             <SectionHeader
-              label="Philosophy"
+              label="About Me"
               serifText="My Approach"
               mainText="to Engineering"
               align="left"
@@ -148,3 +151,31 @@ const RevealTextContent = ({ children }: { children: string }) => {
     </div>
   );
 };
+
+export default function SectionAbout() {
+  const [selectedStyle] = useStorage<StylingModel>(
+    "styling.model",
+    StyleModels[0].id,
+  );
+  if (selectedStyle === "minimal") {
+    return <Panel id="about">
+      <PanelHeader>
+        <PanelTitle>About</PanelTitle>
+      </PanelHeader>
+
+      <PanelContent className={cn(
+        "prose dark:prose-invert max-w-none",
+        "prose-headings:font-mono prose-headings:tracking-tight prose-headings:font-bold",
+        "prose-p:font-mono prose-p:leading-6 prose-p:text-zinc-600 dark:prose-p:text-zinc-300",
+        "prose-li:font-mono",
+      )}>
+        {/* <ProseMono> */}
+        <Markdown>{appConfig.summary}</Markdown>
+        {/* </ProseMono> */}
+      </PanelContent>
+    </Panel>
+  }
+  return <SpotlightReveal>
+    <AboutSection />
+  </SpotlightReveal>
+}

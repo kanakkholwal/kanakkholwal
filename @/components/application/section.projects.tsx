@@ -1,8 +1,4 @@
 "use client";
-
-import { motion } from "framer-motion";
-import { ArrowRight, BarChart2, FolderOpen, Layers } from "lucide-react";
-
 import {
   ExpandableProjectCards,
   SimpleProjectCards,
@@ -12,16 +8,124 @@ import { ButtonTransitionLink } from "@/components/utils/link";
 import { StyleModels, StylingModel } from "@/constants/ui";
 import useStorage from "@/hooks/use-storage";
 import { getProjectList } from "@/lib/project.source";
+import { motion } from "framer-motion";
+import { ArrowRight, BarChart2, BoxIcon, FolderOpen, Layers } from "lucide-react";
+import Link from "next/link";
+import { useMemo } from "react";
+import { Icon } from "../icons";
+import { Badge } from "../ui/badge";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+import { Panel, PanelHeader, PanelTitle, PanelTitleSup } from "./panel";
 import { SectionHeader } from "./sections.header";
 
 const BLUR_FADE_DELAY = 0.04;
-const projectsList = getProjectList();
 
 export function ProjectsSection() {
+  const projectsList = useMemo(() => getProjectList(), []);
+
   const [selectedStyle] = useStorage<StylingModel>(
     "styling.model",
     StyleModels[0].id,
   );
+
+  if (selectedStyle === "minimal") {
+    return <Panel id="projects">
+      <PanelHeader>
+        <PanelTitle>
+          Projects
+          <PanelTitleSup>({projectsList.length})</PanelTitleSup>
+        </PanelTitle>
+      </PanelHeader>
+
+      {projectsList.map((project) => {
+        return (
+          <div key={project.id}>
+            <div className="flex items-center hover:bg-accent-muted">
+
+              <div
+                className="mx-4 flex size-6 shrink-0 items-center justify-center rounded-lg border border-muted-foreground/15 bg-muted text-muted-foreground ring-1 ring-edge ring-offset-1 ring-offset-background select-none"
+                aria-hidden="true"
+              >
+                <BoxIcon className="size-4" />
+              </div>
+
+              <div className="flex-1 border-l border-dashed border-edge">
+                <div className="flex w-full items-center gap-2 p-4 pr-2 text-left">
+                  <Link href={`/projects/${project.id}`} className="flex-1">
+                    <h3 className="mb-1 leading-snug font-medium text-balance">
+                      {project.title}
+                    </h3>
+
+                    <dl className="text-sm text-muted-foreground">
+                      <dt className="sr-only">Period</dt>
+                      <dd className="flex items-center gap-0.5">
+                        <span>{project.dates}</span>
+
+                      </dd>
+                    </dl>
+                  </Link>
+
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <a
+                          className="relative flex size-6 shrink-0 items-center justify-center text-muted-foreground after:absolute after:-inset-2 hover:text-foreground"
+                          href={`/projects/${project.id}`}
+                  
+                        >
+                          <Icon name="link" className="pointer-events-none size-4" />
+                          <span className="sr-only">Open Project</span>
+                        </a>
+                      </TooltipTrigger>
+
+                      <TooltipContent>
+                        <p>Open Project Details</p>
+                      </TooltipContent>
+                    </Tooltip>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <a
+                          className="relative flex size-6 shrink-0 items-center justify-center text-muted-foreground after:absolute after:-inset-2 hover:text-foreground"
+                          href={project.href}
+                          target="_blank"
+                          rel="noopener"
+                        >
+                          <Icon name="arrow-up-right" className="pointer-events-none size-4" />
+                          <span className="sr-only">Open Project Link</span>
+                        </a>
+                      </TooltipTrigger>
+
+                      <TooltipContent>
+                        <p>Open Project Link</p>
+                      </TooltipContent>
+                    </Tooltip>
+
+                </div>
+              </div>
+            </div>
+
+            <div className="overflow-hidden">
+              <div className="space-y-4 border-t border-edge p-4">
+                <div className="text-sm text-muted-foreground line-clamp-3">
+                  {project.description}
+                </div>
+
+                {project.technologies.length > 0 && (
+                  <ul className="flex flex-wrap gap-1.5">
+                    {project.technologies.map((technology, index) => (
+                      <li key={index} className="flex">
+                        <Badge>{technology}</Badge>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            </div>
+          </div>
+        )
+
+      })}
+    </Panel>
+  }
 
   return (
     <section

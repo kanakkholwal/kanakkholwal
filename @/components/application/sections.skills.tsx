@@ -1,11 +1,13 @@
 "use client";
 
+import { StyleModels, StylingModel } from "@/constants/ui";
+import useStorage from "@/hooks/use-storage";
 import { Cloud, Database, Layout, Server, Terminal } from "lucide-react";
+import Image from "next/image";
 import { appConfig } from "root/project.config";
 
-import useStorage from "@/hooks/use-storage";
-import { StyleModels, StylingModel } from "@/constants/ui";
-
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { Panel, PanelContent, PanelHeader, PanelTitle } from "./panel";
 import { BentoSkillsSection } from "./skills.bento";
 import { SpotLightSkillSection } from "./skills.spotlight";
 
@@ -59,6 +61,39 @@ export function SkillSection() {
     "styling.model",
     StyleModels[0].id,
   );
+  if (selectedStyle === "minimal") {
+    return <Panel id="stack">
+      <PanelHeader>
+        <PanelTitle>Stack</PanelTitle>
+      </PanelHeader>
+
+      <PanelContent>
+        <ul className="flex flex-wrap gap-4 select-none group mx-auto justify-center">
+          {Object.values(appConfig.skills).flat().map((tech) => {
+            return (
+              <li key={tech} className="flex">
+                <Tooltip>
+                  <TooltipTrigger>
+                    <Image
+                      src={`https://skillicons.dev/icons?i=${tech}`}
+                      alt={`${tech} icon`}
+                      width={64}
+                      height={64}
+                      className="size-10 md:size-12 object-contain grayscale opacity-70 transition-all duration-500 group-hover:grayscale-0 group-hover:opacity-100"
+                      unoptimized
+                    />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>{tech}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </li>
+            )
+          })}
+        </ul>
+      </PanelContent>
+    </Panel>
+  }
 
   return (
     <section

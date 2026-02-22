@@ -94,8 +94,8 @@ export function OrbitingIdentity() {
               style={{ transform: "translateZ(30px)" }}
             >
               <Image
-                src={appConfig.logo}
-                alt={appConfig.name}
+                src={appConfig.avatar}
+                alt={appConfig.displayName}
                 fill
                 className="object-cover"
               />
@@ -103,7 +103,7 @@ export function OrbitingIdentity() {
 
             <div className="space-y-2 text-left">
               <h3 className="text-xl font-medium text-white tracking-tight">
-                {appConfig.name}
+                {appConfig.displayName}
               </h3>
               <p className="text-sm text-zinc-500 leading-relaxed font-normal">
                 Design Engineer crafting pixel-perfect interfaces.

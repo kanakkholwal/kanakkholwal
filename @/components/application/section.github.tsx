@@ -2,10 +2,8 @@
 import { CountingNumber } from "@/components/animated/text.counter";
 import {
   ContributionGraph,
-  ContributionGraphBlock,
-  ContributionGraphCalendar,
   ContributionGraphLegend,
-  ContributionGraphTotalCount,
+  ContributionGraphTotalCount
 } from "@/components/kibo-ui/contribution-graph";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -49,7 +47,9 @@ import useStorage from "@/hooks/use-storage";
 import Link from "next/link";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 import { appConfig } from "root/project.config";
+import GithubContributionGraph, { GithubContributionGraphCalender } from "../card.contribution";
 import BlurFade from "../magicui/blur-fade";
+import { Panel, PanelContent, PanelHeader, PanelTitle } from "./panel";
 
 // Configuration for the stats ribbon
 const STATS_CONFIG = [
@@ -101,12 +101,25 @@ export default function GithubSection({
     "styling.model",
     StyleModels[0].id,
   );
+  if (selectedStyle === "minimal") {
+    return <Panel>
+      <PanelHeader>
+        <PanelTitle>
+          GitHub Contributions
+        </PanelTitle>
+      </PanelHeader>
+      <PanelContent>
 
+        <GithubContributionGraph data={data.stats.contributions[Object.keys(data.stats.contributions).toReversed()[0]]} />
+      </PanelContent>
+    </Panel>
+  }
   return (
     <section
       id="github"
       className="max-w-(--max-app-width) mx-auto w-full py-24 px-4 md:px-12 space-y-8"
     >
+
       {selectedStyle === "static" ? (
         <StaticGithubSection data={data.stats} />
       ) : (
@@ -232,25 +245,9 @@ export function StaticGithubSection({ data }: { data: Contributions }) {
               </div>
             </div>
             <TabsContent value="graph" className="w-full p-3">
-              <ContributionGraphCalendar className="w-full">
-                {({ activity, dayIndex, weekIndex }) => (
-                  <ContributionGraphBlock
-                    activity={activity}
-                    dayIndex={dayIndex}
-                    weekIndex={weekIndex}
-                    className={cn(
-                      // CUSTOM COLOR MAP: Using semantic opacity steps instead of hex codes
-                      // This ensures it looks perfect in both Light (Green) and Dark (Glowing Green) modes
-                      "rounded-[20px] transition-all duration-300 hover:scale-125",
-                      'data-[level="0"]:fill-muted dark:data-[level="0"]:fill-muted',
-                      'data-[level="1"]:fill-emerald-400/30 dark:data-[level="1"]:fill-emerald-900/40',
-                      'data-[level="2"]:fill-emerald-400/60 dark:data-[level="2"]:fill-emerald-700/60',
-                      'data-[level="3"]:fill-emerald-500 dark:data-[level="3"]:fill-emerald-600',
-                      'data-[level="4"]:fill-emerald-600 dark:data-[level="4"]:fill-emerald-500',
-                    )}
-                  />
-                )}
-              </ContributionGraphCalendar>
+
+              <GithubContributionGraphCalender />
+
               <ContributionGraphLegend className="mt-4" />
             </TabsContent>
             <TabsContent value="chart">
@@ -332,7 +329,7 @@ export function DynamicGithubSection({
                       from={0}
                       to={
                         data.stats.stats[
-                          stat.key as keyof typeof data.stats.stats
+                        stat.key as keyof typeof data.stats.stats
                         ]
                       }
                       duration={2 + i * 0.2}
@@ -412,25 +409,7 @@ export function DynamicGithubSection({
                   className="w-full mt-0 outline-none animate-in fade-in slide-in-from-bottom-2 duration-500"
                 >
                   <div className="overflow-x-auto pb-4 scrollbar-hide w-full">
-                    <ContributionGraphCalendar className="min-w-full max-h-96">
-                      {({ activity, dayIndex, weekIndex }) => (
-                        <ContributionGraphBlock
-                          activity={activity}
-                          dayIndex={dayIndex}
-                          weekIndex={weekIndex}
-                          className={cn(
-                            "rounded-sm transition-all duration-300 border-[0.5px] border-background/20",
-                            "hover:animate-pulse",
-                            // Modern Github Color Scale (Dark Mode Optimized)
-                            'data-[level="0"]:fill-muted/20 dark:data-[level="0"]:fill-zinc-800',
-                            'data-[level="1"]:fill-emerald-900/40',
-                            'data-[level="2"]:fill-emerald-700/60',
-                            'data-[level="3"]:fill-emerald-500',
-                            'data-[level="4"]:fill-emerald-400',
-                          )}
-                        />
-                      )}
-                    </ContributionGraphCalendar>
+                    <GithubContributionGraphCalender className="min-w-full max-h-96 l no-scrollbar px-2" />
                   </div>
                   <div className="flex justify-end mt-4">
                     <ContributionGraphLegend />
@@ -505,18 +484,18 @@ export function DynamicGithubSection({
                           ))}
                         {data.activity.activityOverview
                           .repositoriesContributedTo.length > 4 && (
-                          <a
-                            href={
-                              "https://github.com/" + appConfig.usernames.github
-                            }
-                            className="text-sm font-normal text-muted-foreground hover:text-primary"
-                          >
-                            and{" "}
-                            {data.activity.activityOverview
-                              .repositoriesContributedTo.length - 4}{" "}
-                            other repositories
-                          </a>
-                        )}
+                            <a
+                              href={
+                                "https://github.com/" + appConfig.usernames.github
+                              }
+                              className="text-sm font-normal text-muted-foreground hover:text-primary"
+                            >
+                              and{" "}
+                              {data.activity.activityOverview
+                                .repositoriesContributedTo.length - 4}{" "}
+                              other repositories
+                            </a>
+                          )}
                       </div>
                     </div>
                   </div>

@@ -1,6 +1,6 @@
 export const educationExperiences = [
   {
-    school: "NITH",
+    school: "National Institute of Technology, Hamirpur",
     href: "https://nith.ac.in",
     degree: "B.Tech. (Dual), ECE",
     logoUrl:

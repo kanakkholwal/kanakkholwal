@@ -59,7 +59,7 @@ export async function generateMetadata(props: {
           width: 800,
           height: 600,
 
-          alt: `${appConfig.name} - UI/UX & Full Stack Engineer`,
+          alt: `${appConfig.displayName} - UI/UX & Full Stack Engineer`,
         },
       ],
       creator: `@${appConfig.usernames.twitter}`,

@@ -3,6 +3,7 @@
 import { StarsBackground } from "@/components/animated/bg.stars";
 import { Header } from "@/components/header";
 import { Logo } from "@/components/logo";
+import { StyleModels, StylingModel } from "@/constants/ui";
 import useStorage from "@/hooks/use-storage";
 import { cn } from "@/lib/utils";
 import {
@@ -48,6 +49,10 @@ export default function PageWrapper({
   children: React.ReactNode;
   className?: string;
 }) {
+    const [selectedStyle] = useStorage<StylingModel>(
+    "styling.model",
+    StyleModels[0].id,
+  );
   const [isLoaded, setIsLoaded] = useState(false);
   const { resolvedTheme } = useTheme();
   const [animationEnabled] = useStorage("animations.enabled", false);
@@ -76,7 +81,7 @@ export default function PageWrapper({
   const parallaxY = useTransform(smoothY, [0, 1], [0, -50]);
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoaded(true), 1800);
+    const timer = setTimeout(() => setIsLoaded(true), 1200);
     return () => clearTimeout(timer);
   }, []);
 
@@ -116,6 +121,7 @@ export default function PageWrapper({
             className={cn(
               "relative z-10 min-h-dvh w-full overflow-x-hidden",
               "pb-20",
+              selectedStyle === "minimal" && "mx-auto md:max-w-3xl *:[[id]]:scroll-mt-22 space-y-4",
               className,
             )}
             initial="hidden"

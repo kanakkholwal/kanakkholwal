@@ -143,9 +143,9 @@ export function ExpandableProjectCards({ cards }: { cards: ProjectType[] }) {
                       key={i}
                       href={link.url}
                       target="_blank"
-                      variant="glass"
+                      variant="secondary"
                       size="icon"
-                      className="h-10 w-10 md:h-12 md:w-12 flex items-center justify-center border rounded-lg"
+                      className="size-10 md:size-12 flex items-center justify-center border rounded-lg"
                     >
                       <Icon name={(link.icon as IconType) || "external-link"} />
                     </ButtonLink>

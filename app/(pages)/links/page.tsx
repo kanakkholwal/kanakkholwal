@@ -8,8 +8,8 @@ import { appConfig } from "root/project.config";
 import { generateMetadata } from "~/utils/seo";
 
 export const metadata = generateMetadata({
-  title: `Links | ${appConfig.name}`,
-  description: `Connect with ${appConfig.name}. Socials, portfolio, and contact info.`,
+  title: `Links | ${appConfig.displayName}`,
+  description: `Connect with ${appConfig.displayName}. Socials, portfolio, and contact info.`,
   path: "/links",
 });
 
@@ -107,10 +107,10 @@ export default function LinksPage() {
             <div className="absolute -inset-1 rounded-full bg-gradient-to-tr from-primary to-purple-500 opacity-50 blur-md group-hover:opacity-75 transition-opacity duration-500" />
             <div className="relative p-1 bg-background rounded-full">
               <Image
-                src={appConfig.logo}
+                src={appConfig.avatar}
                 width={110}
                 height={110}
-                alt={appConfig.name}
+                alt={appConfig.displayName}
                 className="rounded-full border border-border"
                 priority
               />
@@ -123,7 +123,7 @@ export default function LinksPage() {
 
           <div className="space-y-2">
             <h1 className="text-3xl font-bold tracking-tight">
-              <span className="text-colorful-titanium">{appConfig.name}</span>
+              <span className="text-colorful-titanium">{appConfig.displayName}</span>
             </h1>
             <p className="text-muted-foreground font-medium">
               Full Stack Engineer & UI/UX Designer

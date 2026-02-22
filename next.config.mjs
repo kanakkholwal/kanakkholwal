@@ -6,8 +6,12 @@ const nextConfig = {
   crossOrigin: "anonymous",
   images: {
     remotePatterns: [
-      { protocol: 'https', hostname: '**' },
+      { protocol: 'https', hostname: '**' }, // <- OK
       { protocol: 'https', hostname: 'api.dicebear.com' },
+      { protocol: 'https', hostname: 'skillicons.dev' },
+      { protocol: 'https', hostname: 'github.com' },
+      { protocol: 'https', hostname: 'cdn.jsdelivr.net' },
+      { protocol: 'https', hostname: '**.ufs.sh' },
       { hostname: 'visitor-badge.laobi.icu' },
     ],
   },

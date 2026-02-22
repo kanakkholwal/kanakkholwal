@@ -32,6 +32,7 @@
   --accent-foreground: hsl(220.9 39.3% 11%);
   --destructive: hsl(0 84.2% 60.2%);
   --destructive-foreground: hsl(0deg 0% 92.16%);
+  --max-app-width: clamp(1440px, 80vw, 2480px);
 
   /* Subtle shadow for Light Mode */
   --spotlight-color: rgba(0, 0, 0, 0.05);
@@ -524,7 +525,8 @@ body {
        - starts from 1024px (for tablets/small desktops)
        - scales with viewport
        - grows reasonably beyond 1440px without a hard limit */
-  --max-app-width: clamp(1440px, 80vw, 2480px);
+
+  max-width: var(--max-app-width, clamp(1024px, 80vw, 2480px));
 
 }
 

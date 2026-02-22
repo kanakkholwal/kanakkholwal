@@ -5,6 +5,8 @@ import { Metadata } from "next";
 import { appConfig } from "root/project.config";
 import ProjectPage from "./client";
 
+export const dynamic = "force-dynamic";
+
 export default async function Page(props: {
   params: Promise<{ slug: string[] }>;
 }) {
@@ -54,7 +56,7 @@ export async function generateMetadata(props: {
           width: 800,
           height: 600,
 
-          alt: `${appConfig.name} - UI/UX & Full Stack Engineer`,
+          alt: `${appConfig.displayName} - UI/UX & Full Stack Engineer`,
         },
       ],
       creator: `@${appConfig.usernames.twitter}`,

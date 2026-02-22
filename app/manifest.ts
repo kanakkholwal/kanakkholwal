@@ -4,7 +4,7 @@ import { appConfig } from "root/project.config";
 export default function manifest(): MetadataRoute.Manifest {
   return {
     id: "kanakkholwal",
-    name: appConfig.name,
+    name: appConfig.displayName,
     short_name: appConfig.shortName,
     description: appConfig.description,
     icons: [

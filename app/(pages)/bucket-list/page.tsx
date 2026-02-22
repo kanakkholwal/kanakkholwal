@@ -5,7 +5,7 @@ import Image from "next/image";
 import { appConfig } from "root/project.config";
 import { generateMetadata } from "~/utils/seo";
 
-// --- METADATA ---
+
 export const metadata = generateMetadata({
   title: "Bucket List",
   description:
@@ -13,8 +13,7 @@ export const metadata = generateMetadata({
   path: "/bucket-list",
 });
 
-// --- COMPONENT: BUCKET CARD ---
-function BucketCard({ item }: { item: (typeof appConfig.bucketList)[0] }) {
+function BucketCard({ item }: { item: (typeof appConfig.bucketList)[number] }) {
   return (
     <div
       className={cn(

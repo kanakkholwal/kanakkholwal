@@ -18,17 +18,17 @@ export default async function ArticlePage(props: { slug: string[] }) {
 
   const Mdx = page.data.body;
 
-  // Calculate read time (rough estimate)
-  // Note: Fumadocs usually provides readingTime in data, if not, this is a fallback
+
   const wordCount = page.data.body?.toString()?.split(/\s+/g).length || 500;
   const readTime = Math.ceil(wordCount / 200);
 
   const otherArticleSlugs = source
     .generateParams()
     .filter((p) => p.slug !== props.slug);
+
   const otherArticles = await Promise.all(
     otherArticleSlugs.map((slug) => source.getPage(slug.slug)),
-  );
+  ).catch(() => []);
 
   return (
     <main className="min-h-screen relative">

@@ -2,16 +2,20 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 import { WorkExperienceType } from "@/lib/work.source";
+import defaultMdxComponents from "fumadocs-ui/mdx";
 import { ArrowUpRight, MapPin } from "lucide-react";
 import Link from "next/link";
-import Markdown from "react-markdown";
 
 interface WorkExperienceCardProps {
   work: WorkExperienceType;
 }
 
 export function WorkExperienceCard({ work }: WorkExperienceCardProps) {
+  const Mdx = work.body;
+
+  
   return (
     <div className="group relative grid md:grid-cols-[200px_1fr] gap-x-12 gap-y-8 transition-all">
       <div className="hidden md:block absolute left-[217px] top-2 bottom-0 w-px bg-gradient-to-b from-border via-border/40 to-transparent" />
@@ -43,7 +47,7 @@ export function WorkExperienceCard({ work }: WorkExperienceCardProps) {
           </Avatar>
 
           <div className="flex flex-col">
-            <h3 className="font-semibold text-sm text-foreground leading-none mb-1">
+            <h3 className="font-semibold text-sm text-metallic text-shadow-glow leading-none mb-1">
               {work.company}
             </h3>
             <Link
@@ -86,64 +90,22 @@ export function WorkExperienceCard({ work }: WorkExperienceCardProps) {
         </h3>
 
         {/* Description: Perfectly Aligned Lists */}
-        <div className="text-muted-foreground leading-relaxed max-w-none text-base">
-          <Markdown
-            components={{
-              // 1. Remove default list padding/margin
-              ul: ({ children }) => (
-                <ul className="flex flex-col gap-3 my-0 list-none pl-0">
-                  {children}
-                </ul>
-              ),
-              // 2. Custom List Item Layout
-              li: ({ children }) => (
-                <li className="flex items-start gap-3">
-                  {/* The "Arrow" Bullet - Fixed width ensures alignment */}
-                  <span className="mt-[5px] shrink-0 text-muted-foreground/40 group-hover:text-primary transition-colors duration-300">
-                    <svg
-                      width="10"
-                      height="10"
-                      viewBox="0 0 10 10"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M3.5 1.5L7 5L3.5 8.5"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </span>
-                  {/* The Content */}
-                  <span className="prose-sm dark:prose-invert text-pretty">
-                    {children}
-                  </span>
-                </li>
-              ),
-              // 3. High-Contrast Strong Text
-              strong: ({ children }) => (
-                <strong className="font-semibold text-foreground">
-                  {children}
-                </strong>
-              ),
-              // 4. Subtle Links
-              a: ({ href, children }) => (
-                <Link
-                  href={href || "#"}
-                  target="_blank"
-                  className="text-foreground underline underline-offset-4 decoration-border hover:decoration-primary transition-all"
-                >
-                  {children}
-                </Link>
-              ),
-              p: ({ children }) => <p className="mb-4 last:mb-0">{children}</p>,
-            }}
-          >
-            {work.description}
-          </Markdown>
-        </div>
+        <div
+                   className={cn(
+                     "prose dark:prose-invert max-w-none",
+                     "prose-headings:font-mono prose-headings:tracking-tight prose-headings:font-bold",
+                     "prose-p:font-mono prose-p:leading-6 prose-p:text-zinc-600 dark:prose-p:text-zinc-300",
+                     "prose-li:font-mono",
+       
+                     // override typography anchor underline
+                     "[&_a[data-card].peer]:no-underline",
+                     "text-muted-foreground max-w-none mb-6 text-sm md:text-base leading-relaxed",
+                     // "prose-pre:border prose-pre:border-border/50 prose-pre:bg-zinc-950",
+                     // "prose-code:px-1 prose-code:py-0.5 prose-code:rounded-sm prose-code:font-mono prose-code:text-sm prose-code:before:content-none prose-code:after:content-none"
+                   )}
+                 >
+                   <Mdx components={defaultMdxComponents} />
+                 </div>
       </div>
     </div>
   );

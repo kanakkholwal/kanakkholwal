@@ -60,8 +60,8 @@ export const ArticleOgTemplate = ({
   date,
   meta,
   tags = [],
-  authorName = appConfig.name,
-  authorImage = appConfig.logo,
+  authorName = appConfig.displayName,
+  authorImage = appConfig.avatar,
   isDark = false,
 }: ArticleTemplateProps) => (
   <SharedLayout isDark={isDark}>
@@ -177,7 +177,7 @@ export const ArticleOgTemplate = ({
 
 export const PortfolioOgTemplate = ({
   siteName = appConfig.url.replace("https://", ""),
-  title = appConfig.name,
+  title = appConfig.displayName,
   role = "Full Stack Engineer",
   status = "Open for Opportunities",
   techStack = ["Next.js", "TypeScript", "System Design"],
@@ -249,11 +249,11 @@ interface TopicTemplateProps extends BaseTemplateProps {
 // Aesthetic: Biometric Scan / Technical Dossier
 export const PortfolioProfileTemplate = ({
   siteName = "KANAK.DEV",
-  title = appConfig.name,
+  title = appConfig.displayName,
   role = "Full Stack Engineer",
   status = "ONLINE :: OPEN FOR WORK",
   techStack = ["Next.js", "TypeScript", "Cloud Architecture"],
-  authorImage = appConfig.logo, // Ensure this is an absolute URL
+  authorImage = appConfig.avatar, // Ensure this is an absolute URL
 }: PortfolioTemplateProps) => (
   <SharedLayout>
     <div tw="flex flex-row w-full h-full items-center justify-between">

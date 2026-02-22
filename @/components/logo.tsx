@@ -62,7 +62,7 @@ export const Logo = ({
 
   useEffect(() => {
     if (textRef.current) setTextWidth(textRef.current.getBBox().width);
-  }, [appConfig.name]);
+  }, [appConfig.displayName]);
 
   const totalWidth = 1050 + textWidth + 50;
 
@@ -100,7 +100,7 @@ export const Logo = ({
           animate={draw ? (isLoader ? "animate" : "visible") : false}
           className={cn(textClassName)}
         >
-          {appConfig.name.split(" ")[0]}
+          {appConfig.displayName.split(" ")[0]}
         </motion.text>
       </motion.svg>
     </div>

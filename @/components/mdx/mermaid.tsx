@@ -2,6 +2,7 @@
 
 import { useTheme } from "next-themes";
 import { use, useEffect, useId, useState } from "react";
+import { ErrorBoundary } from "../utils/error-boundary";
 
 export function Mermaid({ chart }: { chart: string }) {
   const [mounted, setMounted] = useState(false);
@@ -11,7 +12,10 @@ export function Mermaid({ chart }: { chart: string }) {
   }, []);
 
   if (!mounted) return;
-  return <MermaidContent chart={chart} />;
+  return <ErrorBoundary>
+    <MermaidContent chart={chart} />;
+  </ErrorBoundary>
+
 }
 
 const cache = new Map<string, Promise<unknown>>();

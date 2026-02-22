@@ -9,30 +9,12 @@ import {
   ContributionGraphTotalCount,
 } from "@/components/kibo-ui/contribution-graph";
 import { cn } from "@/lib/utils";
-import { eachDayOfInterval, endOfYear, formatISO, startOfYear } from "date-fns";
+import { format } from "date-fns";
 import { Badge } from "./ui/badge";
+import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
-const maxCount = 20;
-const maxLevel = 4;
-const now = new Date();
-const days = eachDayOfInterval({
-  start: startOfYear(now),
-  end: endOfYear(now),
-});
 
-const data = days.map((date) => {
-  const c = Math.round(
-    Math.random() * maxCount - Math.random() * (0.8 * maxCount),
-  );
-  const count = Math.max(0, c);
-  const level = Math.ceil((count / maxCount) * maxLevel);
 
-  return {
-    date: formatISO(date, { representation: "date" }),
-    count,
-    level,
-  };
-});
 
 type ContributionResponse = {
   total: Record<string, number>;
@@ -43,6 +25,43 @@ type ContributionResponse = {
   }>;
 };
 
+export function GithubContributionGraphCalender({className}: {className?: string}) {
+  return       <ContributionGraphCalendar className={cn("w-full px-2", className)}
+        title="GitHub Contributions">
+        {({ activity, dayIndex, weekIndex }) => (
+          <Tooltip key={`${activity.date}-${dayIndex}-${weekIndex}`}>
+            <TooltipTrigger asChild>
+              <g>
+                <ContributionGraphBlock
+                  activity={activity}
+                  dayIndex={dayIndex}
+                  weekIndex={weekIndex}
+                  className={cn(
+                    // CUSTOM COLOR MAP: Using semantic opacity steps instead of hex codes
+                    // This ensures it looks perfect in both Light (Green) and Dark (Glowing Green) modes
+                    "rounded-[20px] transition-all duration-300",
+                    'data-[level="0"]:fill-muted dark:data-[level="0"]:fill-muted',
+                    'data-[level="1"]:fill-emerald-400/30 dark:data-[level="1"]:fill-emerald-900/40',
+                    'data-[level="2"]:fill-emerald-400/60 dark:data-[level="2"]:fill-emerald-700/60',
+                    'data-[level="3"]:fill-emerald-500 dark:data-[level="3"]:fill-emerald-600',
+                    'data-[level="4"]:fill-emerald-600 dark:data-[level="4"]:fill-emerald-500',
+                  )}
+                />
+
+              </g>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>
+                {activity.count} contribution{activity.count > 1 ? "s" : null}{" "}
+                on {format(new Date(activity.date), "dd.MM.yyyy")}
+              </p>
+            </TooltipContent>
+          </Tooltip>
+        )}
+
+      </ContributionGraphCalendar>
+}
+
 function GithubContributionGraph({
   data,
 }: {
@@ -50,22 +69,9 @@ function GithubContributionGraph({
 }) {
   return (
     <ContributionGraph data={data}>
-      <ContributionGraphCalendar>
-        {({ activity, dayIndex, weekIndex }) => (
-          <ContributionGraphBlock
-            activity={activity}
-            className={cn(
-              'data-[level="0"]:fill-[#ebedf0] dark:data-[level="0"]:fill-[#161b22]',
-              'data-[level="1"]:fill-[#9be9a8] dark:data-[level="1"]:fill-[#0e4429]',
-              'data-[level="2"]:fill-[#40c463] dark:data-[level="2"]:fill-[#006d32]',
-              'data-[level="3"]:fill-[#30a14e] dark:data-[level="3"]:fill-[#26a641]',
-              'data-[level="4"]:fill-[#216e39] dark:data-[level="4"]:fill-[#39d353]',
-            )}
-            dayIndex={dayIndex}
-            weekIndex={weekIndex}
-          />
-        )}
-      </ContributionGraphCalendar>
+
+      <GithubContributionGraphCalender/>
+
       <ContributionGraphFooter>
         <ContributionGraphTotalCount>
           {({ totalCount, year }) => (

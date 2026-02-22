@@ -24,5 +24,5 @@ export const metadata = generateMetadata({
     "scalable systems",
     "Kanak Kholwal",
   ],
-  image: "http://localhost:3000/projects/opengraph-image",
+  image: "/projects/opengraph-image",
 });

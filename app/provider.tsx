@@ -1,6 +1,7 @@
 // provider.tsx
 "use client";
 import { Toaster } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { RootProvider } from "fumadocs-ui/provider/next";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
@@ -25,13 +26,16 @@ export function Provider({ children }: { children: React.ReactNode }) {
           defaultTheme="dark"
           attribute={["class", "data-theme"]}
         >
-          <div
-            className={cn(
-              "min-h-screen w-full h-full overflow-x-hidden no-scrollbar",
-            )}
-          >
-            <NuqsAdapter>{children}</NuqsAdapter>
-          </div>
+          <TooltipProvider>
+
+            <div
+              className={cn(
+                "min-h-screen w-full h-full overflow-x-hidden no-scrollbar",
+              )}
+            >
+              <NuqsAdapter>{children}</NuqsAdapter>
+            </div>
+          </TooltipProvider>
         </NextThemesProvider>
 
         <Toaster position="bottom-right" richColors />

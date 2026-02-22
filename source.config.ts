@@ -47,6 +47,8 @@ export const workExperiences = defineDocs({
       logoUrl: z.url(),
       startDate: z.string(),
       endDate: z.string().optional(),
+      isCurrentEmployer: z.boolean().default(false).optional(),
+      isOngoing: z.boolean().default(false).optional(),
     }),
     postprocess: {
       includeProcessedMarkdown: true,

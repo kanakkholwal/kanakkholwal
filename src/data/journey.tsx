@@ -1,31 +1,26 @@
 import { TimelineProjectGrid } from "@/components/extended/timeline";
-import { getProjectList } from "@/lib/project.source";
 import Link from "next/link";
-
-const projectsList = getProjectList().map(({body,...rest}) => ({
-  ...rest,
-}));
-
 
 export const journey_data = [
   {
-    title: "Mid 2024",
+    date: "Mid 2024",
+    role: "Open Source & Independent Builds",
     content: (
       <>
         <p>
-          I burned out with internships and needed a break. So I worked on some
-          personal projects, Data Structures and Algorithms, System Design,
-          learning new skills and also started contributing to Open Source.
+          After back-to-back internships, I took time to reset and go deeper into
+          fundamentals — system design, DSA, and shipping my own products. This
+          phase was less about roles and more about becoming a stronger builder:
+          contributing to open source, running projects end-to-end, and
+          tightening my development workflow.
         </p>
-        <TimelineProjectGrid
-          yearFilter={["2024", "2025"]}
-          projectsList={projectsList}
-        />
+        <TimelineProjectGrid yearFilter={["2024", "2025"]} />
       </>
     ),
   },
   {
-    title: "Early 2024",
+    date: "Early 2024",
+    role: "Frontend Engineer Intern at KoinX",
     content: (
       <>
         <p>
@@ -36,52 +31,54 @@ export const journey_data = [
           >
             KoinX
           </Link>
-          , a fast-growing crypto tax and compliance startup. As a Frontend
-          Engineer Intern, I focused on building and optimizing frontend
-          applications.
+          , a fast-growing crypto tax and compliance platform, where I worked on
+          both customer-facing and B2B products at scale.
         </p>
         <p className="mt-4">
-          I worked on customer-facing and B2B platforms while also contributing
-          to the company’s internal UI library. I migrated{" "}
+          My focus was performance and developer velocity. I migrated legacy CRA
+          apps to{" "}
           <strong className="text-foreground font-semibold">
-            legacy CRA applications to Vite/TypeScript
+            Vite + TypeScript
           </strong>{" "}
-          for faster builds, and optimized the multi-language landing pages by
-          centralizing sources of truth, which improved{" "}
+          to drastically reduce build times, optimized multi-language landing
+          pages by introducing a single source of truth, and improved{" "}
           <strong className="text-foreground font-semibold">
-            SEO and page performance
+            SEO and runtime performance
           </strong>
-          .
+          . I also contributed to the internal UI system used across products.
         </p>
       </>
     ),
   },
   {
-    title: "Late 2022",
+    date: "Late 2022",
+    role: "SDE Intern at Textify AI",
     content: (
       <>
         <p>
-          I got fascinated with building web apps and web technologies. My first
-          noticeable and actually first React.js project was a result ranking
-          app for my college. I built that app in just 24 hours.
-        </p>
-        <p className="mt-4">
-          After that, I started learning more about web development and started
-          building more projects. I started getting confident with my skills and
-          started applying for internships. I got my first internship at{" "}
+          This is where I moved from “building projects” to working on a real
+          product with real users. I joined{" "}
           <Link
             href="https://www.linkedin.com/company/textifyai"
             className="text-foreground font-medium underline underline-offset-4 decoration-border hover:decoration-primary transition-all"
           >
             Textify AI
           </Link>{" "}
-          as a SDE Intern.
+          and became part of a small team shipping continuously.
+        </p>
+        <p className="mt-4">
+          I worked across the stack — designing a drag-and-drop AI tool builder,
+          migrating authentication to NextAuth, and managing deployments across{" "}
+          <strong className="text-foreground font-semibold">
+            AWS, Azure, and GCP
+          </strong>
+          . It was my first experience owning features end-to-end and operating
+          what I built in production.
         </p>
         <div className="mt-4 p-4 rounded-xl bg-primary/30 border border-border/50 text-sm">
           <p>
-            <strong>At Textify:</strong> I designed a drag-and-drop AI tool
-            builder, migrated auth to NextAuth, and managed multi-cloud
-            deployments (AWS, Azure, GCP).
+            This phase shaped how I work today: small teams, fast iteration, and
+            direct impact on real users.
           </p>
         </div>
       </>
