@@ -1,8 +1,6 @@
 import { type InferPageType, loader } from "fumadocs-core/source";
 import { lucideIconsPlugin } from "fumadocs-core/source/lucide-icons";
 import { projects } from "fumadocs-mdx:collections/server";
-import { appConfig } from "root/project.config";
-import { getEnvironmentDev } from "~/utils/env";
 
 // See https://fumadocs.dev/docs/headless/source-api for more info
 export const source = loader({
@@ -16,11 +14,12 @@ export type ProjectType = InferPageType<typeof source>["data"];
 export function getProjectList(): ProjectType[] {
   return source.getPages().map((page) => page.data);
 }
-export function getOtherProjects(currentProjectId: string): ProjectType[] {
+export function getOtherProjects(currentProjectId: string): Omit<ProjectType, "body">[] {
   return source
     .getPages()
     .filter((page) => page.data.id !== currentProjectId)
-    .map((page) => page.data);
+    .map((page) => page.data)
+    .map(({body,...rest}) => rest);
 }
 
 export function getPageImage(page: InferPageType<typeof source>) {

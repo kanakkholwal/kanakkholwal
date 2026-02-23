@@ -15,7 +15,7 @@ export default async function HomePage() {
   const data = await getGithubStats(appConfig.usernames.github);
 
   return (
-    <Wrapper>
+    <Wrapper isHome={true}>
       <HeroSection />
       <AboutSection />
       <WorkSection />
@@ -24,7 +24,7 @@ export default async function HomePage() {
       <ProjectsSection />
       <Suspense
         fallback={
-          <div className="max-w-7xl mx-auto px-6 md:px-12 py-24">
+          <div className="max-w-app mx-auto px-6 md:px-12 py-24">
             <div className="h-96 w-full animate-pulse rounded-3xl bg-muted/50 border border-border" />
           </div>
         }

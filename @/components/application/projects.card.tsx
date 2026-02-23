@@ -16,8 +16,8 @@ import { ProjectFallback } from "./projects.card.fallback";
 import { MousePointerClick } from "lucide-react";
 import { Icon, IconType } from "../icons";
 
-export function ExpandableProjectCards({ cards }: { cards: ProjectType[] }) {
-  const [active, setActive] = useState<ProjectType | null>(null);
+export function ExpandableProjectCards({ cards }: { cards: Omit<ProjectType, "body">[] }) {
+  const [active, setActive] = useState<Omit<ProjectType, "body"> | null>(null);
   const id = useId();
   const ref = useRef<HTMLDivElement>(null);
 
@@ -250,7 +250,7 @@ export function SimpleProjectCards({
   cards,
   className,
 }: {
-  cards: ProjectType[];
+  cards: Omit<ProjectType, "body">[];
   className?: string;
 }) {
   return (
@@ -268,7 +268,7 @@ export function SimpleProjectCards({
   );
 }
 
-function ProjectCard({ card, index }: { card: ProjectType; index: number }) {
+function ProjectCard({ card, index }: { card: Omit<ProjectType, "body">; index: number }) {
   const [isHovered, setIsHovered] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 

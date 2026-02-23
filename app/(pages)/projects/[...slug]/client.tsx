@@ -83,7 +83,7 @@ export default async function ProjectPage(props: { slug: string[] }) {
 
       {/* 3. Media Showcase */}
       <section className="max-w-5xl mx-auto px-4 md:px-8 mb-24">
-        <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl border border-white/10 shadow-2xl bg-zinc-900 group">
+        <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl border border-border shadow-2xl bg-card group">
           {project.video ? (
             <video
               src={project.video}
@@ -234,15 +234,7 @@ export default async function ProjectPage(props: { slug: string[] }) {
         </div>
       </div>
 
-      {/* 5. Footer / Next Steps */}
-      <footer className="border-t border-border bg-zinc-50/50 dark:bg-zinc-900/30">
-        <div className="max-w-7xl mx-auto px-6 py-16">
-          <h2 className="text-2xl font-bold tracking-tight mb-8">
-            Other works
-          </h2>
-          <OtherProjects currentProjectId={project.id} />
-        </div>
-      </footer>
+       <OtherProjects currentProjectId={project.id} />
     </main>
   );
 }

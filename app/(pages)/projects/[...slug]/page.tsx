@@ -5,7 +5,6 @@ import { Metadata } from "next";
 import { appConfig } from "root/project.config";
 import ProjectPage from "./client";
 
-export const dynamic = "force-dynamic";
 
 export default async function Page(props: {
   params: Promise<{ slug: string[] }>;

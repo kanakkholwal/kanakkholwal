@@ -45,9 +45,11 @@ const ITEM_VARIANTS: Variants = {
 export default function PageWrapper({
   children,
   className,
+  isHome,
 }: {
   children: React.ReactNode;
   className?: string;
+  isHome?: boolean;
 }) {
     const [selectedStyle] = useStorage<StylingModel>(
     "styling.model",
@@ -121,7 +123,7 @@ export default function PageWrapper({
             className={cn(
               "relative z-10 min-h-dvh w-full overflow-x-hidden",
               "pb-20",
-              selectedStyle === "minimal" && "mx-auto md:max-w-3xl *:[[id]]:scroll-mt-22 space-y-4",
+              (selectedStyle === "minimal" && isHome) && "mx-auto md:max-w-3xl *:[[id]]:scroll-mt-22 space-y-4",
               className,
             )}
             initial="hidden"
