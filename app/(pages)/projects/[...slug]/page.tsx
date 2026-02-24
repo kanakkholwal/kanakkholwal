@@ -1,9 +1,10 @@
 import { getPageImage, source } from "@/lib/project.source";
+import defaultMdxComponents from "fumadocs-ui/mdx";
 import { notFound } from "next/navigation";
 
 import { Metadata } from "next";
 import { appConfig } from "root/project.config";
-import ProjectPage from "./client";
+import ProjectPageClient from "./client";
 
 
 export default async function Page(props: {
@@ -13,7 +14,22 @@ export default async function Page(props: {
   if (!params.slug) notFound();
 
   if (params.slug.length === 1) {
-    return <ProjectPage slug={params.slug} />;
+    const pageSource = source.getPage(params.slug);
+    if (!pageSource) notFound();
+    const {
+      body: Mdx,
+      getMDAST,
+      getText,
+      info,
+      toc,
+      _exports,
+      _openapi,
+      ...project
+    } = pageSource.data;
+    
+    return <ProjectPageClient project={project} >
+      <Mdx components={defaultMdxComponents}/>
+    </ProjectPageClient>;
   }
   notFound();
 }

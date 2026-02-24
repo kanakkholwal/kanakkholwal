@@ -21,7 +21,7 @@ import { insightConfig, statsConfig } from "./config";
 import { getVersions, sumVersions } from "./lib/versions";
 import { loadSearchParams } from "./searchParams";
 
-// --- ICONS (Phosphor Duotone) ---
+// Icons
 import { Terminal } from "lucide-react";
 import {
   PiDatabaseDuotone,
@@ -102,7 +102,7 @@ const SectionHeader = ({
 
 export default async function StatsPage(props: StatsPageProps) {
   return (
-    <div className="mx-auto max-w-(--max-app-width) px-4 py-12 md:py-20 @container">
+    <div className="mx-auto max-w-app px-4 py-12 md:py-20 @container">
       <DashboardHeader />
 
       <div className="grid grid-cols-1 gap-8 md:gap-12">
