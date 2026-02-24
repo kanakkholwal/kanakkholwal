@@ -1,143 +1,264 @@
-"use client";
+﻿"use client";
 
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { ButtonLink, TransitionLink } from "@/components/utils/link";
+import { ButtonLink, ButtonTransitionLink, TransitionLink } from "@/components/utils/link";
 import { useOutsideClick } from "@/hooks/use-outside-click";
 import { ProjectType } from "@/lib/project.source";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowUpRight, Layers, Play, X } from "lucide-react";
+import {
+  ArrowUpRight,
+  Calendar,
+  ExternalLink,
+  Layers,
+  Play,
+  Tag,
+  X,
+} from "lucide-react";
 import Image from "next/image";
 import React, { useEffect, useId, useRef, useState } from "react";
 import Markdown from "react-markdown";
 
+import { Icon, IconType } from "../icons";
 import { ProjectFallback } from "./projects.card.fallback";
 
-import { MousePointerClick } from "lucide-react";
-import { Icon, IconType } from "../icons";
+/* 
+   STATUS badge colours
+─ */
+const STATUS_STYLES: Record<string, string> = {
+  "In Progress": "bg-amber-500/10 border-amber-500/30 text-amber-500",
+  Active: "bg-emerald-500/10 border-emerald-500/30 text-emerald-500",
+  Shipped: "bg-blue-500/10 border-blue-500/30 text-blue-500",
+  Completed: "bg-blue-500/10 border-blue-500/30 text-blue-500",
+  Archived: "bg-zinc-500/10 border-zinc-500/30 text-zinc-400",
+};
 
-export function ExpandableProjectCards({ cards }: { cards: Omit<ProjectType, "body">[] }) {
+function StatusBadge({ status }: { status?: string }) {
+  if (!status) return null;
+  const cls =
+    STATUS_STYLES[status] ?? "bg-muted border-border text-muted-foreground";
+  return (
+    <span
+      className={cn(
+        "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-mono font-semibold uppercase tracking-widest border",
+        cls,
+      )}
+    >
+      <span className="relative flex h-1.5 w-1.5">
+        <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 bg-current" />
+        <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-current" />
+      </span>
+      {status}
+    </span>
+  );
+}
+
+/* 
+   EXPANDABLE CARDS  (Dynamic variant)
+    bento grid + slide-in drawer
+ */
+export function ExpandableProjectCards({
+  cards,
+}: {
+  cards: Omit<ProjectType, "body">[];
+}) {
   const [active, setActive] = useState<Omit<ProjectType, "body"> | null>(null);
   const id = useId();
-  const ref = useRef<HTMLDivElement>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    function onKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape") setActive(null);
-    }
-    if (active) document.body.style.overflow = "hidden";
-    else document.body.style.overflow = "auto";
-
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setActive(null);
+    };
+    document.body.style.overflow = active ? "hidden" : "auto";
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
   }, [active]);
 
-  useOutsideClick(ref as React.RefObject<HTMLDivElement>, () =>
-    setActive(null),
+  useOutsideClick(
+    modalRef as React.RefObject<HTMLDivElement>,
+    () => setActive(null),
   );
 
   return (
-    <div className="w-full min-h-screen relative" id="project-list">
-      <AnimatePresence mode="wait">
-        {active ? (
-          <div className="absolute inset-0 z-[100] flex  items-center justify-center p-4 sm:p-10 pointer-events-none">
+    <div className="relative" id="project-list">
+      {/* Backdrop */}
+      <AnimatePresence>
+        {active && (
+          <motion.div
+            key="backdrop"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-40 bg-background/70 backdrop-blur-md"
+            onClick={() => setActive(null)}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Morphing modal — shares layoutId with the card */}
+      <AnimatePresence>
+        {active && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none">
             <motion.div
-              layoutId={`card-${active.id}-${id}`}
-              ref={ref}
-              className={cn(
-                "w-full h-fit max-h-[80dvh] max-w-xl flex flex-col bg-card rounded-3xl overflow-hidden shadow-2xl border border-border pointer-events-auto",
-              )}
+              key={active.id}
+              ref={modalRef}
+              layoutId={`card-container-${active.id}-${id}`}
+              style={{ borderRadius: 24 }}
+              className="pointer-events-auto relative w-full max-w-2xl max-h-[90vh] flex flex-col bg-card border border-border shadow-2xl overflow-hidden"
             >
-              <motion.div
-                layoutId={`media-${active.id}-${id}`}
-                className="relative w-full h-60 aspect-video shrink-0 bg-card border-b md:border-b-0 md:border-r border-border"
-              >
-                <button
-                  className="absolute top-4 left-4 z-20 p-2 bg-black/50 backdrop-blur-md border border-white/10 rounded-full text-white hover:bg-black/70 transition-colors"
+              {/* Media header */}
+              <div className="relative h-56 w-full shrink-0 bg-zinc-900">
+                {active.video ? (
+                  <video
+                    src={active.video}
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    className="h-full w-full object-cover opacity-80"
+                  />
+                ) : active.image ? (
+                  <Image
+                    src={active.image}
+                    alt={active.title}
+                    fill
+                    className="object-cover"
+                  />
+                ) : (
+                  <ProjectFallback title={active.title} />
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
+
+                {/* Close */}
+                <motion.button
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  transition={{ delay: 0.1 }}
                   onClick={() => setActive(null)}
+                  className="absolute top-4 right-4 z-20 p-2 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-white hover:bg-black/80 transition-colors"
                 >
                   <X className="size-4" />
-                </button>
+                </motion.button>
 
-                <div className="relative h-full w-full overflow-hidden">
-                  {active.video ? (
-                    <video
-                      src={active.video}
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
-                      className="h-full w-full object-cover"
-                    />
-                  ) : active.image ? (
-                    <Image
-                      src={active.image}
-                      alt={active.title}
-                      fill
-                      className="object-cover"
-                    />
-                  ) : (
-                    <ProjectFallback title={active.title} />
-                  )}
-
-                  {/* Gradient overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-80" />
-
-                  {/* Title Overlay */}
-                  <div className="absolute bottom-0 left-0 p-6 w-full z-20">
-                    <motion.h3
-                      layoutId={`title-${active.id}-${id}`}
-                      className="text-2xl font-bold tracking-tighter text-white mb-2"
-                    >
-                      {active.title}
-                    </motion.h3>
-
-                    {/* Tags in expanded view - FADE IN only (No layoutId) */}
-                    <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 10 }}
-                      transition={{ delay: 0.1 }}
-                      className="flex flex-wrap gap-2"
-                    >
-                      {active.tags?.map((tag) => (
-                        <span
-                          key={tag}
-                          className="text-[10px] font-mono uppercase px-2 py-1 bg-white/20 text-white backdrop-blur-md rounded-md border border-white/10"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </motion.div>
-                  </div>
+                <div className="absolute bottom-0 left-0 p-5 w-full z-10">
+                  <motion.div layoutId={`card-status-${active.id}-${id}`}>
+                    <StatusBadge status={active.status} />
+                  </motion.div>
+                  <motion.h2
+                    layoutId={`card-title-${active.id}-${id}`}
+                    className="mt-2 text-2xl font-bold tracking-tight text-white leading-tight"
+                  >
+                    {active.title}
+                  </motion.h2>
+                  <motion.p
+                    layoutId={`card-dates-${active.id}-${id}`}
+                    className="text-xs font-mono text-white/50 mt-1 flex items-center gap-1.5"
+                  >
+                    <Calendar className="size-3" />
+                    {active.dates}
+                  </motion.p>
                 </div>
-              </motion.div>
+              </div>
 
+              {/* Body — fades in after morph */}
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                // IMPORTANT: Quick exit to prevent squash effect
-                exit={{ opacity: 0, transition: { duration: 0.05 } }}
-                className="flex-1 flex flex-col bg-card relative min-h-0"
+                exit={{ opacity: 0 }}
+                transition={{ delay: 0.15, duration: 0.2 }}
+                className="flex flex-col flex-1 min-h-0"
               >
-                <ScrollArea className="flex-1 p-6 md:p-10 overflow-y-auto">
-                  <div className="prose prose-sm md:prose-base dark:prose-invert max-w-none text-muted-foreground">
-                    <Markdown>{active.description}</Markdown>
+                <ScrollArea className="flex-1 min-h-0">
+                  <div className="p-6 space-y-6">
+                    <div className="prose prose-sm dark:prose-invert max-w-none text-muted-foreground leading-relaxed">
+                      <Markdown>{active.description}</Markdown>
+                    </div>
+
+                    {active.metrics && active.metrics.length > 0 && (
+                      <div>
+                        <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground mb-3">
+                          // Impact
+                        </p>
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                          {active.metrics.map((m) => (
+                            <div
+                              key={m.label}
+                              className="flex flex-col items-center justify-center p-3 rounded-xl border border-border bg-muted/30 text-center"
+                            >
+                              <span className="text-xl font-bold font-mono tracking-tight text-foreground">
+                                {m.value.toLocaleString()}
+                              </span>
+                              <span className="text-[10px] text-muted-foreground mt-0.5 uppercase tracking-wider">
+                                {m.label}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {active.technologies && active.technologies.length > 0 && (
+                      <div>
+                        <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground mb-3 flex items-center gap-1.5">
+                          <Tag className="size-3" /> Stack
+                        </p>
+                        <div className="flex flex-wrap gap-2">
+                          {active.technologies.map((tech) => (
+                            <span
+                              key={tech}
+                              className="inline-flex items-center px-2.5 py-1 rounded-md bg-muted border border-border text-xs font-medium text-foreground/80"
+                            >
+                              {tech}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {active.tags && active.tags.length > 0 && (
+                      <div>
+                        <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground mb-3 flex items-center gap-1.5">
+                          <Layers className="size-3" /> Categories
+                        </p>
+                        <div className="flex flex-wrap gap-2">
+                          {active.tags.map((tag) => (
+                            <span
+                              key={tag}
+                              className="inline-flex items-center px-2 py-0.5 rounded-md bg-primary/10 border border-primary/20 text-xs text-primary/80 font-mono"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </ScrollArea>
 
-                <div className="p-4 md:p-6 border-t border-border bg-card/50 backdrop-blur-sm flex gap-3 z-10">
+                {/* Footer actions */}
+                <div className="p-4 border-t border-border bg-card/80 backdrop-blur-sm flex items-center gap-3 shrink-0">
                   {active.href && (
                     <ButtonLink
                       href={active.href}
                       target="_blank"
                       variant="dark"
-                      className="flex-1 w-full h-10 md:h-12 text-sm font-medium flex items-center justify-center rounded-lg"
+                      className="flex-1 h-11 text-sm font-medium rounded-xl"
                     >
-                      Visit Live Site{" "}
-                      <Icon name="arrow-up-right" className="ml-2" />
+                      <ExternalLink className="size-4" />
+                      Visit Live Site
                     </ButtonLink>
                   )}
+                    <ButtonTransitionLink
+                      href={`/projects/${active.id}`}
+                      variant="secondary"
+                      size="icon"
+                      className="size-11 text-sm font-medium rounded-xl"
+                    >
+                      <Icon name="arrow-right" className="size-4!" />
+                    </ButtonTransitionLink>
                   {active.links?.map((link, i) => (
                     <ButtonLink
                       key={i}
@@ -145,7 +266,7 @@ export function ExpandableProjectCards({ cards }: { cards: Omit<ProjectType, "bo
                       target="_blank"
                       variant="secondary"
                       size="icon"
-                      className="size-10 md:size-12 flex items-center justify-center border rounded-lg"
+                      className="size-11 rounded-xl border shrink-0"
                     >
                       <Icon name={(link.icon as IconType) || "external-link"} />
                     </ButtonLink>
@@ -154,98 +275,129 @@ export function ExpandableProjectCards({ cards }: { cards: Omit<ProjectType, "bo
               </motion.div>
             </motion.div>
           </div>
-        ) : null}
+        )}
       </AnimatePresence>
 
-      {/* GRID VIEW */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-7xl mx-auto">
+      {/* Card Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 w-full max-w-7xl mx-auto">
         {cards?.map((card) => (
-          <motion.div
-            layoutId={`card-${card.id}-${id}`}
+          <ExpandableCard
             key={card.id}
+            card={card}
+            layoutId={id}
             onClick={() => setActive(card)}
-            className="group relative flex flex-col h-[400px] w-full rounded-3xl bg-card border border-border p-2 cursor-pointer hover:border-border/20 hover:shadow-xl dark:hover:shadow-black/40 transition-all duration-500"
-          >
-            {/* Media Chassis */}
-            <div className="relative h-[60%] w-full overflow-hidden rounded-2xl bg-background border border-border/5">
-              <motion.div
-                layoutId={`media-${card.id}-${id}`}
-                className="h-full w-full"
-              >
-                {card.image ? (
-                  <Image
-                    src={card.image}
-                    alt={card.title}
-                    fill
-                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                  />
-                ) : (
-                  <ProjectFallback title={card.title} />
-                )}
-              </motion.div>
-
-              <div className="absolute top-3 left-3 z-10">
-                <div className="px-2 py-1 rounded-md bg-card/90 backdrop-blur-md border border-border/10 text-[10px] font-mono font-medium text-foreground uppercase tracking-wider shadow-sm">
-                  {card.status || "Active"}
-                </div>
-              </div>
-
-              <div className="absolute inset-0 z-6 bg-black/0 group-hover:bg-black/10 transition-colors duration-500 flex items-center justify-center">
-                <div className="size-12 rounded-full bg-primary/10 backdrop-blur-md border border-border/20 flex items-center justify-center opacity-0 group-hover:opacity-100 scale-90 group-hover:scale-100 transition-all duration-300">
-                  <MousePointerClick className="w-5 h-5 text-primary" />
-                </div>
-              </div>
-            </div>
-
-            {/* Info Chassis */}
-            <div className="flex flex-col flex-1 px-2 pt-4 pb-2">
-              <div className="flex items-center justify-between text-[10px] font-mono text-foreground/60 mb-2 uppercase tracking-widest">
-                <span>{card.dates}</span>
-                {card.tags?.[0] && (
-                  <span className="flex items-center gap-1">
-                    <Layers className="size-3" /> {card.tags[0]}
-                  </span>
-                )}
-              </div>
-
-              <motion.h3
-                layoutId={`title-${card.id}-${id}`}
-                className="text-lg font-bold text-foreground leading-tight mb-2 group-hover:text-primary transition-colors"
-              >
-                {card.title}
-              </motion.h3>
-
-              {/* Description (No layoutId) */}
-              <div className="flex-1">
-                <p className="text-sm text-muted-foreground line-clamp-2 leading-relaxed">
-                  {card.description}
-                </p>
-              </div>
-
-              {/* Footer Tags (No layoutId) */}
-              <div className="mt-auto pt-4 border-t border-dashed border-border/10 flex items-center gap-2 overflow-hidden">
-                {card.tags?.slice(1, 4).map((tag, i) => (
-                  <span
-                    key={i}
-                    className="inline-flex items-center px-1.5 py-0.5 rounded-[4px] bg-card text-[10px] font-medium text-muted-foreground"
-                  >
-                    {tag}
-                  </span>
-                ))}
-                {card.tags && card.tags.length > 4 && (
-                  <span className="text-[10px] text-muted-foreground">
-                    +{card.tags.length - 4}
-                  </span>
-                )}
-              </div>
-            </div>
-          </motion.div>
+            isActive={active?.id === card.id}
+          />
         ))}
       </div>
     </div>
   );
 }
 
+function ExpandableCard({
+  card,
+  layoutId,
+  onClick,
+  isActive,
+}: {
+  card: Omit<ProjectType, "body">;
+  layoutId: string;
+  onClick: () => void;
+  isActive: boolean;
+}) {
+  return (
+    <motion.button
+      onClick={onClick}
+      layoutId={`card-container-${card.id}-${layoutId}`}
+      style={{ borderRadius: 24 }}
+      whileHover={isActive ? {} : { y: -4, scale: 1.01 }}
+      transition={{ type: "spring", stiffness: 360, damping: 30 }}
+      className={cn(
+        "group relative flex flex-col text-left w-full overflow-hidden",
+        "bg-card border border-border",
+        "transition-shadow duration-300 hover:shadow-2xl dark:hover:shadow-black/60",
+        isActive && "opacity-40 pointer-events-none",
+      )}
+    >
+      {/* Media */}
+      <div className="relative aspect-[16/10] w-full overflow-hidden bg-zinc-900">
+        {card.image ? (
+          <Image
+            src={card.image}
+            alt={card.title}
+            fill
+            className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+          />
+        ) : (
+          <ProjectFallback title={card.title} />
+        )}
+
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
+
+        {/* Status - top left */}
+        <motion.div
+          layoutId={`card-status-${card.id}-${layoutId}`}
+          className="absolute top-3 left-3 z-10"
+        >
+          <StatusBadge status={card.status} />
+        </motion.div>
+
+        {/* Expand hint - top right */}
+        <div className="absolute top-3 right-3 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-[10px] font-mono text-white/80">
+            <ArrowUpRight className="size-3" />
+            Details
+          </div>
+        </div>
+
+        {/* Title overlay */}
+        <div className="absolute bottom-0 left-0 right-0 p-4 z-10">
+          <motion.h3
+            layoutId={`card-title-${card.id}-${layoutId}`}
+            className="text-base font-bold text-white leading-snug"
+          >
+            {card.title}
+          </motion.h3>
+          <motion.p
+            layoutId={`card-dates-${card.id}-${layoutId}`}
+            className="text-[10px] font-mono text-white/50 mt-1 flex items-center gap-1"
+          >
+            <Calendar className="size-3 shrink-0" />
+            {card.dates}
+          </motion.p>
+        </div>
+      </div>
+
+      {/* Info strip */}
+      <div className="px-4 py-3.5 flex items-center justify-between gap-3 bg-card border-t border-border/60">
+        <div className="overflow-hidden">
+          <div className="flex flex-wrap gap-1">
+            {card.technologies?.slice(0, 3).map((tech) => (
+              <span
+                key={tech}
+                className="inline-flex items-center px-1.5 py-0.5 rounded-[4px] bg-muted text-[10px] text-muted-foreground border border-border/60"
+              >
+                {tech}
+              </span>
+            ))}
+            {card.technologies && card.technologies.length > 3 && (
+              <span className="text-[10px] text-muted-foreground self-center">
+                +{card.technologies.length - 3}
+              </span>
+            )}
+          </div>
+        </div>
+        <div className="flex items-center justify-center size-8 rounded-full border border-border bg-muted/40 text-muted-foreground group-hover:bg-foreground group-hover:text-background group-hover:border-foreground transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 shrink-0">
+          <ArrowUpRight className="size-3.5" />
+        </div>
+      </div>
+    </motion.button>
+  );
+}
+
+/* 
+   SIMPLE CARDS  (Static variant)
+ */
 export function SimpleProjectCards({
   cards,
   className,
@@ -268,16 +420,21 @@ export function SimpleProjectCards({
   );
 }
 
-function ProjectCard({ card, index }: { card: Omit<ProjectType, "body">; index: number }) {
+function ProjectCard({
+  card,
+  index,
+}: {
+  card: Omit<ProjectType, "body">;
+  index: number;
+}) {
   const [isHovered, setIsHovered] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  // Handle video playback on hover
   const handleMouseEnter = () => {
     setIsHovered(true);
     if (videoRef.current) {
       videoRef.current.currentTime = 0;
-      videoRef.current.play().catch(() => {}); // Ignore auto-play errors
+      videoRef.current.play().catch(() => {});
     }
   };
 
@@ -299,8 +456,8 @@ function ProjectCard({ card, index }: { card: Omit<ProjectType, "body">; index: 
         onMouseLeave={handleMouseLeave}
         className={cn(
           "group relative h-full flex flex-col overflow-hidden rounded-3xl",
-          "bg-zinc-50 dark:bg-zinc-900/40", // Chassis background
-          "border border-zinc-200 dark:border-white/10", // Chassis border
+          "bg-zinc-50 dark:bg-zinc-900/40",
+          "border border-zinc-200 dark:border-white/10",
           "p-2 transition-all duration-300 hover:border-zinc-300 dark:hover:border-white/20 hover:shadow-xl dark:hover:shadow-2xl dark:hover:shadow-black/50",
         )}
       >
@@ -335,13 +492,10 @@ function ProjectCard({ card, index }: { card: Omit<ProjectType, "body">; index: 
             <ProjectFallback title={card.title} />
           )}
 
-          <div className="absolute top-3 left-3 z-20 flex gap-2">
-            <div className="px-2 py-1 rounded-md bg-black/40 backdrop-blur-md border border-white/10 text-[10px] font-mono font-medium text-white uppercase tracking-wider shadow-sm">
-              {card.status}
-            </div>
+          <div className="absolute top-3 left-3 z-20">
+            <StatusBadge status={card.status} />
           </div>
 
-          {/* "Play" hint overlay if video exists */}
           {card.video && !isHovered && (
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
               <div className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center border border-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -359,12 +513,16 @@ function ProjectCard({ card, index }: { card: Omit<ProjectType, "body">; index: 
               </h3>
               <div className="flex items-center gap-2 text-xs text-zinc-500 dark:text-zinc-400 font-mono mt-1">
                 <span>{card.dates}</span>
-                <span>•</span>
-                <span>{card.tags?.[0]}</span>
+                {card.tags?.[0] && (
+                  <>
+                    <span></span>
+                    <span>{card.tags[0]}</span>
+                  </>
+                )}
               </div>
             </div>
 
-            <div className="relative flex items-center justify-center w-8 h-8 rounded-full border border-zinc-200 dark:border-white/10 bg-white dark:bg-zinc-800 text-zinc-400 dark:text-zinc-400 group-hover:bg-zinc-900 group-hover:dark:bg-white group-hover:text-white group-hover:dark:text-black transition-all duration-300 group-hover:-translate-y-1 group-hover:translate-x-1">
+            <div className="relative flex items-center justify-center w-8 h-8 rounded-full border border-zinc-200 dark:border-white/10 bg-white dark:bg-zinc-800 text-zinc-400 group-hover:bg-zinc-900 group-hover:dark:bg-white group-hover:text-white group-hover:dark:text-black transition-all duration-300 group-hover:-translate-y-1 group-hover:translate-x-1 shrink-0">
               <ArrowUpRight className="w-4 h-4" />
             </div>
           </div>

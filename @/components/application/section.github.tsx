@@ -3,7 +3,7 @@ import { CountingNumber } from "@/components/animated/text.counter";
 import {
   ContributionGraph,
   ContributionGraphLegend,
-  ContributionGraphTotalCount
+  ContributionGraphTotalCount,
 } from "@/components/kibo-ui/contribution-graph";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -34,7 +34,6 @@ import {
   DetailedActivity,
 } from "~/api/github";
 
-import { CardHeader, CardTitle } from "@/components/ui/card";
 import {
   ChartConfig,
   ChartContainer,
@@ -44,10 +43,13 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { StyleModels, StylingModel } from "@/constants/ui";
 import useStorage from "@/hooks/use-storage";
+import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 import { appConfig } from "root/project.config";
-import GithubContributionGraph, { GithubContributionGraphCalender } from "../card.contribution";
+import GithubContributionGraph, {
+  GithubContributionGraphCalender,
+} from "../card.contribution";
 import BlurFade from "../magicui/blur-fade";
 import { Panel, PanelContent, PanelHeader, PanelTitle } from "./panel";
 
@@ -101,70 +103,102 @@ export default function GithubSection({
     "styling.model",
     StyleModels[0].id,
   );
-  if (selectedStyle === "minimal") {
-    return <Panel>
-      <PanelHeader>
-        <PanelTitle>
-          GitHub Contributions
-        </PanelTitle>
-      </PanelHeader>
-      <PanelContent>
 
-        <GithubContributionGraph data={data.stats.contributions[Object.keys(data.stats.contributions).toReversed()[0]]} />
-      </PanelContent>
-    </Panel>
-  }
   return (
-    <section
-      id="github"
-      className="max-w-(--max-app-width) mx-auto w-full py-24 px-4 md:px-12 space-y-8"
-    >
-
-      {selectedStyle === "static" ? (
-        <StaticGithubSection data={data.stats} />
+    <AnimatePresence mode="wait" initial={false}>
+      {selectedStyle === "minimal" ? (
+        <motion.div
+          key="github-minimal"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.25 }}
+        >
+          <MinimalGithub data={data.stats} />
+        </motion.div>
+      ) : selectedStyle === "static" ? (
+        <motion.div
+          key="github-static"
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 12 }}
+          transition={{ type: "spring", stiffness: 300, damping: 28 }}
+        >
+          <StaticGithubSection data={data.stats} />
+        </motion.div>
       ) : (
-        <DynamicGithubSection data={data} />
+        <motion.div
+          key="github-dynamic"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 20 }}
+          transition={{ type: "spring", stiffness: 260, damping: 24 }}
+        >
+            <DynamicGithubSection data={data} />
+        </motion.div>
       )}
-    </section>
+    </AnimatePresence>
   );
 }
 
-export function StaticGithubSection({ data }: { data: Contributions }) {
-  const [year, setYear] = useState(Object.keys(data.total).toReversed()[0]);
+/* ─────────────────────────────────────────────────────────────
+   Minimal
+───────────────────────────────────────────────────────────── */
 
+function MinimalGithub({ data }: { data: Contributions }) {
   return (
-    <section
-      id="github"
-      className="mx-auto my-32 w-full max-w-7xl px-6 md:px-12 space-y-16"
-    >
-      <div className="flex flex-col items-center text-center space-y-4">
-        <span className="text-sm font-mono text-muted-foreground uppercase tracking-widest">
-          {`// Open Source`}
-        </span>
-        <h2 className="text-4xl md:text-6xl font-bold tracking-tighter text-foreground">
-          <span className="font-instrument-serif italic font-normal text-muted-foreground/80 mr-3">
-            Code
-          </span>
-          <span className="text-colorful-titanium">Contributions</span>
-        </h2>
-        <p className="max-w-xl text-muted-foreground text-lg">
-          A live look at my commit history and open source impact.
-        </p>
-      </div>
+    <Panel>
+      <PanelHeader>
+        <motion.div layoutId="github-label" className="contents">
+          <PanelTitle>GitHub Contributions</PanelTitle>
+        </motion.div>
+      </PanelHeader>
+      <PanelContent>
+        <GithubContributionGraph
+          data={
+            data.contributions[Object.keys(data.contributions).toReversed()[0]]
+          }
+        />
+      </PanelContent>
+    </Panel>
+  );
+}
 
-      <div className="rounded-3xl border border-border bg-card/50 backdrop-blur-sm overflow-hidden">
-        <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-border border-b border-border">
-          {STATS_CONFIG.map((stat) => (
-            <div
-              key={stat.key}
-              className="group flex flex-col items-center justify-center p-8 bg-background/50 hover:bg-background transition-colors duration-300"
-            >
+/* ─────────────────────────────────────────────────────────────
+   Shared stat strip
+───────────────────────────────────────────────────────────── */
+
+function StatsStrip({
+  stats,
+  variant = "static",
+}: {
+  stats: Contributions["stats"];
+  variant?: "static" | "dynamic";
+}) {
+  return (
+    <div
+      className={cn(
+        "grid grid-cols-2 md:grid-cols-4 divide-x divide-border border-b border-border",
+        variant === "dynamic" && "bg-card",
+      )}
+    >
+      {STATS_CONFIG.map((stat, i) => (
+        <div
+          key={stat.key}
+          className={cn(
+            "group flex items-center justify-between p-5 md:p-6 transition-colors",
+            variant === "static"
+              ? "flex-col justify-center p-6 md:p-8 bg-background/50 hover:bg-background"
+              : "hover:bg-background/60",
+          )}
+        >
+          {variant === "static" ? (
+            <>
               <div
                 className={cn(
-                  "mb-3 transition-colors duration-300 text-muted-foreground",
+                  "mb-3 p-3 rounded-lg transition-colors duration-300",
                   stat.color,
                   stat.bg,
-                  "p-3 rounded-lg group-hover:bg-opacity-20",
                 )}
               >
                 <stat.icon className="size-5 md:size-6" />
@@ -172,93 +206,140 @@ export function StaticGithubSection({ data }: { data: Contributions }) {
               <p className="text-2xl md:text-4xl font-bold tracking-tight text-foreground font-mono">
                 <CountingNumber
                   from={0}
-                  to={data.stats[stat.key as keyof typeof data.stats]}
+                  to={stats[stat.key as keyof typeof stats]}
                   duration={2.5}
                 />
               </p>
               <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mt-2">
                 {stat.label}
               </p>
-            </div>
-          ))}
-        </div>
-
-        <Tabs defaultValue="graph" className="p-6 md:p-10 bg-card">
-          <ContributionGraph
-            data={data.contributions[year]}
-            className="mx-auto w-full"
-          >
-            <div className="flex flex-col sm:flex-row justify-between items-center gap-4 pb-5 border-b border-border">
-              <CardHeader className="pb-0">
-                <CardTitle className="text-lg font-medium inline-flex items-center gap-2">
-                  <span className="relative flex h-2.5 w-2.5">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
-                  </span>
-                  Live Activity Map
-                </CardTitle>
-                <div className="text-sm text-muted-foreground">
-                  <ContributionGraphTotalCount>
-                    {({ totalCount, year }) => (
-                      <div className="flex items-center gap-3">
-                        <span className="text-muted-foreground text-sm font-medium">
-                          Total commits in {year}
-                        </span>
-                        <Badge
-                          variant="secondary"
-                          size="sm"
-                          className="font-mono"
-                        >
-                          {totalCount.toLocaleString()}
-                        </Badge>
-                      </div>
-                    )}
-                  </ContributionGraphTotalCount>
+            </>
+          ) : (
+            <>
+              <div className="space-y-1">
+                <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                  {stat.label}
+                </span>
+                <div className="text-2xl md:text-3xl font-bold font-mono tracking-tight text-foreground">
+                  <CountingNumber
+                    from={0}
+                    to={stats[stat.key as keyof typeof stats]}
+                    duration={2 + i * 0.2}
+                  />
                 </div>
-              </CardHeader>
-              <div className="flex items-center gap-2">
-                <TabsList>
-                  <TabsTrigger value="graph">Graph</TabsTrigger>
-                  <TabsTrigger value="chart">Chart</TabsTrigger>
-                </TabsList>
-                <Select
-                  defaultValue={year}
-                  onValueChange={(year) => setYear(year)}
-                >
-                  <SelectTrigger className="w-[120px] bg-background border-border text-foreground font-mono text-xs h-9">
-                    <SelectValue placeholder="Year" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {Object.keys(data.total)
-                      .toReversed()
-                      .map((y) => (
-                        <SelectItem
-                          key={y}
-                          value={y}
-                          className="font-mono text-xs"
-                        >
-                          {y}
-                        </SelectItem>
-                      ))}
-                  </SelectContent>
-                </Select>
               </div>
-            </div>
-            <TabsContent value="graph" className="w-full p-3">
+              <div
+                className={cn(
+                  "p-3 rounded-2xl transition-all duration-300 group-hover:scale-110",
+                  stat.bg,
+                )}
+              >
+                <stat.icon className={cn("size-5", stat.color)} />
+              </div>
+            </>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
 
-              <GithubContributionGraphCalender />
+/* ─────────────────────────────────────────────────────────────
+   Static
+───────────────────────────────────────────────────────────── */
 
-              <ContributionGraphLegend className="mt-4" />
-            </TabsContent>
-            <TabsContent value="chart">
-              <WeeklyChart data={data.contributions[year]} />
-            </TabsContent>
+export function StaticGithubSection({ data }: { data: Contributions }) {
+  const [year, setYear] = useState(Object.keys(data.total).toReversed()[0]);
+
+  return (
+    <section
+      id="github"
+      className="max-w-4xl mx-auto w-full px-4 py-16 md:py-24 space-y-10"
+    >
+      <BlurFade delay={0.04}>
+        <div className="space-y-2">
+          <motion.span
+            layoutId="github-label"
+            className="inline-block text-xs font-mono font-medium tracking-widest uppercase text-muted-foreground"
+          >
+            // Open Source
+          </motion.span>
+          <motion.h2
+            layoutId="github-heading"
+            className="text-3xl md:text-4xl font-bold tracking-tight"
+          >
+            Code Contributions
+          </motion.h2>
+          <p className="text-muted-foreground text-sm md:text-base max-w-xl">
+            A live look at my commit history and open source impact.
+          </p>
+        </div>
+      </BlurFade>
+
+      <BlurFade delay={0.1}>
+        <div className="rounded-2xl border border-border bg-card overflow-hidden">
+          <StatsStrip stats={data.stats} variant="static" />
+
+          <ContributionGraph data={data.contributions[year]} className="w-full">
+            <Tabs defaultValue="graph">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 p-5 border-b border-border">
+                <ContributionGraphTotalCount>
+                  {({ totalCount, year: y }) => (
+                    <div className="space-y-0.5">
+                      <div className="flex items-center gap-2 text-sm font-semibold">
+                        <span className="relative flex h-2 w-2">
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                          <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+                        </span>
+                        Live Activity Map
+                      </div>
+                      <p className="text-xs text-muted-foreground font-mono">
+                        {totalCount.toLocaleString()} commits in {y}
+                      </p>
+                    </div>
+                  )}
+                </ContributionGraphTotalCount>
+
+                <div className="flex items-center gap-2 shrink-0">
+                  <TabsList className="h-8">
+                    <TabsTrigger value="graph" className="text-xs h-7">Graph</TabsTrigger>
+                    <TabsTrigger value="chart" className="text-xs h-7">Chart</TabsTrigger>
+                  </TabsList>
+                  <Select defaultValue={year} onValueChange={setYear}>
+                    <SelectTrigger className="w-[100px] h-8 bg-background border-border font-mono text-xs">
+                      <SelectValue placeholder="Year" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {Object.keys(data.total)
+                        .toReversed()
+                        .map((y) => (
+                          <SelectItem key={y} value={y} className="font-mono text-xs">
+                            {y}
+                          </SelectItem>
+                        ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              <TabsContent value="graph" className="p-4">
+                <GithubContributionGraphCalender />
+                <ContributionGraphLegend className="mt-4" />
+              </TabsContent>
+              <TabsContent value="chart" className="p-4">
+                <WeeklyChart data={data.contributions[year]} />
+              </TabsContent>
+            </Tabs>
           </ContributionGraph>
-        </Tabs>
-      </div>
+        </div>
+      </BlurFade>
     </section>
   );
 }
+
+/* ─────────────────────────────────────────────────────────────
+   Dynamic
+───────────────────────────────────────────────────────────── */
 
 export function DynamicGithubSection({
   data,
@@ -274,79 +355,54 @@ export function DynamicGithubSection({
   const [view, setView] = useState("graph");
 
   return (
-    <>
+    <section
+      id="github"
+      className="max-w-app mx-auto w-full py-20 md:py-32 px-4 md:px-12 space-y-8"
+    >
       <BlurFade delay={0.1}>
         <div className="flex flex-col md:flex-row justify-between items-end gap-6">
           <div className="space-y-2">
-            <div className="flex items-center gap-2 text-sm font-mono text-muted-foreground uppercase tracking-widest">
+            <motion.span
+              layoutId="github-label"
+              className="inline-flex items-center gap-2 text-xs font-mono text-muted-foreground uppercase tracking-widest"
+            >
               <GitCommitHorizontal className="size-4" />
-              <span>Open Source</span>
-            </div>
-            <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground">
-              Code Contributions
-            </h2>
-            <p className="text-muted-foreground text-lg max-w-lg">
-              A live visualization of my commit history and open source impact
-              on GitHub.
+              Open Source
+            </motion.span>
+            <motion.h2
+              layoutId="github-heading"
+              className="text-4xl md:text-6xl font-bold tracking-tighter leading-none"
+            >
+              <span className="font-instrument-serif italic font-normal text-muted-foreground/70 mr-3">
+                Code
+              </span>
+              Contributions
+            </motion.h2>
+            <p className="text-muted-foreground text-base max-w-lg">
+              A live visualization of my commit history and open source impact on GitHub.
             </p>
           </div>
-
-          {/* Year Selector */}
-          <div className="flex items-center gap-2">
-            <Select defaultValue={year} onValueChange={(y) => setYear(y)}>
-              <SelectTrigger className="h-10 w-[140px] rounded-full border-border/60 bg-input/50 backdrop-blur font-mono text-xs focus:ring-0">
-                <span className="text-muted-foreground mr-2">Year:</span>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {Object.keys(data.stats.total)
-                  .toReversed()
-                  .map((y) => (
-                    <SelectItem key={y} value={y} className="font-mono text-xs">
-                      {y}
-                    </SelectItem>
-                  ))}
-              </SelectContent>
-            </Select>
-          </div>
+          <Select defaultValue={year} onValueChange={setYear}>
+            <SelectTrigger className="h-10 w-[140px] rounded-full border-border/60 bg-input/50 backdrop-blur font-mono text-xs focus:ring-0 shrink-0">
+              <span className="text-muted-foreground mr-2">Year:</span>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {Object.keys(data.stats.total)
+                .toReversed()
+                .map((y) => (
+                  <SelectItem key={y} value={y} className="font-mono text-xs">
+                    {y}
+                  </SelectItem>
+                ))}
+            </SelectContent>
+          </Select>
         </div>
       </BlurFade>
 
-      <BlurFade delay={0.2} className="w-full max-w-(--max-app-width) mx-auto">
-        <div className="rounded-4xl border border-border/60 backdrop-blur-xl overflow-hidden">
-          <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-border border-b border-border bg-card ">
-            {STATS_CONFIG.map((stat, i) => (
-              <div
-                key={stat.key}
-                className="group p-6 flex items-center justify-between hover:bg-background/60 transition-colors"
-              >
-                <div className="space-y-1">
-                  <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                    {stat.label}
-                  </span>
-                  <div className="text-2xl md:text-3xl font-bold font-mono tracking-tight text-foreground">
-                    <CountingNumber
-                      from={0}
-                      to={
-                        data.stats.stats[
-                        stat.key as keyof typeof data.stats.stats
-                        ]
-                      }
-                      duration={2 + i * 0.2}
-                    />
-                  </div>
-                </div>
-                <div
-                  className={cn(
-                    "p-3 rounded-2xl transition-all duration-300 group-hover:scale-110",
-                    stat.bg,
-                  )}
-                >
-                  <stat.icon className={cn("size-5", stat.color)} />
-                </div>
-              </div>
-            ))}
-          </div>
+      <BlurFade delay={0.2} className="w-full">
+        <div className="rounded-3xl border border-border/60 bg-card/40 backdrop-blur-xl overflow-hidden">
+          <StatsStrip stats={data.stats.stats} variant="dynamic" />
 
           <div className="p-6 md:p-10 relative w-full bg-card/50">
             <div className="absolute inset-0 -z-10 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] dark:bg-[radial-gradient(#ffffff08_1px,transparent_1px)] opacity-50" />
@@ -355,11 +411,7 @@ export function DynamicGithubSection({
               data={data.stats.contributions[year]}
               className="w-full"
             >
-              <Tabs
-                value={view}
-                onValueChange={setView}
-                className="space-y-8 w-full"
-              >
+              <Tabs value={view} onValueChange={setView} className="space-y-8 w-full">
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                   <ContributionGraphTotalCount>
                     {({ totalCount }) => (
@@ -373,9 +425,7 @@ export function DynamicGithubSection({
                             from={0}
                             to={totalCount}
                             duration={2}
-                            format={(value) =>
-                              value.toFixed(0).toLocaleString()
-                            }
+                            format={(value) => value.toFixed(0).toLocaleString()}
                           />
                         </Badge>
                         <span className="text-muted-foreground font-medium">
@@ -403,20 +453,18 @@ export function DynamicGithubSection({
                   </TabsList>
                 </div>
 
-                {/* Content: Heatmap */}
                 <TabsContent
                   value="graph"
                   className="w-full mt-0 outline-none animate-in fade-in slide-in-from-bottom-2 duration-500"
                 >
                   <div className="overflow-x-auto pb-4 scrollbar-hide w-full">
-                    <GithubContributionGraphCalender className="min-w-full max-h-96 l no-scrollbar px-2" />
+                    <GithubContributionGraphCalender className="min-w-full max-h-96 no-scrollbar px-2" />
                   </div>
                   <div className="flex justify-end mt-4">
                     <ContributionGraphLegend />
                   </div>
                 </TabsContent>
 
-                {/* Content: Bar Chart */}
                 <TabsContent
                   value="chart"
                   className="mt-0 outline-none animate-in fade-in slide-in-from-bottom-2 duration-500"
@@ -426,9 +474,9 @@ export function DynamicGithubSection({
               </Tabs>
             </ContributionGraph>
           </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-border/10 bg-card">
             <div className="p-6 md:p-8 space-y-8">
-              {/* Organization Badges */}
               <div className="flex flex-wrap gap-2">
                 {data.activity.contributedOrganizations.map((org) => (
                   <Link
@@ -451,7 +499,6 @@ export function DynamicGithubSection({
                 ))}
               </div>
 
-              {/* Activity Overview List */}
               <div className="space-y-4">
                 <h3 className="text-sm font-medium text-foreground">
                   Activity overview
@@ -472,8 +519,7 @@ export function DynamicGithubSection({
                               href={repo.url}
                               className={cn(
                                 "inline-flex items-center gap-1 text-sm font-semibold hover:underline decoration-primary underline-offset-2",
-                                data.activity.contributedOrganizations.length >
-                                  4
+                                data.activity.contributedOrganizations.length > 4
                                   ? "text-muted-foreground font-normal no-underline hover:text-primary"
                                   : "text-primary",
                               )}
@@ -482,20 +528,18 @@ export function DynamicGithubSection({
                               {repo.owner}/{repo.name}
                             </Link>
                           ))}
-                        {data.activity.activityOverview
-                          .repositoriesContributedTo.length > 4 && (
-                            <a
-                              href={
-                                "https://github.com/" + appConfig.usernames.github
-                              }
-                              className="text-sm font-normal text-muted-foreground hover:text-primary"
-                            >
-                              and{" "}
-                              {data.activity.activityOverview
-                                .repositoriesContributedTo.length - 4}{" "}
-                              other repositories
-                            </a>
-                          )}
+                        {data.activity.activityOverview.repositoriesContributedTo
+                          .length > 4 && (
+                          <a
+                            href={"https://github.com/" + appConfig.usernames.github}
+                            className="text-sm font-normal text-muted-foreground hover:text-primary"
+                          >
+                            and{" "}
+                            {data.activity.activityOverview
+                              .repositoriesContributedTo.length - 4}{" "}
+                            other repositories
+                          </a>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -503,18 +547,15 @@ export function DynamicGithubSection({
               </div>
             </div>
 
-            {/* RIGHT COLUMN: Distribution Chart */}
-            <div className="p-6 md:p-8 flex items-center justify-center relative">
-              <div className="w-full max-w-[300px] aspect-square relative">
-                <ActivityDistributionChart
-                  data={data.activity.codeReviewDistribution}
-                />
+            <div className="p-6 md:p-8 flex items-center justify-center">
+              <div className="w-full max-w-[300px] aspect-square">
+                <ActivityDistributionChart data={data.activity.codeReviewDistribution} />
               </div>
             </div>
           </div>
         </div>
       </BlurFade>
-    </>
+    </section>
   );
 }
 

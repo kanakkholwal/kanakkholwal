@@ -27,7 +27,6 @@ export function Provider({ children }: { children: React.ReactNode }) {
           attribute={["class", "data-theme"]}
         >
           <TooltipProvider>
-
             <div
               className={cn(
                 "min-h-screen w-full h-full overflow-x-hidden no-scrollbar",

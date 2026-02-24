@@ -1,19 +1,18 @@
 "use client";
 
-import { SectionHeader } from "@/components/application/sections.header";
 import { WorkExperienceCard } from "@/components/card.work";
 import BlurFade from "@/components/magicui/blur-fade";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { StyleModels, StylingModel } from "@/constants/ui";
-import { ArrowUpRight, BriefcaseBusinessIcon, Building2, Calendar, InfinityIcon, MapPin } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
+import { ArrowUpRight, BriefcaseBusinessIcon, InfinityIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
 import useStorage from "@/hooks/use-storage";
 import { cn } from "@/lib/utils";
 import { getWorkExperienceList, WorkExperienceType } from "@/lib/work.source";
-import { motion } from "framer-motion";
 import defaultMdxComponents from "fumadocs-ui/mdx";
 import { useMemo } from "react";
 import { Collapsible, CollapsibleContent, CollapsibleIcon, CollapsibleTrigger } from "../ui/collapsible";
@@ -23,76 +22,156 @@ import { Panel, PanelHeader, PanelTitle } from "./panel";
 const BLUR_FADE_DELAY = 0.04;
 
 
-export function WorkSection() {
+function MinimalWork({ experiences }: { experiences: WorkExperienceType[] }) {
+  return (
+    <Panel id="experience">
+      <PanelHeader>
+        <motion.div layoutId="work-label" className="contents">
+          <PanelTitle>Experience</PanelTitle>
+        </motion.div>
+      </PanelHeader>
+      <div className="pr-2 pl-4">
+        {experiences.map((experience) => (
+          <ExperienceItem
+            key={experience.company + experience.startDate}
+            experience={experience}
+          />
+        ))}
+      </div>
+    </Panel>
+  );
+}
+
+function StaticWork({ experiences }: { experiences: WorkExperienceType[] }) {
+  return (
+    <section
+      id="work"
+      className="max-w-3xl mx-auto w-full px-4 py-16 md:py-24"
+    >
+      <BlurFade delay={BLUR_FADE_DELAY}>
+        <div className="mb-10 space-y-2">
+          <motion.span
+            layoutId="work-label"
+            className="inline-block text-xs font-mono font-medium tracking-widest uppercase text-muted-foreground"
+          >
+            // Career
+          </motion.span>
+          <motion.h2
+            layoutId="work-heading"
+            className="text-3xl md:text-4xl font-bold tracking-tight"
+          >
+            Professional Journey
+          </motion.h2>
+          <p className="text-muted-foreground text-sm md:text-base max-w-xl">
+            A timeline of my professional roles and technical impact.
+          </p>
+        </div>
+      </BlurFade>
+
+      <div className="space-y-6">
+        {experiences.map((work, i) => (
+          <BlurFade key={work.company + work.startDate} delay={BLUR_FADE_DELAY * (i + 3)}>
+            <WorkExperienceCard work={work} />
+          </BlurFade>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function DynamicWork({ experiences }: { experiences: WorkExperienceType[] }) {
+  return (
+    <section
+      id="work"
+      className="max-w-app mx-auto w-full px-4 md:px-12 py-20 md:py-32"
+    >
+      {/* Header */}
+      <BlurFade delay={BLUR_FADE_DELAY * 4}>
+        <div className="mb-16 md:mb-24">
+          <motion.span
+            layoutId="work-label"
+            className="inline-block text-xs font-mono font-medium tracking-widest uppercase text-muted-foreground mb-3"
+          >
+            // Career
+          </motion.span>
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+            <motion.h2
+              layoutId="work-heading"
+              className="text-4xl md:text-6xl font-bold tracking-tighter leading-none"
+            >
+              <span className="font-instrument-serif italic font-normal text-muted-foreground/70 mr-3">
+                Professional
+              </span>
+              Journey
+            </motion.h2>
+            <p className="text-sm text-muted-foreground max-w-xs leading-relaxed md:text-right">
+              A record of roles, responsibilities,<br className="hidden md:block" /> and technical impact.
+            </p>
+          </div>
+          <div className="mt-6 h-px w-full bg-gradient-to-r from-border via-border/40 to-transparent" />
+        </div>
+      </BlurFade>
+
+      {/* Cards */}
+      <div className="space-y-0">
+        {experiences.map((work, i) => (
+          <motion.div
+            key={work.company + work.startDate}
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: i * 0.08 }}
+          >
+            <WorkCard work={work}/>
+          </motion.div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+
+export default function WorkSection() {
   const workExperiences = useMemo(() => getWorkExperienceList(), []);
   const [selectedStyle] = useStorage<StylingModel>(
     "styling.model",
     StyleModels[0].id,
   );
-  if (selectedStyle === "minimal") {
-    return (<Panel id="experience">
-      <PanelHeader>
-        <PanelTitle>Experience</PanelTitle>
-      </PanelHeader>
 
-      <div className="pr-2 pl-4">
-        {workExperiences.map((experience) => (
-          <ExperienceItem key={experience.company + experience.startDate} experience={experience} />
-        ))}
-      </div>
-    </Panel>)
-  }
   return (
-    <section
-      id="work"
-      className="max-w-5xl mx-auto w-full px-4 md:px-12 py-20 md:py-32"
-    >
-      {/* Header Animates on Load */}
-      <BlurFade delay={BLUR_FADE_DELAY * 4}>
-        <SectionHeader
-          label="Career"
-          serifText="Professional"
-          mainText="Journey"
-          description="A timeline of my professional roles and technical impact."
-        />
-      </BlurFade>
-
-      <div className="relative mt-12 md:mt-16">
-        {/* Timeline Connector Line */}
-        <div
-          className="hidden md:block absolute left-8 top-4 bottom-4 w-px bg-gradient-to-b from-border via-border/60 to-transparent z-0"
-          aria-hidden="true"
-        />
-
-        <div className="space-y-8 md:space-y-12">
-          {workExperiences.map((work, id) => (
-            <motion.div
-              key={work.company + work.startDate}
-              // 2. Initial State: Hidden and slightly shifted down
-              initial={{ opacity: 0, y: 50 }}
-              // 3. Animate State: Visible and in place when in view
-              whileInView={{ opacity: 1, y: 0 }}
-              // 4. Viewport Config: Trigger once, with a slight margin offset
-              viewport={{ once: true, margin: "-50px" }}
-              // 5. Transition: Smooth spring or ease, slightly staggered based on index
-              transition={{
-                duration: 0.5,
-                ease: "easeOut",
-                delay: id * 0.1, // Optional: Stagger the very first load
-              }}
-              className="z-10 relative" // Ensure z-index is above the timeline line
-            >
-              {/* Conditional Rendering of Card Style */}
-              {selectedStyle === "dynamic" ? (
-                <WorkCard work={work} />
-              ) : (
-                <WorkExperienceCard work={work} />
-              )}
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </section>
+    <AnimatePresence mode="wait" initial={false}>
+      {selectedStyle === "minimal" ? (
+        <motion.div
+          key="work-minimal"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.25 }}
+        >
+          <MinimalWork experiences={workExperiences} />
+        </motion.div>
+      ) : selectedStyle === "static" ? (
+        <motion.div
+          key="work-static"
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 12 }}
+          transition={{ type: "spring", stiffness: 300, damping: 28 }}
+        >
+          <StaticWork experiences={workExperiences} />
+        </motion.div>
+      ) : (
+        <motion.div
+          key="work-dynamic"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 20 }}
+          transition={{ type: "spring", stiffness: 260, damping: 24 }}
+        >
+            <DynamicWork experiences={workExperiences} />
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }
 
@@ -226,112 +305,117 @@ function WorkCard({ work }: { work: WorkExperienceType }) {
   const Mdx = work.body;
 
   return (
-    <div className="relative md:grid md:grid-cols-[auto_1fr] md:gap-10">
-      <div className="hidden md:flex relative z-10 flex-col items-center">
-        <div className="relative flex items-center justify-center size-16 rounded-2xl border bg-background shadow-sm group-hover:border-primary/50 transition-colors">
-          {/* Connector Line to Logo */}
-          <div className="absolute -top-12 bottom-1/2 w-px bg-border -z-10" />
+    <div className="group relative flex gap-6 md:gap-10 py-10 border-b border-border/40 last:border-0">
 
-          <Avatar className="size-10 rounded-lg bg-transparent">
-            <AvatarImage
-              src={work.logoUrl}
-              alt={work.company}
-              className="object-contain p-1"
-            />
-            <AvatarFallback className="rounded-lg text-xs font-bold bg-muted text-muted-foreground">
+      <div className="relative flex flex-col items-center shrink-0 w-10">
+        {/* Spine line */}
+        <div className="absolute top-0 bottom-0 left-1/2 -translate-x-1/2 w-px bg-gradient-to-b from-transparent via-border/60 to-transparent" />
+        {/* Avatar node — sits on top of the line */}
+        <div className="relative z-10 mt-1 rounded-xl border border-border/60 bg-background shadow-sm group-hover:border-primary/30 group-hover:shadow-[0_0_14px_2px_hsl(var(--primary)/0.15)] transition-all duration-500">
+          <Avatar className="size-10 rounded-xl bg-muted/40">
+            <AvatarImage src={work.logoUrl} alt={work.company} className="object-contain p-1" />
+            <AvatarFallback className="rounded-xl text-[11px] font-bold text-muted-foreground">
               {work.company[0]}
             </AvatarFallback>
           </Avatar>
         </div>
       </div>
 
-      <div className="group relative flex flex-col">
-        <div className="relative p-5 md:p-8 rounded-3xl border border-border/60 bg-card/50 backdrop-blur-sm hover:bg-card/80 hover:border-border transition-all duration-300 shadow-sm hover:shadow-md">
-          <div className="flex md:hidden items-center gap-3 mb-4 border-b border-border/40 pb-4">
-            <Avatar className="size-10 rounded-lg border bg-background">
-              <AvatarImage src={work.logoUrl} className="object-contain p-1" />
-              <AvatarFallback>{work.company[0]}</AvatarFallback>
-            </Avatar>
-            <div>
-              <h4 className="font-semibold text-foreground">{work.company}</h4>
-              <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                <MapPin size={10} />
-                {work.locationType}
-              </div>
-            </div>
-            <div className="ml-auto text-[10px] font-mono font-medium text-muted-foreground/70 bg-muted/50 px-2 py-1 rounded-full border border-border/50">
-              {work.startDate} - {work.endDate ?? "Now"}
-            </div>
-          </div>
+      {/* Content */}
+      <div className="flex-1 min-w-0 pt-1 space-y-4">
 
-          <div className="flex flex-col md:flex-row md:items-start justify-between gap-3 md:gap-4 mb-4 md:mb-6">
-            <div className="space-y-1">
-              <h3 className="text-lg md:text-2xl font-bold text-metallic text-shadow-glow tracking-tight leading-snug">
-                {work.title}
-              </h3>
-
-              <div className="hidden md:flex items-center flex-wrap gap-2 text-sm text-muted-foreground">
-                <span className="flex items-center gap-1.5 font-medium text-foreground/80">
-                  <Building2 size={14} />
-                  {work.company}
-                  {work.href && (
-                    <Link
-                      href={work.href}
-                      target="_blank"
-                      className="p-2 rounded-full text-muted-foreground/50 hover:text-foreground hover:bg-muted/50 transition-all"
-                    >
-                      <ArrowUpRight size={18} className="size-4" />
-                    </Link>
-                  )}
-                </span>
-                <span className="text-muted-foreground/30">•</span>
-                <span className="flex items-center gap-1.5">
-                  <MapPin size={14} />
-                  {work.locationType}
-                </span>
-              </div>
-            </div>
-
-            <div className="hidden md:block self-start">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-muted/50 border border-border text-xs font-mono font-medium text-foreground/70 whitespace-nowrap">
-                <Calendar size={12} className="text-muted-foreground" />
-                {work.startDate} — {work.endDate ?? "Present"}
-              </div>
-            </div>
-          </div>
-
-          {/* Body: Markdown Description */}
-          <div
-            className={cn(
-              "prose dark:prose-invert max-w-none",
-              "prose-headings:font-mono prose-headings:tracking-tight prose-headings:font-bold",
-              "prose-p:font-mono prose-p:leading-6 prose-p:text-zinc-600 dark:prose-p:text-zinc-300",
-              "prose-li:font-mono",
-
-              // override typography anchor underline
-              "[&_a[data-card].peer]:no-underline",
-              "text-muted-foreground max-w-none mb-6 text-sm md:text-base leading-relaxed",
-              // "prose-pre:border prose-pre:border-border/50 prose-pre:bg-zinc-950",
-              // "prose-code:px-1 prose-code:py-0.5 prose-code:rounded-sm prose-code:font-mono prose-code:text-sm prose-code:before:content-none prose-code:after:content-none"
+        {/* Top row — company + date */}
+        <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-1">
+          <div className="flex items-center gap-2 min-w-0">
+            {work.href ? (
+              <Link
+                href={work.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group/link flex items-center gap-1 text-sm font-semibold text-foreground/80 hover:text-foreground transition-colors"
+              >
+                {work.company}
+                <ArrowUpRight className="size-3 text-muted-foreground/40 group-hover/link:text-foreground transition-colors shrink-0" />
+              </Link>
+            ) : (
+              <span className="text-sm font-semibold text-foreground/80">{work.company}</span>
             )}
-          >
-            <Mdx components={defaultMdxComponents} />
+            <span className="text-muted-foreground/30 text-xs select-none">·</span>
+            <span className="text-xs text-muted-foreground/60 font-mono truncate">{work.locationType}</span>
           </div>
+          <time className="shrink-0 font-mono text-[11px] tabular-nums text-muted-foreground/50" dateTime={work.startDate}>
+            {work.startDate} — {work.endDate ?? "Present"}
+          </time>
+        </div>
 
-          {/* Footer: Tech Stack Badges */}
-          {work.badges && work.badges.length > 0 && (
-            <div className="flex flex-wrap gap-2 pt-4 border-t border-border/50">
-              {work.badges.map((badge) => (
-                <Badge
-                  key={badge}
-                  variant="secondary"
-                  className="px-2 py-0.5 text-[10px] font-medium bg-muted/50 text-muted-foreground hover:bg-muted transition-colors border-transparent hover:border-border"
-                >
-                  {badge}
-                </Badge>
-              ))}
-            </div>
+        {/* Role title */}
+        <h3 className="text-xl md:text-3xl font-bold tracking-tight leading-snug text-foreground group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-foreground group-hover:to-muted-foreground transition-all duration-500">
+          {work.title}
+          {work.employmentType && (
+            <span className="ml-3 align-middle font-mono text-[10px] font-normal text-muted-foreground/50 uppercase tracking-widest not-italic">
+              {work.employmentType}
+            </span>
           )}
+        </h3>
+
+        {/* Body */}
+        <div className={cn(
+          "prose dark:prose-invert max-w-none text-sm",
+          "prose-p:my-0 prose-p:leading-relaxed prose-p:text-muted-foreground",
+          "prose-li:text-muted-foreground prose-li:my-0.5",
+          "prose-ul:my-1 prose-ul:pl-4",
+          "[&_a[data-card].peer]:no-underline",
+        )}>
+          <Mdx components={defaultMdxComponents} />
+        </div>
+
+        {/* Badges */}
+        {Array.isArray(work.badges) && work.badges.length > 0 && (
+          <div className="flex flex-wrap gap-1.5 pt-1">
+            {work.badges.map((badge) => (
+              <Badge
+                key={badge}
+                variant="secondary"
+                className="px-2 py-0 h-5 text-[10px] font-mono font-normal rounded-sm bg-muted/60 text-muted-foreground border-transparent"
+              >
+                {badge}
+              </Badge>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function WorkCardMeta({ work, align = "left" }: { work: WorkExperienceType; align?: "left" | "right" }) {
+  return (
+    <div className={cn("space-y-3", align === "right" && "flex flex-col items-end")}>
+      <div className={cn("flex items-center gap-3", align === "right" && "flex-row-reverse")}>
+        <Avatar className="size-10 rounded-xl border border-border/60 bg-muted/40 shadow-sm">
+          <AvatarImage src={work.logoUrl} alt={work.company} className="object-contain p-1" />
+          <AvatarFallback className="rounded-xl text-[11px] font-bold text-muted-foreground">
+            {work.company[0]}
+          </AvatarFallback>
+        </Avatar>
+        <div className={cn(align === "right" && "text-right")}>
+          {work.href ? (
+            <Link
+              href={work.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={cn(
+                "group/link flex items-center gap-1 text-sm font-semibold text-foreground/90 hover:text-foreground transition-colors",
+                align === "right" && "flex-row-reverse"
+              )}
+            >
+              {work.company}
+              <ArrowUpRight className="size-3 text-muted-foreground/40 group-hover/link:text-foreground transition-colors" />
+            </Link>
+          ) : (
+            <span className="text-sm font-semibold text-foreground/90">{work.company}</span>
+          )}
+          <p className="text-[11px] text-muted-foreground/60 font-mono">{work.locationType}</p>
         </div>
       </div>
     </div>

@@ -19,7 +19,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { OtherProjects } from "./other-projects";
 
-export default async function ProjectPage(props: { slug: string[] }) {
+export default function ProjectPage(props: { slug: string[] }) {
   const pageSource = source.getPage(props.slug);
 
   if (!pageSource) notFound();

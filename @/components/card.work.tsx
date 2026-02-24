@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { WorkExperienceType } from "@/lib/work.source";
 import defaultMdxComponents from "fumadocs-ui/mdx";
-import { ArrowUpRight, MapPin } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 
 interface WorkExperienceCardProps {
@@ -14,99 +14,98 @@ interface WorkExperienceCardProps {
 
 export function WorkExperienceCard({ work }: WorkExperienceCardProps) {
   const Mdx = work.body;
+  const domain = work.href
+    ?.replace(/(^\w+:|^)\/\//, "")
+    .replace(/www\./, "")
+    .split("/")[0];
 
-  
   return (
-    <div className="group relative grid md:grid-cols-[200px_1fr] gap-x-12 gap-y-8 transition-all">
-      <div className="hidden md:block absolute left-[217px] top-2 bottom-0 w-px bg-gradient-to-b from-border via-border/40 to-transparent" />
+    <article className="group relative flex gap-5 py-8 border-b border-border/50 last:border-0 transition-colors hover:bg-muted/20 -mx-4 px-4 rounded-lg">
+      {/* Avatar column */}
+      <div className="shrink-0 pt-0.5">
+        <Avatar className="size-9 rounded-md border border-border/60 bg-muted/40 shadow-xs group-hover:border-border transition-colors">
+          <AvatarImage
+            src={work.logoUrl}
+            alt={work.company}
+            className="object-contain p-1"
+          />
+          <AvatarFallback className="rounded-md text-[11px] font-bold text-muted-foreground">
+            {work.company[0]}
+          </AvatarFallback>
+        </Avatar>
+      </div>
 
-      <div className="flex flex-col items-start gap-4 md:sticky md:top-32 self-start z-10">
-        {/* Date Range */}
-        <div className="flex items-center gap-2 relative">
-          {/* Timeline Node Dot */}
-          <div className="hidden md:block size-2.5 rounded-full border-[3px] border-background bg-border group-hover:bg-primary group-hover:scale-125 transition-all duration-300 absolute -right-[19.5px] top-1.5 z-10" />
+      {/* Content column */}
+      <div className="flex-1 min-w-0 space-y-3">
+        {/* Top row: company + date */}
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <div className="flex items-center gap-2 min-w-0">
+            {work.href ? (
+              <Link
+                href={work.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm font-semibold text-foreground/90 hover:text-foreground transition-colors flex items-center gap-1 group/link"
+              >
+                {work.company}
+                <ArrowUpRight className="size-3 text-muted-foreground/50 group-hover/link:text-foreground transition-colors" />
+              </Link>
+            ) : (
+              <span className="text-sm font-semibold text-foreground/90">
+                {work.company}
+              </span>
+            )}
+            <span className="text-muted-foreground/30 text-xs select-none">·</span>
+            <span className="text-xs text-muted-foreground truncate">
+              {work.locationType}
+            </span>
+          </div>
           <time
-            className="font-mono text-xs font-medium text-muted-foreground/80 uppercase tracking-wider"
+            className="shrink-0 font-mono text-[11px] text-muted-foreground/60 tabular-nums"
             dateTime={work.startDate}
           >
             {work.startDate} — {work.endDate ?? "Present"}
           </time>
         </div>
 
-        {/* Company Identity */}
-        <div className="flex items-center gap-3">
-          <Avatar className="size-10 border border-border bg-background shadow-sm group-hover:border-primary/30 transition-colors">
-            <AvatarImage
-              src={work.logoUrl}
-              alt={work.company}
-              className="object-contain p-1.5"
-            />
-            <AvatarFallback className="text-xs font-bold text-muted-foreground">
-              {work.company[0]}
-            </AvatarFallback>
-          </Avatar>
-
-          <div className="flex flex-col">
-            <h3 className="font-semibold text-sm text-metallic text-shadow-glow leading-none mb-1">
-              {work.company}
-            </h3>
-            <Link
-              href={work.href}
-              target="_blank"
-              className="text-xs text-muted-foreground hover:text-primary transition-colors flex items-center gap-1"
-            >
-              {
-                work.href
-                  .replace(/(^\w+:|^)\/\//, "")
-                  .replace(/www\./, "")
-                  .split("/")[0]
-              }
-              <ArrowUpRight className="size-3" />
-            </Link>
-          </div>
-        </div>
-
-        {/* Location & Type Badges */}
-        <div className="flex flex-wrap gap-2">
-          <Badge
-            variant="outline"
-            className="px-2 py-0 h-5 text-[10px] font-mono font-normal text-muted-foreground bg-background"
-          >
-            {work.locationType === "Remote" ? "Remote" : "On-site"}
-          </Badge>
-          {work.location && (
-            <span className="flex items-center text-[10px] text-muted-foreground/60 font-medium sr-only">
-              <MapPin className="size-3 mr-1" />
-              {work.location}
+        {/* Role title */}
+        <h3 className="text-base font-semibold leading-snug text-foreground tracking-tight">
+          {work.title}
+          {work.employmentType && (
+            <span className="ml-2 font-mono text-[10px] font-normal text-muted-foreground/60 uppercase tracking-widest align-middle">
+              {work.employmentType}
             </span>
           )}
-        </div>
-      </div>
-
-      <div className="relative pb-12 md:pb-20">
-        {/* Role Title with "Titanium" Hover Effect */}
-        <h3 className="text-xl md:text-2xl font-bold text-metallic tracking-tight mb-4 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-foreground group-hover:to-slate-500 transition-all duration-300 ease-out">
-          {work.title}
         </h3>
 
-        {/* Description: Perfectly Aligned Lists */}
+        {/* MDX body */}
         <div
-                   className={cn(
-                     "prose dark:prose-invert max-w-none",
-                     "prose-headings:font-mono prose-headings:tracking-tight prose-headings:font-bold",
-                     "prose-p:font-mono prose-p:leading-6 prose-p:text-zinc-600 dark:prose-p:text-zinc-300",
-                     "prose-li:font-mono",
-       
-                     // override typography anchor underline
-                     "[&_a[data-card].peer]:no-underline",
-                     "text-muted-foreground max-w-none mb-6 text-sm md:text-base leading-relaxed",
-                     // "prose-pre:border prose-pre:border-border/50 prose-pre:bg-zinc-950",
-                     // "prose-code:px-1 prose-code:py-0.5 prose-code:rounded-sm prose-code:font-mono prose-code:text-sm prose-code:before:content-none prose-code:after:content-none"
-                   )}
-                 >
-                   <Mdx components={defaultMdxComponents} />
-                 </div>
+          className={cn(
+            "prose dark:prose-invert max-w-none text-sm",
+            "prose-p:my-0 prose-p:leading-6 prose-p:text-muted-foreground",
+            "prose-li:text-muted-foreground prose-li:my-0.5",
+            "prose-ul:my-2 prose-ul:pl-4",
+            "[&_a[data-card].peer]:no-underline",
+          )}
+        >
+          <Mdx components={defaultMdxComponents} />
+        </div>
+
+        {/* Badges */}
+        {Array.isArray(work.badges) && work.badges.length > 0 && (
+          <div className="flex flex-wrap gap-1.5 pt-1">
+            {work.badges.map((badge) => (
+              <Badge
+                key={badge}
+                variant="secondary"
+                className="px-2 py-0 h-5 text-[10px] font-mono font-normal rounded-sm bg-muted/60 text-muted-foreground border-transparent"
+              >
+                {badge}
+              </Badge>
+            ))}
+          </div>
+        )}
       </div>
-    </div>
+    </article>
   );
 }

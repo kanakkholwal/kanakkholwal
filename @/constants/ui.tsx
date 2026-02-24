@@ -40,7 +40,6 @@ export const animationModes: AnimationMode[] = [
 export const NAV_ITEMS = [
   { label: "Work", href: "/#work" },
   { label: "Projects", href: "/projects" },
-  { label: "Stack", href: "/#skills" },
   { label: "Blog", href: "/blog" },
   { label: "Docs", href: "/docs" },
 ];
