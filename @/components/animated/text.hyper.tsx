@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, MotionProps } from "motion/react";
+import { useEffect, useRef, useState } from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -128,7 +128,7 @@ export function HyperText({
   return (
     <MotionComponent
       ref={elementRef}
-      className={cn("overflow-hidden py-2 text-4xl font-bold", className)}
+      className={cn("overflow-hidden py-2 text-4xl font-bold tracking-widest", className)}
       onMouseEnter={handleAnimationTrigger}
       {...props}
     >
@@ -136,7 +136,7 @@ export function HyperText({
         {displayText.map((letter, index) => (
           <motion.span
             key={index}
-            className={cn("font-mono", letter === " " ? "w-3" : "")}
+            className={cn("font-sans", letter === " " ? "w-3" : "")}
           >
             {letter.toUpperCase()}
           </motion.span>

@@ -7,7 +7,7 @@ const appConfig = {
   initials: "KK",
   role: "Product Engineer",
   avatar: "https://github.com/kanakkholwal.png",
-  location: "Rajasthan, India",
+  location: "India",
   description:
     "Product Engineer | Passionate about building scalable solutions, automation, and AI-driven products.",
   summary: `I thrive on solving complex problems and building impactful products. From developing scalable architectures to integrating AI solutions, my goal is to create software that makes a real difference. Always eager to learn, contribute to open source, and collaborate with like-minded developers. Check out my work below, and feel free to reach out.`,
@@ -38,60 +38,14 @@ const appConfig = {
   ],
 
   skills: {
-    frontend: [
-      "react",
-      "nextjs",
-      "svelte",
-      "sveltekit",
-      "typescript",
-      "tailwindcss",
-      "vite",
-      "html",
-      "css",
-      "sass",
-      "svg",
-      "bootstrap",
-    ],
-    backend: ["nodejs", "go", "python", "express", "graphql", "bun"],
-    database: ["postgres", "mongodb", "redis", "firebase"],
-    devops: ["docker", "gcp", "azure", "vercel", "cloudflare", "git", "github"],
-    tools: ["figma", "notion", "postman", "npm", "pnpm", "yarn", "git"],
+
+    frontend: Array.from(new Set(["react", "nextjs", "svelte", "typescript", "tailwindcss", "vite", "tauri", "sass", "bootstrap", "html", "css", "svg"])),
+      backend: Array.from(new Set(["nodejs", "go", "python", "express", "graphql", "bun"])),
+      database: Array.from(new Set(["postgres", "mongodb", "redis", "firebase"])),
+    devops:  Array.from(new Set(["docker", "gcp", "azure", "vercel", "cloudflare", "git", "github"])),
+    tools: Array.from(new Set(["figma", "notion", "postman", "npm", "pnpm", "yarn", "git"])),
   },
-  skill_icons: [
-    "typescript",
-    "go",
-    "postgres",
-    "docker",
-    "python",
-    "javascript",
-    "mongodb",
-    "redis",
-    "cloudflare",
-    "bun",
-    "firebase",
-    "npm",
-    "pnpm",
-    "yarn",
-    "git",
-    "github",
-    "gcp",
-    "svg",
-    "vercel",
-    "nextjs",
-    "vite",
-    "tailwindcss",
-    "notion",
-    "react",
-    "express",
-    "nodejs",
-    "postman",
-    "figma",
-    "bootstrap",
-    "html",
-    "css",
-    "sass",
-    "graphql",
-  ],
+  
   attribution: {
     journey: [
       "The first version of this website was created in 2022. I was just getting started with web technologies and built that one with vanilla js, after that I used some templates and code snippets from here and there, those version are still open source back then. The old version is actually open-sourced.",
@@ -286,10 +240,7 @@ const appConfig = {
         label: "Home",
         href: "/",
       },
-      {
-        label: "Journey",
-        href: "/journey",
-      },
+     
       {
         label: "Projects",
         href: "/projects",
@@ -302,12 +253,12 @@ const appConfig = {
         label: "Docs",
         href: "/docs",
       },
-    ],
-    specifics: [
       {
         label: "OS Stats",
         href: "/stats",
       },
+    ],
+    specifics: [
       // {
       //   label: "Tech Stack",
       //   href: "/tech-stack",
@@ -315,6 +266,10 @@ const appConfig = {
       {
         label: "Bucket List",
         href: "/bucket-list",
+      },
+       {
+        label: "Journey",
+        href: "/journey",
       },
     ],
     more: [

@@ -92,7 +92,7 @@ const backAnimation = () => {
   );
 };
 
-// --- COMPONENTS ---
+
 
 export const TransitionLink = (props: React.ComponentProps<typeof Link>) => {
   const router = useTransitionRouter();

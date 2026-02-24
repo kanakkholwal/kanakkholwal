@@ -51,7 +51,7 @@ export default function PageWrapper({
   className?: string;
   isHome?: boolean;
 }) {
-    const [selectedStyle] = useStorage<StylingModel>(
+  const [selectedStyle] = useStorage<StylingModel>(
     "styling.model",
     StyleModels[0].id,
   );
@@ -109,7 +109,7 @@ export default function PageWrapper({
                 transition={{ duration: 0.5, ease: "easeInOut" }}
               >
                 <motion.div
-                  layoutId="brand-logo"
+                  layoutId="splash"
                   className="relative z-20"
                   transition={{ type: "spring", stiffness: 80, damping: 15 }}
                 >
@@ -121,9 +121,8 @@ export default function PageWrapper({
 
           <motion.main
             className={cn(
-              "relative z-10 min-h-dvh w-full overflow-x-hidden",
-              "pb-20",
-              (selectedStyle === "minimal" && isHome) && "mx-auto md:max-w-3xl *:[[id]]:scroll-mt-22 space-y-4",
+              "relative z-10 min-h-dvh w-full",
+              (selectedStyle === "minimal" && isHome) ? "mx-auto md:max-w-3xl *:[[id]]:scroll-mt-22 space-y-4" : "overflow-x-hidden pb-20",
               className,
             )}
             initial="hidden"
@@ -150,6 +149,9 @@ export default function PageWrapper({
             initial={{ opacity: 0 }}
             animate={isLoaded ? { opacity: 1 } : { opacity: 0 }}
             transition={{ delay: 0.8, duration: 0.5 }}
+            className={
+              cn((selectedStyle === "minimal" && isHome) ? "mx-auto md:max-w-3xl *:[[id]]:scroll-mt-22 space-y-4" : "overflow-x-hidden")
+            }
           >
             <FooterSection />
           </motion.div>

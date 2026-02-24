@@ -32,10 +32,7 @@ export default async function HomePage() {
         <GithubSection data={data} />
       </Suspense>
 
-      {/* Contact */}
-      <div className="py-24">
-        <ContactSection />
-      </div>
+      <ContactSection />
     </Wrapper>
   );
 }

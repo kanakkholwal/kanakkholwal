@@ -19,7 +19,7 @@ export default async function Image() {
       role={appConfig.role}
       status="AVAILABLE FOR OPPORTUNITIES"
       authorImage={imageBase64!}
-      techStack={appConfig.skill_icons.slice(0, 5)}
+      techStack={[...appConfig.skills.frontend,...appConfig.skills.devops,...appConfig.skills.backend,...appConfig.skills.tools].slice(0, 5)}
     />,
   );
 }

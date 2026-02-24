@@ -4,7 +4,7 @@ import {
   SimpleProjectCards,
 } from "@/components/application/projects.card";
 import BlurFade from "@/components/magicui/blur-fade";
-import { ButtonTransitionLink } from "@/components/utils/link";
+import { ButtonLink, ButtonTransitionLink } from "@/components/utils/link";
 import { StyleModels, StylingModel } from "@/constants/ui";
 import useStorage from "@/hooks/use-storage";
 import { getProjectList } from "@/lib/project.source";
@@ -65,39 +65,40 @@ export function ProjectsSection() {
                     </dl>
                   </Link>
 
-                    <Tooltip>
-                      <TooltipTrigger>
-                        <a
-                          className="relative flex size-6 shrink-0 items-center justify-center text-muted-foreground after:absolute after:-inset-2 hover:text-foreground"
-                          href={`/projects/${project.id}`}
-                  
-                        >
-                          <Icon name="link" className="pointer-events-none size-4" />
-                          <span className="sr-only">Open Project</span>
-                        </a>
-                      </TooltipTrigger>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <ButtonTransitionLink
+                        size="icon"
+                        variant="ghost"
+                        href={`/projects/${project.id}`}
 
-                      <TooltipContent>
-                        <p>Open Project Details</p>
-                      </TooltipContent>
-                    </Tooltip>
-                    <Tooltip>
-                      <TooltipTrigger>
-                        <a
-                          className="relative flex size-6 shrink-0 items-center justify-center text-muted-foreground after:absolute after:-inset-2 hover:text-foreground"
-                          href={project.href}
-                          target="_blank"
-                          rel="noopener"
-                        >
-                          <Icon name="arrow-up-right" className="pointer-events-none size-4" />
-                          <span className="sr-only">Open Project Link</span>
-                        </a>
-                      </TooltipTrigger>
+                      >
+                        <Icon name="link" className="pointer-events-none size-4" />
+                        <span className="sr-only">Open Project</span>
+                      </ButtonTransitionLink>
+                    </TooltipTrigger>
 
-                      <TooltipContent>
-                        <p>Open Project Link</p>
-                      </TooltipContent>
-                    </Tooltip>
+                    <TooltipContent>
+                      <p>Open Project Details</p>
+                    </TooltipContent>
+                  </Tooltip>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <ButtonLink
+                        size="icon"
+                        variant="ghost" href={project.href}
+                        target="_blank"
+                        rel="noopener"
+                      >
+                        <Icon name="arrow-up-right" className="pointer-events-none size-4" />
+                        <span className="sr-only">Open Project Link</span>
+                      </ButtonLink>
+                    </TooltipTrigger>
+
+                    <TooltipContent>
+                      <p>Open Project Link</p>
+                    </TooltipContent>
+                  </Tooltip>
 
                 </div>
               </div>

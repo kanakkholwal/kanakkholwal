@@ -3,7 +3,7 @@ import { FaEdge, FaFirefoxBrowser, FaSafari } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { SiCaldotcom } from "react-icons/si";
 
-import { DownloadCloud } from "lucide-react";
+import { ChevronsDownUpIcon, ChevronsUpDownIcon, DownloadCloud } from "lucide-react";
 import { BsStars } from "react-icons/bs";
 import { GiBubbles } from "react-icons/gi";
 import {
@@ -193,6 +193,8 @@ export const IconComponentCollection = {
   "alert-circle": PiWarningCircleDuotone,
   "link": PiLinkDuotone,
   download: DownloadCloud,
+  "chevrons-down-up": ChevronsDownUpIcon,
+  "chevrons-up-down": ChevronsUpDownIcon, 
   // bodies
   moon: PiMoonDuotone,
   sun: PiSunDuotone,

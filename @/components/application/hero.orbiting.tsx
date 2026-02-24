@@ -117,7 +117,7 @@ export function OrbitingIdentity() {
             style={{ transform: "translateZ(10px)" }}
           >
             <div className="flex items-center justify-between gap-3">
-              {appConfig.skill_icons.slice(0, 4).map((skill, i) => (
+              {[...appConfig.skills.frontend,...appConfig.skills.devops,...appConfig.skills.backend,...appConfig.skills.tools].slice(0, 4).map((skill, i) => (
                 <TechIcon key={i} icon={skill} />
               ))}
               <div className="flex-1 text-right">

@@ -49,6 +49,14 @@ export const workExperiences = defineDocs({
       endDate: z.string().optional(),
       isCurrentEmployer: z.boolean().default(false).optional(),
       isOngoing: z.boolean().default(false).optional(),
+      employmentType: z.enum([
+        "Full-time",
+        "Part-time",
+        "Contract",
+        "Internship",
+        "Freelance",
+        "Volunteer",
+      ]).optional(),
     }),
     postprocess: {
       includeProcessedMarkdown: true,

@@ -14,6 +14,7 @@ const nextConfig = {
       { protocol: 'https', hostname: '**.ufs.sh' },
       { hostname: 'visitor-badge.laobi.icu' },
     ],
+    qualities: [100,75,50,25],
   },
 };
 

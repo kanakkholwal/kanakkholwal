@@ -16,6 +16,8 @@ import { getWorkExperienceList, WorkExperienceType } from "@/lib/work.source";
 import { motion } from "framer-motion";
 import defaultMdxComponents from "fumadocs-ui/mdx";
 import { useMemo } from "react";
+import { Collapsible, CollapsibleContent, CollapsibleIcon, CollapsibleTrigger } from "../ui/collapsible";
+import { Separator } from "../ui/separator";
 import { Panel, PanelHeader, PanelTitle } from "./panel";
 
 const BLUR_FADE_DELAY = 0.04;
@@ -97,39 +99,40 @@ export function WorkSection() {
 export function ExperienceItem({ experience }: { experience: WorkExperienceType }) {
   const Mdx = experience.body;
   return (
-    <div className="screen-line-after space-y-4 py-4 relative">
-        <div
-          className={cn(
-            "group block w-full text-left  pl-4",
-            "relative before:absolute before:-top-1 before:-right-1 before:-bottom-1.5 before:left-7 before:-z-1 before:rounded-lg before:transition-[background-color] before:ease-out hover:before:bg-accent-muted",
-            "data-disabled:before:content-none"
-          )}
-        >
-          <div className="relative z-1 mb-1 flex items-center gap-3">
-            <div
-              className={cn(
-                "flex size-6 shrink-0 items-center justify-center rounded-lg",
-                "bg-muted text-muted-foreground",
-                !experience.logoUrl && "border border-muted-foreground/15 ring-1 ring-edge ring-offset-1 ring-offset-background"
-              )}
-              aria-hidden
-            >
-              {experience.logoUrl ? (
-                <Image
-                  src={experience.logoUrl}
-                  alt={`${experience.company} logo`}
-                  width={24}
-                  height={24}
-                  quality={100}
-                  className="rounded-full"
-                  unoptimized
-                  aria-hidden
-                />
-              ) : (
-                <BriefcaseBusinessIcon className="size-4" />
-              )}
+    <Collapsible  className="screen-line-after space-y-4 py-4 relative">
+      <div
+        className={cn(
+          "group block w-full text-left  pl-4",
+          "relative before:absolute before:-top-1 before:-right-1 before:-bottom-1.5 before:left-7 before:-z-1 before:rounded-lg before:transition-[background-color] before:ease-out hover:before:bg-accent-muted",
+          "data-disabled:before:content-none"
+        )}
+      >
+        <div className="relative z-1 mb-1 flex items-center gap-3">
+          <div
+            className={cn(
+              "flex size-10 shrink-0 items-center justify-center rounded-full",
+              "bg-muted text-muted-foreground",
+              !experience.logoUrl && "border border-muted-foreground/15 ring-1 ring-edge ring-offset-1 ring-offset-background"
+            )}
+            aria-hidden
+          >
+            {experience.logoUrl ? (
+              <Image
+                src={experience.logoUrl}
+                alt={`${experience.company} logo`}
+                width={36}
+                height={36}
+                quality={100}
+                className="rounded-full"
+                unoptimized
+                aria-hidden
+              />
+            ) : (
+              <BriefcaseBusinessIcon className="size-4" />
+            )}
 
-            </div>
+          </div>
+          <div>
 
             <h4 className="flex-1 text-balance leading-snug font-semibold">
               {experience.href ? (
@@ -146,61 +149,77 @@ export function ExperienceItem({ experience }: { experience: WorkExperienceType 
               )} {` - `}
               {experience.position}
             </h4>
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              {experience.employmentType && (
+                <>
+                  <dl>
+                    <dt className="sr-only">Employment Type</dt>
+                    <dd>{experience.employmentType}</dd>
+                  </dl>
 
+                  <Separator
+                    className="data-[orientation=vertical]:h-4"
+                    orientation="vertical"
+                  />
+                </>
+              )}
 
+              <dl>
+                <dt className="sr-only">Employment Period</dt>
+                <dd className="flex items-center gap-0.5">
+                  <span>{experience.startDate}</span>
+                  <span className="font-mono">—</span>
+                  {experience.isOngoing ? (
+                    <>
+                      <InfinityIcon
+                        className="size-4.5 translate-y-[0.5px]"
+                        aria-hidden
+                      />
+                      <span className="sr-only">Present</span>
+                    </>
+                  ) : (
+                    <span>{experience.endDate}</span>
+                  )}
+                </dd>
+              </dl>
+            </div>
+            <CollapsibleTrigger className="inline-flex items-center gap-1 absolute right-4 top-1/2 -translate-y-1/2 rounded-full p-2 focus:outline-none focus:ring-2 focus:ring-primary transition-opacity">
+              <CollapsibleIcon className="size-4 text-foreground" />
+            </CollapsibleTrigger>
           </div>
 
-          <div className="flex items-center gap-2 pl-9 text-sm text-muted-foreground">
-
-
-            <dl>
-              <dt className="sr-only">Employment Period</dt>
-              <dd className="flex items-center gap-0.5">
-                <span>{experience.startDate}</span>
-                <span className="font-mono">—</span>
-                {experience.isOngoing ? (
-                  <>
-                    <InfinityIcon
-                      className="size-4.5 translate-y-[0.5px]"
-                      aria-hidden
-                    />
-                    <span className="sr-only">Present</span>
-                  </>
-                ) : (
-                  <span>{experience.endDate}</span>
-                )}
-              </dd>
-            </dl>
-          </div>
         </div>
 
-        <div
-          className={cn(
-            "prose dark:prose-invert max-w-none",
-            "prose-headings:font-mono prose-headings:tracking-tight prose-headings:font-bold",
-            "prose-p:font-mono prose-p:leading-6 prose-p:text-zinc-600 dark:prose-p:text-zinc-300",
-            "prose-li:font-mono",
-            "pt-2 pl-9",
-            // override typography anchor underline
-            "[&_a[data-card].peer]:no-underline",
-            "text-muted-foreground max-w-none mb-6 text-sm md:text-base leading-relaxed",
-            // "prose-pre:border prose-pre:border-border/50 prose-pre:bg-zinc-950",
-            // "prose-code:px-1 prose-code:py-0.5 prose-code:rounded-sm prose-code:font-mono prose-code:text-sm prose-code:before:content-none prose-code:after:content-none"
-          )}
-        >
-          <Mdx components={defaultMdxComponents} />
-        </div>
 
-        {Array.isArray(experience.badges) && experience.badges.length > 0 && (
-          <ul className="flex flex-wrap gap-1.5 pt-3 pl-9">
-            {experience.badges.map((badge, index) => (
-              <li key={index} className="flex">
-                <Badge>{badge}</Badge>
-              </li>
-            ))}
-          </ul>
+      </div>
+
+      <CollapsibleContent
+        className={cn(
+          "prose dark:prose-invert max-w-none",
+          "prose-headings:font-mono prose-headings:tracking-tight prose-headings:font-bold",
+          "prose-p:font-mono prose-p:leading-6 prose-p:text-zinc-600 dark:prose-p:text-zinc-300",
+          "prose-li:font-mono",
+          "pt-2 pl-9",
+          // override typography anchor underline
+          "[&_a[data-card].peer]:no-underline",
+          "text-muted-foreground max-w-none mb-6 text-sm md:text-base leading-relaxed",
+          // "prose-pre:border prose-pre:border-border/50 prose-pre:bg-zinc-950",
+          // "prose-code:px-1 prose-code:py-0.5 prose-code:rounded-sm prose-code:font-mono prose-code:text-sm prose-code:before:content-none prose-code:after:content-none"
         )}
-    </div>
+      >
+        <Mdx components={defaultMdxComponents} />
+      </CollapsibleContent>
+
+      {Array.isArray(experience.badges) && experience.badges.length > 0 && (
+        <ul className="flex flex-wrap gap-1.5 pt-3 pl-9">
+          {experience.badges.map((badge, index) => (
+            <li key={index} className="flex">
+              <Badge>{badge}</Badge>
+            </li>
+          ))}
+        </ul>
+      )}
+    </Collapsible>
   )
 }
 function WorkCard({ work }: { work: WorkExperienceType }) {

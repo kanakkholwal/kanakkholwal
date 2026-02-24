@@ -26,7 +26,41 @@ export function ContactSection() {
     setTimeout(() => setCopied(false), 2000);
   };
   if (selectedStyle === "minimal") {
-    return null
+    return (
+      <section id="contact" className="w-full mx-auto max-w-3xl px-6 py-12">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+          <div className="space-y-2">
+            <h2 className="text-lg font-semibold tracking-tight">
+              Let's work together
+            </h2>
+            <p className="text-sm text-muted-foreground max-w-sm">
+              Have a project in mind? Reach out and let's build something great.
+            </p>
+          </div>
+
+          <div className="flex items-center gap-3 shrink-0">
+            <button
+              onClick={handleCopy}
+              className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              {copied ? (
+                <Check className="size-3.5 text-emerald-500" />
+              ) : (
+                <Copy className="size-3.5" />
+              )}
+              <span className="font-mono text-xs">{email}</span>
+            </button>
+            <div className="w-px h-4 bg-border" />
+            <Button asChild size="sm" rounded="full" variant="outline">
+              <TransitionLink href="/contact">
+                <Sparkles className="size-3.5" />
+                Get in touch
+              </TransitionLink>
+            </Button>
+          </div>
+        </div>
+      </section>
+    );
   }
 
   return (
