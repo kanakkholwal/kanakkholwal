@@ -1,9 +1,8 @@
-import { Timeline } from "@/components/extended/timeline";
 import { generateMetadata } from "~/utils/seo";
-
+import JourneyPageClient from "./client";
 
 export default function JourneyPage() {
-  return <Timeline/>;
+  return <JourneyPageClient />;
 }
 export const metadata = generateMetadata({
   title: "My Developer Journey ",

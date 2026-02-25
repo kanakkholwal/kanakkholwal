@@ -19,7 +19,6 @@ const appConfig = {
     "Indie Hacker",
     "Design Engineer",
     "Creating with code. Small details matter."
-
   ],
   // site related
   siteName: "Kanak Kholwal Portfolio",
@@ -40,12 +39,12 @@ const appConfig = {
   skills: {
 
     frontend: Array.from(new Set(["react", "nextjs", "svelte", "typescript", "tailwindcss", "vite", "tauri", "sass", "bootstrap", "html", "css", "svg"])),
-      backend: Array.from(new Set(["nodejs", "go", "python", "express", "graphql", "bun"])),
-      database: Array.from(new Set(["postgres", "mongodb", "redis", "firebase"])),
-    devops:  Array.from(new Set(["docker", "gcp", "azure", "vercel", "cloudflare", "git", "github"])),
+    backend: Array.from(new Set(["nodejs", "go", "python", "express", "graphql", "bun"])),
+    database: Array.from(new Set(["postgres", "mongodb", "redis", "firebase"])),
+    devops: Array.from(new Set(["docker", "gcp", "azure", "vercel", "cloudflare", "git", "github"])),
     tools: Array.from(new Set(["figma", "notion", "postman", "npm", "pnpm", "yarn", "git"])),
   },
-  
+
   attribution: {
     journey: [
       "The first version of this website was created in 2022. I was just getting started with web technologies and built that one with vanilla js, after that I used some templates and code snippets from here and there, those version are still open source back then. The old version is actually open-sourced.",
@@ -240,7 +239,7 @@ const appConfig = {
         label: "Home",
         href: "/",
       },
-     
+
       {
         label: "Projects",
         href: "/projects",
@@ -267,7 +266,7 @@ const appConfig = {
         label: "Bucket List",
         href: "/bucket-list",
       },
-       {
+      {
         label: "Journey",
         href: "/journey",
       },

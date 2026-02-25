@@ -1,4 +1,4 @@
-import { TimelineProjectGrid } from "@/components/extended/timeline";
+import { TimelineProjectGrid } from "@/components/application/journey.static";
 import Link from "next/link";
 
 export const journey_data = [
@@ -59,7 +59,7 @@ export const journey_data = [
           This is where I moved from “building projects” to working on a real
           product with real users. I joined{" "}
           <Link
-            href="https://www.linkedin.com/company/textifyai"
+            href="https://www.linkedin.com/company/textifyai?utm_source=kanak.eu.org"
             className="text-foreground font-medium underline underline-offset-4 decoration-border hover:decoration-primary transition-all"
           >
             Textify AI

@@ -6,7 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useMemo } from "react";
 import { journey_data } from "~/data/journey";
-import ChangelogContent from "../application/page.timeline";
+import ChangelogContent from "./page.timeline";
 
 
 export function TimelineProjectGrid({

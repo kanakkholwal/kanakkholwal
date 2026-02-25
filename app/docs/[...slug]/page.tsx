@@ -1,7 +1,7 @@
 import { source } from "@/lib/source";
 import { notFound } from "next/navigation";
 
-// --- COMPONENTS ---
+
 import { Metadata } from "next";
 import { appConfig } from "root/project.config";
 import ArticlePage from "./handler.article";
@@ -13,11 +13,11 @@ export default async function Page(props: {
   const params = await props.params;
   if (!params.slug) notFound();
 
-  if (params.slug.length >= 2) {
-    return <ArticlePage slug={params.slug} />;
-  }
   if (params.slug.length === 1) {
     return <CategoryPage category={params.slug[0]} />;
+  }
+  if (params.slug.length >= 2) {
+    return <ArticlePage slug={params.slug} />;
   }
   notFound();
 }

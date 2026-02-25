@@ -54,7 +54,7 @@ export function FooterSection() {
           exit={{ opacity: 0, y: 20 }}
           transition={{ type: "spring", stiffness: 260, damping: 24 }}
         >
-            <DynamicFooter />
+          <DynamicFooter />
         </motion.div>
       )}
     </AnimatePresence>
@@ -72,11 +72,11 @@ function MinimalFooter() {
           </TransitionLink>
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 flex-wrap justify-center">
           <Socials />
-          <div className="w-px h-4 bg-border" />
+          <div className="w-px h-4 bg-border hidden sm:inline-block" />
 
-          <div className="flex gap-4 text-xs text-muted-foreground">
+          <div className="flex gap-4 text-xs text-muted-foreground items-center flex-wrap">
             {appConfig.footerLinks.general.map((link) => {
               if (link.label.toLowerCase() === "home") return null;
               return (
@@ -89,9 +89,9 @@ function MinimalFooter() {
                 </TransitionLink>
               );
             })}
+            <div className="w-px h-4 bg-border" />
+            <GoToTopButton />
           </div>
-          <div className="w-px h-4 bg-border" />
-          <GoToTopButton />
         </div>
       </div>
     </footer>
@@ -120,7 +120,6 @@ function StaticFooter() {
             delay={BLUR_FADE_DELAY * 3}
             className="mt-16 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0"
           >
-            <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 md:gap-8 w-full">
               {Object.entries(appConfig.footerLinks).map(([category, links]) => (
                 <div key={category}>
                   <h3 className="text-sm font-semibold leading-6 text-foreground capitalize tracking-wider">
@@ -148,7 +147,6 @@ function StaticFooter() {
                   </ul>
                 </div>
               ))}
-            </div>
           </BlurFade>
         </div>
       </BlurFade>
@@ -197,9 +195,9 @@ function DynamicFooter() {
       ref={ref}
       className="relative w-full overflow-hidden border-t border-border/40"
     >
-   
+
       <div className="mx-auto max-w-app px-6 lg:px-8">
-    
+
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -219,7 +217,7 @@ function DynamicFooter() {
           </div>
 
           <div className="mt-12 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0">
-            <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 md:gap-8 w-full">
+            <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 xl:col-span-2 md:gap-8 w-full">
               {Object.entries(appConfig.footerLinks).map(
                 ([category, links], i) => (
                   <motion.div
@@ -262,7 +260,6 @@ function DynamicFooter() {
           </div>
         </motion.div>
 
-        {/* ── Bottom bar ── */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={isInView ? { opacity: 1 } : {}}
