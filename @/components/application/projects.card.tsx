@@ -1,11 +1,18 @@
 ﻿"use client";
 
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerTitle,
+} from "@/components/ui/drawer";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ButtonLink, ButtonTransitionLink, TransitionLink } from "@/components/utils/link";
-import { useOutsideClick } from "@/hooks/use-outside-click";
 import { ProjectType } from "@/lib/project.source";
 import { cn } from "@/lib/utils";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import {
   ArrowUpRight,
   Calendar,
@@ -13,10 +20,9 @@ import {
   Layers,
   Play,
   Tag,
-  X,
 } from "lucide-react";
 import Image from "next/image";
-import React, { useEffect, useId, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import Markdown from "react-markdown";
 
 import { Icon, IconType } from "../icons";
@@ -54,8 +60,8 @@ function StatusBadge({ status }: { status?: string }) {
 }
 
 /* 
-   EXPANDABLE CARDS  (Dynamic variant)
-    bento grid + slide-in drawer
+   EXPANDABLE CARDS (Dynamic variant with Drawer)
+    responsive bento grid + side drawer
  */
 export function ExpandableProjectCards({
   cards,
@@ -63,53 +69,33 @@ export function ExpandableProjectCards({
   cards: Omit<ProjectType, "body">[];
 }) {
   const [active, setActive] = useState<Omit<ProjectType, "body"> | null>(null);
-  const id = useId();
-  const modalRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setActive(null);
-    };
-    document.body.style.overflow = active ? "hidden" : "auto";
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [active]);
-
-  useOutsideClick(
-    modalRef as React.RefObject<HTMLDivElement>,
-    () => setActive(null),
-  );
 
   return (
     <div className="relative" id="project-list">
-      {/* Backdrop */}
-      <AnimatePresence>
-        {active && (
-          <motion.div
-            key="backdrop"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-40 bg-background/70 backdrop-blur-md"
-            onClick={() => setActive(null)}
-          />
-        )}
-      </AnimatePresence>
-
-      {/* Morphing modal — shares layoutId with the card */}
-      <AnimatePresence>
-        {active && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none">
-            <motion.div
-              key={active.id}
-              ref={modalRef}
-              layoutId={`card-container-${active.id}-${id}`}
-              style={{ borderRadius: 24 }}
-              className="pointer-events-auto relative w-full max-w-2xl max-h-[90vh] flex flex-col bg-card border border-border shadow-2xl overflow-hidden"
-            >
-              {/* Media header */}
-              <div className="relative h-56 w-full shrink-0 bg-zinc-900">
+      {/* Responsive Drawer — works on mobile & desktop */}
+      <Drawer open={!!active} onOpenChange={(open) => !open && setActive(null)}>
+        <DrawerContent className="max-h-[90vh] max-w-4xl mx-auto flex flex-col">
+          {active && (
+            <>
+              {/* Drawer Header — close button + title */}
+              <DrawerHeader className="relative shrink-0 border-b border-border/40">
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex-1 space-y-2">
+                    <div className="flex items-center gap-3">
+                      <StatusBadge status={active.status} />
+                    </div>
+                    <DrawerTitle className="text-2xl md:text-3xl">
+                      {active.title}
+                    </DrawerTitle>
+                    <DrawerDescription className="text-xs font-mono text-muted-foreground flex items-center gap-1.5">
+                      <Calendar className="size-3" />
+                      {active.dates}
+                    </DrawerDescription>
+                  </div>
+                  <DrawerClose className="shrink-0 opacity-70 hover:opacity-100 transition-opacity" />
+                </div>
+              </DrawerHeader>
+              <div className="relative aspect-[4/3] px-3 w-full overflow-hidden rounded-2xl hidden lg:block">
                 {active.video ? (
                   <video
                     src={active.video}
@@ -124,159 +110,121 @@ export function ExpandableProjectCards({
                     src={active.image}
                     alt={active.title}
                     fill
-                    className="object-cover"
+                    className="w-full h-full object-contain"
                   />
                 ) : (
                   <ProjectFallback title={active.title} />
                 )}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
-
-                {/* Close */}
-                <motion.button
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.8 }}
-                  transition={{ delay: 0.1 }}
-                  onClick={() => setActive(null)}
-                  className="absolute top-4 right-4 z-20 p-2 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-white hover:bg-black/80 transition-colors"
-                >
-                  <X className="size-4" />
-                </motion.button>
-
-                <div className="absolute bottom-0 left-0 p-5 w-full z-10">
-                  <motion.div layoutId={`card-status-${active.id}-${id}`}>
-                    <StatusBadge status={active.status} />
-                  </motion.div>
-                  <motion.h2
-                    layoutId={`card-title-${active.id}-${id}`}
-                    className="mt-2 text-2xl font-bold tracking-tight text-white leading-tight"
-                  >
-                    {active.title}
-                  </motion.h2>
-                  <motion.p
-                    layoutId={`card-dates-${active.id}-${id}`}
-                    className="text-xs font-mono text-white/50 mt-1 flex items-center gap-1.5"
-                  >
-                    <Calendar className="size-3" />
-                    {active.dates}
-                  </motion.p>
-                </div>
+                <div className="absolute inset-0 bg-gradient-to-t from-primary/10 via-primary/5 to-transparent" />
               </div>
 
-              {/* Body — fades in after morph */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ delay: 0.15, duration: 0.2 }}
-                className="flex flex-col flex-1 min-h-0"
-              >
-                <ScrollArea className="flex-1 min-h-0">
-                  <div className="p-6 space-y-6">
-                    <div className="prose prose-sm dark:prose-invert max-w-none text-muted-foreground leading-relaxed">
-                      <Markdown>{active.description}</Markdown>
-                    </div>
 
-                    {active.metrics && active.metrics.length > 0 && (
-                      <div>
-                        <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground mb-3">
-                          // Impact
-                        </p>
-                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                          {active.metrics.map((m) => (
-                            <div
-                              key={m.label}
-                              className="flex flex-col items-center justify-center p-3 rounded-xl border border-border bg-muted/30 text-center"
-                            >
-                              <span className="text-xl font-bold font-mono tracking-tight text-foreground">
-                                {m.value.toLocaleString()}
-                              </span>
-                              <span className="text-[10px] text-muted-foreground mt-0.5 uppercase tracking-wider">
-                                {m.label}
-                              </span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {active.technologies && active.technologies.length > 0 && (
-                      <div>
-                        <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground mb-3 flex items-center gap-1.5">
-                          <Tag className="size-3" /> Stack
-                        </p>
-                        <div className="flex flex-wrap gap-2">
-                          {active.technologies.map((tech) => (
-                            <span
-                              key={tech}
-                              className="inline-flex items-center px-2.5 py-1 rounded-md bg-muted border border-border text-xs font-medium text-foreground/80"
-                            >
-                              {tech}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {active.tags && active.tags.length > 0 && (
-                      <div>
-                        <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground mb-3 flex items-center gap-1.5">
-                          <Layers className="size-3" /> Categories
-                        </p>
-                        <div className="flex flex-wrap gap-2">
-                          {active.tags.map((tag) => (
-                            <span
-                              key={tag}
-                              className="inline-flex items-center px-2 py-0.5 rounded-md bg-primary/10 border border-primary/20 text-xs text-primary/80 font-mono"
-                            >
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    )}
+              {/* Body — scrollable content */}
+              <ScrollArea className="flex-1 h-96 overflow-y-scroll no-scrollbar">
+                <div className="p-4 md:p-6 space-y-6">
+                  <div className="prose prose-sm dark:prose-invert max-w-none text-muted-foreground leading-relaxed">
+                    <Markdown>{active.description}</Markdown>
                   </div>
-                </ScrollArea>
 
-                {/* Footer actions */}
-                <div className="p-4 border-t border-border bg-card/80 backdrop-blur-sm flex items-center gap-3 shrink-0">
-                  {active.href && (
-                    <ButtonLink
-                      href={active.href}
-                      target="_blank"
-                      variant="dark"
-                      className="flex-1 h-11 text-sm font-medium rounded-xl"
-                    >
-                      <ExternalLink className="size-4" />
-                      Visit Live Site
-                    </ButtonLink>
+                  {active.metrics && active.metrics.length > 0 && (
+                    <div>
+                      <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground mb-3">
+                        // Impact
+                      </p>
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                        {active.metrics.map((m) => (
+                          <div
+                            key={m.label}
+                            className="flex flex-col items-center justify-center p-3 rounded-xl border border-border bg-muted/30 text-center"
+                          >
+                            <span className="text-xl font-bold font-mono tracking-tight text-foreground">
+                              {m.value.toLocaleString()}
+                            </span>
+                            <span className="text-[10px] text-muted-foreground mt-0.5 uppercase tracking-wider">
+                              {m.label}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   )}
-                    <ButtonTransitionLink
-                      href={`/projects/${active.id}`}
-                      variant="secondary"
-                      size="icon"
-                      className="size-11 text-sm font-medium rounded-xl"
-                    >
-                      <Icon name="arrow-right" className="size-4!" />
-                    </ButtonTransitionLink>
-                  {active.links?.map((link, i) => (
-                    <ButtonLink
-                      key={i}
-                      href={link.url}
-                      target="_blank"
-                      variant="secondary"
-                      size="icon"
-                      className="size-11 rounded-xl border shrink-0"
-                    >
-                      <Icon name={(link.icon as IconType) || "external-link"} />
-                    </ButtonLink>
-                  ))}
+
+                  {active.technologies && active.technologies.length > 0 && (
+                    <div>
+                      <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground mb-3 flex items-center gap-1.5">
+                        <Tag className="size-3" /> Stack
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        {active.technologies.map((tech) => (
+                          <span
+                            key={tech}
+                            className="inline-flex items-center px-2.5 py-1 rounded-md bg-muted border border-border text-xs font-medium text-foreground/80"
+                          >
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {active.tags && active.tags.length > 0 && (
+                    <div>
+                      <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground mb-3 flex items-center gap-1.5">
+                        <Layers className="size-3" /> Categories
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        {active.tags.map((tag) => (
+                          <span
+                            key={tag}
+                            className="inline-flex items-center px-2 py-0.5 rounded-md bg-primary/10 border border-primary/20 text-xs text-primary/80 font-mono"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
-              </motion.div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
+              </ScrollArea>
+
+              {/* Footer actions */}
+              <div className="p-4 border-t border-border bg-card/80 backdrop-blur-sm flex flex-wrap items-center gap-2 shrink-0">
+                {active.href && (
+                  <ButtonLink
+                    href={active.href}
+                    target="_blank"
+                    variant="dark"
+                    className="flex-1 min-w-[140px] h-10 text-sm font-medium rounded-lg"
+                  >
+                    <ExternalLink className="size-4" />
+                    Visit Live Site
+                  </ButtonLink>
+                )}
+                <ButtonTransitionLink
+                  href={`/projects/${active.id}`}
+                  variant="secondary"
+                  className="h-10 px-4 text-sm font-medium rounded-lg"
+                >
+                  <Icon name="arrow-right" className="size-4!" />
+                  Full Project
+                </ButtonTransitionLink>
+                {active.links?.map((link, i) => (
+                  <ButtonLink
+                    key={i}
+                    href={link.url}
+                    target="_blank"
+                    variant="secondary"
+                    size="icon"
+                    className="h-10 w-10 rounded-lg border shrink-0"
+                  >
+                    <Icon name={(link.icon as IconType) || "external-link"} />
+                  </ButtonLink>
+                ))}
+              </div>
+            </>
+          )}
+        </DrawerContent>
+      </Drawer>
 
       {/* Card Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 w-full max-w-7xl mx-auto">
@@ -284,7 +232,6 @@ export function ExpandableProjectCards({
           <ExpandableCard
             key={card.id}
             card={card}
-            layoutId={id}
             onClick={() => setActive(card)}
             isActive={active?.id === card.id}
           />
@@ -296,20 +243,16 @@ export function ExpandableProjectCards({
 
 function ExpandableCard({
   card,
-  layoutId,
   onClick,
   isActive,
 }: {
   card: Omit<ProjectType, "body">;
-  layoutId: string;
   onClick: () => void;
   isActive: boolean;
 }) {
   return (
     <motion.button
       onClick={onClick}
-      layoutId={`card-container-${card.id}-${layoutId}`}
-      style={{ borderRadius: 24 }}
       whileHover={isActive ? {} : { y: -4, scale: 1.01 }}
       transition={{ type: "spring", stiffness: 360, damping: 30 }}
       className={cn(
@@ -318,6 +261,7 @@ function ExpandableCard({
         "transition-shadow duration-300 hover:shadow-2xl dark:hover:shadow-black/60",
         isActive && "opacity-40 pointer-events-none",
       )}
+      style={{ borderRadius: 24 }}
     >
       {/* Media */}
       <div className="relative aspect-[16/10] w-full overflow-hidden bg-zinc-900">
@@ -335,12 +279,9 @@ function ExpandableCard({
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
 
         {/* Status - top left */}
-        <motion.div
-          layoutId={`card-status-${card.id}-${layoutId}`}
-          className="absolute top-3 left-3 z-10"
-        >
+        <div className="absolute top-3 left-3 z-10">
           <StatusBadge status={card.status} />
-        </motion.div>
+        </div>
 
         {/* Expand hint - top right */}
         <div className="absolute top-3 right-3 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
@@ -352,19 +293,13 @@ function ExpandableCard({
 
         {/* Title overlay */}
         <div className="absolute bottom-0 left-0 right-0 p-4 z-10">
-          <motion.h3
-            layoutId={`card-title-${card.id}-${layoutId}`}
-            className="text-base font-bold text-white leading-snug"
-          >
+          <h3 className="text-base font-bold text-white leading-snug">
             {card.title}
-          </motion.h3>
-          <motion.p
-            layoutId={`card-dates-${card.id}-${layoutId}`}
-            className="text-[10px] font-mono text-white/50 mt-1 flex items-center gap-1"
-          >
+          </h3>
+          <p className="text-[10px] font-mono text-white/50 mt-1 flex items-center gap-1">
             <Calendar className="size-3 shrink-0" />
             {card.dates}
-          </motion.p>
+          </p>
         </div>
       </div>
 
@@ -434,7 +369,7 @@ function ProjectCard({
     setIsHovered(true);
     if (videoRef.current) {
       videoRef.current.currentTime = 0;
-      videoRef.current.play().catch(() => {});
+      videoRef.current.play().catch(() => { });
     }
   };
 

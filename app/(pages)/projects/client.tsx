@@ -14,9 +14,7 @@ import { ArrowRight, ArrowUpRight, TrendingUp } from "lucide-react";
 
 const BLUR_FADE_DELAY = 0.04;
 
-/* ─────────────────────────────────────────────
-   Root export
-───────────────────────────────────────────── */
+
 export default function ProjectsShowcase() {
   const [selectedStyle] = useStorage<StylingModel>(
     "styling.model",
