@@ -1,14 +1,12 @@
 import { cn } from "@/lib/utils";
 import { GoogleAnalytics } from "@next/third-parties/google";
-import type { Metadata } from "next";
-// Geist is the new standard for "Engineering" aesthetics (replaces Inter)
 import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
+import type { Metadata } from "next";
 import { Instrument_Serif, Quicksand } from "next/font/google";
 import { appConfig } from "root/project.config";
 import "./global.css";
 import { Provider } from "./provider";
-// You will need to install this: npm i lenis react-lenis
 
 export const metadata: Metadata = {
   title: {
@@ -78,7 +76,7 @@ const fontInstrumentSerif = Instrument_Serif({
   
 });
 
-// Logo font (Playful accent)
+// Logo font
 const logoFont = Quicksand({
   weight: ["700"],
   subsets: ["latin"],
