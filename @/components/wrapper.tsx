@@ -18,6 +18,8 @@ import { ReactLenis } from "lenis/react";
 import { useTheme } from "next-themes";
 import dynamic from "next/dynamic";
 import { Suspense, useEffect, useRef, useState } from "react";
+import { FlickeringGrid } from "./animated/bg.flickering";
+import ConditionalRender from "./utils/conditional-render";
 
 // Lazy-load heavy components
 const StarsBackground = dynamic(
@@ -110,7 +112,7 @@ export default function PageWrapper({
           </div>
 
           <AnimatePresence>
-            {!isLoaded && (
+            <ConditionalRender condition={!isLoaded}>
               <motion.div
                 className="fixed inset-0 z-[60] flex items-center justify-center bg-background"
                 exit={{ opacity: 0, pointerEvents: "none" }}
@@ -124,7 +126,8 @@ export default function PageWrapper({
                   <Logo size="xl" draw isLoader />
                 </motion.div>
               </motion.div>
-            )}
+
+            </ConditionalRender>
           </AnimatePresence>
 
           <motion.main
@@ -141,17 +144,28 @@ export default function PageWrapper({
           >
             {children}
           </motion.main>
-
-          {animationEnabled && animationMode === "stars" && (
+          <ConditionalRender condition={animationEnabled}>
             <div className="fixed inset-0 -z-10 pointer-events-none">
-              <StarsBackground
-                starColor={resolvedTheme === "dark" ? "#f1f1f1" : "#1c1c1c"}
-                defaultBg={false}
-                className="h-full w-full opacity-60"
-              />
+              <ConditionalRender condition={animationMode === "stars"}>
+                <StarsBackground
+                  starColor={resolvedTheme === "dark" ? "#f1f1f1" : "#1c1c1c"}
+                  defaultBg={false}
+                  className="h-full w-full opacity-60"
+                />
+              </ConditionalRender>
+              <ConditionalRender condition={animationMode === "flickering"}>
+                <FlickeringGrid
+                  className="absolute top-0 left-0 size-full"
+                  squareSize={4}
+                  gridGap={6}
+                  color="#6B7280"
+                  maxOpacity={0.2}
+                  flickerChance={0.05}
+                />
+              </ConditionalRender>
               <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
             </div>
-          )}
+          </ConditionalRender>
 
           <motion.div
             initial={{ opacity: 0 }}

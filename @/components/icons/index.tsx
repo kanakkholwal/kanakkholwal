@@ -2,6 +2,7 @@ import { cn } from "@/lib/utils";
 import { FaEdge, FaFirefoxBrowser, FaSafari } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { SiCaldotcom } from "react-icons/si";
+import { TbChartGridDots } from "react-icons/tb";
 
 import { ChevronsDownUpIcon, ChevronsUpDownIcon, DownloadCloud } from "lucide-react";
 import { BsStars } from "react-icons/bs";
@@ -195,6 +196,7 @@ export const IconComponentCollection = {
   download: DownloadCloud,
   "chevrons-down-up": ChevronsDownUpIcon,
   "chevrons-up-down": ChevronsUpDownIcon, 
+  "grid-mode": TbChartGridDots ,
   // bodies
   moon: PiMoonDuotone,
   sun: PiSunDuotone,
