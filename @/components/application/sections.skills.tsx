@@ -9,6 +9,7 @@ import { appConfig } from "root/project.config";
 
 import BlurFade from "@/components/magicui/blur-fade";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { DynamicSection, StaticSection } from "./base.ui";
 import { Panel, PanelContent, PanelHeader, PanelTitle } from "./panel";
 import { BentoSkillsSection } from "./skills.bento";
 
@@ -97,9 +98,8 @@ function MinimalSkills() {
 
 function StaticSkills() {
   return (
-    <section
+    <StaticSection
       id="skills"
-      className="max-w-4xl mx-auto w-full px-4 py-16 md:py-24"
     >
       <BlurFade delay={BLUR_FADE_DELAY}>
         <div className="mb-10 space-y-2">
@@ -154,15 +154,15 @@ function StaticSkills() {
           </BlurFade>
         ))}
       </div>
-    </section>
+    </StaticSection>
   );
 }
 
 function DynamicSkills() {
   return (
-    <section
+    <DynamicSection
       id="skills"
-      className="relative max-w-app mx-auto w-full px-6 md:px-12 py-32 overflow-hidden"
+      className="relative overflow-hidden"
     >
 
       <div className="flex flex-col items-center text-center mb-16 space-y-4 relative z-10">
@@ -188,7 +188,7 @@ function DynamicSkills() {
       </div>
 
       <BentoSkillsSection categories={CATEGORIES} />
-    </section>
+    </DynamicSection>
   );
 }
 
@@ -228,7 +228,7 @@ export default function SkillSection() {
           exit={{ opacity: 0, y: 20 }}
           transition={{ type: "spring", stiffness: 260, damping: 24 }}
         >
-            <DynamicSkills />
+          <DynamicSkills />
         </motion.div>
       )}
     </AnimatePresence>

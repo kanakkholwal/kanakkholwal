@@ -284,7 +284,7 @@ function MinimalHero() {
         </Magnet>
       </div>
 
-      <div className="relative flex border-x border-edge">
+      <div className="relative flex border-x border-edge px-3">
         <div className="shrink-0 border-r border-edge">
           <div className="mx-0.5 my-0.75">
             <motion.img
@@ -392,7 +392,7 @@ function StaticHero() {
   return (
     <section
       id="hero"
-      className="w-full mx-auto max-w-3xl mt-16 px-6 py-16 flex flex-col sm:flex-row items-start gap-8"
+      className="w-full mx-auto max-w-4xl mt-16 px-6 py-16 flex flex-col sm:flex-row items-start gap-8"
     >
       {/* Avatar */}
       <motion.div layoutId="hero-avatar" className="shrink-0">
@@ -500,10 +500,10 @@ const ORBIT_OUTER = [
 
 /** Activity items shown on the right panel */
 const ACTIVITY = [
-  { icon: "rocket" as IconType,   label: "Shipped", value: "nexo-mdx v2",      time: "2d ago" },
-  { icon: "package" as IconType,  label: "Published", value: "custom-domain-sdk", time: "1w ago" },
-  { icon: "code" as IconType,     label: "PR merged", value: "college-ecosystem", time: "3d ago" },
-  { icon: "stars:bs" as IconType, label: "Starred",   value: "20+ repos",        time: "ongoing" },
+  { icon: "rocket" as IconType, label: "Shipped", value: "nexo-mdx v2", time: "2d ago" },
+  { icon: "package" as IconType, label: "Published", value: "custom-domain-sdk", time: "1w ago" },
+  { icon: "code" as IconType, label: "PR merged", value: "college-ecosystem", time: "3d ago" },
+  { icon: "stars:bs" as IconType, label: "Starred", value: "20+ repos", time: "ongoing" },
 ] as const;
 
 function HeroOrbit() {
@@ -606,7 +606,7 @@ function HeroOrbit() {
           {[
             { to: 20, suffix: "+", label: "Projects" },
             { to: 10, suffix: "+", label: "OSS repos" },
-            { to: 2,  suffix: "+", label: "Yrs exp" },
+            { to: 2, suffix: "+", label: "Yrs exp" },
           ].map((s) => (
             <div key={s.label} className="flex flex-col items-center py-3 gap-0.5">
               <span className="text-base font-black tracking-tight tabular-nums">

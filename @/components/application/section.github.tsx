@@ -51,6 +51,7 @@ import GithubContributionGraph, {
   GithubContributionGraphCalender,
 } from "../card.contribution";
 import BlurFade from "../magicui/blur-fade";
+import { DynamicSection, StaticSection } from "./base.ui";
 import { Panel, PanelContent, PanelHeader, PanelTitle } from "./panel";
 
 // Configuration for the stats ribbon
@@ -134,7 +135,7 @@ export default function GithubSection({
           exit={{ opacity: 0, y: 20 }}
           transition={{ type: "spring", stiffness: 260, damping: 24 }}
         >
-            <DynamicGithubSection data={data} />
+          <DynamicGithubSection data={data} />
         </motion.div>
       )}
     </AnimatePresence>
@@ -252,9 +253,8 @@ export function StaticGithubSection({ data }: { data: Contributions }) {
   const [year, setYear] = useState(Object.keys(data.total).toReversed()[0]);
 
   return (
-    <section
+    <StaticSection
       id="github"
-      className="max-w-4xl mx-auto w-full px-4 py-16 md:py-24 space-y-10"
     >
       <BlurFade delay={0.04}>
         <div className="space-y-2">
@@ -333,7 +333,7 @@ export function StaticGithubSection({ data }: { data: Contributions }) {
           </ContributionGraph>
         </div>
       </BlurFade>
-    </section>
+    </StaticSection>
   );
 }
 
@@ -355,9 +355,8 @@ export function DynamicGithubSection({
   const [view, setView] = useState("graph");
 
   return (
-    <section
+    <DynamicSection
       id="github"
-      className="max-w-app mx-auto w-full py-20 md:py-32 px-4 md:px-12 space-y-8"
     >
       <BlurFade delay={0.1}>
         <div className="flex flex-col md:flex-row justify-between items-end gap-6">
@@ -400,136 +399,135 @@ export function DynamicGithubSection({
         </div>
       </BlurFade>
 
-      <BlurFade delay={0.2} className="w-full">
-        <div className="rounded-3xl border border-border/60 bg-card/40 backdrop-blur-xl overflow-hidden">
-          <StatsStrip stats={data.stats.stats} variant="dynamic" />
+      <BlurFade delay={0.2} className="mt-4 w-full rounded-3xl border border-border/60 bg-card/40 backdrop-blur-xl overflow-hidden">
+        <StatsStrip stats={data.stats.stats} variant="dynamic" />
 
-          <div className="p-6 md:p-10 relative w-full bg-card/50">
-            <div className="absolute inset-0 -z-10 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] dark:bg-[radial-gradient(#ffffff08_1px,transparent_1px)] opacity-50" />
+        <div className="p-6 md:p-10 relative w-full bg-card/50">
+          <div className="absolute inset-0 -z-10 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] dark:bg-[radial-gradient(#ffffff08_1px,transparent_1px)] opacity-50" />
 
-            <ContributionGraph
-              data={data.stats.contributions[year]}
-              className="w-full"
-            >
-              <Tabs value={view} onValueChange={setView} className="space-y-8 w-full">
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                  <ContributionGraphTotalCount>
-                    {({ totalCount }) => (
-                      <div className="flex items-baseline gap-3">
-                        <Badge
-                          variant="secondary"
-                          size="xl"
-                          className="font-mono text-2xl font-bold text-foreground tracking-tight"
-                        >
-                          <CountingNumber
-                            from={0}
-                            to={totalCount}
-                            duration={2}
-                            format={(value) => value.toFixed(0).toLocaleString()}
-                          />
-                        </Badge>
-                        <span className="text-muted-foreground font-medium">
-                          commits in {year}
-                        </span>
-                      </div>
-                    )}
-                  </ContributionGraphTotalCount>
+          <ContributionGraph
+            data={data.stats.contributions[year]}
+            className="w-full"
+          >
+            <Tabs value={view} onValueChange={setView} className="space-y-8 w-full">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <ContributionGraphTotalCount>
+                  {({ totalCount }) => (
+                    <div className="flex items-baseline gap-3">
+                      <Badge
+                        variant="secondary"
+                        size="xl"
+                        className="font-mono text-2xl font-bold text-foreground tracking-tight"
+                      >
+                        <CountingNumber
+                          from={0}
+                          to={totalCount}
+                          duration={2}
+                          format={(value) => value.toFixed(0).toLocaleString()}
+                        />
+                      </Badge>
+                      <span className="text-muted-foreground font-medium">
+                        commits in {year}
+                      </span>
+                    </div>
+                  )}
+                </ContributionGraphTotalCount>
 
-                  <TabsList className="h-10 bg-muted/50 p-1 rounded-full border border-border/50">
-                    <TabsTrigger
-                      value="graph"
-                      className="rounded-full px-4 text-xs font-medium data-[state=active]:bg-background data-[state=active]:shadow-sm"
-                    >
-                      <Grid className="mr-2 size-3.5" />
-                      Heatmap
-                    </TabsTrigger>
-                    <TabsTrigger
-                      value="chart"
-                      className="rounded-full px-4 text-xs font-medium data-[state=active]:bg-background data-[state=active]:shadow-sm"
-                    >
-                      <BarChart2 className="mr-2 size-3.5" />
-                      Activity
-                    </TabsTrigger>
-                  </TabsList>
-                </div>
-
-                <TabsContent
-                  value="graph"
-                  className="w-full mt-0 outline-none animate-in fade-in slide-in-from-bottom-2 duration-500"
-                >
-                  <div className="overflow-x-auto pb-4 scrollbar-hide w-full">
-                    <GithubContributionGraphCalender className="min-w-full max-h-96 no-scrollbar px-2" />
-                  </div>
-                  <div className="flex justify-end mt-4">
-                    <ContributionGraphLegend />
-                  </div>
-                </TabsContent>
-
-                <TabsContent
-                  value="chart"
-                  className="mt-0 outline-none animate-in fade-in slide-in-from-bottom-2 duration-500"
-                >
-                  <WeeklyChart data={data.stats.contributions[year]} />
-                </TabsContent>
-              </Tabs>
-            </ContributionGraph>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-border/10 bg-card">
-            <div className="p-6 md:p-8 space-y-8">
-              <div className="flex flex-wrap gap-2">
-                {data.activity.contributedOrganizations.map((org) => (
-                  <Link
-                    key={org.name}
-                    href={org.url}
-                    target="_blank"
-                    className="flex items-center gap-2 px-3 py-1.5 rounded-md border border-border bg-muted/50 hover:bg-muted/25 transition-all group"
+                <TabsList className="h-10 bg-muted/50 p-1 rounded-full border border-border/50">
+                  <TabsTrigger
+                    value="graph"
+                    className="rounded-full px-4 text-xs font-medium data-[state=active]:bg-background data-[state=active]:shadow-sm"
                   >
-                    <Image
-                      src={org.avatarUrl}
-                      alt={org.name}
-                      width={20}
-                      height={20}
-                      className="rounded-md grayscale group-hover:grayscale-0 transition-all"
-                    />
-                    <span className="text-sm font-semibold text-foreground">
-                      {org.name}
-                    </span>
-                  </Link>
-                ))}
+                    <Grid className="mr-2 size-3.5" />
+                    Heatmap
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="chart"
+                    className="rounded-full px-4 text-xs font-medium data-[state=active]:bg-background data-[state=active]:shadow-sm"
+                  >
+                    <BarChart2 className="mr-2 size-3.5" />
+                    Activity
+                  </TabsTrigger>
+                </TabsList>
               </div>
 
-              <div className="space-y-4">
-                <h3 className="text-sm font-medium text-foreground">
-                  Activity overview
-                </h3>
-                <div className="space-y-3">
-                  <div className="flex gap-2 text-foreground">
-                    <Book className="size-4 mt-0.5 text-muted-foreground" />
-                    <div className="space-y-2">
-                      <p className="text-sm text-muted-foreground">
-                        Contributed to
-                      </p>
-                      <div className="flex flex-col gap-1.5">
-                        {data.activity.activityOverview.repositoriesContributedTo
-                          .slice(0, 4)
-                          .map((repo, i) => (
-                            <Link
-                              key={i}
-                              href={repo.url}
-                              className={cn(
-                                "inline-flex items-center gap-1 text-sm font-semibold hover:underline decoration-primary underline-offset-2",
-                                data.activity.contributedOrganizations.length > 4
-                                  ? "text-muted-foreground font-normal no-underline hover:text-primary"
-                                  : "text-primary",
-                              )}
-                            >
-                              <GoRepoPush className="size-4 mt-0.5 text-muted-foreground inline-block" />
-                              {repo.owner}/{repo.name}
-                            </Link>
-                          ))}
-                        {data.activity.activityOverview.repositoriesContributedTo
-                          .length > 4 && (
+              <TabsContent
+                value="graph"
+                className="w-full mt-0 outline-none animate-in fade-in slide-in-from-bottom-2 duration-500"
+              >
+                <div className="overflow-x-auto pb-4 scrollbar-hide w-full">
+                  <GithubContributionGraphCalender className="min-w-full max-h-96 no-scrollbar px-2" />
+                </div>
+                <div className="flex justify-end mt-4">
+                  <ContributionGraphLegend />
+                </div>
+              </TabsContent>
+
+              <TabsContent
+                value="chart"
+                className="mt-0 outline-none animate-in fade-in slide-in-from-bottom-2 duration-500"
+              >
+                <WeeklyChart data={data.stats.contributions[year]} />
+              </TabsContent>
+            </Tabs>
+          </ContributionGraph>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-border/10 bg-card">
+          <div className="p-6 md:p-8 space-y-8">
+            <div className="flex flex-wrap gap-2">
+              {data.activity.contributedOrganizations.map((org) => (
+                <Link
+                  key={org.name}
+                  href={org.url}
+                  target="_blank"
+                  className="flex items-center gap-2 px-3 py-1.5 rounded-md border border-border bg-muted/50 hover:bg-muted/25 transition-all group"
+                >
+                  <Image
+                    src={org.avatarUrl}
+                    alt={org.name}
+                    width={20}
+                    height={20}
+                    className="rounded-md grayscale group-hover:grayscale-0 transition-all"
+                  />
+                  <span className="text-sm font-semibold text-foreground">
+                    {org.name}
+                  </span>
+                </Link>
+              ))}
+            </div>
+
+            <div className="space-y-4">
+              <h3 className="text-sm font-medium text-foreground">
+                Activity overview
+              </h3>
+              <div className="space-y-3">
+                <div className="flex gap-2 text-foreground">
+                  <Book className="size-4 mt-0.5 text-muted-foreground" />
+                  <div className="space-y-2">
+                    <p className="text-sm text-muted-foreground">
+                      Contributed to
+                    </p>
+                    <div className="flex flex-col gap-1.5">
+                      {data.activity.activityOverview.repositoriesContributedTo
+                        .slice(0, 4)
+                        .map((repo, i) => (
+                          <Link
+                            key={i}
+                            href={repo.url}
+                            className={cn(
+                              "inline-flex items-center gap-1 text-sm font-semibold hover:underline decoration-primary underline-offset-2",
+                              data.activity.contributedOrganizations.length > 4
+                                ? "text-muted-foreground font-normal no-underline hover:text-primary"
+                                : "text-primary",
+                            )}
+                          >
+                            <GoRepoPush className="size-4 mt-0.5 text-muted-foreground inline-block" />
+                            {repo.owner}/{repo.name}
+                          </Link>
+                        ))}
+                      {data.activity.activityOverview.repositoriesContributedTo
+                        .length > 4 && (
                           <a
                             href={"https://github.com/" + appConfig.usernames.github}
                             className="text-sm font-normal text-muted-foreground hover:text-primary"
@@ -540,22 +538,21 @@ export function DynamicGithubSection({
                             other repositories
                           </a>
                         )}
-                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
+          </div>
 
-            <div className="p-6 md:p-8 flex items-center justify-center">
-              <div className="w-full max-w-[300px] aspect-square">
-                <ActivityDistributionChart data={data.activity.codeReviewDistribution} />
-              </div>
+          <div className="p-6 md:p-8 flex items-center justify-center">
+            <div className="w-full max-w-[300px] aspect-square">
+              <ActivityDistributionChart data={data.activity.codeReviewDistribution} />
             </div>
           </div>
         </div>
       </BlurFade>
-    </section>
+    </DynamicSection>
   );
 }
 

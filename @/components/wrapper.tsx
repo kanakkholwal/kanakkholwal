@@ -1,6 +1,5 @@
 "use client";
 
-import { StarsBackground } from "@/components/animated/bg.stars";
 import { Header } from "@/components/header";
 import { Logo } from "@/components/logo";
 import { StyleModels, StylingModel } from "@/constants/ui";
@@ -15,10 +14,19 @@ import {
   useTransform,
   Variants,
 } from "framer-motion";
-import { ReactLenis } from "lenis/react"; //
+import { ReactLenis } from "lenis/react";
 import { useTheme } from "next-themes";
-import { useEffect, useRef, useState } from "react";
-import { FooterSection } from "./footer";
+import dynamic from "next/dynamic";
+import { Suspense, useEffect, useRef, useState } from "react";
+
+// Lazy-load heavy components
+const StarsBackground = dynamic(
+  () => import("@/components/animated/bg.stars").then((m) => ({ default: m.StarsBackground })),
+  { ssr: false },
+);
+const FooterSection = dynamic(
+  () => import("./footer").then((m) => ({ default: m.FooterSection })),
+);
 
 // Staggered animation for content elements
 const CONTAINER_VARIANTS: Variants = {
@@ -153,7 +161,9 @@ export default function PageWrapper({
               cn((selectedStyle === "minimal" && isHome) ? "mx-auto md:max-w-3xl *:[[id]]:scroll-mt-22 space-y-4" : "overflow-x-hidden")
             }
           >
-            <FooterSection />
+            <Suspense fallback={<div className="min-h-48" />}>
+              <FooterSection />
+            </Suspense>
           </motion.div>
         </div>
       </LayoutGroup>

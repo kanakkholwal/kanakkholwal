@@ -113,7 +113,7 @@ function MinimalAbout() {
 
 function StaticAbout() {
   return (
-    <section id="about" className="max-w-3xl mx-auto w-full px-4 py-16 md:py-24">
+    <section id="about" className="max-w-4xl mx-auto w-full px-4 py-16 md:py-24">
       <div className="border-t border-border pt-12 space-y-10">
         <BlurFade delay={BLUR_FADE_DELAY}>
           <div className="space-y-2">
@@ -194,14 +194,9 @@ function DynamicAbout() {
       id="about"
       className="relative w-full py-24 md:py-32 px-4 md:px-12 overflow-hidden mx-auto max-w-app"
     >
-      {/* Background */}
-      <div className="pointer-events-none absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-[radial-gradient(circle,_hsl(var(--foreground)/0.04)_1px,_transparent_1px)] bg-[size:28px_28px]" />
-        <div className="absolute -top-32 -right-32 w-[500px] h-[500px] rounded-full bg-primary/5 blur-[120px]" />
-        <div className="absolute -bottom-32 -left-32 w-[400px] h-[400px] rounded-full bg-primary/3 blur-[100px]" />
-      </div>
 
-      <div className="relative z-10 max-w-5xl mx-auto space-y-14">
+
+      <div className="relative z-10 max-w-app mx-auto space-y-14">
 
         {/* ── Header ── */}
         <BlurFade delay={BLUR_FADE_DELAY}>

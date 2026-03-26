@@ -221,7 +221,7 @@ function StaticNavbar() {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -16 }}
       transition={{ type: "spring", stiffness: 300, damping: 28 }}
-      className="pointer-events-auto relative flex flex-col items-center w-full max-w-[calc(var(--max-app-width)*0.85)]"
+      className="pointer-events-auto relative flex flex-col items-center w-full max-w-4xl"
     >
       <div className="flex items-center justify-between w-full gap-3">
         {/* Left capsule — logo + nav */}

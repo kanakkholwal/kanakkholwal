@@ -74,16 +74,14 @@ export function ExpandableProjectCards({
     <div className="relative" id="project-list">
       {/* Responsive Drawer — works on mobile & desktop */}
       <Drawer open={!!active} onOpenChange={(open) => !open && setActive(null)}>
-        <DrawerContent className="max-h-[90vh] max-w-4xl mx-auto flex flex-col">
+        <DrawerContent className="max-h-[88vh] max-w-2xl mx-auto flex flex-col">
           {active && (
             <>
               {/* Drawer Header — close button + title */}
               <DrawerHeader className="relative shrink-0 border-b border-border/40">
-                <div className="flex items-start justify-between gap-4">
+                <div className="flex items-start justify-between gap-3">
                   <div className="flex-1 space-y-2">
-                    <div className="flex items-center gap-3">
-                      <StatusBadge status={active.status} />
-                    </div>
+                    <StatusBadge status={active.status} />
                     <DrawerTitle className="text-2xl md:text-3xl">
                       {active.title}
                     </DrawerTitle>
@@ -95,37 +93,13 @@ export function ExpandableProjectCards({
                   <DrawerClose className="shrink-0 opacity-70 hover:opacity-100 transition-opacity" />
                 </div>
               </DrawerHeader>
-              <div className="relative aspect-[4/3] px-3 w-full overflow-hidden rounded-2xl hidden lg:block">
-                {active.video ? (
-                  <video
-                    src={active.video}
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    className="h-full w-full object-cover opacity-80"
-                  />
-                ) : active.image ? (
-                  <Image
-                    src={active.image}
-                    alt={active.title}
-                    fill
-                    className="w-full h-full object-contain"
-                  />
-                ) : (
-                  <ProjectFallback title={active.title} />
-                )}
-                <div className="absolute inset-0 bg-gradient-to-t from-primary/10 via-primary/5 to-transparent" />
-              </div>
-
-
-              {/* Body — scrollable content */}
-              <ScrollArea className="flex-1 h-96 overflow-y-scroll no-scrollbar">
-                <div className="p-4 md:p-6 space-y-6">
-                  <div className="prose prose-sm dark:prose-invert max-w-none text-muted-foreground leading-relaxed">
+              <ScrollArea className="flex-1 overflow-y-auto">
+                <div className="p-5 space-y-6">
+                  {/* description */}
+                  <p className="text-sm text-muted-foreground leading-relaxed">
                     <Markdown>{active.description}</Markdown>
-                  </div>
-
+                  </p>
+                  {/* metrics */}
                   {active.metrics && active.metrics.length > 0 && (
                     <div>
                       <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground mb-3">
@@ -148,6 +122,7 @@ export function ExpandableProjectCards({
                       </div>
                     </div>
                   )}
+
 
                   {active.technologies && active.technologies.length > 0 && (
                     <div>
@@ -187,6 +162,9 @@ export function ExpandableProjectCards({
                 </div>
               </ScrollArea>
 
+
+
+
               {/* Footer actions */}
               <div className="p-4 border-t border-border bg-card/80 backdrop-blur-sm flex flex-wrap items-center gap-2 shrink-0">
                 {active.href && (
@@ -202,7 +180,7 @@ export function ExpandableProjectCards({
                 )}
                 <ButtonTransitionLink
                   href={`/projects/${active.id}`}
-                  variant="secondary"
+                  variant="default_soft"
                   className="h-10 px-4 text-sm font-medium rounded-lg"
                 >
                   <Icon name="arrow-right" className="size-4!" />
@@ -226,8 +204,9 @@ export function ExpandableProjectCards({
         </DrawerContent>
       </Drawer>
 
+
       {/* Card Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 w-full max-w-7xl mx-auto">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 w-full max-w-app mx-auto">
         {cards?.map((card) => (
           <ExpandableCard
             key={card.id}
@@ -343,7 +322,7 @@ export function SimpleProjectCards({
   return (
     <div
       className={cn(
-        "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-7xl mx-auto",
+        "grid grid-cols-1 @xs:grid-cols-2 @3xl:grid-cols-3 gap-6 w-full mx-auto",
         className,
       )}
       id="project-list"

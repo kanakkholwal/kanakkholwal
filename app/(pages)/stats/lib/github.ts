@@ -1,3 +1,4 @@
+"use server";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import { cache } from "react";

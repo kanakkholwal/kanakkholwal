@@ -86,12 +86,12 @@ export default function StatsPageClient({
 function MinimalStats(props: StatsPageClientProps) {
   const sections = [
     { label: "// repository", node: props.repoSection },
-    { label: "// registry",   node: props.registrySection },
-    { label: "// health",     node: props.healthSection },
+    { label: "// registry", node: props.registrySection },
+    { label: "// health", node: props.healthSection },
   ];
 
   return (
-    <div className="mx-auto max-w-4xl px-6 py-16 md:py-24 space-y-16">
+    <div className="mx-auto max-w-3xl px-6 py-16 md:py-24 space-y-16">
       <BlurFade delay={BLUR_FADE_DELAY}>{props.header}</BlurFade>
 
       {sections.map((s, i) => (
@@ -111,14 +111,14 @@ function MinimalStats(props: StatsPageClientProps) {
 
 function StaticStats(props: StatsPageClientProps) {
   return (
-    <div className="mx-auto max-w-app px-4 py-12 md:py-20 md:pt-40 @container">
+    <div className="mx-auto max-w-4xl px-4 py-12 md:py-20 md:pt-40 @container">
       <BlurFade delay={BLUR_FADE_DELAY}>
         <div className="mb-12 border-b border-border pb-8">{props.header}</div>
       </BlurFade>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+      <div className="grid grid-cols-1 @lg:grid-cols-12 gap-10">
         {/* Main column */}
-        <div className="lg:col-span-8 flex flex-col gap-10">
+        <div className="@lg:col-span-8 flex flex-col gap-10">
           <BlurFade delay={BLUR_FADE_DELAY * 2}>
             <section>
               <SectionLabel>Repository Intelligence</SectionLabel>
@@ -135,7 +135,7 @@ function StaticStats(props: StatsPageClientProps) {
         </div>
 
         {/* Sidebar */}
-        <aside className="lg:col-span-4">
+        <aside className="@lg:col-span-4">
           <BlurFade delay={BLUR_FADE_DELAY * 4}>
             <div className="sticky top-20">
               <SectionLabel>Project Health</SectionLabel>
@@ -151,7 +151,7 @@ function StaticStats(props: StatsPageClientProps) {
 
 function DynamicStats(props: StatsPageClientProps) {
   return (
-    <main className="min-h-screen w-full overflow-x-hidden">
+    <main className="min-h-screen w-full overflow-x-hidden max-w-app mx-auto">
       {/* Dot-grid texture */}
       <div
         className="pointer-events-none fixed inset-0 -z-10 opacity-[0.04]"

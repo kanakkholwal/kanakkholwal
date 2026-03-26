@@ -1,11 +1,17 @@
 import AboutSection from "@/components/application/section.about";
-import GithubSectionSSR from "@/components/application/section.github.ssr";
 import HeroSection from "@/components/application/section.hero";
-import ProjectsSection from "@/components/application/section.projects";
-import WorkSection from "@/components/application/section.work";
-import SkillSection from "@/components/application/sections.skills";
-import { ContactSection } from "@/components/contact";
 import Wrapper from "@/components/wrapper";
+import dynamic from "next/dynamic";
+
+// Code-split below-fold sections (ssr: true for SEO by default)
+const WorkSection = dynamic(() => import("@/components/application/section.work"));
+const SkillSection = dynamic(() => import("@/components/application/sections.skills"));
+const ProjectsSection = dynamic(() => import("@/components/application/section.projects"));
+const GithubSectionSSR = dynamic(() => import("@/components/application/section.github.ssr"));
+const ContactSection = dynamic(
+  () => import("@/components/contact").then((m) => ({ default: m.ContactSection })),
+  { ssr: true },
+);
 
 
 export default function HomePage() {

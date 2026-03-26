@@ -7,7 +7,7 @@ import {
   useInView,
   UseInViewOptions,
   useMotionValue,
-} from "motion/react";
+} from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { formatNumber } from "~/utils/number";
 

@@ -7,7 +7,7 @@ import {
   type HTMLMotionProps,
   type SpringOptions,
   type Transition,
-} from "motion/react";
+} from "framer-motion";
 import * as React from "react";
 
 import { cn } from "@/lib/utils";
@@ -113,9 +113,9 @@ function StarsBackground({
     <div
       data-slot="stars-background"
       className={cn(
-        "relative size-full overflow-hidden",
+        "relative size-full overflow-hidden min-w-screen min-h-screen",
         defaultBg &&
-          "dark:bg-[radial-gradient(ellipse_at_bottom,_#1c1c1c_0%,_#171717_100%)] bg-[radial-gradient(ellipse_at_bottom,_#f5f5f5_0%,_#f1f1f1_100%)]",
+        "dark:bg-[radial-gradient(ellipse_at_bottom,_#1c1c1c_0%,_#171717_100%)] bg-[radial-gradient(ellipse_at_bottom,_#f5f5f5_0%,_#f1f1f1_100%)]",
         className,
       )}
       onMouseMove={handleMouseMove}
@@ -161,5 +161,6 @@ export {
   StarLayer,
   StarsBackground,
   type StarLayerProps,
-  type StarsBackgroundProps,
+  type StarsBackgroundProps
 };
+

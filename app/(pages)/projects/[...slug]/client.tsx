@@ -27,7 +27,7 @@ import { OtherProjects } from "./other-projects";
 
 const BLUR_FADE_DELAY = 0.04;
 
-type ProjectData = Omit<ProjectType, "body"|  "getText" | "getMDAST" | "info" | "toc" | "_exports" | "_openapi">;
+type ProjectData = Omit<ProjectType, "body" | "getText" | "getMDAST" | "info" | "toc" | "_exports" | "_openapi">;
 
 interface ProjectPageProps {
   project: ProjectData;
@@ -184,7 +184,7 @@ function MinimalProjectPage({ project, children }: ProjectPageProps) {
 function StaticProjectPage({ project, children }: ProjectPageProps) {
   return (
     <main className="min-h-screen w-full overflow-x-hidden">
- 
+
 
       <section className="pt-40 pb-12 px-6 max-w-4xl mx-auto">
         <BlurFade delay={BLUR_FADE_DELAY}>
@@ -216,7 +216,7 @@ function StaticProjectPage({ project, children }: ProjectPageProps) {
         </BlurFade>
       </section>
 
-      <BlurFade delay={BLUR_FADE_DELAY * 5} className="max-w-5xl mx-auto px-4 md:px-8 mb-20">
+      <BlurFade delay={BLUR_FADE_DELAY * 5} className="max-w-3xl mx-auto px-4 md:px-8 mb-20">
         <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl border border-border shadow-xl bg-card">
           {project.video ? (
             <video src={project.video} autoPlay loop muted playsInline className="w-full h-full object-cover" />
@@ -228,7 +228,7 @@ function StaticProjectPage({ project, children }: ProjectPageProps) {
         </div>
       </BlurFade>
 
-      <div className="max-w-7xl mx-auto px-6 md:px-12 pb-32">
+      <div className="max-w-6xl mx-auto px-6 md:px-12 pb-32">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
           <article className="lg:col-span-8">
             {project.metrics && project.metrics.length > 0 && (
@@ -313,10 +313,10 @@ function StaticProjectPage({ project, children }: ProjectPageProps) {
 function DynamicProjectPage({ project, children }: ProjectPageProps) {
   return (
     <main className="min-h-screen w-full overflow-x-hidden">
-      <nav className="fixed top-0 left-0 right-0 z-50 h-16 flex items-center px-6 md:px-12 bg-background/60 backdrop-blur-xl border-b border-white/5">
+      <nav className="fixed top-0 left-0 right-0 z-50 h-16 flex items-center px-6 md:px-12 bg-card/20 backdrop-blur-xl border-b border-border/5">
         <div className="max-w-7xl mx-auto w-full flex items-center justify-between">
-          <ButtonLink href="/projects" variant="ghost" size="sm" className="-ml-3 text-muted-foreground hover:text-foreground">
-            <ArrowLeft className="w-4 h-4 mr-2" /> All Projects
+          <ButtonLink href="/projects" variant="ghost" size="sm" className="-ml-3">
+            <ArrowLeft /> All Projects
           </ButtonLink>
           <span className="text-xs font-mono text-muted-foreground/40 hidden md:block">
             CASE_STUDY :: {project.id.toUpperCase()}

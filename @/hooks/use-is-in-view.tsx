@@ -1,5 +1,5 @@
+import { useInView, type UseInViewOptions } from "framer-motion";
 import * as React from "react";
-import { useInView, type UseInViewOptions } from "motion/react";
 
 interface UseIsInViewOptions {
   inView?: boolean;
@@ -23,3 +23,4 @@ function useIsInView<T extends HTMLElement = HTMLElement>(
 }
 
 export { useIsInView, type UseIsInViewOptions };
+

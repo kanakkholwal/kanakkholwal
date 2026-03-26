@@ -101,7 +101,7 @@ function MinimalFooter() {
 
 function StaticFooter() {
   return (
-    <footer className="w-full mx-auto max-w-app px-6 py-12 md:py-16 lg:px-8">
+    <footer className="w-full mx-auto max-w-4xl px-6 py-12 md:py-16 lg:px-8">
       <BlurFade delay={BLUR_FADE_DELAY}>
         <div className="xl:grid xl:grid-cols-3 xl:gap-8">
           <div className="space-y-8 xl:col-span-1">
@@ -118,35 +118,35 @@ function StaticFooter() {
 
           <BlurFade
             delay={BLUR_FADE_DELAY * 3}
-            className="mt-16 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0"
+            className="mt-16 grid grid-cols-3 gap-8 xl:col-span-2 xl:mt-0 justify-items-end"
           >
-              {Object.entries(appConfig.footerLinks).map(([category, links]) => (
-                <div key={category}>
-                  <h3 className="text-sm font-semibold leading-6 text-foreground capitalize tracking-wider">
-                    {category}
-                  </h3>
-                  <ul role="list" className="mt-6 space-y-4">
-                    {links.map((link) => (
-                      <li key={link.href}>
-                        <TransitionLink
-                          className="group relative inline-flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors"
-                          href={link.href}
-                          prefetch={false}
-                        >
-                          <span className="relative">
-                            {link.label}
-                            <span className="absolute -bottom-0.5 left-0 h-[1px] w-full origin-right scale-x-0 bg-current transition-transform duration-300 ease-out group-hover:origin-left group-hover:scale-x-100" />
-                          </span>
-                          <Icon
-                            name="arrow-up-right"
-                            className="ml-1 size-3 -translate-x-2 opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100"
-                          />
-                        </TransitionLink>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
+            {Object.entries(appConfig.footerLinks).map(([category, links]) => (
+              <div key={category}>
+                <h3 className="text-sm font-semibold leading-6 text-foreground capitalize tracking-wider">
+                  {category}
+                </h3>
+                <ul role="list" className="mt-6 space-y-4">
+                  {links.map((link) => (
+                    <li key={link.href}>
+                      <TransitionLink
+                        className="group relative inline-flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors"
+                        href={link.href}
+                        prefetch={false}
+                      >
+                        <span className="relative">
+                          {link.label}
+                          <span className="absolute -bottom-0.5 left-0 h-[1px] w-full origin-right scale-x-0 bg-current transition-transform duration-300 ease-out group-hover:origin-left group-hover:scale-x-100" />
+                        </span>
+                        <Icon
+                          name="arrow-up-right"
+                          className="ml-1 size-3 -translate-x-2 opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100"
+                        />
+                      </TransitionLink>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </BlurFade>
         </div>
       </BlurFade>
@@ -193,11 +193,10 @@ function DynamicFooter() {
   return (
     <footer
       ref={ref}
-      className="relative w-full overflow-hidden border-t border-border/40"
+      className="relative w-full overflow-hidden border-t border-border/40 mx-auto max-w-app"
     >
 
-      <div className="mx-auto max-w-app px-6 lg:px-8">
-
+      <div className="px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}

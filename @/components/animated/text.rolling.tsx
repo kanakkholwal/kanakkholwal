@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, type Transition } from "motion/react";
+import { motion, type Transition } from "framer-motion";
 import * as React from "react";
 
 import { useIsInView, type UseIsInViewOptions } from "@/hooks/use-is-in-view";
@@ -115,3 +115,4 @@ function RollingText({
 }
 
 export { RollingText, type RollingTextProps };
+

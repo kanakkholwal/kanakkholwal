@@ -73,7 +73,7 @@ export function ContactSection() {
           exit={{ opacity: 0, y: 20 }}
           transition={{ type: "spring", stiffness: 260, damping: 24 }}
         >
-            <DynamicContact email={email} copied={copied} onCopy={handleCopy} />
+          <DynamicContact email={email} copied={copied} onCopy={handleCopy} />
         </motion.div>
       )}
     </AnimatePresence>
@@ -291,156 +291,151 @@ function DynamicContact({
   return (
     <section
       id="contact"
-      className="relative w-full py-32 px-4 overflow-hidden max-w-7xl mx-auto"
+      className="relative w-full py-32 px-4 overflow-hidden max-w-app mx-auto"
     >
-  
 
-        <motion.div
-          initial={{ opacity: 0, y: 40, scale: 0.95 }}
-          animate={{ opacity: 1, y: 0, scale: 1 } }
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="group relative"
-        >
-       
 
-          <div className="p-8 md:p-14 flex flex-col md:flex-row items-start gap-10 md:gap-14">
-            <div className="flex-1 space-y-7 text-center md:text-left">
-              <motion.div
-                initial={{ opacity: 0, y: -8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20"
+      <motion.div
+        initial={{ opacity: 0, y: 40, scale: 0.95 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        className="group relative p-8 md:p-14 flex flex-col md:flex-row items-start gap-10 md:gap-14">
+        <div className="flex-1 space-y-7 text-center md:text-left">
+          <motion.div
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20"
+          >
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+            </span>
+            <span className="text-xs font-medium text-emerald-500 tracking-wide">
+              Available for new projects
+            </span>
+          </motion.div>
+
+          {/* Heading */}
+          <div className="space-y-3">
+            <motion.span layoutId="contact-label" className="sr-only" aria-hidden />
+            <motion.h2
+              layoutId="contact-heading"
+              className="text-4xl md:text-5xl font-bold tracking-tight leading-tight"
+            >
+              Let's build the{" "}
+              <br className="hidden md:block" />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-foreground via-foreground/80 to-foreground/30">
+                next big thing.
+              </span>
+            </motion.h2>
+            <p className="text-base text-muted-foreground max-w-xs mx-auto md:mx-0 leading-relaxed">
+              Open to freelance, collabs, and full-time roles. Let's turn
+              ideas into products.
+            </p>
+          </div>
+
+          {/* Quick stats */}
+          <div className="flex flex-wrap justify-center md:justify-start gap-3">
+            {QUICK_STATS.map(({ label, value, icon: Icon }) => (
+              <div
+                key={label}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-muted/60 border border-border text-xs text-muted-foreground"
               >
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
-                </span>
-                <span className="text-xs font-medium text-emerald-500 tracking-wide">
-                  Available for new projects
-                </span>
-              </motion.div>
-
-              {/* Heading */}
-              <div className="space-y-3">
-                <motion.span layoutId="contact-label" className="sr-only" aria-hidden />
-                <motion.h2
-                  layoutId="contact-heading"
-                  className="text-4xl md:text-5xl font-bold tracking-tight leading-tight"
-                >
-                  Let's build the{" "}
-                  <br className="hidden md:block" />
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-foreground via-foreground/80 to-foreground/30">
-                    next big thing.
-                  </span>
-                </motion.h2>
-                <p className="text-base text-muted-foreground max-w-xs mx-auto md:mx-0 leading-relaxed">
-                  Open to freelance, collabs, and full-time roles. Let's turn
-                  ideas into products.
-                </p>
+                <Icon className="size-3 shrink-0" />
+                <span>{value}</span>
               </div>
+            ))}
+          </div>
 
-              {/* Quick stats */}
-              <div className="flex flex-wrap justify-center md:justify-start gap-3">
-                {QUICK_STATS.map(({ label, value, icon: Icon }) => (
-                  <div
-                    key={label}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-muted/60 border border-border text-xs text-muted-foreground"
-                  >
-                    <Icon className="size-3 shrink-0" />
-                    <span>{value}</span>
-                  </div>
-                ))}
-              </div>
+          {/* CTA */}
+          <Button
+            asChild
+            rounded="full"
+            variant="dark"
+            className="shadow-xl shadow-foreground/10"
+          >
+            <TransitionLink href="/contact">
+              <Sparkles />
+              Start a Project
+            </TransitionLink>
+          </Button>
+        </div>
 
-              {/* CTA */}
-              <Button
-                asChild
-                rounded="full"
-                variant="dark"
-                className="shadow-xl shadow-foreground/10"
-              >
-                <TransitionLink href="/contact">
-                  <Sparkles  />
-                  Start a Project
-                </TransitionLink>
-              </Button>
+        {/* ── Right: reach-me card ── */}
+        <div className="w-full md:w-[340px] shrink-0">
+          <div className="rounded-2xl border border-border bg-card overflow-hidden shadow-2xl">
+            {/* Card header */}
+            <div className="px-5 py-4 border-b border-border60">
+              <p className="text-[10px] font-mono uppercase tracking-widest text-foreground">
+                    // How to reach me
+              </p>
             </div>
 
-            {/* ── Right: reach-me card ── */}
-            <div className="w-full md:w-[340px] shrink-0">
-              <div className="rounded-2xl border border-border bg-card overflow-hidden shadow-2xl">
-                {/* Card header */}
-                <div className="px-5 py-4 border-b border-border60">
+            {/* Email copy row */}
+            <button
+              onClick={onCopy}
+              className="group/copy w-full flex items-center justify-between px-5 py-4 border-b border-border/60 hover:bg-card transition-colors"
+            >
+              <div className="flex items-center gap-3 overflow-hidden">
+                <span className="flex items-center justify-center size-8 rounded-lg bg-card/90 text-muted-foreground group-hover/copy:text-foreground transition-colors shrink-0">
+                  <Mail className="size-4" />
+                </span>
+                <div className="overflow-hidden text-left">
                   <p className="text-[10px] font-mono uppercase tracking-widest text-foreground">
-                    // How to reach me
+                    Email
+                  </p>
+                  <p className="text-sm font-mono text-muted-foreground truncate max-w-[190px]">
+                    {email}
                   </p>
                 </div>
-
-                {/* Email copy row */}
-                <button
-                  onClick={onCopy}
-                  className="group/copy w-full flex items-center justify-between px-5 py-4 border-b border-border/60 hover:bg-card transition-colors"
-                >
-                  <div className="flex items-center gap-3 overflow-hidden">
-                    <span className="flex items-center justify-center size-8 rounded-lg bg-card/90 text-muted-foreground group-hover/copy:text-foreground transition-colors shrink-0">
-                      <Mail className="size-4" />
-                    </span>
-                    <div className="overflow-hidden text-left">
-                      <p className="text-[10px] font-mono uppercase tracking-widest text-foreground">
-                        Email
-                      </p>
-                      <p className="text-sm font-mono text-muted-foreground truncate max-w-[190px]">
-                        {email}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="relative size-8 flex items-center justify-center shrink-0">
-                    <motion.div
-                      initial={false}
-                      animate={{ scale: copied ? 0 : 1, opacity: copied ? 0 : 1 }}
-                      className="absolute"
-                    >
-                      <Copy className="size-3.5 text-foreground group-hover/copy:text-white transition-colors" />
-                    </motion.div>
-                    <motion.div
-                      initial={false}
-                      animate={{ scale: copied ? 1 : 0, opacity: copied ? 1 : 0 }}
-                      className="absolute"
-                    >
-                      <Check className="size-3.5 text-emerald-400" />
-                    </motion.div>
-                  </div>
-                </button>
-
-                {/* Social link rows */}
-                {Object.entries(appConfig.social).map(([key, social]) => (
-                  <a
-                    key={key}
-                    href={social}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group/link flex items-center justify-between px-5 py-3.5 border-b border-border/60 last:border-0 hover:bg-card transition-colors"
-                  >
-                    <div className="flex items-center gap-3">
-                      <span className="flex items-center justify-center size-8 rounded-lg bg-card/90 text-muted-foreground group-hover/link:text-foreground transition-colors shrink-0">
-                        <Icon className="size-4" name={key as IconType} />
-                      </span>
-                      <div>
-                        <p className="text-sm font-medium text-foreground leading-none">
-                          {key === "cal.com" ? "Schedule a call" : key.charAt(0).toUpperCase() + key.slice(1)}
-                        </p>
-                        <p className="text-[11px] text-muted-foreground mt-0.5 font-mono">
-                          {"@" + social.split("https://")[1].split("/").pop()}
-                        </p>
-                      </div>
-                    </div>
-                    <ArrowUpRight className="size-3.5 text-muted-foreground group-hover/link:text-foreground group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-all" />
-                  </a>
-                ))}
               </div>
-            </div>
+              <div className="relative size-8 flex items-center justify-center shrink-0">
+                <motion.div
+                  initial={false}
+                  animate={{ scale: copied ? 0 : 1, opacity: copied ? 0 : 1 }}
+                  className="absolute"
+                >
+                  <Copy className="size-3.5 text-foreground group-hover/copy:text-white transition-colors" />
+                </motion.div>
+                <motion.div
+                  initial={false}
+                  animate={{ scale: copied ? 1 : 0, opacity: copied ? 1 : 0 }}
+                  className="absolute"
+                >
+                  <Check className="size-3.5 text-emerald-400" />
+                </motion.div>
+              </div>
+            </button>
+
+            {/* Social link rows */}
+            {Object.entries(appConfig.social).map(([key, social]) => (
+              <a
+                key={key}
+                href={social}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group/link flex items-center justify-between px-5 py-3.5 border-b border-border/60 last:border-0 hover:bg-card transition-colors"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="flex items-center justify-center size-8 rounded-lg bg-card/90 text-muted-foreground group-hover/link:text-foreground transition-colors shrink-0">
+                    <Icon className="size-4" name={key as IconType} />
+                  </span>
+                  <div>
+                    <p className="text-sm font-medium text-foreground leading-none">
+                      {key === "cal.com" ? "Schedule a call" : key.charAt(0).toUpperCase() + key.slice(1)}
+                    </p>
+                    <p className="text-[11px] text-muted-foreground mt-0.5 font-mono">
+                      {"@" + social.split("https://")[1].split("/").pop()}
+                    </p>
+                  </div>
+                </div>
+                <ArrowUpRight className="size-3.5 text-muted-foreground group-hover/link:text-foreground group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-all" />
+              </a>
+            ))}
           </div>
-        </motion.div>
+        </div>
+      </motion.div>
     </section>
   );
 }

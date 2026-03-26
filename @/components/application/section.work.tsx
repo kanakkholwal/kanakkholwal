@@ -17,6 +17,7 @@ import defaultMdxComponents from "fumadocs-ui/mdx";
 import { useMemo } from "react";
 import { Collapsible, CollapsibleContent, CollapsibleIcon, CollapsibleTrigger } from "../ui/collapsible";
 import { Separator } from "../ui/separator";
+import { DynamicSection, StaticSection } from "./base.ui";
 import { Panel, PanelHeader, PanelTitle } from "./panel";
 
 const BLUR_FADE_DELAY = 0.04;
@@ -44,9 +45,8 @@ function MinimalWork({ experiences }: { experiences: WorkExperienceType[] }) {
 
 function StaticWork({ experiences }: { experiences: WorkExperienceType[] }) {
   return (
-    <section
+    <StaticSection
       id="work"
-      className="max-w-3xl mx-auto w-full px-4 py-16 md:py-24"
     >
       <BlurFade delay={BLUR_FADE_DELAY}>
         <div className="mb-10 space-y-2">
@@ -75,15 +75,14 @@ function StaticWork({ experiences }: { experiences: WorkExperienceType[] }) {
           </BlurFade>
         ))}
       </div>
-    </section>
+    </StaticSection>
   );
 }
 
 function DynamicWork({ experiences }: { experiences: WorkExperienceType[] }) {
   return (
-    <section
+    <DynamicSection
       id="work"
-      className="max-w-app mx-auto w-full px-4 md:px-12 py-20 md:py-32"
     >
       {/* Header */}
       <BlurFade delay={BLUR_FADE_DELAY * 4}>
@@ -122,11 +121,11 @@ function DynamicWork({ experiences }: { experiences: WorkExperienceType[] }) {
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: i * 0.08 }}
           >
-            <WorkCard work={work}/>
+            <WorkCard work={work} />
           </motion.div>
         ))}
       </div>
-    </section>
+    </DynamicSection>
   );
 }
 
@@ -168,7 +167,7 @@ export default function WorkSection() {
           exit={{ opacity: 0, y: 20 }}
           transition={{ type: "spring", stiffness: 260, damping: 24 }}
         >
-            <DynamicWork experiences={workExperiences} />
+          <DynamicWork experiences={workExperiences} />
         </motion.div>
       )}
     </AnimatePresence>
@@ -178,7 +177,7 @@ export default function WorkSection() {
 export function ExperienceItem({ experience }: { experience: WorkExperienceType }) {
   const Mdx = experience.body;
   return (
-    <Collapsible  className="screen-line-after space-y-4 py-4 relative">
+    <Collapsible className="screen-line-after space-y-4 py-4 relative">
       <div
         className={cn(
           "group block w-full text-left  pl-4",
@@ -313,7 +312,7 @@ function WorkCard({ work }: { work: WorkExperienceType }) {
         {/* Avatar node — sits on top of the line */}
         <div className="relative z-10 mt-1 rounded-xl border border-border/60 bg-background shadow-sm group-hover:border-primary/30 group-hover:shadow-[0_0_14px_2px_hsl(var(--primary)/0.15)] transition-all duration-500">
           <Avatar className="size-10 rounded-xl bg-muted/40">
-            <AvatarImage src={work.logoUrl} alt={work.company} className="object-contain p-1" />
+            <AvatarImage src={work.logoUrl} alt={work.company} className="object-contain p-1 rounded-full" />
             <AvatarFallback className="rounded-xl text-[11px] font-bold text-muted-foreground">
               {work.company[0]}
             </AvatarFallback>
@@ -393,7 +392,7 @@ function WorkCardMeta({ work, align = "left" }: { work: WorkExperienceType; alig
     <div className={cn("space-y-3", align === "right" && "flex flex-col items-end")}>
       <div className={cn("flex items-center gap-3", align === "right" && "flex-row-reverse")}>
         <Avatar className="size-10 rounded-xl border border-border/60 bg-muted/40 shadow-sm">
-          <AvatarImage src={work.logoUrl} alt={work.company} className="object-contain p-1" />
+          <AvatarImage src={work.logoUrl} alt={work.company} className="object-contain p-1 rounded-full" />
           <AvatarFallback className="rounded-xl text-[11px] font-bold text-muted-foreground">
             {work.company[0]}
           </AvatarFallback>

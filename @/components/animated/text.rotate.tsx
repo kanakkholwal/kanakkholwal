@@ -1,12 +1,12 @@
-import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
 import {
-  motion,
   AnimatePresence,
+  motion,
   Transition,
-  type VariantLabels,
   type Target,
-  type TargetAndTransition
-} from 'motion/react';
+  type TargetAndTransition,
+  type VariantLabels
+} from 'framer-motion';
+import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
 
 function cn(...classes: (string | undefined | null | boolean)[]): string {
   return classes.filter(Boolean).join(' ');

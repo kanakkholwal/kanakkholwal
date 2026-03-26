@@ -73,7 +73,7 @@ const fontInstrumentSerif = Instrument_Serif({
   subsets: ["latin"],
   variable: "--font-instrument-serif",
   weight: "400",
-  
+  display: "swap",
 });
 
 // Logo font
@@ -81,6 +81,7 @@ const logoFont = Quicksand({
   weight: ["700"],
   subsets: ["latin"],
   variable: "--font-logo",
+  display: "swap",
 });
 
 export default function RootLayout({

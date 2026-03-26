@@ -4,12 +4,16 @@ import BlurFade from "@/components/magicui/blur-fade";
 import { Socials } from "@/components/socials";
 import { StyleModels, StylingModel } from "@/constants/ui";
 import useStorage from "@/hooks/use-storage";
-import Cal, { getCalApi } from "@calcom/embed-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight, Calendar, Mail, MessageSquare } from "lucide-react";
-import { useTheme } from "next-themes";
+import dynamic from "next/dynamic";
 import Link from "next/link";
-import { useEffect } from "react";
+
+// Lazy-load Cal.com embed (~200KB+)
+const BookACallForm = dynamic(() => import("./book-a-call"), {
+  ssr: false,
+  loading: () => <div className="w-full h-96 animate-pulse bg-muted/40 rounded-xl" />,
+});
 
 const BLUR_FADE_DELAY = 0.04;
 
@@ -235,24 +239,3 @@ function DynamicContact({ displayName, email }: ContactPageClientProps) {
   );
 }
 
-/* ─── Shared Cal embed ────────────────────────────────── */
-export function BookACallForm() {
-  const { resolvedTheme } = useTheme();
-  useEffect(() => {
-    (async function () {
-      const cal = await getCalApi({ namespace: "book-a-call" });
-      cal("ui", { hideEventTypeDetails: false, layout: "month_view" });
-    })();
-  }, []);
-  return (
-    <Cal
-      namespace="book-a-call"
-      calLink="kanakkholwal/book-a-call"
-      style={{ width: "100%", height: "100%", overflow: "scroll" }}
-      config={{
-        theme: resolvedTheme === "dark" ? "dark" : "light",
-        layout: "month_view",
-      }}
-    />
-  );
-}

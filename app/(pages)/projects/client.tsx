@@ -52,7 +52,7 @@ export default function ProjectsShowcase() {
           exit={{ opacity: 0, y: 20 }}
           transition={{ type: "spring", stiffness: 260, damping: 24 }}
         >
-            <DynamicProjects projects={projects} />
+          <DynamicProjects projects={projects} />
         </motion.div>
       )}
     </AnimatePresence>
@@ -139,7 +139,7 @@ function StaticProjects({
   projects: ReturnType<typeof getProjectList>;
 }) {
   return (
-    <div className="max-w-app mx-auto px-6 md:px-12 pb-24 pt-20">
+    <div className="max-w-4xl mx-auto px-6 md:px-12 pb-24 pt-20 @container">
       {/* Header */}
       <div className="flex flex-col items-start max-w-2xl mx-auto md:mx-0 space-y-5 pt-12 md:pt-20 pb-14">
         <BlurFade delay={BLUR_FADE_DELAY}>
@@ -218,7 +218,7 @@ function DynamicProjects({
   projects: ReturnType<typeof getProjectList>;
 }) {
   return (
-    <div className="relative min-h-screen w-full overflow-hidden">
+    <div className="relative min-h-screen w-full overflow-hidden max-w-app mx-auto">
       {/* Dot-grid background */}
       <div className="fixed inset-0 -z-50 h-full w-full bg-background opacity-40 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] dark:bg-[radial-gradient(#1f2937_1px,transparent_1px)] mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)" />
 

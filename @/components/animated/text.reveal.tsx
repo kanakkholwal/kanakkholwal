@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
-import { motion, useInView, Variants } from "motion/react";
 import { cn } from "@/lib/utils";
+import { motion, useInView, Variants } from "framer-motion";
+import React, { useEffect, useRef, useState } from "react";
 
 type RevealVariant =
   | "fade"
@@ -239,8 +239,8 @@ export function TextReveal({
   // Split text into words or characters
   const elements = wordLevel
     ? children
-        .split(" ")
-        .map((word, i, arr) => (i < arr.length - 1 ? `${word} ` : word))
+      .split(" ")
+      .map((word, i, arr) => (i < arr.length - 1 ? `${word} ` : word))
     : children.split("");
 
   // Update container variants with custom stagger delay
@@ -260,16 +260,16 @@ export function TextReveal({
     duration === 0.6
       ? originalVariant // Use original variant unchanged if default duration
       : {
-          hidden: originalVariant.hidden,
-          visible: {
-            ...originalVariant.visible,
-            transition: {
-              ...((originalVariant.visible as Record<string, unknown>)
-                .transition as Record<string, unknown>),
-              duration,
-            },
+        hidden: originalVariant.hidden,
+        visible: {
+          ...originalVariant.visible,
+          transition: {
+            ...((originalVariant.visible as Record<string, unknown>)
+              .transition as Record<string, unknown>),
+            duration,
           },
-        };
+        },
+      };
 
   useEffect(() => {
     if (shouldAnimate && !hasAnimated) {

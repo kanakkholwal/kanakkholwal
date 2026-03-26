@@ -190,7 +190,7 @@ function StaticProjects({ projects }: { projects: ReturnType<typeof getProjectLi
   return (
     <section
       id="projects"
-      className="w-full py-16 md:py-24 px-4 max-w-3xl mx-auto space-y-10"
+      className="w-full py-16 md:py-24 px-4 max-w-4xl mx-auto space-y-10"
     >
       <BlurFade delay={BLUR_FADE_DELAY}>
         <div className="space-y-2">
@@ -222,11 +222,10 @@ function StaticProjects({ projects }: { projects: ReturnType<typeof getProjectLi
               {/* Status dot */}
               <div className="shrink-0 pt-1.5">
                 <span
-                  className={`block size-2 rounded-full mt-1 ${
-                    project.status === "active"
-                      ? "bg-emerald-500"
-                      : "bg-border"
-                  }`}
+                  className={`block size-2 rounded-full mt-1 ${project.status === "active"
+                    ? "bg-emerald-500"
+                    : "bg-border"
+                    }`}
                 />
               </div>
 
@@ -277,29 +276,28 @@ function DynamicProjects({ projects }: { projects: ReturnType<typeof getProjectL
       className="w-full py-32 px-6 md:px-12 max-w-app mx-auto space-y-16"
     >
       <BlurFade delay={BLUR_FADE_DELAY * 11}>
-        <div className="mb-4">
+        <div className="flex flex-col items-center text-center mb-16 space-y-4 relative z-10">
           <motion.span
             layoutId="projects-label"
-            className="inline-block text-xs font-mono font-medium tracking-widest uppercase text-muted-foreground mb-3"
+            className="text-sm font-mono text-muted-foreground uppercase tracking-widest"
           >
-            // Portfolio
+            {`// Portfolio`}
           </motion.span>
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
-            <motion.h2
-              layoutId="projects-heading"
-              className="text-4xl md:text-6xl font-bold tracking-tighter leading-none"
-            >
-              <span className="font-instrument-serif italic font-normal text-muted-foreground/70 mr-3">
-                Real world
-              </span>
-              Projects
-            </motion.h2>
-            <p className="text-sm text-muted-foreground max-w-xs leading-relaxed md:text-right">
-              From full-stack applications to open-source libraries.
-            </p>
-          </div>
-          <div className="mt-6 h-px w-full bg-gradient-to-r from-border via-border/40 to-transparent" />
+          <motion.h2
+            layoutId="projects-heading"
+            className="text-4xl md:text-6xl font-bold tracking-tighter leading-none"
+          >
+            <span className="font-instrument-serif italic font-normal text-muted-foreground/70 mr-3">
+              Real world
+            </span>
+            Projects
+          </motion.h2>
+          <p className="max-w-xl text-muted-foreground text-lg">
+            From full-stack applications to open-source libraries.
+
+          </p>
         </div>
+
       </BlurFade>
 
       <ExpandableProjectCards cards={projects} />
@@ -347,7 +345,7 @@ export default function ProjectsSection() {
           exit={{ opacity: 0, y: 20 }}
           transition={{ type: "spring", stiffness: 260, damping: 24 }}
         >
-            <DynamicProjects projects={projectsList} />
+          <DynamicProjects projects={projectsList} />
         </motion.div>
       )}
     </AnimatePresence>

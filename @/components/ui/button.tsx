@@ -56,7 +56,7 @@ const buttonVariants = cva(
     variants: {
       variant: intents,
       size: {
-        default: "h-10 px-5 py-2 [&>svg]:size-4 has-[>svg]:px-5",
+        default: "h-10 px-5 py-2 [&>svg]:size-5 has-[>svg]:px-5",
         xs: "h-6 rounded-md px-2.5 py-1.5 text-xs [&>svg]:size-3",
         sm: "h-8 rounded-md px-3 py-2 text-xs [&>svg]:size-4 has-[>svg]:pl-4",
         lg: "px-5 py-3 h-11 [&>svg]:size-6",
@@ -160,8 +160,8 @@ interface IconRefProps {
 
 export interface ButtonProps
   extends
-    React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
+  React.ButtonHTMLAttributes<HTMLButtonElement>,
+  VariantProps<typeof buttonVariants> {
   isLoading?: boolean;
   asChild?: boolean;
 }

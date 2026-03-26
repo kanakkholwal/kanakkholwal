@@ -13,20 +13,20 @@ import type React from "react";
 export function Provider({ children }: { children: React.ReactNode }) {
   return (
     <ViewTransitions>
-      <RootProvider theme={{ enabled: false }}>
-        <Next13ProgressBar
-          height="4px"
-          color="var(--primary)"
-          options={{ showSpinner: true, trickle: true }}
-          showOnShallow={true}
-        />
+      <TooltipProvider>
+        <RootProvider theme={{ enabled: false }}>
+          <Next13ProgressBar
+            height="4px"
+            color="var(--primary)"
+            options={{ showSpinner: true, trickle: true }}
+            showOnShallow={true}
+          />
 
-        <NextThemesProvider
-          themes={["light", "dark", "system"]}
-          defaultTheme="dark"
-          attribute={["class", "data-theme"]}
-        >
-          <TooltipProvider>
+          <NextThemesProvider
+            themes={["light", "dark", "system"]}
+            defaultTheme="dark"
+            attribute={["class", "data-theme"]}
+          >
             <div
               className={cn(
                 "min-h-screen w-full h-full overflow-x-hidden no-scrollbar",
@@ -34,11 +34,10 @@ export function Provider({ children }: { children: React.ReactNode }) {
             >
               <NuqsAdapter>{children}</NuqsAdapter>
             </div>
-          </TooltipProvider>
-        </NextThemesProvider>
-
-        <Toaster position="bottom-right" richColors />
-      </RootProvider>
+          </NextThemesProvider>
+          <Toaster position="bottom-right" richColors />
+        </RootProvider>
+      </TooltipProvider>
     </ViewTransitions>
   );
 }
