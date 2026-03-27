@@ -322,7 +322,7 @@ export function SimpleProjectCards({
   return (
     <div
       className={cn(
-        "grid grid-cols-1 @xs:grid-cols-2 @3xl:grid-cols-3 gap-6 w-full mx-auto",
+        "grid grid-cols-1 @xs:grid-cols-2 @4xl:grid-cols-3 gap-6 w-full mx-auto",
         className,
       )}
       id="project-list"

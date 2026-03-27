@@ -161,7 +161,6 @@ function MinimalDocs({ posts, latestPostDate }: DocsPageClientProps) {
 function StaticDocs({ posts, latestPostDate }: DocsPageClientProps) {
     return (
         <main className="min-h-screen w-full relative mt-20">
-            <div className="fixed inset-0 z-0 pointer-events-none h-full w-full bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:24px_24px]" />
 
             <div className="relative z-10 max-w-4xl mx-auto px-4 md:px-8 py-12 md:py-20 @container">
                 {/* Header */}
@@ -210,7 +209,7 @@ function StaticDocs({ posts, latestPostDate }: DocsPageClientProps) {
                         <EmptyState />
                     </BlurFade>
                 ) : (
-                    <div className="grid grid-cols-1 @md:grid-cols-2 @lg:grid-cols-3 gap-8">
+                    <div className="grid grid-cols-1 @xl:grid-cols-2 @4xl:grid-cols-3 gap-8">
                         {posts.map((post, i) => (
                             <BlurFade key={post.url} delay={BLUR_FADE_DELAY * (i + 3)}>
                                 <Link
