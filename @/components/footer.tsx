@@ -101,10 +101,10 @@ function MinimalFooter() {
 
 function StaticFooter() {
   return (
-    <footer className="w-full mx-auto max-w-4xl px-6 py-12 md:py-16 lg:px-8">
+    <footer className="w-full mx-auto max-w-4xl px-6 py-12 md:py-16 lg:px-8 @container">
       <BlurFade delay={BLUR_FADE_DELAY}>
-        <div className="xl:grid xl:grid-cols-3 xl:gap-8">
-          <div className="space-y-8 xl:col-span-1">
+        <div className="flex justify-between flex-wrap items-start gap-8">
+          <div className="space-y-8 @4xl:col-span-1">
             <TransitionLink href="/" className="inline-block">
               <Logo className="h-9 w-auto" />
             </TransitionLink>
@@ -118,7 +118,7 @@ function StaticFooter() {
 
           <BlurFade
             delay={BLUR_FADE_DELAY * 3}
-            className="mt-16 grid grid-cols-3 gap-8 xl:col-span-2 xl:mt-0 justify-items-end"
+            className="grid grid-cols-3 gap-8 @5xl:col-span-2 justify-items-end"
           >
             {Object.entries(appConfig.footerLinks).map(([category, links]) => (
               <div key={category}>
