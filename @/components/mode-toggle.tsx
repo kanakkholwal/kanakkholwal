@@ -15,6 +15,7 @@ export function ModeToggle() {
       rounded="full"
       className="hover:[&>svg]:rotate-360 [&>svg]:duration-500"
       onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+      aria-label="Toggle theme"
     >
       <Icon name="sun" className="dark:hidden" />
       <Icon name="moon" className="hidden dark:block" />

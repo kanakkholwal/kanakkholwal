@@ -16,6 +16,7 @@ export function Socials(props: React.ComponentProps<"div">) {
             className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors duration-100 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground size-8 [&_svg]:size-5 text-muted-foreground"
             data-active="false"
             key={name}
+            title={`Follow on ${name.charAt(0).toUpperCase() + name.slice(1)}`}
           >
             <Icon name={name} />
           </a>

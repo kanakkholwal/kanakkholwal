@@ -4,7 +4,7 @@ import { Icon, IconType } from "@/components/icons";
 import { ButtonLink, TransitionLink } from "@/components/utils/link";
 import { StyleModels, StylingModel } from "@/constants/ui";
 import { AnimatePresence, Variants, motion, useMotionValue } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, MapPin } from "lucide-react";
 import { appConfig, resume_link } from "root/project.config";
 
 import useStorage from "@/hooks/use-storage";
@@ -299,11 +299,9 @@ function MinimalHero() {
 
         <div className="flex flex-1 flex-col">
           <div className="flex grow items-end pb-1 pl-4">
-            <div className="line-clamp-1 font-mono text-xs text-zinc-300 select-none max-sm:hidden dark:text-zinc-800">
-              {"text-3xl "}
-              <span className="inline dark:hidden">text-zinc-950</span>
-              <span className="hidden dark:inline">text-zinc-50</span>
-              {" font-medium"}
+            <div className="line-clamp-1 font-mono text-xs text-muted-foreground select-none max-sm:hidden inline-flex items-center gap-1">
+              <MapPin className="inline-block mr-1 size-3" size={12} />
+              {appConfig.location}
             </div>
           </div>
 
@@ -396,11 +394,13 @@ function StaticHero() {
     >
       {/* Avatar */}
       <motion.div layoutId="hero-avatar" className="shrink-0">
-        <img
-          className="size-24 sm:size-28 rounded-2xl ring-1 ring-border object-cover select-none"
+        <Image
+          className="size-24 sm:size-28 rounded-2xl ring-1 ring-border object-cover select-none hover:-rotate-4 transition-all duration-300"
           alt={`${appConfig.displayName}'s avatar`}
           src={appConfig.avatar}
           fetchPriority="high"
+          height={96}
+          width={96}
         />
       </motion.div>
 
