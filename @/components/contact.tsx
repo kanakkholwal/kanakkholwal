@@ -353,7 +353,7 @@ function DynamicContact({
             asChild
             rounded="full"
             variant="dark"
-            className="shadow-xl shadow-foreground/10"
+            className="shadow-xl shadow-[rgba(149, 157, 165, 0.2)_0px_8px_24px] dark:shadow-[rgba(255, 255, 255, 0.1)_0px_8px_24px]"
           >
             <TransitionLink href="/contact">
               <Sparkles />

@@ -116,9 +116,9 @@ function StaticStats(props: StatsPageClientProps) {
         <div className="mb-12 border-b border-border pb-8">{props.header}</div>
       </BlurFade>
 
-      <div className="grid grid-cols-1 @lg:grid-cols-12 gap-10">
+      <div className="grid grid-cols-1 @4xl:grid-cols-12 gap-10">
         {/* Main column */}
-        <div className="@lg:col-span-8 flex flex-col gap-10">
+        <div className="@4xl:col-span-8 flex flex-col gap-10">
           <BlurFade delay={BLUR_FADE_DELAY * 2}>
             <section>
               <SectionLabel>Repository Intelligence</SectionLabel>
@@ -135,7 +135,7 @@ function StaticStats(props: StatsPageClientProps) {
         </div>
 
         {/* Sidebar */}
-        <aside className="@lg:col-span-4">
+        <aside className="@4xl:col-span-4">
           <BlurFade delay={BLUR_FADE_DELAY * 4}>
             <div className="sticky top-20">
               <SectionLabel>Project Health</SectionLabel>

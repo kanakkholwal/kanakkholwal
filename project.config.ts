@@ -198,6 +198,12 @@ const appConfig = {
     npmPackages: ["custom-domain-sdk", "nexo-editor", "nexo-mdx"],
     repositories: [
       {
+        name: "orbit",
+        repo: "kanakkholwal/orbit",
+        repoBeatsUri:
+          "https://repobeats.axiom.co/api/embed/e66720ef5fadf321ae59f5a9ae917ff738d6653d.svg",
+      },
+      {
         name: "college-ecosystem",
         repo: "kanakkholwal/college-ecosystem",
         repoBeatsUri:
@@ -209,12 +215,7 @@ const appConfig = {
         repoBeatsUri:
           "https://repobeats.axiom.co/api/embed/e66720ef5fadf321ae59f5a9ae917ff738d6653d.svg",
       },
-      {
-        name: "orbit",
-        repo: "kanakkholwal/orbit",
-        repoBeatsUri:
-          "https://repobeats.axiom.co/api/embed/e66720ef5fadf321ae59f5a9ae917ff738d6653d.svg",
-      },
+
       {
         name: "nexonauts",
         repo: "kanakkholwal/nexonauts",
