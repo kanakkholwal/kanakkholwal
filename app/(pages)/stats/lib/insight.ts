@@ -79,11 +79,48 @@ export const getProjectInsight = cache(
       });
       if (!res.ok) {
         console.warn("No stats data received");
-        return Promise.reject(
-          new Error(
-            `Failed to fetch project insight data: ${res.status} ${res.statusText}`,
-          ),
-        );
+        console.error(`Failed to fetch project insight data: ${res.status} ${res.statusText}`);
+        return Promise.resolve({
+          data: {
+            visitors: 0,
+            users: {
+              currentPeriodCount: 0,
+              totalUsers: 0,
+              growth: 0,
+              growthPercent: 0,
+              trend: 0,
+              periodStart: new Date(),
+              periodEnd: new Date(),
+              previousPeriodCount: 0,
+              graphData: [],
+              summary: {
+                currentPeriod: { start: new Date(), end: new Date(), count: 0, label: "" },
+                previousPeriod: { start: new Date(), end: new Date(), count: 0, label: "" },
+              },
+            },
+            sessions: {
+              currentPeriodCount: 0,
+              totalSessions: 0,
+              activeSessions: 0,
+              growth: 0,
+              growthPercent: 0,
+              trend: 0,
+              periodStart: new Date(),
+              periodEnd: new Date(),
+              previousPeriodCount: 0,
+              graphData: [],
+              summary: {
+                currentPeriod: { start: new Date(), end: new Date(), count: 0, label: "" },
+                previousPeriod: { start: new Date(), end: new Date(), count: 0, label: "" },
+              },
+              uniqueUsers: 0,
+              avgSessionsPerUser: 0,
+            },
+          },
+          message: "Failed to fetch project insight data",
+          success: false,
+          error: res.statusText,
+        });
       }
       const stats = (await res.json()) as InsightResponse;
 
