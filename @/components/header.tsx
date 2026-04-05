@@ -168,7 +168,7 @@ function DynamicIslandNavbar() {
 
         <div className="flex items-center justify-between px-2 pl-4 h-[56px] gap-4">
           <motion.div layoutId="brand-logo">
-            <TransitionLink href="/">
+            <TransitionLink href="/" title="Home Page">
               <Logo size="sm" />
             </TransitionLink>
           </motion.div>
@@ -226,7 +226,7 @@ function StaticNavbar() {
       <div className="flex items-center justify-between w-full gap-3">
         {/* Left capsule — logo + nav */}
         <motion.div layoutId="brand-main" className="flex items-center gap-1 px-3 py-2 rounded-full border border-border/60 bg-background/70 backdrop-blur-xl shadow-sm shrink-0">
-          <TransitionLink href="/" className="flex items-center mr-2 shrink-0">
+          <TransitionLink href="/" title="Home Page" className="flex items-center mr-2 shrink-0">
             <motion.div layoutId="brand-logo">
               <Logo size="sm" />
             </motion.div>
@@ -239,6 +239,7 @@ function StaticNavbar() {
               <TransitionLink
                 key={item.href}
                 href={item.href}
+                title={item.label}
                 onMouseEnter={() => setHoveredItem(item.href)}
                 onMouseLeave={() => setHoveredItem(null)}
                 className="relative px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors duration-150 rounded-full"
@@ -429,7 +430,7 @@ function StyleSelectorPopover({
 
   return (
     <Popover>
-      <PopoverTrigger asChild>
+      <PopoverTrigger asChild aria-label="Select style">
         {triggerVariant === "pill" ? (
           <button className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full border border-border/60 bg-background/70 hover:bg-muted/50 transition-colors text-muted-foreground hover:text-foreground text-xs font-medium">
             {current ? (
@@ -463,6 +464,7 @@ function StyleSelectorPopover({
               key={style.id}
               onClick={() => setSelectedStyle(style.id)}
               disabled={style?.disabled}
+              aria-label={`Select ${style.label} style`}
               className={cn(
                 "flex items-center gap-3 w-full px-2 py-1.5 rounded-lg text-sm transition-colors",
                 selectedStyle === style.id

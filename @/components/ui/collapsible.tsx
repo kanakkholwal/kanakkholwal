@@ -30,6 +30,7 @@ function CollapsibleContent({
     <CollapsiblePrimitive.CollapsibleContent
       data-slot="collapsible-content"
       {...props}
+      className={cn("data-[state=open]:animate-collapsible-down data-[state=closed]:animate-collapsible-up", props.className)}
     />
   )
 }

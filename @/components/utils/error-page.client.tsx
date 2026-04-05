@@ -7,14 +7,14 @@ import { StyleModels, StylingModel } from "@/constants/ui";
 import useStorage from "@/hooks/use-storage";
 import { AnimatePresence, motion } from "framer-motion";
 import {
-    AlertCircle,
-    AlertTriangle,
-    ArrowLeft,
-    Copy,
-    Home,
-    RefreshCcw,
-    Terminal,
-    Zap,
+  AlertCircle,
+  AlertTriangle,
+  ArrowLeft,
+  Copy,
+  Home,
+  RefreshCcw,
+  Terminal,
+  Zap,
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -479,6 +479,7 @@ function DynamicError({ error, reset }: ErrorPageClientProps) {
             <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
               <Link
                 href="/"
+                title="Home Page"
                 className="flex w-full items-center gap-3 rounded-xl border border-border bg-card/50 px-4 py-3.5 text-sm font-medium hover:bg-card transition-colors"
               >
                 <Home className="size-4 shrink-0" />

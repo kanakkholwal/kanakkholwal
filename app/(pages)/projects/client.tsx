@@ -122,7 +122,7 @@ function MinimalProjects({
             <TrendingUp className="size-4 text-indigo-500" />
             GitHub Stats
           </ButtonTransitionLink>
-          <ButtonTransitionLink href="/" variant="dark" rounded="full">
+          <ButtonTransitionLink href="/" variant="dark" rounded="full" title="Home Page">
             Back to Home
             <ArrowRight className="size-4" />
           </ButtonTransitionLink>

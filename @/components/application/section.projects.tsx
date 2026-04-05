@@ -145,21 +145,21 @@ function MinimalProjects({ projects }: { projects: ReturnType<typeof getProjectL
                 </Link>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <ButtonTransitionLink size="icon" variant="ghost" href={`/projects/${project.id}`}>
-                      <Icon name="link" className="pointer-events-none size-4" />
+                    <ButtonTransitionLink size="icon_sm" variant="ghost" href={`/projects/${project.id}`}>
+                      <Icon name="link" className="pointer-events-none" />
                       <span className="sr-only">Open Project</span>
                     </ButtonTransitionLink>
                   </TooltipTrigger>
-                  <TooltipContent><p>Open Project Details</p></TooltipContent>
+                  <TooltipContent>Open Project Details</TooltipContent>
                 </Tooltip>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <ButtonLink size="icon" variant="ghost" href={project.href} target="_blank" rel="noopener">
-                      <Icon name="arrow-up-right" className="pointer-events-none size-4" />
+                    <ButtonLink size="icon_sm" variant="ghost" href={project.href} target="_blank" rel="noopener">
+                      <Icon name="arrow-up-right" className="pointer-events-none" />
                       <span className="sr-only">Open Project Link</span>
                     </ButtonLink>
                   </TooltipTrigger>
-                  <TooltipContent><p>Open Project Link</p></TooltipContent>
+                  <TooltipContent>Open Project Link</TooltipContent>
                 </Tooltip>
               </div>
             </div>

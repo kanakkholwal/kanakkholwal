@@ -15,6 +15,7 @@ import { cn } from "@/lib/utils";
 import { getWorkExperienceList, WorkExperienceType } from "@/lib/work.source";
 import defaultMdxComponents from "fumadocs-ui/mdx";
 import { useMemo } from "react";
+import { Button } from "../ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleIcon, CollapsibleTrigger } from "../ui/collapsible";
 import { Separator } from "../ui/separator";
 import { DynamicSection, StaticSection } from "./base.ui";
@@ -212,7 +213,7 @@ export function ExperienceItem({ experience }: { experience: WorkExperienceType 
           </div>
           <div>
 
-            <h4 className="flex-1 text-balance leading-snug font-semibold">
+            <h3 className="flex-1 text-balance leading-snug font-semibold" title={`${experience.position} at ${experience.company}`}>
               {experience.href ? (
                 <a
                   className="underline-offset-4 hover:underline"
@@ -226,7 +227,7 @@ export function ExperienceItem({ experience }: { experience: WorkExperienceType 
                 experience.company
               )} {` - `}
               {experience.position}
-            </h4>
+            </h3>
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               {experience.employmentType && (
                 <>
@@ -261,8 +262,13 @@ export function ExperienceItem({ experience }: { experience: WorkExperienceType 
                 </dd>
               </dl>
             </div>
-            <CollapsibleTrigger className="inline-flex items-center gap-1 absolute right-4 top-1/2 -translate-y-1/2 rounded-full p-2 focus:outline-none focus:ring-2 focus:ring-primary transition-opacity">
-              <CollapsibleIcon className="size-4 text-foreground" />
+            <CollapsibleTrigger
+              aria-label="Toggle experience details"
+              className="absolute right-4 top-1/2 -translate-y-1/2"
+              asChild>
+              <Button size="icon_sm" variant="ghost">
+                <CollapsibleIcon />
+              </Button>
             </CollapsibleTrigger>
           </div>
 
