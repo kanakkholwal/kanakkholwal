@@ -155,7 +155,15 @@ function DynamicIslandNavbar() {
                       ))}
                     </motion.div>
                   ) : (
-                    <StyleSelector key="style-selector" />
+                    <motion.div
+                      key="style-selector"
+                      initial={{ x: 50, opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      exit={{ x: 50, opacity: 0 }}
+                      transition={{ type: "tween", duration: 0.2, ease: "easeInOut" }}
+                    >
+                      <StyleSelector />
+                    </motion.div>
                   )}
                 </AnimatePresence>
               </div>
@@ -561,11 +569,7 @@ function StyleSelector() {
   );
 
   return (
-    <motion.div
-      key="design-content"
-      initial={{ x: 50, opacity: 0 }}
-      animate={{ x: 0, opacity: 1 }}
-      exit={{ x: 50, opacity: 0 }}
+    <div
       className="grid grid-cols-2 gap-2"
     >
       {StyleModels.map((style) => (
@@ -645,15 +649,15 @@ function StyleSelector() {
                     {mode.label}
                   </Label>
                   <Switch
-                    id="animationMode.stars"
+                    id={`animationMode.${mode.id}`}
                     onCheckedChange={(checked) => {
                       if (checked) {
-                        setAnimationMode("stars");
+                        setAnimationMode(mode.id);
                       } else {
                         setAnimationMode("none");
                       }
                     }}
-                    checked={animationMode === "stars"}
+                    checked={animationMode === mode.id}
                   />
                 </div>
               );
@@ -661,6 +665,6 @@ function StyleSelector() {
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.div>
+    </div>
   )
 }
