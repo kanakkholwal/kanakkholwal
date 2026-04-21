@@ -12,7 +12,13 @@ export const source = loader({
 export type ProjectType = InferPageType<typeof source>["data"];
 
 export function getProjectList(): ProjectType[] {
-  return source.getPages().map((page) => page.data);
+  // Sort by order (lowest first), then by last modified date (newest first)
+  return source.getPages().map((page) => page.data).toSorted((a, b) => {
+    if ((a.order ?? 99) !== (b.order ?? 99)) {
+      return (a.order ?? 99) - (b.order ?? 99);
+    }
+    return new Date(b.lastModified ?? 0).getTime() - new Date(a.lastModified ?? 0).getTime();
+  });
 }
 export function getOtherProjects(currentProjectId: string): Omit<ProjectType, "body">[] {
   return source

@@ -68,6 +68,7 @@ export const projects = defineDocs({
   docs: {
     schema: frontmatterSchema.extend({
       id: z.string(),
+      order: z.number().optional().default(99),
       title: z.string(),
       href: z.url(),
       dates: z.string(),

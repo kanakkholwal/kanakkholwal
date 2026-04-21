@@ -4,6 +4,7 @@ title: "Recast"
 href: "https://recast.nexonauts.com"
 dates: "April 2026"
 active: true
+order: 2
 status: "In Progress"
 description: "Recast is a high-performance open-source screen recording tool with integrated, cinematic editing capabilities."
 technologies:
@@ -15,22 +16,18 @@ links:
   - label: "Source"
     url: "https://github.com/kanakkholwal/recast"
     icon: "github"
+  - label: "Website"
+    url: "https://recast.nexonauts.com"
+    icon: "globe"
 ---
 
-<h1 align="center">Recast</h1>
+<strong>Video editing, refined.</strong> The fast, minimal, and intentional
+editor built for the next generation of storytellers.
 
-<p align="center">
-  <strong>Video editing, refined.</strong> The fast, minimal, and intentional editor built for the next generation of storytellers.
-</p>
-
-<p align="center">
-  <a href="https://github.com/kanakkholwal/recast/actions"><img src="https://img.shields.io/github/actions/workflow/status/kanakkholwal/recast/release-desktop?style=flat-square" alt="Build Status"></a>
-  <a href="https://github.com/kanakkholwal/recast/blob/main/LICENSE.md"><img src="https://img.shields.io/badge/license-Dual_License-blue.svg?style=flat-square" alt="License: Dual License (GPLv3 / Commercial)"></a>
-</p>
-
-Recast is a high-performance open-source screen recording tool with integrated, cinematic editing capabilities. It aims to replace messy timeline-based tools with a "Smooth by Default" experience for startups and creators generating polished product demos. 
+Recast is a high-performance open-source screen recording tool with integrated, cinematic editing capabilities. It aims to replace messy timeline-based tools with a "Smooth by Default" experience for startups and creators generating polished product demos.
 
 ## ✨ Key Features
+
 - **Cinematic Magic by Default:** Perfect cursor motion smoothing, automatic zooming, and intelligent tracking.
 - **Zero-Lag Recording:** Built natively with Tauri and Rust, offloading high-performance video encoding (FFmpeg) to the user's silicon.
 - **Privacy-First:** Locally generated user profiles without invasive tracking.
@@ -40,12 +37,17 @@ Recast is a high-performance open-source screen recording tool with integrated, 
 
 Recast is structured as a **pnpm** workspace utilizing **Turborepo** for fast, cached builds.
 
-| Package | Path | Description |
-|---|---|---|
-| **🏔 Recast Desktop** | `apps/desktop` | The core product: A Tauri + Rust backend and a SvelteKit + Svelte 5 frontend editor pane. |
-| **🌐 Recast Web** | `apps/web` | The marketing landing page and distribution site, built on SvelteKit. |
-| **🧩 UI Library** | `packages/ui` | Headless, accessible internal Svelte UI component library. |
-| **🎨 Design Tokens** | `packages/design` | Centralized Tailwind CSS v4 design scope and typographic assets. |
+| Package               | Path              | Description                                                                               |
+| --------------------- | ----------------- | ----------------------------------------------------------------------------------------- |
+| **🏔 Recast Desktop** | `apps/desktop`    | The core product: A Tauri + Rust backend and a SvelteKit + Svelte 5 frontend editor pane. |
+| **🌐 Recast Web**     | `apps/web`        | The marketing landing page and distribution site, built on SvelteKit.                     |
+| **🧩 UI Library**     | `packages/ui`     | Headless, accessible internal Svelte UI component library.                                |
+| **🎨 Design Tokens**  | `packages/design` | Centralized Tailwind CSS v4 design scope and typographic assets.                          |
 
-
-See [LICENSE.md](LICENSE.md) for full legal details.
+## 🚀 Tech Stack
+- **Desktop App**: [Tauri](https://tauri.app/) + [Rust](https://www.rust-lang.org/)
+- **Frontend**: [SvelteKit](https://kit.svelte.dev/) + [Svelte 5](https://svelte.dev/)
+- **Video Encoding**: [FFmpeg](https://ffmpeg.org/)
+- **Styling**: [Tailwind CSS 4.0](https://tailwindcss.com/)
+- **Icons**: [Lucide Svelte](https://lucide.dev/)
+- **Linting**: [Biome](https://biomejs.dev/)
