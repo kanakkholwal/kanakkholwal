@@ -229,11 +229,11 @@ export function ExperienceItem({ experience }: { experience: WorkExperienceType 
               {experience.position}
             </h3>
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              {experience.employmentType && (
+              {experience.locationType && (
                 <>
                   <dl>
-                    <dt className="sr-only">Employment Type</dt>
-                    <dd>{experience.employmentType}</dd>
+                    <dt className="sr-only">Work Mode </dt>
+                    <dd>{experience.locationType}</dd>
                   </dl>
 
                   <Separator
