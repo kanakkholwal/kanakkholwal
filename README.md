@@ -27,27 +27,6 @@
 - Active in algorithms & data structures.
 - Actively learning **System Design, Devops**
 
-## Experience
-
-### Textify AI — _Remote_
-
-**Software Developer** | _Jan 2023 – Feb 2024_
-
-- Architected a **No-Code AI Workflow Engine** featuring a drag-and-drop interface, enabling users to build dynamic, schema-driven **LLM chains (Text/Image/Markdown)** without writing code..
-- Orchestrated a complex multi-cloud infrastructure migration **(AWS Amplify → Azure → GCP Cloud Run)**, utilizing **Docker** and **GitHub Actions** to establish a scalable, containerized CI/CD pipeline..
-- Hardened platform security by implementing **RBAC and Multi-Factor Authentication (MFA)** via AWS Cognito, later migrating to NextAuth to unify session management across microservices.
-- Re-engineered legacy monolithic codebases into modular **RESTful microservices** and **Server Side Event driven architecture**, reducing API latency and cutting deployment build times by 30%.
-- Designed centralized schema handling systems that decoupled frontend logic from backend data structures, significantly improving developer velocity.
-
-### KoinX — _Remote_
-
-**Frontend Developer** | _Mar 2024 – Jun 2024_
-
-- Spearheaded the architectural **migration** of **legacy Create-React-App (CRA)** repositories to **Vite + TypeScript**, slashing build times by **60%** and optimizing HMR (Hot Module Replacement) for the team.
-- Engineered a centralized **Internationalization** (i18n) and **SEO** architecture, enabling localized landing pages that drove a **150% increase in organic traffic**.
-- Co-developed the **internal UI Component Library**, enforcing strict design system tokens to ensure visual consistency across B2B and consumer-facing crypto dashboards.
-- Optimized **core web vitals and page load** speeds for high-traffic pages, directly improving user retention and SERP rankings.
-- Collaborated with product teams to ship production-ready features for a high-growth Fintech platform.
 
 ### Open Source — _Global_
 
@@ -107,6 +86,29 @@ _Ecosystem for developers (Next.js, Shadcn UI, MongoDB)_
 - Designed **marketplace**, tools engine, and **developer utilities** for productivity.
 - Architected scalable frontend, integrating **CI/CD pipelines** for rapid feature delivery.
 - Orchestrated microservices for **email delivery system** for transactional emails and newsletter.
+
+  
+## Experience
+
+### Textify AI — _Remote_
+
+**Software Developer** | _Jan 2023 – Feb 2024_
+
+- Architected a **No-Code AI Workflow Engine** featuring a drag-and-drop interface, enabling users to build dynamic, schema-driven **LLM chains (Text/Image/Markdown)** without writing code..
+- Orchestrated a complex multi-cloud infrastructure migration **(AWS Amplify → Azure → GCP Cloud Run)**, utilizing **Docker** and **GitHub Actions** to establish a scalable, containerized CI/CD pipeline..
+- Hardened platform security by implementing **RBAC and Multi-Factor Authentication (MFA)** via AWS Cognito, later migrating to NextAuth to unify session management across microservices.
+- Re-engineered legacy monolithic codebases into modular **RESTful microservices** and **Server Side Event driven architecture**, reducing API latency and cutting deployment build times by 30%.
+- Designed centralized schema handling systems that decoupled frontend logic from backend data structures, significantly improving developer velocity.
+
+### KoinX — _Remote_
+
+**Frontend Developer** | _Mar 2024 – Jun 2024_
+
+- Spearheaded the architectural **migration** of **legacy Create-React-App (CRA)** repositories to **Vite + TypeScript**, slashing build times by **60%** and optimizing HMR (Hot Module Replacement) for the team.
+- Engineered a centralized **Internationalization** (i18n) and **SEO** architecture, enabling localized landing pages that drove a **150% increase in organic traffic**.
+- Co-developed the **internal UI Component Library**, enforcing strict design system tokens to ensure visual consistency across B2B and consumer-facing crypto dashboards.
+- Optimized **core web vitals and page load** speeds for high-traffic pages, directly improving user retention and SERP rankings.
+- Collaborated with product teams to ship production-ready features for a high-growth Fintech platform.
 
 ## Skills
 
