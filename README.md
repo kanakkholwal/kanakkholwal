@@ -20,23 +20,23 @@
 
 ## Summary
 
-- **Software Engineer** with full-stack development, scalable systems, and **devops/cloud computing** experience.
-- Shipped **high-impact OSS projects** (**1.4M+ visitors,** 300+ weekly npm downloads) and delivered production features at SaaS startups.
+- Full-stack AI apps development, scalable systems, and **devops/cloud computing** experience.
+- Shipped **high-impact OSS projects** (**1.5M+ visitors, 740+ users** 300+ weekly npm downloads) and delivered production features at SaaS startups.
 - Skilled in **Reactjs, Next.js, TypeScript, Node.js, React Native, Docker, Python, Go, AWS/GCP/Azure**.
 - Achieved +220% engagement, +150% SEO traffic, 60% faster builds.
 - Active in algorithms & data structures.
 - Actively learning **System Design, Devops**
 
 
-### Open Source — _Global_
-
-**Contributor & Maintainer** | _2022 – Present_
+### Open Source —  **Contributor & Maintainer**
 
 - [**Bruno**](https://github.com/usebruno/bruno/issues?q=sort%3Aupdated-desc%20is%3Apr%20author%3Akanakkholwal%20-state%3Aclosed) - Opensource IDE For Exploring and Testing API's (lightweight alternative to Postman/Insomnia)
 - [**Optexity**](https://github.com/optexity/optexity/issues?q=sort%3Aupdated-desc%20author%3Akanakkholwal) - Build custom browser agents with AI-powered automation
+  
 - [**College Ecosystem**](https://github.com/kanakkholwal/college-ecosystem) - Next.js/TS platform; 1M+ visits; realtime polls, rankings, communities.
 - [**Orbit**](https://github.com/kanakkholwal/orbit) - browser-first pdf utility application
-- [**Muse**](https://github.com/kanakkholwal/muse-mvp) - AI fashion discovery (vector search); reduced user selection time 40%.
+- [**Recast**](https://github.com/kanakkholwal/recast) - open source product demo video recorder and editor
+- [**Docvia**](https://github.com/kanakkholwal/docvia) - framework agnostic documentation compiler
 - [**Mailing system**](https://github.com/kanakkholwal/mail-system) - A modern, type-safe & portable email service built with Typescript, React Email, and Nodemailer.
 - [**Markdown Editor**](https://github.com/kanakkholwal/nexo-mdx) - plugin-based Markdown Editor with React + TS + shadcn UI / Tailwind css ; rendering speed +35%; 300+ weekly downloads.
 - [**Rich Text Editor**](https://github.com/kanakkholwal/nexo-editor) - A lightweight, customizable React Rich Text Editor built on TipTap
@@ -44,48 +44,10 @@
 
 ## Projects
 
-### Custom Domain Management SDK
-
-[GitHub](https://github.com/kanakkholwal/custom-domain-sdk)
-_Cloudflare Workers, DNS, Typescript, Go_
-
-- Engineered a framework-agnostic **SDK** for **multi-tenant domain** onboarding using strict lifecycle state machines.
-- Automated domain verification, DNS provisioning, and edge routing via **Cloudflare Custom Hostnames**.
-- Designed a **database-agnostic control plane** for **domain mapping** used in SaaS platforms.
-
-### College Ecosystem
-
-[GitHub](https://github.com/kanakkholwal/college-ecosystem) | [Live](https://app.nith.eu.org)  
-_Multi-feature college portal (Next.js, Typescript, Node.js, PostgreSQL, MongoDB, Docker)_
-
-- Scaled to **1,400,000+ visits** & **740+ active users** with features like rankings, attendance, real-time polling.
-- Implemented **subreddit-like communities** and live announcements.
-- Optimized database queries and caching for scalability & fault tolerance.
-- Orchestrated microservices for scraping and **email delivery system**.
-
-### Muse
-
-[GitHub](https://github.com/kanakkholwal/muse-mvp)  
-_AI-powered fashion discovery (TypeScript, PostgreSQL, Shadcn UI, React Native, Python, Nextjs, recommendation system)_
-
-- **Researched and scraped 25K+ products** across different fashion e-commerce platforms.
-- Developed different techniques to perform better recommendation.
-- Implemented **swipe-based recommendation engine**; reduced selection time 40%.
-- Designed **vector similarity search** for efficient personalization.
-- Integrated **scalable** APIs and database queries with **indexing** for performance.
-- Orchestrated **Continous Integration** of publishing Docker Images on **Github Container Registry**.
-- Orchestrated **Continous Deployement** of **Docker images from GHCR to Google Cloud Run**.
-- Handled **Application Load balancer** to handle point custom domains to Google Cloud Run Instances which doesn't support Domain mapping yet.
-
-### NexoNauts.com
-
-[GitHub](https://github.com/kanakkholwal/nexonauts) | [Live](https://nexonauts.com)  
-_Ecosystem for developers (Next.js, Shadcn UI, MongoDB)_
-
-- Launched mentorship program connecting developers; improved satisfaction to 90%.
-- Designed **marketplace**, tools engine, and **developer utilities** for productivity.
-- Architected scalable frontend, integrating **CI/CD pipelines** for rapid feature delivery.
-- Orchestrated microservices for **email delivery system** for transactional emails and newsletter.
+- [Custom Domain Management SDK](https://github.com/kanakkholwal/custom-domain-sdk) : a framework-agnostic **SDK** for **multi-tenant domain** onboarding using strict lifecycle state machine
+- [College Ecosystem](https://github.com/kanakkholwal/college-ecosystem) | [Live](https://app.nith.eu.org) : Scaled to **1500,000+ visits** & **740+ active users** with features like rankings, attendance, real-time polling for college infrastrcuture.
+- [Muse](https://github.com/kanakkholwal/muse-mvp) : AI-powered fashion discovery
+- [NexoNauts.com](https://github.com/kanakkholwal/nexonauts) | [Live](https://nexonauts.com) : Ecosystem for developers (Next.js, Shadcn UI, MongoDB)_
 
   
 ## Experience
@@ -112,11 +74,11 @@ _Ecosystem for developers (Next.js, Shadcn UI, MongoDB)_
 
 ## Skills
 
-**Languages:** JavaScript, TypeScript, Go, Python, C++
+**Languages** :  JavaScript, TypeScript, Go, Python, Rust, Php, C++
 
-**Frontend:** React, Next.js, Vite, TailwindCSS, Shadcn UI, Bootstrap
+**Frontend** :  React, Next.js, Svelte 5, Sveltkit, Vite, TailwindCSS, Shadcn UI, SASS, Bootstrap
 
-**Backend:** Node.js, Express.js, REST APIs, Microservices
+**Backend:** Node.js, Express.js, Go Fiber, REST APIs, Microservices
 
 **Databases:** PostgreSQL, MongoDB, Redis, Firebase, Supabase
 
@@ -128,7 +90,7 @@ _Ecosystem for developers (Next.js, Shadcn UI, MongoDB)_
 
 ### My Skills
 
-[![My Skills](https://skillicons.dev/icons?i=js,ts,go,python,docker,postgres,mongodb,redis,firebase,npm,pnpm,git,github,gcp,svg,vercel,nextjs,vite,tailwind,notion,react,express,nodejs,postman,figma,bootstrap,html,css,sass)](https://kanakkholwal.eu.org)
+[![My Skills](https://skillicons.dev/icons?i=js,ts,go,python,rust,php,docker,postgres,mongodb,redis,firebase,npm,pnpm,git,github,gcp,svelte,nextjs,vite,tailwind,notion,react,express,nodejs,svg,vercel,postman,figma,bootstrap,html,css,sass)](https://kanakkholwal.eu.org)
 
 ---
 
