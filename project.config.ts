@@ -195,7 +195,7 @@ const appConfig = {
     "google.adsense": "ca-pub-6988693445063744",
   },
   statsConfig: {
-    npmPackages: ["custom-domain-sdk", "nexo-editor", "nexo-mdx"],
+    npmPackages: ["custom-domain-sdk", "nexo-editor", "nexo-mdx","remark-plugins","pdf-tables-parser","barcode-react","mailer-easy","nexo-html2jsx","nexo-deck-swiper"],
     repositories: [
       {
         name: "orbit",
