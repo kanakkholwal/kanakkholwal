@@ -192,7 +192,7 @@ const appConfig = {
   },
   verifications: {
     "google.analytics": "G-95KQZNMSSE",
-    "google.adsense": "ca-pub-6988693445063744",
+    "google.adsense": "ca-pub-2219281381026289",
   },
   statsConfig: {
     npmPackages: ["custom-domain-sdk", "nexo-editor", "nexo-mdx","remark-plugins","pdf-tables-parser","barcode-react","mailer-easy","nexo-html2jsx","nexo-deck-swiper"],
@@ -201,13 +201,25 @@ const appConfig = {
         name: "orbit",
         repo: "kanakkholwal/orbit",
         repoBeatsUri:
-          "https://repobeats.axiom.co/api/embed/e66720ef5fadf321ae59f5a9ae917ff738d6653d.svg",
+          "https://repobeats.axiom.co/api/embed/7428b9d86909d3ebe378193443428b47e901c5b3.svg",
       },
       {
         name: "college-ecosystem",
         repo: "kanakkholwal/college-ecosystem",
         repoBeatsUri:
           "https://repobeats.axiom.co/api/embed/5c24e4ec8193c618a748a6339fb9eae49ad645ee.svg",
+      },
+       {
+        name: "recast",
+        repo: "kanakkholwal/recast",
+        repoBeatsUri:
+          "https://repobeats.axiom.co/api/embed/48a0fbae00fde61a7b572ede300674e3c5ea4f68.svg",
+      },
+         {
+        name: "docvia",
+        repo: "kanakkholwal/docvia",
+        repoBeatsUri:
+          "https://repobeats.axiom.co/api/embed/f7838bfc240cbade0730ee9f752d9d96f7701769.svg",
       },
       {
         name: "nexo-mdx",
