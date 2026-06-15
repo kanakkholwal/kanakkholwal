@@ -20,7 +20,9 @@
     <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/kanakkholwal/kanakkholwal/pacmangraph/pacman-contribution-graph.svg">
     <img alt="pacman contribution graph" src="https://raw.githubusercontent.com/kanakkholwal/kanakkholwal/pacmangraph/pacman-contribution-graph.svg">
 </picture>
-Stack
+
+
+## My Stack
 
 [![My Skills](https://skillicons.dev/icons?i=js,ts,go,rust,python,tauri,docker,postgres,mongodb,redis,firebase,npm,pnpm,git,github,gcp,azure,svelte,nextjs,vite,tailwind,notion,react,express,nodejs,svg,vercel,postman,figma,bootstrap,html,css,sass,php)](https://kanakkholwal.eu.org)
 
