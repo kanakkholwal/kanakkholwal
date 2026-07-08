@@ -74,10 +74,14 @@ function StoryAbout() {
       title={<>Beyond the <Serif className="text-muted-foreground/80">résumé</Serif>.</>}
     >
       <StoryReveal className="space-y-5 text-base leading-relaxed text-muted-foreground">
-        <p>{appConfig.summary}</p>
         <p>
-          I own features end to end — from the database schema to the pixels —
-          and I care most about the parts users feel but never see.
+          I&apos;m a product engineer who likes owning the whole thing, from the
+          database schema all the way to the last few pixels.
+        </p>
+        <p>
+          What keeps me interested is the craft in the parts people feel but
+          rarely notice: the loading state that never flickers, the copy that
+          sounds like a person, the transition that just feels right.
         </p>
       </StoryReveal>
 
@@ -122,9 +126,8 @@ function MinimalAbout() {
       <PanelContent
         className={cn(
           "prose dark:prose-invert max-w-none",
-          "prose-headings:font-mono prose-headings:tracking-tight prose-headings:font-bold",
-          "prose-p:font-mono prose-p:leading-6 prose-p:text-zinc-600 dark:prose-p:text-zinc-300",
-          "prose-li:font-mono",
+          "prose-headings:tracking-tight prose-headings:font-bold",
+          "prose-p:leading-7 prose-p:text-zinc-600 dark:prose-p:text-zinc-300",
         )}
       >
         <Markdown>{appConfig.summary}</Markdown>

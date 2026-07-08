@@ -5,6 +5,7 @@ import { StyleModels, StylingModel } from "@/constants/ui";
 import useStorage from "@/hooks/use-storage";
 import { motion } from "framer-motion";
 import { StyleSwap } from "@/components/animated/style-swap";
+import { Serif, StoryReveal } from "@/components/application/story.frame";
 import React from "react";
 
 const BLUR_FADE_DELAY = 0.04;
@@ -42,6 +43,13 @@ export default function StatsPageClient({
         />
       ) : selectedStyle === "static" ? (
         <StaticStats
+          header={header}
+          repoSection={repoSection}
+          registrySection={registrySection}
+          healthSection={healthSection}
+        />
+      ) : selectedStyle === "story" ? (
+        <StoryStats
           header={header}
           repoSection={repoSection}
           registrySection={registrySection}
@@ -196,6 +204,42 @@ function DynamicStats(props: StatsPageClientProps) {
           />
           <div className="mt-8">{props.healthSection}</div>
         </motion.section>
+      </div>
+    </main>
+  );
+}
+
+function StoryStats(props: StatsPageClientProps) {
+  const nodes = [
+    props.header,
+    props.repoSection,
+    props.registrySection,
+    props.healthSection,
+  ];
+
+  return (
+    <main className="mx-auto w-full max-w-3xl px-6 pb-24 pt-28 md:pt-36">
+      <StoryReveal>
+        <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
+          In the open
+        </p>
+        <h1 className="mt-3 text-4xl font-bold leading-tight tracking-tighter text-foreground md:text-5xl">
+          Open source, by the{" "}
+          <Serif className="text-muted-foreground/80">numbers</Serif>.
+        </h1>
+        <p className="mt-5 max-w-xl text-base leading-relaxed text-muted-foreground">
+          These are the things I have built in public and left running. Stars,
+          downloads, and the quiet signals that tell me whether any of it is
+          actually useful to someone else.
+        </p>
+      </StoryReveal>
+
+      <div className="mt-14 space-y-12">
+        {nodes.map((node, i) => (
+          <StoryReveal key={i} delay={0.1 + i * 0.05}>
+            {node}
+          </StoryReveal>
+        ))}
       </div>
     </main>
   );

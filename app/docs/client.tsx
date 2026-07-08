@@ -7,6 +7,7 @@ import { StyleModels, StylingModel } from "@/constants/ui";
 import useStorage from "@/hooks/use-storage";
 import { motion } from "framer-motion";
 import { StyleSwap } from "@/components/animated/style-swap";
+import { Serif, StoryReveal } from "@/components/application/story.frame";
 import { ArrowUpRight, Terminal } from "lucide-react";
 import Link from "next/link";
 
@@ -43,6 +44,8 @@ export default function DocsPageClient({
                 <MinimalDocs posts={posts} latestPostDate={latestPostDate} />
             ) : selectedStyle === "static" ? (
                 <StaticDocs posts={posts} latestPostDate={latestPostDate} />
+            ) : selectedStyle === "story" ? (
+                <StoryDocs posts={posts} latestPostDate={latestPostDate} />
             ) : (
                 <DynamicDocs posts={posts} latestPostDate={latestPostDate} />
             )}
@@ -245,6 +248,66 @@ function StaticDocs({ posts, latestPostDate }: DocsPageClientProps) {
     );
 }
 
+
+function StoryDocs({ posts, latestPostDate }: DocsPageClientProps) {
+    return (
+        <main className="mx-auto w-full max-w-3xl px-6 pb-24 pt-28 md:pt-36">
+            <StoryReveal>
+                <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
+                    Docs
+                </p>
+                <h1 className="mt-3 text-4xl font-bold leading-tight tracking-tighter text-foreground md:text-5xl">
+                    Things worth{" "}
+                    <Serif className="text-muted-foreground/80">writing down</Serif>.
+                </h1>
+                <p className="mt-5 max-w-xl text-base leading-relaxed text-muted-foreground">
+                    Notes I keep for myself as much as anyone else: deep-dives, case
+                    studies, and the small details I know I will forget otherwise. Last
+                    updated {latestPostDate}.
+                </p>
+            </StoryReveal>
+
+            {posts.length === 0 ? (
+                <div className="mt-14">
+                    <EmptyState />
+                </div>
+            ) : (
+                <div className="mt-14 space-y-6">
+                    {posts.map((post, i) => (
+                        <StoryReveal key={post.url} delay={Math.min(i * 0.05, 0.3)}>
+                            <Link
+                                href={post.url}
+                                className="group block border-b border-border/40 pb-5"
+                            >
+                                <div className="flex items-baseline justify-between gap-3">
+                                    <h3 className="text-base font-semibold text-foreground transition-colors group-hover:text-primary">
+                                        {post.data.title}
+                                    </h3>
+                                    {post.data.lastModified && (
+                                        <span className="shrink-0 font-mono text-xs text-muted-foreground/70">
+                                            {new Date(
+                                                post.data.lastModified,
+                                            ).toLocaleDateString("en-US", {
+                                                month: "short",
+                                                day: "numeric",
+                                                year: "numeric",
+                                            })}
+                                        </span>
+                                    )}
+                                </div>
+                                {post.data.description && (
+                                    <p className="mt-1 line-clamp-2 text-sm leading-relaxed text-muted-foreground">
+                                        {post.data.description}
+                                    </p>
+                                )}
+                            </Link>
+                        </StoryReveal>
+                    ))}
+                </div>
+            )}
+        </main>
+    );
+}
 
 function DynamicDocs({ posts, latestPostDate }: DocsPageClientProps) {
     return (

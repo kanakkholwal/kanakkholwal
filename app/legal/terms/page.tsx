@@ -3,8 +3,7 @@ import { generateMetadata } from "~/utils/seo";
 
 export const metadata = generateMetadata({
   title: "Terms & Conditions",
-  description:
-    "Terms and Conditions for Your Name — portfolio site. Rules for using this website.",
+  description: `Terms and Conditions for the ${appConfig.displayName} portfolio site. Rules for using this website.`,
   path: "/legal/terms",
   keywords: ["terms and conditions", "portfolio terms", "legal"],
 });
@@ -41,7 +40,7 @@ const PrivacyPolicyPage: React.FC = () => {
             All content (text, images, code samples) on the Site is owned by or
             licensed to the Site owner. You may not republish or redistribute
             content without permission. Code snippets are generally provided
-            under MIT unless otherwise noted — verify license notes near each
+            under MIT unless otherwise noted, so verify license notes near each
             snippet.
           </p>
         </section>
@@ -63,7 +62,7 @@ const PrivacyPolicyPage: React.FC = () => {
             All content (text, images, code samples) on the Site is owned by or
             licensed to the Site owner. You may not republish or redistribute
             content without permission. Code snippets are generally provided
-            under MIT unless otherwise noted — verify license notes near each
+            under MIT unless otherwise noted, so verify license notes near each
             snippet.
           </p>
         </section>

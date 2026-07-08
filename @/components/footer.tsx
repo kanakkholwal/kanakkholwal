@@ -31,6 +31,8 @@ export function FooterSection() {
         <MinimalFooter />
       ) : selectedStyle === "static" ? (
         <StaticFooter />
+      ) : selectedStyle === "story" ? (
+        <StoryFooter />
       ) : (
         <DynamicFooter />
       )}
@@ -38,6 +40,54 @@ export function FooterSection() {
   );
 }
 
+
+function StoryFooter() {
+  const links = [
+    ...appConfig.footerLinks.general,
+    ...appConfig.footerLinks.specifics,
+  ].filter((link) => link.label.toLowerCase() !== "home");
+
+  return (
+    <footer className="mx-auto w-full max-w-3xl px-6 pb-16">
+      <div className="border-t border-dashed border-border/60 pt-10">
+        <div className="flex flex-col gap-8 sm:flex-row sm:items-start sm:justify-between">
+          <div className="space-y-4">
+            <TransitionLink href="/" className="inline-block">
+              <Logo className="h-7 w-auto" />
+            </TransitionLink>
+            <p className="max-w-xs text-sm leading-relaxed text-muted-foreground">
+              Thanks for reading to the end. I ship new work fairly often, so
+              check back when you have a minute.
+            </p>
+            <Socials className="inline-flex items-center gap-1" />
+          </div>
+
+          <nav className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted-foreground sm:justify-end">
+            {links.map((link) => (
+              <TransitionLink
+                key={link.href}
+                href={link.href}
+                className="transition-colors hover:text-foreground"
+              >
+                {link.label}
+              </TransitionLink>
+            ))}
+          </nav>
+        </div>
+
+        <div className="mt-10 flex items-center justify-between border-t border-border/40 pt-6 text-xs text-muted-foreground">
+          <p>
+            &copy; {currentYear} {appConfig.displayName}
+          </p>
+          <div className="flex items-center gap-2">
+            <ModeToggle />
+            <GoToTopButton />
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+}
 
 function MinimalFooter() {
   return (

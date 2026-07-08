@@ -8,7 +8,7 @@ export default function ProjectsPage() {
 export const metadata = generateMetadata({
   title: "Projects Showcase",
   description:
-    "Explore Kanak's most impactful and innovative projects — full-stack apps, AI integrations, and cloud-native solutions built with Next.js, AWS, Docker, and GCP.",
+    "Explore Kanak's most impactful and innovative projects: full-stack apps, AI integrations, and cloud-native solutions built with Next.js, AWS, Docker, and GCP.",
   path: "/projects",
   keywords: [
     "projects",

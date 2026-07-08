@@ -43,7 +43,7 @@ function StoryWork({ experiences }: { experiences: WorkExperienceType[] }) {
                 <span className="font-normal text-muted-foreground"> · {work.company}</span>
               </h3>
               <span className="shrink-0 font-mono text-xs tabular-nums text-muted-foreground/70">
-                {work.startDate} — {work.endDate ?? "Present"}
+                {work.startDate} to {work.endDate ?? "Present"}
               </span>
             </div>
             {Array.isArray(work.badges) && work.badges.length > 0 && (
@@ -266,7 +266,7 @@ export function ExperienceItem({ experience }: { experience: WorkExperienceType 
                 <dt className="sr-only">Employment Period</dt>
                 <dd className="flex items-center gap-0.5">
                   <span>{experience.startDate}</span>
-                  <span className="font-mono">—</span>
+                  <span className="font-mono text-xs">to</span>
                   {experience.isOngoing ? (
                     <>
                       <InfinityIcon
@@ -368,7 +368,7 @@ function WorkCard({ work }: { work: WorkExperienceType }) {
             <span className="text-xs text-muted-foreground/60 font-mono truncate">{work.locationType}</span>
           </div>
           <time className="shrink-0 font-mono text-[11px] tabular-nums text-muted-foreground/50" dateTime={work.startDate}>
-            {work.startDate} — {work.endDate ?? "Present"}
+            {work.startDate} to {work.endDate ?? "Present"}
           </time>
         </div>
 

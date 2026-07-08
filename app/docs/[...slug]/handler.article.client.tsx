@@ -8,6 +8,7 @@ import useStorage from "@/hooks/use-storage";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { StyleSwap } from "@/components/animated/style-swap";
+import { Serif, StoryReveal } from "@/components/application/story.frame";
 import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import React from "react";
@@ -63,6 +64,14 @@ export default function ArticlePageClient({
                 >
                     {children}
                 </StaticArticle>
+            ) : selectedStyle === "story" ? (
+                <StoryArticle
+                    article={article}
+                    toc={toc}
+                    otherArticles={otherArticles}
+                >
+                    {children}
+                </StoryArticle>
             ) : (
                 <DynamicArticle
                     article={article}
@@ -278,7 +287,7 @@ function StaticArticle({
                                         ? new Date(article.lastModified)
                                             .toISOString()
                                             .split("T")[0]
-                                        : "—"}
+                                        : "Not set"}
                                 </span>
                             </div>
                             <Link
@@ -323,6 +332,59 @@ function StaticArticle({
                     {otherArticles}
                 </div>
             </div>
+        </main>
+    );
+}
+
+
+function StoryArticle({
+    article,
+    children,
+}: ArticlePageClientProps) {
+    return (
+        <main className="mx-auto w-full max-w-3xl px-6 pb-24 pt-28 md:pt-36">
+            <StoryReveal>
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs text-muted-foreground">
+                    {article.lastModified && (
+                        <time
+                            dateTime={new Date(article.lastModified).toISOString()}
+                        >
+                            {new Date(article.lastModified).toLocaleDateString("en-US", {
+                                year: "numeric",
+                                month: "long",
+                                day: "numeric",
+                            })}
+                        </time>
+                    )}
+                    {article.lastModified && <span aria-hidden>/</span>}
+                    <span>{article.readTime} min read</span>
+                </div>
+                <h1 className="mt-3 text-4xl font-bold leading-tight tracking-tighter text-foreground md:text-5xl">
+                    {article.title}
+                </h1>
+                {article.description ? (
+                    <p className="mt-5 text-lg leading-relaxed text-muted-foreground">
+                        Notes on <Serif className="text-muted-foreground/80">{article.category.toLowerCase()}</Serif>: {article.description}
+                    </p>
+                ) : null}
+            </StoryReveal>
+            <StoryReveal
+                delay={0.1}
+                className="prose dark:prose-invert mt-10 max-w-none prose-headings:tracking-tight"
+            >
+                {children}
+            </StoryReveal>
+            <StoryReveal delay={0.15}>
+                <div className="mt-16 border-t border-border/50 pt-8">
+                    <Link
+                        href="/docs"
+                        className="group inline-flex items-center text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+                    >
+                        <ArrowLeft className="mr-2 size-4 transition-transform group-hover:-translate-x-1" />
+                        Back to Index
+                    </Link>
+                </div>
+            </StoryReveal>
         </main>
     );
 }

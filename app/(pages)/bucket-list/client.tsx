@@ -7,6 +7,7 @@ import useStorage from "@/hooks/use-storage";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { StyleSwap } from "@/components/animated/style-swap";
+import { Serif, StoryReveal } from "@/components/application/story.frame";
 import { CheckCircle2, CircleDashed, Trophy } from "lucide-react";
 import Image from "next/image";
 import { appConfig } from "root/project.config";
@@ -44,6 +45,13 @@ export default function BucketListClient({
         />
       ) : selectedStyle === "static" ? (
         <StaticBucketList
+          items={items}
+          total={total}
+          completed={completed}
+          percentage={percentage}
+        />
+      ) : selectedStyle === "story" ? (
+        <StoryBucketList
           items={items}
           total={total}
           completed={completed}
@@ -378,6 +386,57 @@ function DynamicBucketList({ items, total, completed, percentage }: BucketListCl
             </div>
           </motion.section>
         )}
+      </div>
+    </main>
+  );
+}
+
+function StoryBucketList({ items, total, completed, percentage }: BucketListClientProps) {
+  return (
+    <main className="mx-auto w-full max-w-3xl px-6 pb-24 pt-28 md:pt-36">
+      <StoryReveal>
+        <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
+          The list
+        </p>
+        <h1 className="mt-3 text-4xl font-bold leading-tight tracking-tighter text-foreground md:text-5xl">
+          Things I want to <Serif className="text-muted-foreground/80">do</Serif>.
+        </h1>
+        <p className="mt-5 max-w-xl text-base leading-relaxed text-muted-foreground">
+          A running list of the places, moments and small ambitions I keep
+          reaching for. {completed} of {total} done so far ({percentage}%), and
+          I love that the rest is still ahead of me.
+        </p>
+      </StoryReveal>
+
+      <div className="mt-14 space-y-1">
+        {items.map((item, i) => (
+          <StoryReveal key={item.name} delay={i * 0.05}>
+            <div className="flex items-start gap-4 border-b border-border/40 py-5">
+              {item.completed ? (
+                <CheckCircle2 className="mt-0.5 size-5 shrink-0 text-emerald-500" />
+              ) : (
+                <CircleDashed className="mt-0.5 size-5 shrink-0 text-muted-foreground/50" />
+              )}
+              <div className="min-w-0 flex-1">
+                <p
+                  className={cn(
+                    "text-lg font-medium leading-snug",
+                    item.completed
+                      ? "text-muted-foreground line-through decoration-emerald-500/40"
+                      : "text-foreground",
+                  )}
+                >
+                  {item.name}
+                </p>
+                {item.description && (
+                  <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+                    {item.description}
+                  </p>
+                )}
+              </div>
+            </div>
+          </StoryReveal>
+        ))}
       </div>
     </main>
   );

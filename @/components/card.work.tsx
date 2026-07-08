@@ -64,7 +64,7 @@ export function WorkExperienceCard({ work }: WorkExperienceCardProps) {
             className="shrink-0 font-mono text-[11px] text-muted-foreground/60 tabular-nums"
             dateTime={work.startDate}
           >
-            {work.startDate} — {work.endDate ?? "Present"}
+            {work.startDate} to {work.endDate ?? "Present"}
           </time>
         </div>
 

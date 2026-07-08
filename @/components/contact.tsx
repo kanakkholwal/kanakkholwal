@@ -81,8 +81,8 @@ function StoryContact({
     >
       <StoryReveal className="max-w-xl text-base leading-relaxed text-muted-foreground">
         <p>
-          That&apos;s the story so far. If any of it resonates — a role, a
-          collaboration, or just a good conversation — I&apos;d love to hear from you.
+          That&apos;s the story so far. If any of it resonates, whether that&apos;s a
+          role, a project, or just a good conversation, I&apos;d love to hear from you.
         </p>
       </StoryReveal>
 
@@ -202,7 +202,7 @@ function StaticContact({
             <BlurFade delay={BLUR_FADE_DELAY * 3}>
               <p className="text-muted-foreground text-base leading-relaxed">
                 Open to freelance, collaborations, and full-time roles. Whether
-                it's a product idea, a design system, or a quick chat — I'm
+                it's a product idea, a design system, or a quick chat, and I'm
                 all ears.
               </p>
             </BlurFade>

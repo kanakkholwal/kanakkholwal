@@ -3,8 +3,7 @@ import { generateMetadata } from "~/utils/seo";
 
 export const metadata = generateMetadata({
   title: "Privacy Policy",
-  description:
-    "Privacy Policy for Your Name — portfolio site. Explains what data is collected and how it is used.",
+  description: `Privacy Policy for the ${appConfig.displayName} portfolio site. Explains what data is collected and how it is used.`,
   path: "/legal/privacy",
   keywords: [
     "privacy policy",
@@ -33,7 +32,7 @@ const PrivacyPolicyPage: React.FC = () => {
             </li>
             <li>
               <strong>User-provided:</strong> contact form submissions (name,
-              email, message) — stored only to reply.
+              email, message), stored only to reply.
             </li>
             <li>
               <strong>Third-party:</strong> data collected by third-party
@@ -52,7 +51,7 @@ const PrivacyPolicyPage: React.FC = () => {
               analytics.
             </li>
             <li>
-              Deliver advertisements via Google AdSense (if enabled) — see the
+              Deliver advertisements via Google AdSense (if enabled), see the
               Ads section below.
             </li>
             <li>Respond to contact requests.</li>
@@ -83,7 +82,7 @@ const PrivacyPolicyPage: React.FC = () => {
           <h2>5. Data Security</h2>
           <p>
             We take reasonable measures to protect data. However, no method of
-            transmission over the internet is 100% secure — we cannot guarantee
+            transmission over the internet is 100% secure, so we cannot guarantee
             absolute security.
           </p>
         </section>

@@ -11,6 +11,7 @@ import useStorage from "@/hooks/use-storage";
 import { getProjectList } from "@/lib/project.source";
 import { motion } from "framer-motion";
 import { StyleSwap } from "@/components/animated/style-swap";
+import { Serif, StoryReveal } from "@/components/application/story.frame";
 import { ArrowRight, ArrowUpRight, TrendingUp } from "lucide-react";
 
 const BLUR_FADE_DELAY = 0.04;
@@ -29,6 +30,8 @@ export default function ProjectsShowcase() {
         <MinimalProjects projects={projects} />
       ) : selectedStyle === "static" ? (
         <StaticProjects projects={projects} />
+      ) : selectedStyle === "story" ? (
+        <StoryProjects projects={projects} />
       ) : (
         <DynamicProjects projects={projects} />
       )}
@@ -136,7 +139,7 @@ function StaticProjects({
         <BlurFade delay={BLUR_FADE_DELAY * 3}>
           <p className="text-base text-muted-foreground max-w-xl leading-relaxed">
             A curated archive of applications, open-source libraries, and
-            experiments — focused on scalable architecture and intuitive UX.
+            experiments, focused on scalable architecture and intuitive UX.
           </p>
         </BlurFade>
       </div>
@@ -186,6 +189,51 @@ function StaticProjects({
         </div>
       </BlurFade>
     </div>
+  );
+}
+
+function StoryProjects({
+  projects,
+}: {
+  projects: ReturnType<typeof getProjectList>;
+}) {
+  return (
+    <main className="mx-auto w-full max-w-3xl px-6 pb-24 pt-28 md:pt-36">
+      <StoryReveal>
+        <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
+          The work
+        </p>
+        <h1 className="mt-3 text-4xl font-bold leading-tight tracking-tighter text-foreground md:text-5xl">
+          Everything I&apos;ve <Serif className="text-muted-foreground/80">shipped</Serif>.
+        </h1>
+        <p className="mt-5 max-w-xl text-base leading-relaxed text-muted-foreground">
+          These are the things I built and cared about, some polished, some still finding their shape. Each one taught me something I carried into the next.
+        </p>
+      </StoryReveal>
+
+      <div className="mt-14 space-y-6">
+        {projects.map((project, i) => (
+          <StoryReveal key={project.id} delay={Math.min(i * 0.05, 0.3)}>
+            <TransitionLink
+              href={`/projects/${project.id}`}
+              className="group block border-b border-border/40 pb-5"
+            >
+              <div className="flex items-baseline justify-between gap-3">
+                <h3 className="text-base font-semibold text-foreground transition-colors group-hover:text-primary">
+                  {project.title}
+                </h3>
+                <span className="shrink-0 font-mono text-xs text-muted-foreground/70">
+                  {project.dates}
+                </span>
+              </div>
+              <p className="mt-1 line-clamp-2 text-sm leading-relaxed text-muted-foreground">
+                {project.description}
+              </p>
+            </TransitionLink>
+          </StoryReveal>
+        ))}
+      </div>
+    </main>
   );
 }
 
@@ -272,8 +320,8 @@ function DynamicProjects({
                 </span>
               </h3>
               <p className="text-sm text-muted-foreground max-w-xs mx-auto md:mx-0">
-                Commit history, open-source contributions, and GitHub activity
-                — all in one place.
+                Commit history, open-source contributions, and GitHub activity,
+                all in one place.
               </p>
             </div>
 

@@ -5,7 +5,8 @@ import { ProjectFallback } from "@/components/application/projects.card.fallback
 import { Icon, IconType } from "@/components/icons";
 import BlurFade from "@/components/magicui/blur-fade";
 import { Badge } from "@/components/ui/badge";
-import { ButtonLink } from "@/components/utils/link";
+import { ButtonLink, TransitionLink } from "@/components/utils/link";
+import { StoryReveal } from "@/components/application/story.frame";
 import { StyleModels, StylingModel } from "@/constants/ui";
 import useStorage from "@/hooks/use-storage";
 import { ProjectType } from "@/lib/project.source";
@@ -47,6 +48,8 @@ export default function ProjectPageClient({ project, children }: ProjectPageProp
         <MinimalProjectPage project={project}>{children}</MinimalProjectPage>
       ) : selectedStyle === "static" ? (
         <StaticProjectPage project={project}>{children}</StaticProjectPage>
+      ) : selectedStyle === "story" ? (
+        <StoryProjectPage project={project}>{children}</StoryProjectPage>
       ) : (
         <DynamicProjectPage project={project}>{children}</DynamicProjectPage>
       )}
@@ -486,6 +489,65 @@ function DynamicProjectPage({ project, children }: ProjectPageProps) {
         </div>
       </div>
 
+      <OtherProjects currentProjectId={project.id} />
+    </main>
+  );
+}
+
+/*  STORY  */
+function StoryProjectPage({ project, children }: ProjectPageProps) {
+  return (
+    <main className="mx-auto w-full max-w-3xl px-6 pb-24 pt-28 md:pt-36">
+      <StoryReveal>
+        <TransitionLink
+          href="/projects"
+          className="inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
+        >
+          <ArrowLeft className="size-3.5" /> All work
+        </TransitionLink>
+        <div className="mt-8 flex flex-wrap items-center gap-3 text-xs font-mono text-muted-foreground">
+          <StatusPill status={project.status} minimal />
+          <span>{project.dates}</span>
+          {project.tags?.[0] && <span>{project.tags[0]}</span>}
+        </div>
+        <h1 className="mt-4 text-4xl font-bold leading-tight tracking-tighter text-foreground md:text-5xl">
+          {project.title}
+        </h1>
+        <p className="mt-5 text-lg leading-relaxed text-muted-foreground">
+          {project.description}
+        </p>
+        {project.links?.length ? (
+          <div className="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-sm">
+            {project.links.map((link, i) => (
+              <a
+                key={i}
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-foreground underline-offset-4 hover:underline"
+              >
+                {link.label}
+              </a>
+            ))}
+          </div>
+        ) : null}
+      </StoryReveal>
+      <StoryReveal delay={0.1} className="mt-12 flex flex-wrap gap-1.5">
+        {project.technologies.map((t) => (
+          <span
+            key={t}
+            className="rounded-full border border-border/60 bg-muted/40 px-2.5 py-0.5 text-xs text-muted-foreground"
+          >
+            {t}
+          </span>
+        ))}
+      </StoryReveal>
+      <StoryReveal
+        delay={0.15}
+        className="prose dark:prose-invert mt-10 max-w-none prose-headings:tracking-tight"
+      >
+        {children}
+      </StoryReveal>
       <OtherProjects currentProjectId={project.id} />
     </main>
   );

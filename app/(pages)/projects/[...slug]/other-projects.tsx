@@ -8,6 +8,8 @@ import { ProjectType, getOtherProjects } from "@/lib/project.source";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { StyleSwap } from "@/components/animated/style-swap";
+import { StoryReveal } from "@/components/application/story.frame";
+import { TransitionLink } from "@/components/utils/link";
 import { ArrowUpRight, Layers } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -31,6 +33,8 @@ export function OtherProjects({ currentProjectId }: OtherProjectsProps) {
         <MinimalOtherProjects projects={projects} />
       ) : selectedStyle === "static" ? (
         <StaticOtherProjects projects={projects} />
+      ) : selectedStyle === "story" ? (
+        <StoryOtherProjects projects={projects} />
       ) : (
         <DynamicOtherProjects projects={projects} />
       )}
@@ -137,6 +141,43 @@ function StaticOtherProjects({ projects }: { projects: ProjectData[] }) {
             </BlurFade>
           ))}
         </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────
+   STORY — editorial "keep reading" list
+───────────────────────────────────────────────────────── */
+function StoryOtherProjects({ projects }: { projects: ProjectData[] }) {
+  return (
+    <section className="mx-auto w-full max-w-3xl px-6 py-12">
+      <StoryReveal>
+        <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
+          Keep reading
+        </p>
+      </StoryReveal>
+      <div className="mt-6 space-y-5">
+        {projects.map((p, i) => (
+          <StoryReveal key={p.id} delay={Math.min(i * 0.05, 0.3)}>
+            <TransitionLink
+              href={`/projects/${p.id}`}
+              className="group block border-b border-border/40 pb-5"
+            >
+              <div className="flex items-baseline justify-between gap-3">
+                <h3 className="text-base font-semibold text-foreground transition-colors group-hover:text-primary">
+                  {p.title}
+                </h3>
+                <span className="shrink-0 font-mono text-xs text-muted-foreground/70">
+                  {p.dates}
+                </span>
+              </div>
+              <p className="mt-1 line-clamp-2 text-sm leading-relaxed text-muted-foreground">
+                {p.description}
+              </p>
+            </TransitionLink>
+          </StoryReveal>
+        ))}
       </div>
     </section>
   );

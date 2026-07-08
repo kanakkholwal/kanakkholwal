@@ -8,6 +8,7 @@ import useStorage from "@/hooks/use-storage";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { StyleSwap } from "@/components/animated/style-swap";
+import { Serif, StoryReveal } from "@/components/application/story.frame";
 import { ArrowUpRight, Globe, Mail } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -43,6 +44,13 @@ export default function LinksPageClient({
         />
       ) : selectedStyle === "static" ? (
         <StaticLinks
+          displayName={displayName}
+          avatar={avatar}
+          email={email}
+          url={url}
+        />
+      ) : selectedStyle === "story" ? (
+        <StoryLinks
           displayName={displayName}
           avatar={avatar}
           email={email}
@@ -227,6 +235,69 @@ function StaticLinks({ displayName, avatar, email, url }: LinksPageClientProps) 
           </BlurFade>
         </div>
       </div>
+    </main>
+  );
+}
+
+
+function StoryLinks({ displayName, avatar, email, url }: LinksPageClientProps) {
+  const rows = [
+    { href: url, icon: Globe, label: "My portfolio", dest: url.replace("https://", "") },
+    { href: `mailto:${email}`, icon: Mail, label: "Say hello over email", dest: email },
+  ];
+
+  return (
+    <main className="mx-auto w-full max-w-3xl px-6 pb-24 pt-28 md:pt-36">
+      <StoryReveal>
+        <div className="flex items-center gap-4">
+          <Image
+            src={avatar}
+            width={56}
+            height={56}
+            alt={displayName}
+            className="rounded-full border border-border"
+            priority
+          />
+          <div>
+            <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
+              Find me
+            </p>
+            <h1 className="mt-1 text-2xl font-bold leading-tight tracking-tight text-foreground md:text-3xl">
+              I&apos;m {displayName}, mostly <Serif className="text-muted-foreground/80">here</Serif>.
+            </h1>
+          </div>
+        </div>
+        <p className="mt-5 max-w-xl text-base leading-relaxed text-muted-foreground">
+          A few honest places to reach me. Pick whichever feels right, and I&apos;ll write back.
+        </p>
+      </StoryReveal>
+
+      <div className="mt-14 space-y-3">
+        {rows.map(({ href, icon: Icon, label, dest }, i) => (
+          <StoryReveal key={href} delay={0.06 * (i + 1)}>
+            <Link
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex items-center gap-4 rounded-xl border border-border/60 bg-card/40 px-5 py-4 transition-colors hover:border-foreground/20 hover:bg-card"
+            >
+              <Icon className="size-5 shrink-0 text-muted-foreground transition-colors group-hover:text-foreground" />
+              <div className="min-w-0 flex-1">
+                <p className="font-medium text-foreground">{label}</p>
+                <p className="truncate font-mono text-xs text-muted-foreground">{dest}</p>
+              </div>
+              <ArrowUpRight className="size-4 shrink-0 text-muted-foreground/40 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-foreground" />
+            </Link>
+          </StoryReveal>
+        ))}
+      </div>
+
+      <StoryReveal delay={0.24} className="mt-12 space-y-3">
+        <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
+          Elsewhere
+        </p>
+        <Socials />
+      </StoryReveal>
     </main>
   );
 }

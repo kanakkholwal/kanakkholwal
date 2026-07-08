@@ -10,26 +10,21 @@ import {
 import type { ReactNode } from "react";
 
 // One shared motion contract for every design-mode (`styling.model`) change.
-// Each homepage section renders its active Minimal / Static / Dynamic variant
-// through <StyleSwap>, so switching modes reads the same everywhere: the
-// outgoing variant lifts away and fades while the incoming one rises into
-// place — identical easing, distance and duration across the whole page.
-// Previously every section hand-rolled its own AnimatePresence with slightly
-// different springs and offsets, so the page shimmered unevenly on each switch.
+// Each section renders its active Minimal / Static / Dynamic / Story variant
+// through <StyleSwap>, so switching modes reads the same everywhere.
+//
+// The swap is a shared-layout crossfade: elements that exist in more than one
+// mode (the logo, name, role, avatar, socials, CTA — anything with a matching
+// `layoutId` inside the wrapper's <LayoutGroup>) physically travel to their new
+// position, while everything else crossfades. `mode="popLayout"` takes the
+// outgoing variant out of layout flow so the incoming one settles into place and
+// the shared elements can morph cleanly; the wrapper animates opacity only, so
+// it never fights the layout projection that drives the morph.
 
 /** Signature ease, shared with the story components (see story/motion.ts). */
 export const STYLE_SWAP_EASE = [0.22, 1, 0.36, 1] as const;
 
-/** Distance the variant travels as it enters / leaves, in px. */
-const SWAP_SHIFT = 10;
-
-const swapVariants: Variants = {
-  initial: { opacity: 0, y: SWAP_SHIFT },
-  animate: { opacity: 1, y: 0 },
-  exit: { opacity: 0, y: -SWAP_SHIFT },
-};
-
-const reducedVariants: Variants = {
+const crossfade: Variants = {
   initial: { opacity: 0 },
   animate: { opacity: 1 },
   exit: { opacity: 0 },
@@ -40,26 +35,24 @@ export function StyleSwap({
   children,
   className,
 }: {
-  /** Active `styling.model` id — a change drives the exit → enter swap. */
+  /** Active `styling.model` id — a change drives the shared-layout swap. */
   swapKey: string;
   children: ReactNode;
   className?: string;
 }) {
   const reduce = useReducedMotion();
 
+  // Exit a touch faster than enter so the swap feels responsive.
   const transition: Transition = {
-    duration: reduce ? 0.2 : 0.28,
-    ease: reduce ? "linear" : STYLE_SWAP_EASE,
+    duration: reduce ? 0.15 : 0.3,
+    ease: STYLE_SWAP_EASE,
   };
 
-  // mode="wait" keeps the swap coordinated — the old mode fully leaves before
-  // the new one arrives. initial={false} skips the entrance on first paint so
-  // it doesn't fight the page-load reveal in the wrapper.
   return (
-    <AnimatePresence mode="wait" initial={false}>
+    <AnimatePresence mode="popLayout" initial={false}>
       <motion.div
         key={swapKey}
-        variants={reduce ? reducedVariants : swapVariants}
+        variants={crossfade}
         initial="initial"
         animate="animate"
         exit="exit"

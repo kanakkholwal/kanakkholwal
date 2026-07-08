@@ -3,9 +3,9 @@ import { GlowFillButton } from "@/components/animated/button.fill";
 import { Icon, IconType } from "@/components/icons";
 import { ButtonLink, TransitionLink } from "@/components/utils/link";
 import { StyleModels, StylingModel } from "@/constants/ui";
-import { Variants, motion, useMotionValue } from "framer-motion";
+import { Variants, motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { StyleSwap } from "@/components/animated/style-swap";
-import { Serif, StoryOpening, StoryReveal } from "@/components/application/story.frame";
+import { StoryOpening, StoryReveal } from "@/components/application/story.frame";
 import { ArrowRight, MapPin } from "lucide-react";
 import { appConfig, resume_link } from "root/project.config";
 
@@ -20,7 +20,6 @@ import { Panel } from "@/components/application/panel";
 import { Logo } from "@/components/logo";
 import { GreaterSeparator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
-import { useSpring, useTransform } from "framer-motion";
 import Image from "next/image";
 import { HyperText } from "../animated/text.hyper";
 import RotatingText from "../animated/text.rotate";
@@ -54,40 +53,47 @@ export default function Section() {
 function StoryHero() {
   return (
     <StoryOpening id="hero">
-      <StoryReveal className="flex items-center gap-4">
-        <Image
-          src={appConfig.avatar}
-          alt={appConfig.displayName}
-          width={56}
-          height={56}
-          className="size-14 rounded-full border border-border/60"
-          fetchPriority="high"
-        />
-        <div>
-          <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
-            A portfolio, told as a story
-          </p>
-          <p className="text-sm text-muted-foreground">
-            {appConfig.role} · {appConfig.location}
-          </p>
+      {/* Avatar / name / role carry the same layoutIds as the other heroes, so
+          they travel into place when you switch into or out of story mode. */}
+      <div className="flex items-center gap-4">
+        <motion.div layoutId="hero-avatar" className="shrink-0">
+          <Image
+            src={appConfig.avatar}
+            alt={appConfig.displayName}
+            width={56}
+            height={56}
+            className="size-14 rounded-full border border-border/60 object-cover"
+            fetchPriority="high"
+          />
+        </motion.div>
+        <div className="min-w-0">
+          <motion.h1
+            layoutId="hero-name"
+            className="text-2xl font-bold tracking-tight text-foreground"
+          >
+            {appConfig.displayName}
+          </motion.h1>
+          <motion.div layoutId="hero-role" className="mt-1">
+            <RotatingText
+              texts={appConfig.applicableRoles}
+              mainClassName="text-sm font-medium text-muted-foreground"
+              rotationInterval={2800}
+              transition={{ type: "spring", damping: 20, stiffness: 200 }}
+            />
+          </motion.div>
         </div>
-      </StoryReveal>
+      </div>
 
-      <StoryReveal delay={0.08}>
-        <h1 className="mt-8 text-4xl font-black leading-[1.05] tracking-tighter text-foreground md:text-6xl">
-          I&apos;m {appConfig.shortName}. I{" "}
-          <Serif className="text-muted-foreground/80">build</Serif> products that{" "}
-          <Serif className="text-muted-foreground/80">ship</Serif>.
-        </h1>
-      </StoryReveal>
-
-      <StoryReveal delay={0.14}>
-        <p className="mt-6 max-w-xl text-base leading-relaxed text-muted-foreground">
+      <StoryReveal delay={0.05}>
+        <p className="mt-8 font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
+          A portfolio, read as a story
+        </p>
+        <p className="mt-4 max-w-xl text-lg leading-relaxed text-foreground/90">
           {appConfig.summary}
         </p>
       </StoryReveal>
 
-      <StoryReveal delay={0.2} className="mt-8 flex flex-wrap items-center gap-3">
+      <motion.div layoutId="hero-cta" className="mt-8 flex flex-wrap items-center gap-3">
         <ButtonLink
           href={resume_link}
           target="_blank"
@@ -102,10 +108,31 @@ function StoryHero() {
           href="#about"
           className="inline-flex items-center gap-1.5 text-sm font-medium text-foreground transition-all hover:gap-2.5"
         >
-          Read the story
+          Start reading
           <ArrowRight className="size-4" />
         </a>
-      </StoryReveal>
+      </motion.div>
+
+      <motion.div
+        layoutId="hero-socials"
+        className="mt-8 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-border/30 pt-6"
+      >
+        <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground/60">
+          Find me
+        </span>
+        {Object.entries(appConfig.social).map(([key, link]) => (
+          <a
+            key={key}
+            href={link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
+          >
+            <Icon name={key as IconType} className="size-3.5" />
+            <span className="capitalize">{key}</span>
+          </a>
+        ))}
+      </motion.div>
     </StoryOpening>
   );
 }
@@ -131,15 +158,9 @@ function DynamicHero() {
       id="hero"
       className="relative w-full min-h-[95dvh] flex flex-col overflow-hidden"
     >
-      {/* ── Background layers ── */}
+      {/* ── Background: subtle dot grid only (no glows / vignette) ── */}
       <div className="pointer-events-none absolute inset-0 z-0">
-        {/* Fine dot grid */}
         <div className="absolute inset-0 bg-[radial-gradient(circle,_hsl(var(--foreground)/0.08)_1px,_transparent_1px)] bg-[size:28px_28px]" />
-        {/* Dual radial glows */}
-        <div className="absolute -top-32 -left-32 w-[500px] h-[500px] rounded-full bg-primary/8 blur-[120px]" />
-        <div className="absolute -bottom-20 -right-20 w-[400px] h-[400px] rounded-full bg-primary/5 blur-[100px]" />
-        {/* Vignette */}
-        <div className="absolute inset-0 [background:radial-gradient(ellipse_80%_60%_at_50%_50%,transparent_40%,hsl(var(--background)/0.7)_100%)]" />
       </div>
 
       {/* ── Top status strip ── */}
@@ -296,7 +317,7 @@ function DynamicHero() {
           <motion.div
             animate={{ y: [0, 6, 0] }}
             transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
-            className="w-px h-8 bg-gradient-to-b from-muted-foreground/40 to-transparent"
+            className="w-px h-8 bg-muted-foreground/30"
           />
         </div>
       </motion.div>
@@ -526,16 +547,6 @@ function StaticHero() {
     </section>
   );
 }
-/** Social + tech icons that orbit the avatar */
-const ORBIT_INNER = ["github", "linkedin", "twitter"] as const;
-const ORBIT_OUTER = [
-  "terminal",
-  "code",
-  "package",
-  "globe",
-  "rocket",
-  "cpu",
-] as const;
 
 /** Activity items shown on the right panel */
 const ACTIVITY = [
@@ -544,6 +555,8 @@ const ACTIVITY = [
   { icon: "code" as IconType, label: "PR merged", value: "college-ecosystem", time: "3d ago" },
   { icon: "stars:bs" as IconType, label: "Starred", value: "20+ repos", time: "ongoing" },
 ] as const;
+
+const ORBIT_INNER = ["github", "linkedin", "twitter"] as const;
 
 function HeroOrbit() {
   const x = useMotionValue(0);
@@ -587,13 +600,10 @@ function HeroOrbit() {
       }}
       style={{ rotateX, rotateY, transformStyle: "preserve-3d", perspective: 900 }}
     >
-      {/* Outer glow */}
-      <div className="pointer-events-none absolute -inset-6 rounded-3xl bg-primary/5 blur-2xl" />
-
       {/* Card shell */}
       <div className="relative w-[340px] rounded-2xl border border-border/60 bg-card/80 backdrop-blur-xl shadow-2xl overflow-hidden">
 
-        {/* ── Top bar ── */}
+        {/* Top bar */}
         <div className="flex items-center justify-between px-4 py-3 border-b border-border/40">
           <div className="flex items-center gap-1.5">
             <span className="size-2.5 rounded-full bg-red-500/80" />
@@ -612,10 +622,9 @@ function HeroOrbit() {
           </div>
         </div>
 
-        {/* ── Avatar + identity ── */}
+        {/* Avatar + identity */}
         <div className="flex items-center gap-4 px-5 py-4 border-b border-border/30">
           <div className="relative shrink-0">
-            <div className="absolute inset-0 rounded-full bg-primary/20 blur-lg scale-110" />
             <div className="relative size-14 rounded-full ring-2 ring-border ring-offset-2 ring-offset-card overflow-hidden">
               <Image
                 src={appConfig.avatar}
@@ -640,7 +649,7 @@ function HeroOrbit() {
           </div>
         </div>
 
-        {/* ── Stats row ── */}
+        {/* Stats row */}
         <div className="grid grid-cols-3 divide-x divide-border/40 border-b border-border/30">
           {[
             { to: 20, suffix: "+", label: "Projects" },
@@ -656,7 +665,7 @@ function HeroOrbit() {
           ))}
         </div>
 
-        {/* ── Activity feed ── */}
+        {/* Activity feed */}
         <div className="px-4 py-3">
           <p className="text-[9px] font-mono text-muted-foreground/50 uppercase tracking-widest mb-2.5">
             Recent activity
@@ -686,7 +695,7 @@ function HeroOrbit() {
           </motion.ul>
         </div>
 
-        {/* ── Social footer ── */}
+        {/* Social footer */}
         <div className="flex items-center justify-between px-5 py-3 border-t border-border/30">
           {ORBIT_INNER.map((key) => (
             <a

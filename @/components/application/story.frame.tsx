@@ -86,11 +86,11 @@ export function StoryChapter({
       <div className="relative border-l border-dashed border-border/60 pb-16 pl-8 pt-6 md:pl-10">
         <span
           aria-hidden
-          className="absolute -left-[6px] top-7 size-3 rounded-full border-2 border-background bg-primary"
+          className="absolute -left-1.5 top-7 size-3 rounded-full border-2 border-background bg-primary"
         />
         <StoryReveal>
           <p className="mb-4 font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
-            Ch.{pad(index)} <span className="text-muted-foreground/40">—</span> {kicker}
+            Ch.{pad(index)} <span className="text-muted-foreground/40">·</span> {kicker}
           </p>
           <h2 className="text-2xl font-bold leading-tight tracking-tight text-foreground md:text-3xl">
             {title}
