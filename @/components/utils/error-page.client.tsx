@@ -5,7 +5,7 @@ import BlurFade from "@/components/magicui/blur-fade";
 import { Button } from "@/components/ui/button";
 import { StyleModels, StylingModel } from "@/constants/ui";
 import useStorage from "@/hooks/use-storage";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { StyleSwap } from "@/components/animated/style-swap";
 import { Serif, StoryReveal } from "@/components/application/story.frame";
 import {

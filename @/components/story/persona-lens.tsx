@@ -1,7 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
 
 export type Lens = "developer" | "founder" | "recruiter";
 
@@ -37,8 +37,8 @@ export function PersonaLens({
               aria-checked={active}
               onClick={() => onChange(lens.id)}
               className={cn(
-                "relative rounded-full px-4 py-1.5 text-sm font-medium transition-colors",
-                active ? "text-primary-foreground" : "text-muted-foreground hover:text-foreground",
+                "relative rounded-full px-4 py-1.5 text-sm font-medium transition-colors bg-transparent",
+                active ? "text-foreground" : "text-muted-foreground hover:text-foreground",
               )}
             >
               {active && (

@@ -1,16 +1,15 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Github, Linkedin, Twitter } from "lucide-react";
+import { Icon } from "@/components/icons";
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { getStoryChapters } from "~/data/story/story.build";
+import { getStory, type StoryChapter } from "~/data/story";
 import { appConfig } from "root/project.config";
 import { CaseStudyCard } from "./case-study-card";
 import { EASE } from "./motion";
 import { type Lens, PersonaLens } from "./persona-lens";
 import { StackLine } from "./story-bits";
-import { isProject } from "./story-facets";
 
 const IDENTITY_STACK = [
   "TypeScript",
@@ -24,23 +23,17 @@ const IDENTITY_STACK = [
 ];
 
 const SOCIALS = [
-  { href: appConfig.social.github, label: "GitHub", Icon: Github },
-  { href: appConfig.social.linkedin, label: "LinkedIn", Icon: Linkedin },
-  { href: appConfig.social.twitter, label: "Twitter", Icon: Twitter },
-];
+  { href: appConfig.social.github, label: "GitHub", name: "github" },
+  { href: appConfig.social.linkedin, label: "LinkedIn", name: "linkedin" },
+  { href: appConfig.social.twitter, label: "Twitter", name: "twitter" },
+] as const;
 
 export function StoryJourney() {
   const [lens, setLens] = useState<Lens>("developer");
 
-  const { ordered, building } = useMemo(() => {
-    const chapters = getStoryChapters();
-    // Recent work first, then featured projects.
-    const work = chapters.filter((c) => !isProject(c)).reverse();
-    const projects = chapters.filter(isProject);
-    return {
-      ordered: [...work, ...projects],
-      building: chapters.find((c) => /present/i.test(c.period))?.title,
-    };
+  const { work, projects, building } = useMemo(() => {
+    const { work, projects, current } = getStory();
+    return { work, projects, building: current?.title };
   }, []);
 
   return (
@@ -62,30 +55,59 @@ export function StoryJourney() {
       <div className="lg:grid lg:grid-cols-[300px_1fr] lg:items-start lg:gap-12">
         <IdentityPanel building={building} />
 
-        <div className="mt-10 space-y-8 lg:mt-0">
+        <div className="mt-10 space-y-12 lg:mt-0">
           <PersonaLens value={lens} onChange={setLens} />
 
-          <motion.div
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true, margin: "-80px" }}
-            variants={{ show: { transition: { staggerChildren: 0.08 } } }}
-            className="space-y-4"
-          >
-            {ordered.map((chapter, i) => (
-              <motion.div
-                key={chapter.id}
-                variants={{
-                  hidden: { opacity: 0, y: 24 },
-                  show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: EASE } },
-                }}
-              >
-                <CaseStudyCard chapter={chapter} lens={lens} index={i} />
-              </motion.div>
-            ))}
-          </motion.div>
+          <ChapterGroup label="Experience" chapters={work} lens={lens} />
+          {projects.length > 0 && (
+            <ChapterGroup
+              label="Featured Projects"
+              chapters={projects}
+              lens={lens}
+            />
+          )}
         </div>
       </div>
+    </section>
+  );
+}
+
+// Work roles and featured projects are both story chapters, but they read as
+// distinct sections so a project never looks like a job. Each group numbers
+// itself from 01.
+function ChapterGroup({
+  label,
+  chapters,
+  lens,
+}: {
+  label: string;
+  chapters: StoryChapter[];
+  lens: Lens;
+}) {
+  return (
+    <section className="space-y-4">
+      <h2 className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
+        {label}
+      </h2>
+      <motion.div
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, margin: "-80px" }}
+        variants={{ show: { transition: { staggerChildren: 0.08 } } }}
+        className="space-y-4"
+      >
+        {chapters.map((chapter, i) => (
+          <motion.div
+            key={chapter.id}
+            variants={{
+              hidden: { opacity: 0, y: 24 },
+              show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: EASE } },
+            }}
+          >
+            <CaseStudyCard chapter={chapter} lens={lens} index={i} />
+          </motion.div>
+        ))}
+      </motion.div>
     </section>
   );
 }
@@ -126,7 +148,7 @@ function IdentityPanel({ building }: { building?: string }) {
       </div>
 
       <div className="flex items-center gap-2">
-        {SOCIALS.map(({ href, label, Icon }) => (
+        {SOCIALS.map(({ href, label, name }) => (
           <a
             key={label}
             href={href}
@@ -135,7 +157,7 @@ function IdentityPanel({ building }: { building?: string }) {
             aria-label={label}
             className="flex size-9 items-center justify-center rounded-full border border-border/60 text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground"
           >
-            <Icon className="size-4" />
+            <Icon name={name} className="size-4" />
           </a>
         ))}
       </div>

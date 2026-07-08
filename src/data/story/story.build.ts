@@ -41,6 +41,7 @@ function workToChapter(work: WorkExperienceType): StoryChapter | null {
     org: work.position,
     period,
     href: work.href,
+    current: Boolean(work.isCurrentEmployer || work.isOngoing || !work.endDate),
     beats,
   };
 }

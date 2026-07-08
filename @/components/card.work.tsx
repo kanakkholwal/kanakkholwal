@@ -27,6 +27,8 @@ export function WorkExperienceCard({ work }: WorkExperienceCardProps) {
           <AvatarImage
             src={work.logoUrl}
             alt={work.company}
+            height={40}
+            width={40}
             className="object-contain p-1 rounded-full"
           />
           <AvatarFallback className="rounded-md text-[11px] font-bold text-muted-foreground">
