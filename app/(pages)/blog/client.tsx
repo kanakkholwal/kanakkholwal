@@ -5,7 +5,8 @@ import BlurFade from "@/components/magicui/blur-fade";
 import { Badge } from "@/components/ui/badge";
 import { StyleModels, StylingModel } from "@/constants/ui";
 import useStorage from "@/hooks/use-storage";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
+import { StyleSwap } from "@/components/animated/style-swap";
 import { ArrowUpRight, BookOpen, CalendarDays, Clock } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -37,39 +38,15 @@ export default function AnimatedMediumPosts({ posts, now, mediumUrl }: Props) {
   );
 
   return (
-    <AnimatePresence mode="wait" initial={false}>
+    <StyleSwap swapKey={selectedStyle}>
       {selectedStyle === "minimal" ? (
-        <motion.div
-          key="blog-minimal"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
-        >
-          <MinimalBlog posts={posts} now={now} mediumUrl={mediumUrl} />
-        </motion.div>
+        <MinimalBlog posts={posts} now={now} mediumUrl={mediumUrl} />
       ) : selectedStyle === "static" ? (
-        <motion.div
-          key="blog-static"
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 12 }}
-          transition={{ type: "spring", stiffness: 300, damping: 28 }}
-        >
-          <StaticBlog posts={posts} now={now} mediumUrl={mediumUrl} />
-        </motion.div>
+        <StaticBlog posts={posts} now={now} mediumUrl={mediumUrl} />
       ) : (
-        <motion.div
-          key="blog-dynamic"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 20 }}
-          transition={{ type: "spring", stiffness: 260, damping: 24 }}
-        >
-          <DynamicBlog posts={posts} now={now} mediumUrl={mediumUrl} />
-        </motion.div>
+        <DynamicBlog posts={posts} now={now} mediumUrl={mediumUrl} />
       )}
-    </AnimatePresence>
+    </StyleSwap>
   );
 }
 

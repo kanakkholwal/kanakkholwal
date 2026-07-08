@@ -3,7 +3,8 @@
 import BlurFade from "@/components/magicui/blur-fade";
 import { StyleModels, StylingModel } from "@/constants/ui";
 import useStorage from "@/hooks/use-storage";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
+import { StyleSwap } from "@/components/animated/style-swap";
 import React from "react";
 
 const BLUR_FADE_DELAY = 0.04;
@@ -31,54 +32,30 @@ export default function StatsPageClient({
   );
 
   return (
-    <AnimatePresence mode="wait" initial={false}>
+    <StyleSwap swapKey={selectedStyle}>
       {selectedStyle === "minimal" ? (
-        <motion.div
-          key="stats-minimal"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
-        >
-          <MinimalStats
-            header={header}
-            repoSection={repoSection}
-            registrySection={registrySection}
-            healthSection={healthSection}
-          />
-        </motion.div>
+        <MinimalStats
+          header={header}
+          repoSection={repoSection}
+          registrySection={registrySection}
+          healthSection={healthSection}
+        />
       ) : selectedStyle === "static" ? (
-        <motion.div
-          key="stats-static"
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 12 }}
-          transition={{ type: "spring", stiffness: 300, damping: 28 }}
-        >
-          <StaticStats
-            header={header}
-            repoSection={repoSection}
-            registrySection={registrySection}
-            healthSection={healthSection}
-          />
-        </motion.div>
+        <StaticStats
+          header={header}
+          repoSection={repoSection}
+          registrySection={registrySection}
+          healthSection={healthSection}
+        />
       ) : (
-        <motion.div
-          key="stats-dynamic"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 20 }}
-          transition={{ type: "spring", stiffness: 260, damping: 24 }}
-        >
-          <DynamicStats
-            header={header}
-            repoSection={repoSection}
-            registrySection={registrySection}
-            healthSection={healthSection}
-          />
-        </motion.div>
+        <DynamicStats
+          header={header}
+          repoSection={repoSection}
+          registrySection={registrySection}
+          healthSection={healthSection}
+        />
       )}
-    </AnimatePresence>
+    </StyleSwap>
   );
 }
 

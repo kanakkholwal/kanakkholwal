@@ -5,7 +5,8 @@ import { Badge } from "@/components/ui/badge";
 import { StyleModels, StylingModel } from "@/constants/ui";
 import useStorage from "@/hooks/use-storage";
 import { cn } from "@/lib/utils";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
+import { StyleSwap } from "@/components/animated/style-swap";
 import { CheckCircle2, CircleDashed, Trophy } from "lucide-react";
 import Image from "next/image";
 import { appConfig } from "root/project.config";
@@ -33,54 +34,30 @@ export default function BucketListClient({
   );
 
   return (
-    <AnimatePresence mode="wait" initial={false}>
+    <StyleSwap swapKey={selectedStyle}>
       {selectedStyle === "minimal" ? (
-        <motion.div
-          key="bucket-minimal"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
-        >
-          <MinimalBucketList
-            items={items}
-            total={total}
-            completed={completed}
-            percentage={percentage}
-          />
-        </motion.div>
+        <MinimalBucketList
+          items={items}
+          total={total}
+          completed={completed}
+          percentage={percentage}
+        />
       ) : selectedStyle === "static" ? (
-        <motion.div
-          key="bucket-static"
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 12 }}
-          transition={{ type: "spring", stiffness: 300, damping: 28 }}
-        >
-          <StaticBucketList
-            items={items}
-            total={total}
-            completed={completed}
-            percentage={percentage}
-          />
-        </motion.div>
+        <StaticBucketList
+          items={items}
+          total={total}
+          completed={completed}
+          percentage={percentage}
+        />
       ) : (
-        <motion.div
-          key="bucket-dynamic"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 20 }}
-          transition={{ type: "spring", stiffness: 260, damping: 24 }}
-        >
-          <DynamicBucketList
-            items={items}
-            total={total}
-            completed={completed}
-            percentage={percentage}
-          />
-        </motion.div>
+        <DynamicBucketList
+          items={items}
+          total={total}
+          completed={completed}
+          percentage={percentage}
+        />
       )}
-    </AnimatePresence>
+    </StyleSwap>
   );
 }
 

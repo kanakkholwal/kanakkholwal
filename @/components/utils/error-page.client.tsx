@@ -5,7 +5,8 @@ import BlurFade from "@/components/magicui/blur-fade";
 import { Button } from "@/components/ui/button";
 import { StyleModels, StylingModel } from "@/constants/ui";
 import useStorage from "@/hooks/use-storage";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
+import { StyleSwap } from "@/components/animated/style-swap";
 import {
   AlertCircle,
   AlertTriangle,
@@ -34,42 +35,21 @@ export default function ErrorPageClient({ error, reset }: ErrorPageClientProps) 
   );
 
   return (
-    <AnimatePresence mode="wait" initial={false}>
+    <StyleSwap swapKey={selectedStyle}>
       {selectedStyle === "minimal" ? (
-        <motion.div
-          key="error-minimal"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
-          className="flex min-h-screen w-full items-center justify-center p-6"
-        >
+        <div className="flex min-h-screen w-full items-center justify-center p-6">
           <MinimalError error={error} reset={reset} />
-        </motion.div>
+        </div>
       ) : selectedStyle === "static" ? (
-        <motion.div
-          key="error-static"
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 12 }}
-          transition={{ type: "spring", stiffness: 300, damping: 28 }}
-          className="flex min-h-screen w-full items-center justify-center p-6"
-        >
+        <div className="flex min-h-screen w-full items-center justify-center p-6">
           <StaticError error={error} reset={reset} />
-        </motion.div>
+        </div>
       ) : (
-        <motion.div
-          key="error-dynamic"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 20 }}
-          transition={{ type: "spring", stiffness: 260, damping: 24 }}
-          className="w-full"
-        >
+        <div className="w-full">
           <DynamicError error={error} reset={reset} />
-        </motion.div>
+        </div>
       )}
-    </AnimatePresence>
+    </StyleSwap>
   );
 }
 

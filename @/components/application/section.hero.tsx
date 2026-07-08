@@ -3,7 +3,9 @@ import { GlowFillButton } from "@/components/animated/button.fill";
 import { Icon, IconType } from "@/components/icons";
 import { ButtonLink, TransitionLink } from "@/components/utils/link";
 import { StyleModels, StylingModel } from "@/constants/ui";
-import { AnimatePresence, Variants, motion, useMotionValue } from "framer-motion";
+import { Variants, motion, useMotionValue } from "framer-motion";
+import { StyleSwap } from "@/components/animated/style-swap";
+import { Serif, StoryOpening, StoryReveal } from "@/components/application/story.frame";
 import { ArrowRight, MapPin } from "lucide-react";
 import { appConfig, resume_link } from "root/project.config";
 
@@ -32,44 +34,81 @@ export default function Section() {
   );
 
   return (
-    <AnimatePresence mode="wait" initial={false}>
+    <StyleSwap swapKey={selectedStyle}>
       {selectedStyle === "minimal" ? (
-        <motion.div
-          key="hero-minimal"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.3, ease: "easeInOut" }}
-        >
-          <MinimalHero />
-        </motion.div>
+        <MinimalHero />
       ) : selectedStyle === "static" ? (
-        <motion.div
-          key="hero-static"
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 16 }}
-          transition={{ type: "spring", stiffness: 300, damping: 28 }}
-        >
-          <StaticHero />
-        </motion.div>
+        <StaticHero />
+      ) : selectedStyle === "story" ? (
+        <StoryHero />
       ) : (
-        <motion.div
-          key="hero-dynamic"
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 24 }}
-          transition={{ type: "spring", stiffness: 260, damping: 24 }}
-        >
-          <SpotlightReveal>
-            <DynamicHero />
-          </SpotlightReveal>
-        </motion.div>
+        <SpotlightReveal>
+          <DynamicHero />
+        </SpotlightReveal>
       )}
-    </AnimatePresence>
+    </StyleSwap>
   );
 }
 
+
+function StoryHero() {
+  return (
+    <StoryOpening id="hero">
+      <StoryReveal className="flex items-center gap-4">
+        <Image
+          src={appConfig.avatar}
+          alt={appConfig.displayName}
+          width={56}
+          height={56}
+          className="size-14 rounded-full border border-border/60"
+          fetchPriority="high"
+        />
+        <div>
+          <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
+            A portfolio, told as a story
+          </p>
+          <p className="text-sm text-muted-foreground">
+            {appConfig.role} · {appConfig.location}
+          </p>
+        </div>
+      </StoryReveal>
+
+      <StoryReveal delay={0.08}>
+        <h1 className="mt-8 text-4xl font-black leading-[1.05] tracking-tighter text-foreground md:text-6xl">
+          I&apos;m {appConfig.shortName}. I{" "}
+          <Serif className="text-muted-foreground/80">build</Serif> products that{" "}
+          <Serif className="text-muted-foreground/80">ship</Serif>.
+        </h1>
+      </StoryReveal>
+
+      <StoryReveal delay={0.14}>
+        <p className="mt-6 max-w-xl text-base leading-relaxed text-muted-foreground">
+          {appConfig.summary}
+        </p>
+      </StoryReveal>
+
+      <StoryReveal delay={0.2} className="mt-8 flex flex-wrap items-center gap-3">
+        <ButtonLink
+          href={resume_link}
+          target="_blank"
+          rounded="full"
+          variant="outline"
+          className="h-11 px-6"
+        >
+          <Icon name="download" />
+          Resume
+        </ButtonLink>
+        <a
+          href="#about"
+          className="inline-flex items-center gap-1.5 text-sm font-medium text-foreground transition-all hover:gap-2.5"
+        >
+          Read the story
+          <ArrowRight className="size-4" />
+        </a>
+      </StoryReveal>
+    </StoryOpening>
+  );
+}
 
 function DynamicHero() {
   const fadeUp: Variants = {

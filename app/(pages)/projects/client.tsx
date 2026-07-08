@@ -9,7 +9,8 @@ import { ButtonTransitionLink, TransitionLink } from "@/components/utils/link";
 import { StyleModels, StylingModel } from "@/constants/ui";
 import useStorage from "@/hooks/use-storage";
 import { getProjectList } from "@/lib/project.source";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
+import { StyleSwap } from "@/components/animated/style-swap";
 import { ArrowRight, ArrowUpRight, TrendingUp } from "lucide-react";
 
 const BLUR_FADE_DELAY = 0.04;
@@ -23,39 +24,15 @@ export default function ProjectsShowcase() {
   const projects = getProjectList();
 
   return (
-    <AnimatePresence mode="wait" initial={false}>
+    <StyleSwap swapKey={selectedStyle}>
       {selectedStyle === "minimal" ? (
-        <motion.div
-          key="projects-minimal"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
-        >
-          <MinimalProjects projects={projects} />
-        </motion.div>
+        <MinimalProjects projects={projects} />
       ) : selectedStyle === "static" ? (
-        <motion.div
-          key="projects-static"
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 12 }}
-          transition={{ type: "spring", stiffness: 300, damping: 28 }}
-        >
-          <StaticProjects projects={projects} />
-        </motion.div>
+        <StaticProjects projects={projects} />
       ) : (
-        <motion.div
-          key="projects-dynamic"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 20 }}
-          transition={{ type: "spring", stiffness: 260, damping: 24 }}
-        >
-          <DynamicProjects projects={projects} />
-        </motion.div>
+        <DynamicProjects projects={projects} />
       )}
-    </AnimatePresence>
+    </StyleSwap>
   );
 }
 

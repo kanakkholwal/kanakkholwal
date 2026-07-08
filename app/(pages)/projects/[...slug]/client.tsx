@@ -10,7 +10,8 @@ import { StyleModels, StylingModel } from "@/constants/ui";
 import useStorage from "@/hooks/use-storage";
 import { ProjectType } from "@/lib/project.source";
 import { cn } from "@/lib/utils";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
+import { StyleSwap } from "@/components/animated/style-swap";
 import {
   ArrowLeft,
   ArrowUpRight,
@@ -41,39 +42,15 @@ export default function ProjectPageClient({ project, children }: ProjectPageProp
   );
 
   return (
-    <AnimatePresence mode="wait" initial={false}>
+    <StyleSwap swapKey={selectedStyle}>
       {selectedStyle === "minimal" ? (
-        <motion.div
-          key="project-minimal"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
-        >
-          <MinimalProjectPage project={project}>{children}</MinimalProjectPage>
-        </motion.div>
+        <MinimalProjectPage project={project}>{children}</MinimalProjectPage>
       ) : selectedStyle === "static" ? (
-        <motion.div
-          key="project-static"
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 12 }}
-          transition={{ type: "spring", stiffness: 300, damping: 28 }}
-        >
-          <StaticProjectPage project={project}>{children}</StaticProjectPage>
-        </motion.div>
+        <StaticProjectPage project={project}>{children}</StaticProjectPage>
       ) : (
-        <motion.div
-          key="project-dynamic"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 20 }}
-          transition={{ type: "spring", stiffness: 260, damping: 24 }}
-        >
-          <DynamicProjectPage project={project}>{children}</DynamicProjectPage>
-        </motion.div>
+        <DynamicProjectPage project={project}>{children}</DynamicProjectPage>
       )}
-    </AnimatePresence>
+    </StyleSwap>
   );
 }
 

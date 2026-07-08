@@ -3,11 +3,13 @@ import {
   ExpandableProjectCards
 } from "@/components/application/projects.card";
 import BlurFade from "@/components/magicui/blur-fade";
-import { ButtonLink, ButtonTransitionLink } from "@/components/utils/link";
+import { ButtonLink, ButtonTransitionLink, TransitionLink } from "@/components/utils/link";
+import { Serif, StoryChapter, StoryReveal } from "@/components/application/story.frame";
 import { StyleModels, StylingModel } from "@/constants/ui";
 import useStorage from "@/hooks/use-storage";
 import { getProjectList } from "@/lib/project.source";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
+import { StyleSwap } from "@/components/animated/style-swap";
 import { ArrowRight, BarChart2, BoxIcon, FolderOpen, Layers } from "lucide-react";
 import Link from "next/link";
 import { useMemo } from "react";
@@ -110,6 +112,50 @@ function ProjectsCta() {
 /* ─────────────────────────────────────────────────────────────
    Sub-components
 ───────────────────────────────────────────────────────────── */
+
+function StoryProjects({ projects }: { projects: ReturnType<typeof getProjectList> }) {
+  const featured = projects.slice(0, 5);
+  return (
+    <StoryChapter
+      index={4}
+      kicker="The proof"
+      id="projects"
+      title={<>Things I&apos;ve <Serif className="text-muted-foreground/80">shipped</Serif>.</>}
+    >
+      <div className="space-y-6">
+        {featured.map((project, i) => (
+          <StoryReveal key={project.id} delay={Math.min(i * 0.05, 0.3)}>
+            <TransitionLink href={`/projects/${project.id}`} className="group block">
+              <div className="flex items-baseline justify-between gap-3">
+                <h3 className="text-base font-semibold text-foreground transition-colors group-hover:text-primary">
+                  {project.title}
+                </h3>
+                <span className="shrink-0 font-mono text-xs text-muted-foreground/70">
+                  {project.dates}
+                </span>
+              </div>
+              {project.description && (
+                <p className="mt-1 line-clamp-2 text-sm leading-relaxed text-muted-foreground">
+                  {project.description}
+                </p>
+              )}
+            </TransitionLink>
+          </StoryReveal>
+        ))}
+      </div>
+
+      <StoryReveal delay={0.2} className="mt-8">
+        <TransitionLink
+          href="/projects"
+          className="inline-flex items-center gap-1.5 text-sm font-medium text-foreground transition-all hover:gap-2.5"
+        >
+          Read every case study
+          <ArrowRight className="size-4" />
+        </TransitionLink>
+      </StoryReveal>
+    </StoryChapter>
+  );
+}
 
 function MinimalProjects({ projects }: { projects: ReturnType<typeof getProjectList> }) {
   return (
@@ -316,38 +362,16 @@ export default function ProjectsSection() {
   );
 
   return (
-    <AnimatePresence mode="wait" initial={false}>
+    <StyleSwap swapKey={selectedStyle}>
       {selectedStyle === "minimal" ? (
-        <motion.div
-          key="projects-minimal"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.25 }}
-        >
-          <MinimalProjects projects={projectsList} />
-        </motion.div>
+        <MinimalProjects projects={projectsList} />
       ) : selectedStyle === "static" ? (
-        <motion.div
-          key="projects-static"
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 12 }}
-          transition={{ type: "spring", stiffness: 300, damping: 28 }}
-        >
-          <StaticProjects projects={projectsList} />
-        </motion.div>
+        <StaticProjects projects={projectsList} />
+      ) : selectedStyle === "story" ? (
+        <StoryProjects projects={projectsList} />
       ) : (
-        <motion.div
-          key="projects-dynamic"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 20 }}
-          transition={{ type: "spring", stiffness: 260, damping: 24 }}
-        >
-          <DynamicProjects projects={projectsList} />
-        </motion.div>
+        <DynamicProjects projects={projectsList} />
       )}
-    </AnimatePresence>
+    </StyleSwap>
   );
 }

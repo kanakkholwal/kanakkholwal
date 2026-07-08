@@ -5,7 +5,8 @@ import { Icon } from "@/components/icons";
 import BlurFade from "@/components/magicui/blur-fade";
 import { StyleModels, StylingModel } from "@/constants/ui";
 import useStorage from "@/hooks/use-storage";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
+import { StyleSwap } from "@/components/animated/style-swap";
 import { ArrowUpRight, Terminal } from "lucide-react";
 import Link from "next/link";
 
@@ -37,39 +38,15 @@ export default function DocsPageClient({
     );
 
     return (
-        <AnimatePresence mode="wait" initial={false}>
+        <StyleSwap swapKey={selectedStyle}>
             {selectedStyle === "minimal" ? (
-                <motion.div
-                    key="docs-minimal"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                >
-                    <MinimalDocs posts={posts} latestPostDate={latestPostDate} />
-                </motion.div>
+                <MinimalDocs posts={posts} latestPostDate={latestPostDate} />
             ) : selectedStyle === "static" ? (
-                <motion.div
-                    key="docs-static"
-                    initial={{ opacity: 0, y: 12 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 12 }}
-                    transition={{ type: "spring", stiffness: 300, damping: 28 }}
-                >
-                    <StaticDocs posts={posts} latestPostDate={latestPostDate} />
-                </motion.div>
+                <StaticDocs posts={posts} latestPostDate={latestPostDate} />
             ) : (
-                <motion.div
-                    key="docs-dynamic"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 20 }}
-                    transition={{ type: "spring", stiffness: 260, damping: 24 }}
-                >
-                    <DynamicDocs posts={posts} latestPostDate={latestPostDate} />
-                </motion.div>
+                <DynamicDocs posts={posts} latestPostDate={latestPostDate} />
             )}
-        </AnimatePresence>
+        </StyleSwap>
     );
 }
 

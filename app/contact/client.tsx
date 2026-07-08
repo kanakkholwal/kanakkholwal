@@ -4,7 +4,8 @@ import BlurFade from "@/components/magicui/blur-fade";
 import { Socials } from "@/components/socials";
 import { StyleModels, StylingModel } from "@/constants/ui";
 import useStorage from "@/hooks/use-storage";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
+import { StyleSwap } from "@/components/animated/style-swap";
 import { ArrowUpRight, Calendar, Mail, MessageSquare } from "lucide-react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
@@ -32,39 +33,15 @@ export default function ContactPageClient({
   );
 
   return (
-    <AnimatePresence mode="wait" initial={false}>
+    <StyleSwap swapKey={selectedStyle}>
       {selectedStyle === "minimal" ? (
-        <motion.div
-          key="contact-minimal"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
-        >
-          <MinimalContact displayName={displayName} email={email} />
-        </motion.div>
+        <MinimalContact displayName={displayName} email={email} />
       ) : selectedStyle === "static" ? (
-        <motion.div
-          key="contact-static"
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 12 }}
-          transition={{ type: "spring", stiffness: 300, damping: 28 }}
-        >
-          <StaticContact displayName={displayName} email={email} />
-        </motion.div>
+        <StaticContact displayName={displayName} email={email} />
       ) : (
-        <motion.div
-          key="contact-dynamic"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 20 }}
-          transition={{ type: "spring", stiffness: 260, damping: 24 }}
-        >
-          <DynamicContact displayName={displayName} email={email} />
-        </motion.div>
+        <DynamicContact displayName={displayName} email={email} />
       )}
-    </AnimatePresence>
+    </StyleSwap>
   );
 }
 

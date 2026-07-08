@@ -2,7 +2,9 @@
 
 import { StyleModels, StylingModel } from "@/constants/ui";
 import useStorage from "@/hooks/use-storage";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
+import { StyleSwap } from "@/components/animated/style-swap";
+import { Serif, StoryChapter, StoryReveal } from "@/components/application/story.frame";
 import { Cloud, Database, Layout, Server, Terminal } from "lucide-react";
 import Image from "next/image";
 import { appConfig } from "root/project.config";
@@ -59,6 +61,41 @@ const CATEGORIES = [
 ];
 export type SkillCategory = (typeof CATEGORIES)[number];
 
+
+function StorySkills() {
+  const groups = [
+    { label: "Frontend", items: appConfig.skills.frontend },
+    { label: "Backend", items: appConfig.skills.backend },
+    { label: "Data", items: appConfig.skills.database },
+    { label: "Infra", items: appConfig.skills.devops },
+    { label: "Tools", items: appConfig.skills.tools },
+  ];
+  return (
+    <StoryChapter
+      index={3}
+      kicker="The craft"
+      id="stack"
+      title={<>The tools I <Serif className="text-muted-foreground/80">reach for</Serif>.</>}
+    >
+      <div className="space-y-4">
+        {groups.map((group, i) => (
+          <StoryReveal
+            key={group.label}
+            delay={Math.min(i * 0.05, 0.25)}
+            className="flex flex-col gap-1 sm:flex-row sm:gap-6"
+          >
+            <p className="w-24 shrink-0 pt-0.5 font-mono text-xs uppercase tracking-widest text-muted-foreground/70">
+              {group.label}
+            </p>
+            <p className="text-sm leading-relaxed text-foreground/85">
+              {group.items.join("  ·  ")}
+            </p>
+          </StoryReveal>
+        ))}
+      </div>
+    </StoryChapter>
+  );
+}
 
 function MinimalSkills() {
   const allSkills = Array.from(new Set(Object.values(appConfig.skills).flat()));
@@ -199,38 +236,16 @@ export default function SkillSection() {
   );
 
   return (
-    <AnimatePresence mode="wait" initial={false}>
+    <StyleSwap swapKey={selectedStyle}>
       {selectedStyle === "minimal" ? (
-        <motion.div
-          key="skills-minimal"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.25 }}
-        >
-          <MinimalSkills />
-        </motion.div>
+        <MinimalSkills />
       ) : selectedStyle === "static" ? (
-        <motion.div
-          key="skills-static"
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 12 }}
-          transition={{ type: "spring", stiffness: 300, damping: 28 }}
-        >
-          <StaticSkills />
-        </motion.div>
+        <StaticSkills />
+      ) : selectedStyle === "story" ? (
+        <StorySkills />
       ) : (
-        <motion.div
-          key="skills-dynamic"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 20 }}
-          transition={{ type: "spring", stiffness: 260, damping: 24 }}
-        >
-          <DynamicSkills />
-        </motion.div>
+        <DynamicSkills />
       )}
-    </AnimatePresence>
+    </StyleSwap>
   );
 }

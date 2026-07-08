@@ -6,7 +6,9 @@ import { Button } from "@/components/ui/button";
 import { TransitionLink } from "@/components/utils/link";
 import { StyleModels, StylingModel } from "@/constants/ui";
 import useStorage from "@/hooks/use-storage";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
+import { StyleSwap } from "@/components/animated/style-swap";
+import { Serif, StoryChapter, StoryReveal } from "@/components/application/story.frame";
 import {
   ArrowUpRight,
   CalendarDays,
@@ -44,44 +46,76 @@ export function ContactSection() {
   };
 
   return (
-    <AnimatePresence mode="wait" initial={false}>
+    <StyleSwap swapKey={selectedStyle}>
       {selectedStyle === "minimal" ? (
-        <motion.div
-          key="contact-minimal"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.25 }}
-        >
-          <MinimalContact email={email} copied={copied} onCopy={handleCopy} />
-        </motion.div>
+        <MinimalContact email={email} copied={copied} onCopy={handleCopy} />
       ) : selectedStyle === "static" ? (
-        <motion.div
-          key="contact-static"
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 12 }}
-          transition={{ type: "spring", stiffness: 300, damping: 28 }}
-        >
-          <StaticContact email={email} copied={copied} onCopy={handleCopy} />
-        </motion.div>
+        <StaticContact email={email} copied={copied} onCopy={handleCopy} />
+      ) : selectedStyle === "story" ? (
+        <StoryContact email={email} copied={copied} onCopy={handleCopy} />
       ) : (
-        <motion.div
-          key="contact-dynamic"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 20 }}
-          transition={{ type: "spring", stiffness: 260, damping: 24 }}
-        >
-          <DynamicContact email={email} copied={copied} onCopy={handleCopy} />
-        </motion.div>
+        <DynamicContact email={email} copied={copied} onCopy={handleCopy} />
       )}
-    </AnimatePresence>
+    </StyleSwap>
   );
 }
 
 // Minimal
 
+
+function StoryContact({
+  email,
+  copied,
+  onCopy,
+}: {
+  email: string;
+  copied: boolean;
+  onCopy: () => void;
+}) {
+  return (
+    <StoryChapter
+      index={6}
+      kicker="The invitation"
+      id="contact"
+      title={<>Let&apos;s write the <Serif className="text-muted-foreground/80">next</Serif> chapter.</>}
+    >
+      <StoryReveal className="max-w-xl text-base leading-relaxed text-muted-foreground">
+        <p>
+          That&apos;s the story so far. If any of it resonates — a role, a
+          collaboration, or just a good conversation — I&apos;d love to hear from you.
+        </p>
+      </StoryReveal>
+
+      <StoryReveal delay={0.1} className="mt-8 flex flex-wrap items-center gap-3">
+        <button
+          type="button"
+          onClick={onCopy}
+          className="inline-flex items-center gap-2 rounded-full border border-border/60 bg-card/50 px-4 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted"
+        >
+          {copied ? (
+            <Check className="size-4 text-emerald-500" />
+          ) : (
+            <Copy className="size-4" />
+          )}
+          {email}
+        </button>
+        <a
+          href={appConfig.social["cal.com"]}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1.5 rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
+        >
+          <CalendarDays className="size-4" />
+          Book a call
+        </a>
+      </StoryReveal>
+
+      <StoryReveal delay={0.16} className="mt-6">
+        <Socials className="inline-flex items-center gap-1" />
+      </StoryReveal>
+    </StoryChapter>
+  );
+}
 
 function MinimalContact({
   email,

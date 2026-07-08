@@ -6,7 +6,8 @@ import { Badge } from "@/components/ui/badge";
 import { StyleModels, StylingModel } from "@/constants/ui";
 import useStorage from "@/hooks/use-storage";
 import { cn } from "@/lib/utils";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
+import { StyleSwap } from "@/components/animated/style-swap";
 import { ArrowUpRight, Globe, Mail } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -32,54 +33,30 @@ export default function LinksPageClient({
   );
 
   return (
-    <AnimatePresence mode="wait" initial={false}>
+    <StyleSwap swapKey={selectedStyle}>
       {selectedStyle === "minimal" ? (
-        <motion.div
-          key="links-minimal"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
-        >
-          <MinimalLinks
-            displayName={displayName}
-            avatar={avatar}
-            email={email}
-            url={url}
-          />
-        </motion.div>
+        <MinimalLinks
+          displayName={displayName}
+          avatar={avatar}
+          email={email}
+          url={url}
+        />
       ) : selectedStyle === "static" ? (
-        <motion.div
-          key="links-static"
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 12 }}
-          transition={{ type: "spring", stiffness: 300, damping: 28 }}
-        >
-          <StaticLinks
-            displayName={displayName}
-            avatar={avatar}
-            email={email}
-            url={url}
-          />
-        </motion.div>
+        <StaticLinks
+          displayName={displayName}
+          avatar={avatar}
+          email={email}
+          url={url}
+        />
       ) : (
-        <motion.div
-          key="links-dynamic"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 20 }}
-          transition={{ type: "spring", stiffness: 260, damping: 24 }}
-        >
-          <DynamicLinks
-            displayName={displayName}
-            avatar={avatar}
-            email={email}
-            url={url}
-          />
-        </motion.div>
+        <DynamicLinks
+          displayName={displayName}
+          avatar={avatar}
+          email={email}
+          url={url}
+        />
       )}
-    </AnimatePresence>
+    </StyleSwap>
   );
 }
 

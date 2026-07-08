@@ -4,7 +4,8 @@ import BlurFade from "@/components/magicui/blur-fade";
 import { StyleModels, StylingModel } from "@/constants/ui";
 import useStorage from "@/hooks/use-storage";
 import { cn } from "@/lib/utils";
-import { AnimatePresence, motion, useInView } from "framer-motion";
+import { motion, useInView } from "framer-motion";
+import { StyleSwap } from "@/components/animated/style-swap";
 import { useRef } from "react";
 import { appConfig } from "root/project.config";
 import { Icon } from "./icons";
@@ -25,39 +26,15 @@ export function FooterSection() {
   );
 
   return (
-    <AnimatePresence mode="wait" initial={false}>
+    <StyleSwap swapKey={selectedStyle}>
       {selectedStyle === "minimal" ? (
-        <motion.div
-          key="footer-minimal"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
-        >
-          <MinimalFooter />
-        </motion.div>
+        <MinimalFooter />
       ) : selectedStyle === "static" ? (
-        <motion.div
-          key="footer-static"
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 12 }}
-          transition={{ type: "spring", stiffness: 300, damping: 28 }}
-        >
-          <StaticFooter />
-        </motion.div>
+        <StaticFooter />
       ) : (
-        <motion.div
-          key="footer-dynamic"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 20 }}
-          transition={{ type: "spring", stiffness: 260, damping: 24 }}
-        >
-          <DynamicFooter />
-        </motion.div>
+        <DynamicFooter />
       )}
-    </AnimatePresence>
+    </StyleSwap>
   );
 }
 

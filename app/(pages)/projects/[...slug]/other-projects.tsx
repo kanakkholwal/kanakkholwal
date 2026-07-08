@@ -6,7 +6,8 @@ import { StyleModels, StylingModel } from "@/constants/ui";
 import useStorage from "@/hooks/use-storage";
 import { ProjectType, getOtherProjects } from "@/lib/project.source";
 import { cn } from "@/lib/utils";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
+import { StyleSwap } from "@/components/animated/style-swap";
 import { ArrowUpRight, Layers } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -25,39 +26,15 @@ export function OtherProjects({ currentProjectId }: OtherProjectsProps) {
   if (!projects.length) return null;
 
   return (
-    <AnimatePresence mode="wait" initial={false}>
+    <StyleSwap swapKey={selectedStyle}>
       {selectedStyle === "minimal" ? (
-        <motion.div
-          key="other-minimal"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
-        >
-          <MinimalOtherProjects projects={projects} />
-        </motion.div>
+        <MinimalOtherProjects projects={projects} />
       ) : selectedStyle === "static" ? (
-        <motion.div
-          key="other-static"
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 12 }}
-          transition={{ type: "spring", stiffness: 300, damping: 28 }}
-        >
-          <StaticOtherProjects projects={projects} />
-        </motion.div>
+        <StaticOtherProjects projects={projects} />
       ) : (
-        <motion.div
-          key="other-dynamic"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 20 }}
-          transition={{ type: "spring", stiffness: 260, damping: 24 }}
-        >
-          <DynamicOtherProjects projects={projects} />
-        </motion.div>
+        <DynamicOtherProjects projects={projects} />
       )}
-    </AnimatePresence>
+    </StyleSwap>
   );
 }
 

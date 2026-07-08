@@ -6,7 +6,8 @@ import { Badge } from "@/components/ui/badge";
 import { StyleModels, StylingModel } from "@/constants/ui";
 import useStorage from "@/hooks/use-storage";
 import { cn } from "@/lib/utils";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
+import { StyleSwap } from "@/components/animated/style-swap";
 import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import React from "react";
@@ -45,57 +46,33 @@ export default function ArticlePageClient({
     );
 
     return (
-        <AnimatePresence mode="wait" initial={false}>
+        <StyleSwap swapKey={selectedStyle}>
             {selectedStyle === "minimal" ? (
-                <motion.div
-                    key="article-minimal"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.2 }}
+                <MinimalArticle
+                    article={article}
+                    toc={toc}
+                    otherArticles={otherArticles}
                 >
-                    <MinimalArticle
-                        article={article}
-                        toc={toc}
-                        otherArticles={otherArticles}
-                    >
-                        {children}
-                    </MinimalArticle>
-                </motion.div>
+                    {children}
+                </MinimalArticle>
             ) : selectedStyle === "static" ? (
-                <motion.div
-                    key="article-static"
-                    initial={{ opacity: 0, y: 12 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 12 }}
-                    transition={{ type: "spring", stiffness: 300, damping: 28 }}
+                <StaticArticle
+                    article={article}
+                    toc={toc}
+                    otherArticles={otherArticles}
                 >
-                    <StaticArticle
-                        article={article}
-                        toc={toc}
-                        otherArticles={otherArticles}
-                    >
-                        {children}
-                    </StaticArticle>
-                </motion.div>
+                    {children}
+                </StaticArticle>
             ) : (
-                <motion.div
-                    key="article-dynamic"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 20 }}
-                    transition={{ type: "spring", stiffness: 260, damping: 24 }}
+                <DynamicArticle
+                    article={article}
+                    toc={toc}
+                    otherArticles={otherArticles}
                 >
-                    <DynamicArticle
-                        article={article}
-                        toc={toc}
-                        otherArticles={otherArticles}
-                    >
-                        {children}
-                    </DynamicArticle>
-                </motion.div>
+                    {children}
+                </DynamicArticle>
             )}
-        </AnimatePresence>
+        </StyleSwap>
     );
 }
 
