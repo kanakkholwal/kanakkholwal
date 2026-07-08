@@ -11,6 +11,8 @@ export type StoryBeat = {
   heading: string;
   body: string;
   scene: StoryScene;
+  /** Spoken in play mode. Defaults to `body` when omitted. */
+  narration?: string;
 };
 
 export type StoryChapter = {

@@ -29,7 +29,7 @@ export function Provider({ children }: { children: React.ReactNode }) {
           >
             <div
               className={cn(
-                "min-h-screen w-full h-full overflow-x-hidden no-scrollbar",
+                "min-h-screen w-full h-full overflow-x-clip no-scrollbar",
               )}
             >
               <NuqsAdapter>{children}</NuqsAdapter>

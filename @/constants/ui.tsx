@@ -1,8 +1,8 @@
 import { IconComponent, IconType } from "@/components/icons";
-import { Box, Minus, Sparkles } from "lucide-react"; // Make sure to install lucide-react
+import { BookOpen, Box, Minus, Sparkles } from "lucide-react"; // Make sure to install lucide-react
 
 export type StylingModelOption = {
-  id: "dynamic" | "static" | "minimal" | "3d";
+  id: "dynamic" | "static" | "minimal" | "story" | "3d";
   label: string;
   icon: IconComponent;
   color: string;
@@ -18,6 +18,7 @@ export const StyleModels: StylingModelOption[] = [
   },
   { id: "dynamic", label: "Dynamic", icon: Sparkles, color: "text-blue-500" },
   { id: "static", label: "Static", icon: Box, color: "text-orange-500" },
+  { id: "story", label: "Story", icon: BookOpen, color: "text-emerald-500" },
   // { id: "3d", label: "3D", icon: BoxSelect, color: "text-purple-500", disabled: true },
 ] as const;
 

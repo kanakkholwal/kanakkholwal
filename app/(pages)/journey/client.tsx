@@ -3,6 +3,7 @@
 import {
     Timeline
 } from "@/components/application/journey.static";
+import { StoryJourney } from "@/components/story/story-journey";
 import BlurFade from "@/components/magicui/blur-fade";
 import { Badge } from "@/components/ui/badge";
 import { StyleModels, StylingModel } from "@/constants/ui";
@@ -40,6 +41,16 @@ export default function JourneyPageClient() {
           transition={{ type: "spring", stiffness: 300, damping: 28 }}
         >
           <StaticJourney />
+        </motion.div>
+      ) : selectedStyle === "story" ? (
+        <motion.div
+          key="journey-story"
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 16 }}
+          transition={{ type: "spring", stiffness: 280, damping: 26 }}
+        >
+          <StoryJourney />
         </motion.div>
       ) : (
         <motion.div

@@ -99,7 +99,7 @@ export default function RootLayout({
       <body
         className={cn(
           // Base Layout
-          "min-h-screen min-w-screen w-full antialiased !overflow-x-hidden no-scrollbar h-full",
+          "min-h-screen min-w-screen w-full antialiased overflow-x-clip no-scrollbar h-full",
           // Colors: Ensure these are defined in your Tailwind CSS
           "bg-background text-foreground",
           // Typography Variables

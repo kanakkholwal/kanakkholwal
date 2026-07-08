@@ -95,7 +95,7 @@ export const projects = defineDocs({
         .array(
           z.object({
             label: z.string(),
-            value: z.number(),
+            value: z.coerce.number().default(0),
           }),
         )
         .optional(),

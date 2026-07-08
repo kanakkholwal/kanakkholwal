@@ -7,9 +7,9 @@ export default function JourneyV2Page() {
 }
 
 export const metadata:Metadata = generateMetadata({
-  title: "Journey — Cinematic Cut",
+  title: "The Journey",
   description:
-    "A scroll-driven, cinematic retelling of Kanak’s work journey — each milestone pins while the story and its scenes animate in sync.",
+    "Kanak's work journey, told three ways: a cinematic scroll, a terminal log, or a keynote. Switch between them.",
   path: "/journey-v2",
   keywords: [
     "developer journey",
