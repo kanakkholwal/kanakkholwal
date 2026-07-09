@@ -168,6 +168,14 @@ function StaticProjectPage({ project, children }: ProjectPageProps) {
 
       <section className="pt-40 pb-12 px-6 max-w-4xl mx-auto">
         <BlurFade delay={BLUR_FADE_DELAY}>
+          <TransitionLink
+            href="/projects"
+            className="mb-8 inline-flex items-center gap-1.5 font-mono text-xs text-muted-foreground transition-colors hover:text-foreground"
+          >
+            <ArrowLeft className="size-3.5" /> All projects
+          </TransitionLink>
+        </BlurFade>
+        <BlurFade delay={BLUR_FADE_DELAY * 1.5}>
           <div className="flex items-center gap-3 mb-6">
             <StatusPill status={project.status} />
             <span className="text-xs font-mono text-muted-foreground flex items-center gap-1.5">
@@ -194,6 +202,21 @@ function StaticProjectPage({ project, children }: ProjectPageProps) {
             ))}
           </div>
         </BlurFade>
+        {project.href && (
+          <BlurFade delay={BLUR_FADE_DELAY * 5}>
+            <div className="mt-8">
+              <ButtonLink
+                href={project.href}
+                target="_blank"
+                rel="noreferrer"
+                variant="dark"
+                className="h-11 rounded-xl px-6 text-sm font-medium"
+              >
+                <ExternalLink className="size-4" /> Visit Live Site
+              </ButtonLink>
+            </div>
+          </BlurFade>
+        )}
       </section>
 
       <BlurFade delay={BLUR_FADE_DELAY * 5} className="max-w-3xl mx-auto px-4 md:px-8 mb-20">
@@ -203,7 +226,7 @@ function StaticProjectPage({ project, children }: ProjectPageProps) {
           ) : project.image ? (
             <Image src={project.image} alt={project.title} width={1920} height={1080} className="w-full h-full object-cover" priority />
           ) : (
-            <ProjectFallback title={project.title} />
+            <ProjectFallback title={project.title} description={project.description} />
           )}
         </div>
       </BlurFade>
@@ -241,7 +264,7 @@ function StaticProjectPage({ project, children }: ProjectPageProps) {
                 <SidebarCard title="Project Links" icon={<Rocket className="w-3 h-3" />}>
                   <div className="flex flex-col gap-2">
                     {project.links?.map((link, i) => (
-                      <Link key={i} href={link.url} target="_blank"
+                      <Link key={i} href={link.url} target="_blank" rel="noreferrer"
                         className="group flex items-center justify-between p-3 rounded-lg bg-secondary/50 hover:bg-primary/5 border border-transparent hover:border-primary/20 transition-all"
                       >
                         <span className="flex items-center gap-3 font-medium text-sm">
@@ -293,17 +316,6 @@ function StaticProjectPage({ project, children }: ProjectPageProps) {
 function DynamicProjectPage({ project, children }: ProjectPageProps) {
   return (
     <main className="min-h-screen w-full overflow-x-hidden">
-      <nav className="fixed top-0 left-0 right-0 z-50 h-16 flex items-center px-6 md:px-12 bg-card/20 backdrop-blur-xl border-b border-border/5">
-        <div className="max-w-7xl mx-auto w-full flex items-center justify-between">
-          <ButtonLink href="/projects" variant="ghost" size="sm" className="-ml-3">
-            <ArrowLeft /> All Projects
-          </ButtonLink>
-          <span className="text-xs font-mono text-muted-foreground/40 hidden md:block">
-            CASE_STUDY :: {project.id.toUpperCase()}
-          </span>
-        </div>
-      </nav>
-
       {/* Full-bleed hero */}
       <section className="relative min-h-[70vh] flex items-end overflow-hidden">
         <div className="absolute inset-0 -z-10">
@@ -320,6 +332,17 @@ function DynamicProjectPage({ project, children }: ProjectPageProps) {
         />
 
         <div className="relative z-10 w-full max-w-5xl mx-auto px-6 pb-20 pt-32">
+          <div className="mb-8 flex items-center justify-between">
+            <TransitionLink
+              href="/projects"
+              className="inline-flex items-center gap-1.5 font-mono text-xs text-muted-foreground transition-colors hover:text-foreground"
+            >
+              <ArrowLeft className="size-3.5" /> All Projects
+            </TransitionLink>
+            <span className="hidden font-mono text-xs text-muted-foreground/40 md:block">
+              CASE_STUDY :: {project.id.toUpperCase()}
+            </span>
+          </div>
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -362,12 +385,12 @@ function DynamicProjectPage({ project, children }: ProjectPageProps) {
             className="flex flex-wrap gap-3"
           >
             {project.href && (
-              <ButtonLink href={project.href} target="_blank" variant="dark" className="h-11 px-6 rounded-xl text-sm font-medium">
+              <ButtonLink href={project.href} target="_blank" rel="noreferrer" variant="dark" className="h-11 px-6 rounded-xl text-sm font-medium">
                 <ExternalLink className="size-4" /> Visit Live Site
               </ButtonLink>
             )}
             {project.links?.map((link, i) => (
-              <ButtonLink key={i} href={link.url} target="_blank" variant="outline" className="h-11 px-5 rounded-xl text-sm font-medium gap-2">
+              <ButtonLink key={i} href={link.url} target="_blank" rel="noreferrer" variant="outline" className="h-11 px-5 rounded-xl text-sm font-medium gap-2">
                 {link.icon && <Icon name={link.icon as IconType} className="size-4" />}
                 {link.label}
               </ButtonLink>
@@ -467,7 +490,7 @@ function DynamicProjectPage({ project, children }: ProjectPageProps) {
                   </p>
                   <div className="flex flex-col gap-2">
                     {project.links.map((link, i) => (
-                      <Link key={i} href={link.url} target="_blank"
+                      <Link key={i} href={link.url} target="_blank" rel="noreferrer"
                         className="group flex items-center justify-between p-3 rounded-xl bg-muted/40 hover:bg-primary/10 border border-border/40 hover:border-primary/30 transition-all"
                       >
                         <span className="flex items-center gap-3 text-sm font-medium">
@@ -516,23 +539,50 @@ function StoryProjectPage({ project, children }: ProjectPageProps) {
         <p className="mt-5 text-lg leading-relaxed text-muted-foreground">
           {project.description}
         </p>
-        {project.links?.length ? (
-          <div className="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-sm">
-            {project.links.map((link, i) => (
-              <a
-                key={i}
-                href={link.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-foreground underline-offset-4 hover:underline"
-              >
-                {link.label}
-              </a>
-            ))}
-          </div>
-        ) : null}
+        <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3 text-sm">
+          {project.href && (
+            <a
+              href={project.href}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-1.5 rounded-full bg-foreground px-5 py-2 font-medium text-background transition-opacity hover:opacity-90"
+            >
+              Visit live site <ArrowUpRight className="size-4" />
+            </a>
+          )}
+          {project.links?.map((link, i) => (
+            <a
+              key={i}
+              href={link.url}
+              target="_blank"
+              rel="noreferrer"
+              className="text-foreground underline-offset-4 hover:underline"
+            >
+              {link.label}
+            </a>
+          ))}
+        </div>
       </StoryReveal>
-      <StoryReveal delay={0.1} className="mt-12 flex flex-wrap gap-1.5">
+      {project.metrics?.length ? (
+        <StoryReveal
+          delay={0.1}
+          className="mt-10 flex flex-wrap gap-x-10 gap-y-4 border-y border-border/40 py-6"
+        >
+          {project.metrics.map((m, i) => (
+            <div key={i}>
+              <CountingNumber
+                to={m.value}
+                suffix="+"
+                className="text-2xl font-bold tracking-tight text-foreground"
+              />
+              <p className="mt-0.5 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                {m.label}
+              </p>
+            </div>
+          ))}
+        </StoryReveal>
+      ) : null}
+      <StoryReveal delay={0.15} className="mt-12 flex flex-wrap gap-1.5">
         {project.technologies.map((t) => (
           <span
             key={t}
@@ -543,7 +593,7 @@ function StoryProjectPage({ project, children }: ProjectPageProps) {
         ))}
       </StoryReveal>
       <StoryReveal
-        delay={0.15}
+        delay={0.2}
         className="prose dark:prose-invert mt-10 max-w-none prose-headings:tracking-tight"
       >
         {children}

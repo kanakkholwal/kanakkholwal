@@ -1,83 +1,89 @@
 "use client";
 
-import { cn } from "@/lib/utils";
-import { Layers } from "lucide-react";
-
-import { FileCode, FolderGit2, Terminal } from "lucide-react";
+import type { CSSProperties } from "react";
 import { useMemo } from "react";
 
-// Deterministic color generator (Pastel/Muted tech colors)
-const getTheme = (str: string) => {
-  const colors = [
-    "bg-blue-500",
-    "bg-emerald-500",
-    "bg-orange-500",
-    "bg-violet-500",
-    "bg-pink-500",
-  ];
-  const icons = [FileCode, FolderGit2, Terminal, Layers];
+// A stable accent per project, so each placeholder feels branded and distinct
+// without the garish solid-color block the old fallback used.
+const ACCENTS = [
+  "#3b82f6", // blue
+  "#10b981", // emerald
+  "#f59e0b", // amber
+  "#8b5cf6", // violet
+  "#ec4899", // pink
+];
 
+function accentFor(str: string) {
   let hash = 0;
-  for (let i = 0; i < str.length; i++)
+  for (let i = 0; i < str.length; i++) {
     hash = str.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  return ACCENTS[Math.abs(hash) % ACCENTS.length];
+}
 
-  const colorIndex = Math.abs(hash % colors.length);
-  const iconIndex = Math.abs(hash % icons.length);
-
-  return {
-    color: colors[colorIndex],
-    Icon: icons[iconIndex],
-  };
-};
+/**
+ * Branded placeholder shown when a project has no image/video. Reads like an OG
+ * card: a monogram + wordmark lockup with the project's tagline underneath.
+ */
 export function ProjectFallback({
   title,
-  type = "project",
+  description,
+  meta,
 }: {
   title: string;
-  type?: string;
+  description?: string;
+  /** Optional small line under the tagline (e.g. dates) — only pass it when the
+   * surrounding card doesn't already show this info. */
+  meta?: string;
 }) {
-  const { color, Icon } = useMemo(() => getTheme(title), [title]);
+  const accent = useMemo(() => accentFor(title), [title]);
+  const initial = title.trim().charAt(0).toUpperCase() || "•";
 
   return (
-    <div className="relative w-full h-full bg-zinc-50 dark:bg-zinc-800/50 flex items-center justify-center overflow-hidden group-hover:bg-zinc-100 dark:group-hover:bg-zinc-800 transition-colors duration-500">
+    <div
+      className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden bg-zinc-50 px-8 text-center dark:bg-zinc-900"
+      style={{ "--accent": accent } as CSSProperties}
+    >
+      {/* Dotted grid */}
       <div
-        className="absolute inset-0 opacity-[0.4]"
+        className="absolute inset-0"
         style={{
           backgroundImage:
-            "radial-gradient(circle, #808080 1px, transparent 1px)",
-          backgroundSize: "20px 20px",
+            "radial-gradient(rgb(130 130 140 / 0.22) 1px, transparent 1px)",
+          backgroundSize: "22px 22px",
         }}
       />
 
-      <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] dark:opacity-[0.05]">
-        <div className="w-[120%] h-[120%] border-[20px] border-black dark:border-white rounded-full scale-150" />
-      </div>
-
-      <div className="relative z-5 flex flex-col items-center gap-3">
+      {/* Logo lockup: monogram + wordmark */}
+      <div className="relative z-10 flex items-center justify-center gap-3">
         <div
-          className={cn(
-            "w-12 h-12 rounded-xl flex items-center justify-center shadow-sm text-white",
-            color,
-          )}
+          className="flex size-11 shrink-0 items-center justify-center rounded-xl border text-lg font-bold"
+          style={{
+            borderColor: "color-mix(in oklab, var(--accent) 35%, transparent)",
+            background: "color-mix(in oklab, var(--accent) 12%, transparent)",
+            color: "var(--accent)",
+          }}
         >
-          <Icon className="w-6 h-6" />
+          {initial}
         </div>
-
-        <div className="flex flex-col items-center">
-          <span className="text-xs font-mono font-bold text-zinc-400 uppercase tracking-widest">
-            NO_MEDIA
-          </span>
-          <span className="text-[10px] font-mono text-zinc-300 dark:text-zinc-600">
-            {title.substring(0, 12).toUpperCase().replace(/\s/g, "_")}...
-          </span>
-        </div>
+        <span className="text-2xl font-semibold leading-tight tracking-tight text-zinc-900 dark:text-zinc-50">
+          {title}
+        </span>
       </div>
 
-      {/* 4. Technical Corner Markers (CAD Style) */}
-      <div className="absolute top-3 left-3 w-2 h-2 border-t border-l border-zinc-300 dark:border-zinc-600" />
-      <div className="absolute top-3 right-3 w-2 h-2 border-t border-r border-zinc-300 dark:border-zinc-600" />
-      <div className="absolute bottom-3 left-3 w-2 h-2 border-b border-l border-zinc-300 dark:border-zinc-600" />
-      <div className="absolute bottom-3 right-3 w-2 h-2 border-b border-r border-zinc-300 dark:border-zinc-600" />
+      {/* Tagline */}
+      {description && (
+        <p className="relative z-10 mt-4 line-clamp-2 max-w-[85%] font-mono text-xs leading-relaxed text-zinc-500 dark:text-zinc-400">
+          {description}
+        </p>
+      )}
+
+      {/* Optional meta (e.g. dates) */}
+      {meta && (
+        <p className="relative z-10 mt-3 font-mono text-[10px] uppercase tracking-widest text-zinc-400 dark:text-zinc-500">
+          {meta}
+        </p>
+      )}
     </div>
   );
 }

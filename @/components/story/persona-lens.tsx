@@ -1,9 +1,17 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import useStorage from "@/hooks/use-storage";
 import { motion } from "framer-motion";
 
 export type Lens = "developer" | "founder" | "recruiter";
+
+// One persisted lens shared across every surface (the /journey page and the
+// homepage), so switching it anywhere keeps them in sync. `useStorage` syncs
+// live within a tab and persists across route changes.
+export function useStoryLens() {
+  return useStorage<Lens>("story.lens", "developer");
+}
 
 export const LENSES: { id: Lens; label: string; blurb: string }[] = [
   { id: "developer", label: "Developer", blurb: "the stack and how it was built" },

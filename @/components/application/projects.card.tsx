@@ -252,10 +252,12 @@ function ExpandableCard({
             className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
           />
         ) : (
-          <ProjectFallback title={card.title} />
+          <ProjectFallback
+            title={card.title}
+            description={card.description}
+            meta={card.dates}
+          />
         )}
-
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
 
         {/* Status - top left */}
         <div className="absolute top-3 left-3 z-10">
@@ -269,22 +271,24 @@ function ExpandableCard({
             Details
           </div>
         </div>
-
-        {/* Title overlay */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 z-10">
-          <h3 className="text-base font-bold text-white leading-snug">
-            {card.title}
-          </h3>
-          <p className="text-[10px] font-mono text-white/50 mt-1 flex items-center gap-1">
-            <Calendar className="size-3 shrink-0" />
-            {card.dates}
-          </p>
-        </div>
       </div>
 
       {/* Info strip */}
       <div className="px-4 py-3.5 flex items-center justify-between gap-3 bg-card border-t border-border/60">
-        <div className="overflow-hidden">
+        <div className="min-w-0 space-y-1.5">
+          {/* Image cards need their title/date here; the branded fallback
+              already shows them, so skip to avoid repeating. */}
+          {card.image && (
+            <div>
+              <h3 className="truncate text-sm font-bold leading-snug text-foreground">
+                {card.title}
+              </h3>
+              <p className="mt-0.5 flex items-center gap-1 font-mono text-[10px] text-muted-foreground">
+                <Calendar className="size-3 shrink-0" />
+                {card.dates}
+              </p>
+            </div>
+          )}
           <div className="flex flex-wrap gap-1">
             {card.technologies?.slice(0, 3).map((tech) => (
               <span
@@ -403,7 +407,7 @@ function ProjectCard({
               )}
             />
           ) : (
-            <ProjectFallback title={card.title} />
+            <ProjectFallback title={card.title} description={card.description} />
           )}
 
           <div className="absolute top-3 left-3 z-20">

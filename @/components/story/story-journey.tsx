@@ -1,14 +1,12 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { Icon } from "@/components/icons";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { getStory, type StoryChapter } from "~/data/story";
 import { appConfig } from "root/project.config";
-import { CaseStudyCard } from "./case-study-card";
-import { EASE } from "./motion";
-import { type Lens, PersonaLens } from "./persona-lens";
+import { type Lens, PersonaLens, useStoryLens } from "./persona-lens";
+import { StoryCardList } from "./story-card-list";
 import { StackLine } from "./story-bits";
 
 const IDENTITY_STACK = [
@@ -29,7 +27,7 @@ const SOCIALS = [
 ] as const;
 
 export function StoryJourney() {
-  const [lens, setLens] = useState<Lens>("developer");
+  const [lens, setLens] = useStoryLens();
 
   const { work, projects, building } = useMemo(() => {
     const { work, projects, current } = getStory();
@@ -89,25 +87,7 @@ function ChapterGroup({
       <h2 className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
         {label}
       </h2>
-      <motion.div
-        initial="hidden"
-        whileInView="show"
-        viewport={{ once: true, margin: "-80px" }}
-        variants={{ show: { transition: { staggerChildren: 0.08 } } }}
-        className="space-y-4"
-      >
-        {chapters.map((chapter, i) => (
-          <motion.div
-            key={chapter.id}
-            variants={{
-              hidden: { opacity: 0, y: 24 },
-              show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: EASE } },
-            }}
-          >
-            <CaseStudyCard chapter={chapter} lens={lens} index={i} />
-          </motion.div>
-        ))}
-      </motion.div>
+      <StoryCardList chapters={chapters} lens={lens} />
     </section>
   );
 }

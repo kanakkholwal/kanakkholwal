@@ -5,9 +5,12 @@ import {
 import BlurFade from "@/components/magicui/blur-fade";
 import { ButtonLink, ButtonTransitionLink, TransitionLink } from "@/components/utils/link";
 import { Serif, StoryChapter, StoryReveal } from "@/components/application/story.frame";
+import { PersonaLens, useStoryLens } from "@/components/story/persona-lens";
+import { StoryCardList } from "@/components/story/story-card-list";
 import { StyleModels, StylingModel } from "@/constants/ui";
 import useStorage from "@/hooks/use-storage";
 import { getProjectList } from "@/lib/project.source";
+import { getStory } from "~/data/story";
 import { motion } from "framer-motion";
 import { StyleSwap } from "@/components/animated/style-swap";
 import { ArrowRight, BarChart2, BoxIcon, FolderOpen, Layers } from "lucide-react";
@@ -113,8 +116,13 @@ function ProjectsCta() {
    Sub-components
 ───────────────────────────────────────────────────────────── */
 
-function StoryProjects({ projects }: { projects: ReturnType<typeof getProjectList> }) {
-  const featured = projects.slice(0, 5);
+function StoryProjects() {
+  const [lens, setLens] = useStoryLens();
+  // The same persona-lens case-study cards used on /journey, curated to the
+  // featured projects. The lens is shared, so switching it here or on /journey
+  // stays in sync.
+  const chapters = useMemo(() => getStory().projects, []);
+
   return (
     <StoryChapter
       index={4}
@@ -123,33 +131,16 @@ function StoryProjects({ projects }: { projects: ReturnType<typeof getProjectLis
       title={<>Things I&apos;ve <Serif className="text-muted-foreground/80">shipped</Serif>.</>}
     >
       <div className="space-y-6">
-        {featured.map((project, i) => (
-          <StoryReveal key={project.id} delay={Math.min(i * 0.05, 0.3)}>
-            <TransitionLink href={`/projects/${project.id}`} className="group block">
-              <div className="flex items-baseline justify-between gap-3">
-                <h3 className="text-base font-semibold text-foreground transition-colors group-hover:text-primary">
-                  {project.title}
-                </h3>
-                <span className="shrink-0 font-mono text-xs text-muted-foreground/70">
-                  {project.dates}
-                </span>
-              </div>
-              {project.description && (
-                <p className="mt-1 line-clamp-2 text-sm leading-relaxed text-muted-foreground">
-                  {project.description}
-                </p>
-              )}
-            </TransitionLink>
-          </StoryReveal>
-        ))}
+        <PersonaLens value={lens} onChange={setLens} />
+        <StoryCardList chapters={chapters} lens={lens} />
       </div>
 
       <StoryReveal delay={0.2} className="mt-8">
         <TransitionLink
-          href="/projects"
+          href="/journey"
           className="inline-flex items-center gap-1.5 text-sm font-medium text-foreground transition-all hover:gap-2.5"
         >
-          Read every case study
+          Read the full story
           <ArrowRight className="size-4" />
         </TransitionLink>
       </StoryReveal>
@@ -368,7 +359,7 @@ export default function ProjectsSection() {
       ) : selectedStyle === "static" ? (
         <StaticProjects projects={projectsList} />
       ) : selectedStyle === "story" ? (
-        <StoryProjects projects={projectsList} />
+        <StoryProjects />
       ) : (
         <DynamicProjects projects={projectsList} />
       )}

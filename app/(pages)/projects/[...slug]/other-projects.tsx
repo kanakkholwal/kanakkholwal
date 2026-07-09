@@ -117,9 +117,11 @@ function StaticOtherProjects({ projects }: { projects: ProjectData[] }) {
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                   ) : (
-                    <ProjectFallback title={p.title} />
+                    <ProjectFallback title={p.title} description={p.description} />
                   )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  {p.image && (
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  )}
                 </div>
 
                 {/* Info */}
@@ -247,10 +249,8 @@ function DynamicOtherProjects({ projects }: { projects: ProjectData[] }) {
                       className="object-cover opacity-90 transition-transform duration-700 ease-out group-hover:scale-105"
                     />
                   ) : (
-                    <ProjectFallback title={p.title} />
+                    <ProjectFallback title={p.title} description={p.description} />
                   )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-50 group-hover:opacity-80 transition-opacity duration-500" />
-
                   {/* Status badge */}
                   {p.status && (
                     <div className="absolute top-3 left-3 z-10">
@@ -268,18 +268,19 @@ function DynamicOtherProjects({ projects }: { projects: ProjectData[] }) {
                     </div>
                   </div>
 
-                  {/* Title overlay */}
-                  <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-1 group-hover:translate-y-0 transition-transform duration-300">
-                    <h3 className="text-sm font-bold text-white leading-snug">
-                      {p.title}
-                    </h3>
-                  </div>
                 </div>
 
                 {/* Bottom strip */}
                 <div className="px-4 py-3 flex items-center justify-between gap-3 bg-card border-t border-border/50">
-                  <div>
-                    <p className="text-[10px] font-mono text-muted-foreground">
+                  <div className="min-w-0">
+                    {/* Image cards need their title here; the fallback carries
+                        its own. */}
+                    {p.image && (
+                      <h3 className="truncate text-sm font-bold leading-snug text-foreground">
+                        {p.title}
+                      </h3>
+                    )}
+                    <p className="mt-0.5 text-[10px] font-mono text-muted-foreground">
                       {p.dates}
                     </p>
                     <div className="flex gap-1 mt-1">
