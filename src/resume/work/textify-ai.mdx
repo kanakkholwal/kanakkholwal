@@ -14,8 +14,11 @@ endDate: "Jun 2024"
 employmentType: "Part-time"
 ---
 
-- Architected a **No-Code AI Workflow Engine** featuring a drag-and-drop interface, enabling users to build dynamic, schema-driven LLM chains (Text/Image/Markdown) without writing code.
-- Orchestrated a complex multi-cloud infrastructure migration **(AWS Amplify → Azure → GCP Cloud Run)**, utilizing **Docker** and **GitHub Actions** to establish a scalable, containerized CI/CD pipeline.
-- Hardened platform security by implementing **RBAC and Multi-Factor Authentication (MFA)** via AWS Cognito, later migrating to **NextAuth** to unify session management across microservices.
-- Re-engineered legacy monolithic codebases into modular **RESTful microservices**, reducing API latency and cutting deployment build times by **30%**.
-- Designed centralized schema handling systems that decoupled frontend logic from backend data structures, significantly improving developer velocity.
+I joined right as ChatGPT went mainstream, when the whole plan was to ship AI tools fast and see what stuck. I started as a five month intern and stayed on part time, mostly on the frontend but picking up auth, deployments, and backend whenever the small team needed it.
+
+- The founder wanted a separate app for every idea he could think of: LinkedIn bio generator, summarizer, resume writer, "turn this into that", and a long list beyond. I first moved the React codebase to **Vite** to speed up the dev loop, then migrated everything to **Next.js** once we were juggling around 20 of these tools and the old setup turned slow and buggy.
+- Twenty hardcoded tools was never going to scale, and a separate endpoint per tool made no sense. So I built a **low-code, drag-and-drop tool builder**. You lay out a form (text, textarea, select, multi-select), each field gets a unique id, and you write one prompt that references those ids by mention. At runtime we swap the mentions for the user's real input, send it through the **OpenAI** call, and stream back the text or image. One engine replaced twenty apps, and anyone on the team could ship a new tool without an engineer.
+- Owned deployments end to end. We started on **Azure** shipping through **GitHub Actions**, then I moved us to **GCP** with **Docker** and their container registry, which made releases far more predictable.
+- Migrated authentication from **Amazon Cognito** to **NextAuth**. The hard part was sharing a session securely across subdomains, which I solved with correctly scoped, secure cookies.
+- When we pivoted to news and financial analytics, I worked the document-analysis side with **LangChain** and web search, turning results into charts on a multi-tenant setup.
+- Reworked the UI and UX as we grew to roughly **10,000 signed-up users**, with a share of them converting to paid.

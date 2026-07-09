@@ -6,7 +6,7 @@ dates: "April 2026"
 active: true
 order: 2
 status: "In Progress"
-description: "Recast is a high-performance open-source screen recording tool with integrated, cinematic editing capabilities."
+description: "An open-source screen recorder with cinematic editing built in: cursor smoothing, auto-zoom, and a WebCodecs preview. A free, private Loom alternative."
 technologies:
   - "Sveltekit"
   - "Rust"
@@ -21,17 +21,20 @@ links:
     icon: "globe"
 ---
 
-<strong>Video editing, refined.</strong> The fast, minimal, and intentional
-editor built for the next generation of storytellers.
+Recast started because I wanted a good build-in-public video for Orbit. Windows' native recorder gave me flat, plain footage, and the tools that did better were either paywalled, heavy, or Mac only (Screen Studio, Cap, Loom). I'm on Windows, so I built my own.
 
-Recast is a high-performance open-source screen recording tool with integrated, cinematic editing capabilities. It aims to replace messy timeline-based tools with a "Smooth by Default" experience for startups and creators generating polished product demos.
+Recast is an open-source screen recorder with editing built in. It records your screen and your cursor, smooths the cursor motion, and adds automatic zoom, so a raw capture comes out looking deliberate. The desktop app is completely free and open source, with no tracking beyond optional error traces.
 
-## ✨ Key Features
+## ✨ What makes it good
 
-- **Cinematic Magic by Default:** Perfect cursor motion smoothing, automatic zooming, and intelligent tracking.
-- **Zero-Lag Recording:** Built natively with Tauri and Rust, offloading high-performance video encoding (FFmpeg) to the user's silicon.
-- **Privacy-First:** Locally generated user profiles without invasive tracking.
-- **Sleek Interface:** "Craft" design system featuring minimal glassmorphism, native blurs, and Svelte 5 reactivity.
+- **Cinematic by default.** It records real cursor movement and smooths it, then auto-zooms and tracks the action, so an ordinary screen capture comes out polished without manual keyframing.
+- **A live preview that is actually smooth.** The editor started on a plain video element and it just was not good enough, so I moved to the **WebCodecs API** for frame-level control over playback and scrubbing. That was the turning point for the whole editing experience.
+- **Native capture, Rust under the hood.** Getting clean capture and FFmpeg encoding to behave across operating systems is fiddly, so the heavy pipeline runs in **Rust** behind a **Tauri** app.
+- **Share it your way.** Upload straight to Google Drive, use the Loom-style Recast Cloud with password controls and workspaces, or bring your own storage (S3, Cloudflare R2, Azure, or Google Cloud Storage) and keep everything in-house.
+
+## Where it is
+
+The desktop app is done and stable on Windows, with early testing on macOS and Linux. I use it myself for the demos I post on Twitter and LinkedIn. Next up is a set of AI features: transcriptions and auto captions. It is meant as a Loom replacement for solo developers, creators, and small teams, right up to enterprises sharing a quick feature or pull-request walkthrough.
 
 ## 🏗 Architecture (Monorepo)
 

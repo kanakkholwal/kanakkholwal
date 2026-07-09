@@ -17,7 +17,7 @@ export function StoryTerminal({ chapters }: { chapters: StoryChapter[] }) {
             <span className="size-3 rounded-full bg-yellow-500/70" />
             <span className="size-3 rounded-full bg-green-500/70" />
             <span className="ml-3 font-mono text-xs text-muted-foreground">
-              kanak@journey — history
+              kanak@journey ~ history
             </span>
           </div>
 

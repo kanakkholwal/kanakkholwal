@@ -6,7 +6,7 @@ dates: "Feb 2026 - Present"
 active: true
 order: 3
 status: "Shipped"
-description: "A professional, high-performance PDF toolkit that runs entirely in your browser using WASM."
+description: "A free, offline PDF toolkit that runs entirely on your device with WASM. Merge, split, and compress without uploading a thing."
 technologies:
   - "TypeScript"
   - "Svelte"
@@ -34,14 +34,16 @@ links:
     icon: "globe"
 ---
 
-Orbit is a professional, high-performance PDF toolkit that runs entirely in your browser. By leveraging powerful WebAssembly (WASM) engines, it ensures your documents never leave your device, providing world-class security and speed.
+I built Orbit because I did not trust the web for something as simple as merging a PDF. Most online PDF tools upload your file to their server first, and when a document is sensitive that is a real problem: you have no idea whether it is stored, trained on, or leaked. So I built the opposite, a PDF toolkit that does everything on your own device and never uploads a thing.
+
+The constraints were simple from day one: lightweight, private, and offline. Heavy operations like compression run on WebAssembly, so they are fast without a server. It works in the browser, installs as a PWA on mobile with offline caching, and ships as a Tauri desktop app for anyone who would rather have it as a real app. Nothing here is groundbreaking. It is convenience done properly: a clean UI, sane defaults, and your files staying yours.
 
 ## ✨ Why Orbit?
 
-* **🔒 100% Private & Secure**: All processing happens locally in your browser's sandbox. Zero server uploads, zero data transfer.
-* **⚡ Native Speed**: Powered by a high-performance WASM engine for desktop-class processing speeds.
-* **📱 Offline Capable**: Fully functional without an internet connection. Install it as a PWA for a seamless desktop experience (available soon).
-* **♾️ Unlimited Everything**: No daily quotas, no file size caps, and no subscriptions. Batch process as much as your hardware handles.
+* **🔒 Private by default**: Everything runs locally in your browser's sandbox. No uploads, no server, no telemetry on your documents.
+* **⚡ Fast**: The heavy lifting runs on a WebAssembly engine, so processing feels desktop-class.
+* **📱 Works offline**: Fully functional with no connection. Install it as a PWA on mobile, or grab the Tauri desktop build.
+* **♾️ No limits**: No daily quotas, no file size caps, and no subscriptions. Batch as much as your machine can handle.
 
 ## 🛠️ Essential Tools
 
@@ -54,7 +56,7 @@ Orbit is a professional, high-performance PDF toolkit that runs entirely in your
 
 ## 🚀 Tech Stack
 
-Orbit PDF is built with cutting-edge technologies for maximum performance and reliability:
+Orbit is built with:
 
 - **Frontend**: [Svelte 5](https://svelte.dev/) (Runes), [SvelteKit](https://kit.svelte.dev/)
 - **Styling**: [Tailwind CSS 4.0](https://tailwindcss.com/)
@@ -63,45 +65,6 @@ Orbit PDF is built with cutting-edge technologies for maximum performance and re
 - **Icons**: [Lucide Svelte](https://lucide.dev/)
 - **Linting**: [Biome](https://biomejs.dev/)
 
-## 🛠️ Local Development
-
-### Prerequisites
-
-You'll need [Bun](https://bun.sh/) (recommended) or Node.js installed.
-
-### Installation
-
-```sh
-# Clone the repository
-git clone https://github.com/kanakkholwal/orbit.git
-
-# Navigate to the project
-cd orbit
-
-# Install dependencies
-bun install
-```
-
-### Development
-
-```sh
-# Start the development server
-bun run dev
-
-# Open in browser
-# http://localhost:5173
-```
-
-### Building for Production
-
-```sh
-# Create a production build
-bun run build
-
-# Preview the build
-bun run preview
-```
-
 ## 🤝 Contributing
 
-Contributions are welcome! If you have an idea for a tool or a feature, feel free to open an issue or submit a pull request.
+Orbit is open source. If you have an idea for a tool or a feature, feel free to open an issue or a pull request on [GitHub](https://github.com/kanakkholwal/orbit).

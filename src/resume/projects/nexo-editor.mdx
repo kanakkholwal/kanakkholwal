@@ -6,7 +6,7 @@ dates: "Aug 2025"
 active: true
 order: 5
 status: "Shipped"
-description: "A headless, accessible-first React Markdown editor package designed to inherit your Tailwind/Shadcn themes via CSS modules."
+description: "A lightweight, headless React markdown editor that inherits your Tailwind or Shadcn theme instead of fighting it. Pluggable and accessibility-first."
 technologies:
   - "React.js"
   - "TypeScript"
@@ -29,12 +29,14 @@ links:
 ---
 
 ### **Overview**
-**Nexo MDX** is a React-based Markdown editor built to solve the styling fragmentation in rich text editors. Unlike traditional editors that force their own styles, Nexo adopts a **"Headless UI" philosophy**, allowing developers to control the look and feel completely using their own utility classes.
+**Nexo MDX** is a lightweight, headless markdown editor for React. Most editors ship their own look and fight your design system. Nexo does the opposite: it inherits whatever you already use, your color palette, your utility classes, your Shadcn theme, and stays out of the way. It comes with sensible default styling, but everything is pluggable and yours to override.
 
 ### **Key Technical Capabilities**
 - **Native Accessibility:** Built on top of native `textarea` elements to ensure full screen-reader compatibility and correct form submission behavior without hydration mismatches.
 - **Plugin Architecture:** Supports **Remark** and **Rehype** plugins, allowing developers to extend functionality (e.g., adding mathematical formulas or code highlighting) without forking the core library.
 - **CSS Module Injection:** Features a unique styling engine where developers can override internal component styles using global CSS variables or direct class targeting (e.g., `.nexo-mdx-editor .toolbar`).
+- **Markdown and JSON, both ways:** Convert markdown to a JSON tree and back, so content is easy to store, transform, and render however you need.
+- **Lightweight:** Small and unbloated, published on npm as `nexo-mdx` with a few hundred downloads a week.
 
 ### **Implementation**
 ```tsx
