@@ -5,7 +5,9 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { StyleModels, StylingModel } from "@/constants/ui";
 import useStorage from "@/hooks/use-storage";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
+import { StyleSwap } from "@/components/animated/style-swap";
+import { Serif, StoryReveal } from "@/components/application/story.frame";
 import { ArrowUpRight, Heart, Sparkles } from "lucide-react";
 import Link from "next/link";
 
@@ -35,54 +37,37 @@ export default function AttributionPageClient({
   );
 
   return (
-    <AnimatePresence mode="wait" initial={false}>
+    <StyleSwap swapKey={selectedStyle}>
       {selectedStyle === "minimal" ? (
-        <motion.div
-          key="attribution-minimal"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
-        >
-          <MinimalAttribution
-            journey={journey}
-            credits={credits}
-            displayName={displayName}
-            email={email}
-          />
-        </motion.div>
+        <MinimalAttribution
+          journey={journey}
+          credits={credits}
+          displayName={displayName}
+          email={email}
+        />
       ) : selectedStyle === "static" ? (
-        <motion.div
-          key="attribution-static"
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 12 }}
-          transition={{ type: "spring", stiffness: 300, damping: 28 }}
-        >
-          <StaticAttribution
-            journey={journey}
-            credits={credits}
-            displayName={displayName}
-            email={email}
-          />
-        </motion.div>
+        <StaticAttribution
+          journey={journey}
+          credits={credits}
+          displayName={displayName}
+          email={email}
+        />
+      ) : selectedStyle === "story" ? (
+        <StoryAttribution
+          journey={journey}
+          credits={credits}
+          displayName={displayName}
+          email={email}
+        />
       ) : (
-        <motion.div
-          key="attribution-dynamic"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 20 }}
-          transition={{ type: "spring", stiffness: 260, damping: 24 }}
-        >
-          <DynamicAttribution
-            journey={journey}
-            credits={credits}
-            displayName={displayName}
-            email={email}
-          />
-        </motion.div>
+        <DynamicAttribution
+          journey={journey}
+          credits={credits}
+          displayName={displayName}
+          email={email}
+        />
       )}
-    </AnimatePresence>
+    </StyleSwap>
   );
 }
 
@@ -114,7 +99,7 @@ function MinimalAttribution({ journey, credits, displayName, email }: Attributio
             ))}
           </div>
           <p className="text-sm font-semibold text-foreground mt-4">
-            — {displayName}
+            {displayName}
           </p>
         </section>
       </BlurFade>
@@ -219,6 +204,51 @@ function StaticAttribution({ journey, credits, displayName, email }: Attribution
           </BlurFade>
         </div>
       </div>
+    </main>
+  );
+}
+
+
+function StoryAttribution({ journey, credits, displayName, email }: AttributionPageClientProps) {
+  return (
+    <main className="mx-auto w-full max-w-3xl px-6 pb-24 pt-28 md:pt-36">
+      <StoryReveal>
+        <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
+          Attribution
+        </p>
+        <h1 className="mt-3 text-4xl font-bold leading-tight tracking-tighter text-foreground md:text-5xl">
+          Standing on <Serif className="text-muted-foreground/80">shoulders</Serif>.
+        </h1>
+        <p className="mt-5 max-w-xl text-base leading-relaxed text-muted-foreground">
+          None of this got built in a vacuum. Here&apos;s how it came together, and the
+          people whose work made it possible.
+        </p>
+      </StoryReveal>
+
+      <StoryReveal delay={0.08} className="mt-14 space-y-5">
+        {journey.map((para, i) => (
+          <p key={i} className="text-base leading-relaxed text-muted-foreground">
+            {para}
+          </p>
+        ))}
+        <div className="flex items-center gap-3 pt-2">
+          <div className="h-px w-12 bg-border" />
+          <p className="text-sm font-semibold text-foreground">{displayName}</p>
+        </div>
+      </StoryReveal>
+
+      <StoryReveal delay={0.12} className="mt-14 space-y-5">
+        <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
+          With thanks to
+        </p>
+        <ul className="space-y-3">
+          {credits.map(({ person, attribute }, i) => (
+            <li key={i} className="text-base leading-relaxed text-muted-foreground">
+              <strong className="font-semibold text-foreground">{person}</strong>, for {attribute}
+            </li>
+          ))}
+        </ul>
+      </StoryReveal>
     </main>
   );
 }

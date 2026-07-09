@@ -3,12 +3,14 @@
 import {
     Timeline
 } from "@/components/application/journey.static";
+import { StoryJourney } from "@/components/story/story-journey";
 import BlurFade from "@/components/magicui/blur-fade";
 import { Badge } from "@/components/ui/badge";
 import { StyleModels, StylingModel } from "@/constants/ui";
 import useStorage from "@/hooks/use-storage";
 import { cn } from "@/lib/utils";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
+import { StyleSwap } from "@/components/animated/style-swap";
 import { journey_data } from "~/data/journey";
 
 const BLUR_FADE_DELAY = 0.04;
@@ -20,39 +22,17 @@ export default function JourneyPageClient() {
   );
 
   return (
-    <AnimatePresence mode="wait" initial={false}>
+    <StyleSwap swapKey={selectedStyle}>
       {selectedStyle === "minimal" ? (
-        <motion.div
-          key="journey-minimal"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
-        >
-          <MinimalJourney />
-        </motion.div>
+        <MinimalJourney />
       ) : selectedStyle === "static" ? (
-        <motion.div
-          key="journey-static"
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 12 }}
-          transition={{ type: "spring", stiffness: 300, damping: 28 }}
-        >
-          <StaticJourney />
-        </motion.div>
+        <StaticJourney />
+      ) : selectedStyle === "story" ? (
+        <StoryJourney />
       ) : (
-        <motion.div
-          key="journey-dynamic"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 20 }}
-          transition={{ type: "spring", stiffness: 260, damping: 24 }}
-        >
-          <DynamicJourney />
-        </motion.div>
+        <DynamicJourney />
       )}
-    </AnimatePresence>
+    </StyleSwap>
   );
 }
 

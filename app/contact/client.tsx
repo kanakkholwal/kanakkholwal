@@ -4,7 +4,9 @@ import BlurFade from "@/components/magicui/blur-fade";
 import { Socials } from "@/components/socials";
 import { StyleModels, StylingModel } from "@/constants/ui";
 import useStorage from "@/hooks/use-storage";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
+import { StyleSwap } from "@/components/animated/style-swap";
+import { Serif, StoryReveal } from "@/components/application/story.frame";
 import { ArrowUpRight, Calendar, Mail, MessageSquare } from "lucide-react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
@@ -32,39 +34,17 @@ export default function ContactPageClient({
   );
 
   return (
-    <AnimatePresence mode="wait" initial={false}>
+    <StyleSwap swapKey={selectedStyle}>
       {selectedStyle === "minimal" ? (
-        <motion.div
-          key="contact-minimal"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
-        >
-          <MinimalContact displayName={displayName} email={email} />
-        </motion.div>
+        <MinimalContact displayName={displayName} email={email} />
       ) : selectedStyle === "static" ? (
-        <motion.div
-          key="contact-static"
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 12 }}
-          transition={{ type: "spring", stiffness: 300, damping: 28 }}
-        >
-          <StaticContact displayName={displayName} email={email} />
-        </motion.div>
+        <StaticContact displayName={displayName} email={email} />
+      ) : selectedStyle === "story" ? (
+        <StoryContact displayName={displayName} email={email} />
       ) : (
-        <motion.div
-          key="contact-dynamic"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 20 }}
-          transition={{ type: "spring", stiffness: 260, damping: 24 }}
-        >
-          <DynamicContact displayName={displayName} email={email} />
-        </motion.div>
+        <DynamicContact displayName={displayName} email={email} />
       )}
-    </AnimatePresence>
+    </StyleSwap>
   );
 }
 
@@ -135,6 +115,41 @@ function StaticContact({ displayName, email }: ContactPageClientProps) {
       </div>
       <BookACallForm />
     </section>
+  );
+}
+
+
+function StoryContact({ displayName, email }: ContactPageClientProps) {
+  return (
+    <main className="mx-auto w-full max-w-3xl px-6 pb-24 pt-28 md:pt-36">
+      <StoryReveal>
+        <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
+          Say hello
+        </p>
+        <h1 className="mt-3 text-4xl font-bold leading-tight tracking-tighter text-foreground md:text-5xl">
+          Let&apos;s <Serif className="text-muted-foreground/80">talk</Serif>.
+        </h1>
+        <p className="mt-5 max-w-xl text-base leading-relaxed text-muted-foreground">
+          I&apos;m {displayName}, and I genuinely enjoy a good conversation.
+          Whether it&apos;s a project, an idea you&apos;re chewing on, or just a
+          hello, my inbox is always open and I read every message.
+        </p>
+      </StoryReveal>
+
+      <StoryReveal delay={0.1}>
+        <div className="mt-12 flex flex-wrap items-center gap-6">
+          <a
+            href={`mailto:${email}`}
+            className="group inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
+          >
+            <Mail className="size-4 shrink-0" />
+            {email}
+            <ArrowUpRight className="size-4 opacity-70 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          </a>
+          <Socials className="items-center gap-x-1" />
+        </div>
+      </StoryReveal>
+    </main>
   );
 }
 

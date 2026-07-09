@@ -27,6 +27,8 @@ export function WorkExperienceCard({ work }: WorkExperienceCardProps) {
           <AvatarImage
             src={work.logoUrl}
             alt={work.company}
+            height={40}
+            width={40}
             className="object-contain p-1 rounded-full"
           />
           <AvatarFallback className="rounded-md text-[11px] font-bold text-muted-foreground">
@@ -64,7 +66,7 @@ export function WorkExperienceCard({ work }: WorkExperienceCardProps) {
             className="shrink-0 font-mono text-[11px] text-muted-foreground/60 tabular-nums"
             dateTime={work.startDate}
           >
-            {work.startDate} — {work.endDate ?? "Present"}
+            {work.startDate} to {work.endDate ?? "Present"}
           </time>
         </div>
 

@@ -5,7 +5,7 @@ href: "https://www.npmjs.com/package/custom-domain-sdk"
 dates: "Feb 2025 - Feb 2025"
 active: true
 status: "Shipped"
-description: "TypeScript SDK for managing custom domains using Cloudflare like Custom Hostnames"
+description: "A TypeScript SDK for adding bring-your-own-domain support to multi-tenant apps, built on Cloudflare Custom Hostnames with a strict domain lifecycle."
 technologies:
   - "TypeScript"
   - "Cloudflare API"
@@ -40,4 +40,4 @@ The SDK enforces the following state transitions:
 7. **failed**: Terminating state for any step.
 
 ### **Why this exists**
-Custom domains look trivial until you try to ship them properly. DNS propagation, TLS provisioning, and provider-specific quirks make it a painful process to debug. This SDK exists to make that logic *explicit, deterministic, and reusable*.
+Every platform that lets you bring your own domain, the way Vercel or Webflow map a custom domain onto your account, builds this flow internally, and none of them ship it as a package. Custom domains look trivial until you actually do it: DNS propagation, TLS provisioning, and provider-specific quirks turn it into a painful thing to debug. I wanted to understand that flow end to end and leave behind a reusable version, so this SDK makes the logic explicit, deterministic, and both framework and database agnostic.

@@ -13,12 +13,15 @@ location: "Bengaluru, India"
 locationType: "On-site"
 logoUrl: "https://www.virallens.com/wp-content/uploads/2021/09/logo-blue.png"
 startDate: "Mar 2026"
-endDate: "Present"
+endDate: "Jun 2026"
 employmentType: "Full-time"
 ---
 
-- Architected and delivered a high-performance Markdown rendering engine and rich text editor library enabling local-first, offline-capable documentation workflows.
-- Designed and implemented a centralized documentation platform with auto-sync pipelines and OpenAPI specification support, streamlining API documentation across all client-facing applications.
-- Established end-to-end observability infrastructure by integrating Better Stack for log management, uptime monitoring, and alerting across distributed production services.
-- Engineered a scalable multi-agent AI document generation system leveraging an LLM agent swarm architecture for intelligent, automated document drafting and collaboration.
-- Drove cross-functional feature development in close collaboration with product, design, and backend teams, delivering high-quality, production-ready features with measurable improvements to system integration and user experience.
+ViralLens is a digital marketing company. I worked on its tech side building software for a US law firm's class action practice, a short full-time run of about four months where I owned a lot of ground across local-first tooling, AI pipelines, and observability.
+
+- Built a **local-first markdown engine and rich text editor** that runs entirely in the browser on **IndexedDB**. Full offline storage, multi-document handling with tabbed editing, and PDF export. It can lean on up to 80 percent of the device's storage quota when it needs to, so notes and prompts stay on your machine and never touch a server.
+- Built a **DOCX MCP** that lets multiple AI agents edit and collaborate on the same document with full low-level API control. It exposes tools for the parts a real legal document needs: create, search, and update sections, a table of contents, and a **table of authorities**.
+- Built the **AI agent pipelines** behind the product: content generation, content analysis, and fact verification, with per-section scoring and highlighting so you can see exactly what held up and what did not.
+- Built market and legal analysis tools that score stock performance and estimated damages, then predict a **market reaction score** for how a given class action might land, alongside a good amount of legal text processing.
+- Set up the **observability layer**: a unified analytics platform tracking how long processes run and what they cost, per-application error and failure tracking with **Better Stack**, and **PostHog** on client projects to see how people actually used what we shipped.
+- Wrote the internal documentation and refactored the codebase early on to make the rest of this possible.

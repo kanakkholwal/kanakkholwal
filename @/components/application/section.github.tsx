@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import {
+  ArrowUpRight,
   BarChart2,
   Book,
   BookOpen,
@@ -43,7 +44,9 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { StyleModels, StylingModel } from "@/constants/ui";
 import useStorage from "@/hooks/use-storage";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
+import { StyleSwap } from "@/components/animated/style-swap";
+import { Serif, StoryChapter, StoryReveal } from "@/components/application/story.frame";
 import Link from "next/link";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 import { appConfig } from "root/project.config";
@@ -106,39 +109,17 @@ export default function GithubSection({
   );
 
   return (
-    <AnimatePresence mode="wait" initial={false}>
+    <StyleSwap swapKey={selectedStyle}>
       {selectedStyle === "minimal" ? (
-        <motion.div
-          key="github-minimal"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.25 }}
-        >
-          <MinimalGithub data={data.stats} />
-        </motion.div>
+        <MinimalGithub data={data.stats} />
       ) : selectedStyle === "static" ? (
-        <motion.div
-          key="github-static"
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 12 }}
-          transition={{ type: "spring", stiffness: 300, damping: 28 }}
-        >
-          <StaticGithubSection data={data.stats} />
-        </motion.div>
+        <StaticGithubSection data={data.stats} />
+      ) : selectedStyle === "story" ? (
+        <StoryGithub data={data.stats} />
       ) : (
-        <motion.div
-          key="github-dynamic"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 20 }}
-          transition={{ type: "spring", stiffness: 260, damping: 24 }}
-        >
-          <DynamicGithubSection data={data} />
-        </motion.div>
+        <DynamicGithubSection data={data} />
       )}
-    </AnimatePresence>
+    </StyleSwap>
   );
 }
 
@@ -168,6 +149,58 @@ function MinimalGithub({ data }: { data: Contributions }) {
 /* ─────────────────────────────────────────────────────────────
    Shared stat strip
 ───────────────────────────────────────────────────────────── */
+
+function StoryGithub({ data }: { data: Contributions }) {
+  return (
+    <StoryChapter
+      index={5}
+      kicker="In the open"
+      id="github"
+      title={<>Building in <Serif className="text-muted-foreground/80">public</Serif>.</>}
+    >
+      <StoryReveal className="max-w-xl text-base leading-relaxed text-muted-foreground">
+        <p>
+          Most of what I learn ends up open source. These counters are pulled
+          live from GitHub.
+        </p>
+      </StoryReveal>
+
+      <StoryReveal
+        delay={0.1}
+        className="mt-6 grid grid-cols-2 gap-x-6 gap-y-5 sm:grid-cols-4"
+      >
+        {STATS_CONFIG.map((stat) => (
+          <div key={stat.key}>
+            <div className="font-mono text-3xl font-bold tracking-tight text-foreground tabular-nums">
+              <CountingNumber
+                from={0}
+                to={data.stats[stat.key as keyof typeof data.stats]}
+                duration={2}
+                startOnView
+                once
+              />
+            </div>
+            <p className="mt-1 font-mono text-xs uppercase tracking-widest text-muted-foreground/70">
+              {stat.label}
+            </p>
+          </div>
+        ))}
+      </StoryReveal>
+
+      <StoryReveal delay={0.16} className="mt-8">
+        <Link
+          href={appConfig.social.github}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1.5 text-sm font-medium text-foreground transition-all hover:gap-2.5"
+        >
+          See the full profile
+          <ArrowUpRight className="size-4" />
+        </Link>
+      </StoryReveal>
+    </StoryChapter>
+  );
+}
 
 function StatsStrip({
   stats,

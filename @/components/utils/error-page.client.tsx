@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { StyleModels, StylingModel } from "@/constants/ui";
 import useStorage from "@/hooks/use-storage";
 import { AnimatePresence, motion } from "framer-motion";
+import { StyleSwap } from "@/components/animated/style-swap";
+import { Serif, StoryReveal } from "@/components/application/story.frame";
 import {
   AlertCircle,
   AlertTriangle,
@@ -34,42 +36,23 @@ export default function ErrorPageClient({ error, reset }: ErrorPageClientProps) 
   );
 
   return (
-    <AnimatePresence mode="wait" initial={false}>
+    <StyleSwap swapKey={selectedStyle}>
       {selectedStyle === "minimal" ? (
-        <motion.div
-          key="error-minimal"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
-          className="flex min-h-screen w-full items-center justify-center p-6"
-        >
+        <div className="flex min-h-screen w-full items-center justify-center p-6">
           <MinimalError error={error} reset={reset} />
-        </motion.div>
+        </div>
       ) : selectedStyle === "static" ? (
-        <motion.div
-          key="error-static"
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 12 }}
-          transition={{ type: "spring", stiffness: 300, damping: 28 }}
-          className="flex min-h-screen w-full items-center justify-center p-6"
-        >
+        <div className="flex min-h-screen w-full items-center justify-center p-6">
           <StaticError error={error} reset={reset} />
-        </motion.div>
+        </div>
+      ) : selectedStyle === "story" ? (
+        <StoryError error={error} reset={reset} />
       ) : (
-        <motion.div
-          key="error-dynamic"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 20 }}
-          transition={{ type: "spring", stiffness: 260, damping: 24 }}
-          className="w-full"
-        >
+        <div className="w-full">
           <DynamicError error={error} reset={reset} />
-        </motion.div>
+        </div>
       )}
-    </AnimatePresence>
+    </StyleSwap>
   );
 }
 
@@ -247,6 +230,43 @@ function StaticError({ error, reset }: ErrorPageClientProps) {
           </Button>
         </div>
       </BlurFade>
+    </div>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────
+   STORY — calm, human, centred detour screen
+───────────────────────────────────────────────────────── */
+function StoryError({ error, reset }: ErrorPageClientProps) {
+  return (
+    <div className="mx-auto flex min-h-screen w-full max-w-xl flex-col items-center justify-center px-6 text-center">
+      <StoryReveal>
+        <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
+          A small detour
+        </p>
+        <h1 className="mt-3 text-3xl font-bold tracking-tighter md:text-4xl">
+          Something <Serif className="text-muted-foreground/80">broke</Serif>.
+        </h1>
+        <p className="mt-4 text-base leading-relaxed text-muted-foreground">
+          Nothing you did. Something on my end tripped up for a moment. Give it
+          another try, and if it keeps happening I&apos;ll get it sorted.
+        </p>
+        <div className="mt-8 flex items-center justify-center gap-3">
+          <button
+            onClick={reset}
+            className="rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
+          >
+            Try again
+          </button>
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 rounded-full border border-border px-5 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted/50"
+          >
+            <Home className="size-3.5" />
+            Go home
+          </Link>
+        </div>
+      </StoryReveal>
     </div>
   );
 }

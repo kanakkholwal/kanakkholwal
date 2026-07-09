@@ -3,7 +3,9 @@
 import BlurFade from "@/components/magicui/blur-fade";
 import { StyleModels, StylingModel } from "@/constants/ui";
 import useStorage from "@/hooks/use-storage";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
+import { StyleSwap } from "@/components/animated/style-swap";
+import { Serif, StoryReveal } from "@/components/application/story.frame";
 import React from "react";
 
 const BLUR_FADE_DELAY = 0.04;
@@ -31,54 +33,37 @@ export default function StatsPageClient({
   );
 
   return (
-    <AnimatePresence mode="wait" initial={false}>
+    <StyleSwap swapKey={selectedStyle}>
       {selectedStyle === "minimal" ? (
-        <motion.div
-          key="stats-minimal"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
-        >
-          <MinimalStats
-            header={header}
-            repoSection={repoSection}
-            registrySection={registrySection}
-            healthSection={healthSection}
-          />
-        </motion.div>
+        <MinimalStats
+          header={header}
+          repoSection={repoSection}
+          registrySection={registrySection}
+          healthSection={healthSection}
+        />
       ) : selectedStyle === "static" ? (
-        <motion.div
-          key="stats-static"
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 12 }}
-          transition={{ type: "spring", stiffness: 300, damping: 28 }}
-        >
-          <StaticStats
-            header={header}
-            repoSection={repoSection}
-            registrySection={registrySection}
-            healthSection={healthSection}
-          />
-        </motion.div>
+        <StaticStats
+          header={header}
+          repoSection={repoSection}
+          registrySection={registrySection}
+          healthSection={healthSection}
+        />
+      ) : selectedStyle === "story" ? (
+        <StoryStats
+          header={header}
+          repoSection={repoSection}
+          registrySection={registrySection}
+          healthSection={healthSection}
+        />
       ) : (
-        <motion.div
-          key="stats-dynamic"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 20 }}
-          transition={{ type: "spring", stiffness: 260, damping: 24 }}
-        >
-          <DynamicStats
-            header={header}
-            repoSection={repoSection}
-            registrySection={registrySection}
-            healthSection={healthSection}
-          />
-        </motion.div>
+        <DynamicStats
+          header={header}
+          repoSection={repoSection}
+          registrySection={registrySection}
+          healthSection={healthSection}
+        />
       )}
-    </AnimatePresence>
+    </StyleSwap>
   );
 }
 
@@ -219,6 +204,42 @@ function DynamicStats(props: StatsPageClientProps) {
           />
           <div className="mt-8">{props.healthSection}</div>
         </motion.section>
+      </div>
+    </main>
+  );
+}
+
+function StoryStats(props: StatsPageClientProps) {
+  const nodes = [
+    props.header,
+    props.repoSection,
+    props.registrySection,
+    props.healthSection,
+  ];
+
+  return (
+    <main className="mx-auto w-full max-w-3xl px-6 pb-24 pt-28 md:pt-36">
+      <StoryReveal>
+        <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
+          In the open
+        </p>
+        <h1 className="mt-3 text-4xl font-bold leading-tight tracking-tighter text-foreground md:text-5xl">
+          Open source, by the{" "}
+          <Serif className="text-muted-foreground/80">numbers</Serif>.
+        </h1>
+        <p className="mt-5 max-w-xl text-base leading-relaxed text-muted-foreground">
+          These are the things I have built in public and left running. Stars,
+          downloads, and the quiet signals that tell me whether any of it is
+          actually useful to someone else.
+        </p>
+      </StoryReveal>
+
+      <div className="mt-14 space-y-12">
+        {nodes.map((node, i) => (
+          <StoryReveal key={i} delay={0.1 + i * 0.05}>
+            {node}
+          </StoryReveal>
+        ))}
       </div>
     </main>
   );

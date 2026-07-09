@@ -41,5 +41,5 @@ export function generateMetadata({
       keywords: (keywords || []).join(", "),
       robots: "index,follow",
     },
-  } as Metadata;
+  } satisfies Metadata;
 }

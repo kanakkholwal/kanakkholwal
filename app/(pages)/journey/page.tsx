@@ -7,7 +7,7 @@ export default function JourneyPage() {
 export const metadata = generateMetadata({
   title: "My Developer Journey ",
   description:
-    "Explore Kanak’s journey as a software engineer — from early coding days to mastering full-stack development with Next.js, AWS, Docker, and AI integration. A story of growth, challenges, and innovation.",
+    "Explore Kanak’s journey as a software engineer, from early coding days to mastering full-stack development with Next.js, AWS, Docker, and AI integration. A story of growth, challenges, and innovation.",
   path: "/journey",
   keywords: [
     "developer journey",

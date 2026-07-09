@@ -5,15 +5,7 @@ import { Logo } from "@/components/logo";
 import { StyleModels, StylingModel } from "@/constants/ui";
 import useStorage from "@/hooks/use-storage";
 import { cn } from "@/lib/utils";
-import {
-  AnimatePresence,
-  LayoutGroup,
-  motion,
-  useScroll,
-  useSpring,
-  useTransform,
-  Variants,
-} from "framer-motion";
+import { AnimatePresence, LayoutGroup, motion, Variants } from "framer-motion";
 import { ReactLenis } from "lenis/react";
 import { useTheme } from "next-themes";
 import dynamic from "next/dynamic";
@@ -70,27 +62,7 @@ export default function PageWrapper({
   const [animationEnabled] = useStorage("animations.enabled", false);
   const [animationMode] = useStorage("animations.mode", "stars");
 
-  // 1. Ref for the scroll container
   const containerRef = useRef<HTMLDivElement>(null);
-
-  // 2. Scroll Hooks for Parallax
-  // We track the scroll progress of the viewport
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end end"],
-  });
-
-  // 3. Create a smooth spring physics for the parallax value to remove jitter
-  const smoothY = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
-    restDelta: 0.001,
-  });
-
-  // 4. Transform scroll 0-1 into a Y pixel value.
-  // This makes the children move slightly slower/faster than the actual scroll, creating depth.
-  // Move from 0px to -50px over the course of the page.
-  const parallaxY = useTransform(smoothY, [0, 1], [0, -50]);
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoaded(true), 1200);
@@ -103,7 +75,7 @@ export default function PageWrapper({
         <div
           ref={containerRef}
           className={cn(
-            "relative min-h-dvh w-full overflow-x-hidden",
+            "relative min-h-dvh w-full overflow-x-clip",
             !isLoaded && "h-dvh overflow-y-hidden",
           )}
         >
@@ -133,14 +105,12 @@ export default function PageWrapper({
           <motion.main
             className={cn(
               "relative z-10 min-h-dvh w-full",
-              (selectedStyle === "minimal" && isHome) ? "mx-auto md:max-w-3xl *:[[id]]:scroll-mt-22 space-y-4" : "overflow-x-hidden pb-20",
+              (selectedStyle === "minimal" && isHome) ? "mx-auto md:max-w-3xl *:[[id]]:scroll-mt-22 space-y-4" : "overflow-x-clip pb-20",
               className,
             )}
             initial="hidden"
             animate={isLoaded ? "visible" : "hidden"}
             variants={CONTAINER_VARIANTS}
-            // 6. Apply the Parallax Y value here
-            style={{ y: parallaxY }}
           >
             {children}
           </motion.main>
@@ -172,7 +142,7 @@ export default function PageWrapper({
             animate={isLoaded ? { opacity: 1 } : { opacity: 0 }}
             transition={{ delay: 0.8, duration: 0.5 }}
             className={
-              cn((selectedStyle === "minimal" && isHome) ? "mx-auto md:max-w-3xl *:[[id]]:scroll-mt-22 space-y-4" : "overflow-x-hidden")
+              cn((selectedStyle === "minimal" && isHome) ? "mx-auto md:max-w-3xl *:[[id]]:scroll-mt-22 space-y-4" : "overflow-x-clip")
             }
           >
             <Suspense fallback={<div className="min-h-48" />}>

@@ -5,23 +5,28 @@ href: "https://github.com/kanakkholwal/crawler-for-llms"
 dates: "Feb 2025"
 active: true
 status: "Shipped"
-description: "A high-throughput web crawler optimized for extracting and normalizing data for LLM fine-tuning and Vector DB ingestion."
+description: "A lightweight microservice that scrapes web pages, strips the noise, and returns clean markdown ready for AI and RAG pipelines."
 technologies:
   - "Node.js"
-  - "Puppeteer"
-  - "Data Engineering"
-  - "Vector Embeddings"
+  - "Web Scraping"
+  - "Markdown"
   - "RAG"
+  - "Microservice"
 links:
   - label: "Source"
     url: "https://github.com/kanakkholwal/crawler-for-llms"
     icon: "github"
 ---
 
-### **Engineering the Pipeline**
-This tool addresses the data bottleneck in **Retrieval-Augmented Generation (RAG)** workflows. It is designed to navigate complex DOM structures, handle rate limits, and convert unstructured HTML into semantic JSONL datasets.
+### What it is
 
-### **Features**
-- **Puppeteer Clustering:** Manages a pool of headless browser instances to crawl pages concurrently without memory leaks.
-- **Data Normalization:** Automatically strips non-content DOM elements (ads, navbars) to reduce token usage during LLM ingestion.
-- **Resilience:** Implements exponential backoff strategies and proxy rotation to handle anti-bot measures.
+I needed to pull clean, structured content out of web pages for an AI project, and I did not want to drag in a heavy scraping framework to do it. So I built a small microservice instead: give it a page, it reads the content, strips the noise like navbars, ads, and boilerplate, and hands back clean markdown in a modular, schema-driven shape.
+
+That markdown drops straight into an AI or RAG pipeline, where clean input matters more than raw volume. Fewer wasted tokens, and less junk for the model to wade through.
+
+### Features
+
+- **Schema-driven extraction:** Pull exactly the fields you want from a page, in a predictable structure.
+- **Noise removal:** Strips the non-content elements so what is left is the actual text, not the chrome around it.
+- **Markdown output:** Returns clean markdown that is ready to embed, index, or feed to a model.
+- **Lightweight:** A focused microservice, not a heavy crawler framework.

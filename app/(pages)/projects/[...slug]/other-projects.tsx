@@ -6,7 +6,10 @@ import { StyleModels, StylingModel } from "@/constants/ui";
 import useStorage from "@/hooks/use-storage";
 import { ProjectType, getOtherProjects } from "@/lib/project.source";
 import { cn } from "@/lib/utils";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
+import { StyleSwap } from "@/components/animated/style-swap";
+import { StoryReveal } from "@/components/application/story.frame";
+import { TransitionLink } from "@/components/utils/link";
 import { ArrowUpRight, Layers } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -25,39 +28,17 @@ export function OtherProjects({ currentProjectId }: OtherProjectsProps) {
   if (!projects.length) return null;
 
   return (
-    <AnimatePresence mode="wait" initial={false}>
+    <StyleSwap swapKey={selectedStyle}>
       {selectedStyle === "minimal" ? (
-        <motion.div
-          key="other-minimal"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
-        >
-          <MinimalOtherProjects projects={projects} />
-        </motion.div>
+        <MinimalOtherProjects projects={projects} />
       ) : selectedStyle === "static" ? (
-        <motion.div
-          key="other-static"
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 12 }}
-          transition={{ type: "spring", stiffness: 300, damping: 28 }}
-        >
-          <StaticOtherProjects projects={projects} />
-        </motion.div>
+        <StaticOtherProjects projects={projects} />
+      ) : selectedStyle === "story" ? (
+        <StoryOtherProjects projects={projects} />
       ) : (
-        <motion.div
-          key="other-dynamic"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 20 }}
-          transition={{ type: "spring", stiffness: 260, damping: 24 }}
-        >
-          <DynamicOtherProjects projects={projects} />
-        </motion.div>
+        <DynamicOtherProjects projects={projects} />
       )}
-    </AnimatePresence>
+    </StyleSwap>
   );
 }
 
@@ -136,9 +117,11 @@ function StaticOtherProjects({ projects }: { projects: ProjectData[] }) {
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                   ) : (
-                    <ProjectFallback title={p.title} />
+                    <ProjectFallback title={p.title} description={p.description} />
                   )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  {p.image && (
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  )}
                 </div>
 
                 {/* Info */}
@@ -160,6 +143,43 @@ function StaticOtherProjects({ projects }: { projects: ProjectData[] }) {
             </BlurFade>
           ))}
         </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────
+   STORY — editorial "keep reading" list
+───────────────────────────────────────────────────────── */
+function StoryOtherProjects({ projects }: { projects: ProjectData[] }) {
+  return (
+    <section className="mx-auto w-full max-w-3xl px-6 py-12">
+      <StoryReveal>
+        <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
+          Keep reading
+        </p>
+      </StoryReveal>
+      <div className="mt-6 space-y-5">
+        {projects.map((p, i) => (
+          <StoryReveal key={p.id} delay={Math.min(i * 0.05, 0.3)}>
+            <TransitionLink
+              href={`/projects/${p.id}`}
+              className="group block border-b border-border/40 pb-5"
+            >
+              <div className="flex items-baseline justify-between gap-3">
+                <h3 className="text-base font-semibold text-foreground transition-colors group-hover:text-primary">
+                  {p.title}
+                </h3>
+                <span className="shrink-0 font-mono text-xs text-muted-foreground/70">
+                  {p.dates}
+                </span>
+              </div>
+              <p className="mt-1 line-clamp-2 text-sm leading-relaxed text-muted-foreground">
+                {p.description}
+              </p>
+            </TransitionLink>
+          </StoryReveal>
+        ))}
       </div>
     </section>
   );
@@ -229,10 +249,8 @@ function DynamicOtherProjects({ projects }: { projects: ProjectData[] }) {
                       className="object-cover opacity-90 transition-transform duration-700 ease-out group-hover:scale-105"
                     />
                   ) : (
-                    <ProjectFallback title={p.title} />
+                    <ProjectFallback title={p.title} description={p.description} />
                   )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-50 group-hover:opacity-80 transition-opacity duration-500" />
-
                   {/* Status badge */}
                   {p.status && (
                     <div className="absolute top-3 left-3 z-10">
@@ -250,18 +268,19 @@ function DynamicOtherProjects({ projects }: { projects: ProjectData[] }) {
                     </div>
                   </div>
 
-                  {/* Title overlay */}
-                  <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-1 group-hover:translate-y-0 transition-transform duration-300">
-                    <h3 className="text-sm font-bold text-white leading-snug">
-                      {p.title}
-                    </h3>
-                  </div>
                 </div>
 
                 {/* Bottom strip */}
                 <div className="px-4 py-3 flex items-center justify-between gap-3 bg-card border-t border-border/50">
-                  <div>
-                    <p className="text-[10px] font-mono text-muted-foreground">
+                  <div className="min-w-0">
+                    {/* Image cards need their title here; the fallback carries
+                        its own. */}
+                    {p.image && (
+                      <h3 className="truncate text-sm font-bold leading-snug text-foreground">
+                        {p.title}
+                      </h3>
+                    )}
+                    <p className="mt-0.5 text-[10px] font-mono text-muted-foreground">
                       {p.dates}
                     </p>
                     <div className="flex gap-1 mt-1">

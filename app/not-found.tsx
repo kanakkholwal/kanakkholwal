@@ -5,7 +5,12 @@ import {
 import PageWrapper from "@/components/wrapper";
 import { cn } from "@/lib/utils";
 import { Home } from "lucide-react";
+import { Metadata } from "next";
 
+export const metadata:Metadata = {
+  title: "404 - Page Not Found",
+  description: "The page you are looking for does not exist.",
+};
 export default function NotFound() {
   return (
     <PageWrapper>

@@ -13,8 +13,10 @@ startDate: "Mar 2024"
 endDate: "Jun 2024"
 employmentType: "Internship"
 ---
-- Spearheaded the architectural migration of legacy **Create-React-App (CRA)** repositories to **Vite + TypeScript**, slashing build times by **60%** and optimizing HMR (Hot Module Replacement) for the team.
-- Engineered a centralized **Internationalization (i18n)** and SEO architecture, enabling localized landing pages that drove a **150% increase in organic traffic**.
-- Co-developed the **internal UI Component Library**, enforcing strict design system tokens to ensure visual consistency across B2B and consumer-facing crypto dashboards.
-- Optimized core web vitals and page load speeds for high-traffic pages, directly improving user retention and SERP rankings.
-- Collaborated with product teams to ship production-ready features for a high-growth Fintech platform.
+KoinX builds crypto tax software, the tool people across different countries use to work out and report what they owe on their crypto. I came in as a frontend engineer for a three month internship and worked across both sides of the product.
+
+- Started on the consumer dashboard, shipping new pages, charts, and graphs, then moved onto an internal tool used by chartered accountants along with a few team-only features.
+- On my own, without being asked, I branched one of our production apps and migrated it from **Create React App** to **Vite** for a much better developer experience. My lead liked the result and asked me to do the rest, so I migrated all five to six production CRA repos over. The trickiest part was SVG handling, which I sorted out with the right Vite plugins.
+- Built new components for the **internal UI component library** so the interface stayed consistent across our apps.
+- Our marketing site was expanding to multiple languages and countries, but it hydrated everything on the client and pulled all content from a single JSON file, so it kept getting slower. I moved rendering to build time and server-side in **Next.js**, and made the content imports **tree-shakable** so a page only loads what it needs.
+- With no extra libraries, just lazy loading, dynamic imports, and runtime code splitting, I took the site's **PageSpeed performance score from around 60 to 88** and improved **Core Web Vitals** across the board.

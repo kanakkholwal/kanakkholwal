@@ -4,7 +4,8 @@ import BlurFade from "@/components/magicui/blur-fade";
 import { StyleModels, StylingModel } from "@/constants/ui";
 import useStorage from "@/hooks/use-storage";
 import { cn } from "@/lib/utils";
-import { AnimatePresence, motion, useInView } from "framer-motion";
+import { motion, useInView } from "framer-motion";
+import { StyleSwap } from "@/components/animated/style-swap";
 import { useRef } from "react";
 import { appConfig } from "root/project.config";
 import { Icon } from "./icons";
@@ -25,42 +26,68 @@ export function FooterSection() {
   );
 
   return (
-    <AnimatePresence mode="wait" initial={false}>
+    <StyleSwap swapKey={selectedStyle}>
       {selectedStyle === "minimal" ? (
-        <motion.div
-          key="footer-minimal"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
-        >
-          <MinimalFooter />
-        </motion.div>
+        <MinimalFooter />
       ) : selectedStyle === "static" ? (
-        <motion.div
-          key="footer-static"
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 12 }}
-          transition={{ type: "spring", stiffness: 300, damping: 28 }}
-        >
-          <StaticFooter />
-        </motion.div>
+        <StaticFooter />
+      ) : selectedStyle === "story" ? (
+        <StoryFooter />
       ) : (
-        <motion.div
-          key="footer-dynamic"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 20 }}
-          transition={{ type: "spring", stiffness: 260, damping: 24 }}
-        >
-          <DynamicFooter />
-        </motion.div>
+        <DynamicFooter />
       )}
-    </AnimatePresence>
+    </StyleSwap>
   );
 }
 
+
+function StoryFooter() {
+  const links = [
+    ...appConfig.footerLinks.general,
+    ...appConfig.footerLinks.specifics,
+  ].filter((link) => link.label.toLowerCase() !== "home");
+
+  return (
+    <footer className="mx-auto w-full max-w-3xl px-6 pb-16">
+      <div className="border-t border-dashed border-border/60 pt-10">
+        <div className="flex flex-col gap-8 sm:flex-row sm:items-start sm:justify-between">
+          <div className="space-y-4">
+            <TransitionLink href="/" className="inline-block">
+              <Logo className="h-7 w-auto" />
+            </TransitionLink>
+            <p className="max-w-xs text-sm leading-relaxed text-muted-foreground">
+              Thanks for reading to the end. I ship new work fairly often, so
+              check back when you have a minute.
+            </p>
+            <Socials className="inline-flex items-center gap-1" />
+          </div>
+
+          <nav className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted-foreground sm:justify-end">
+            {links.map((link) => (
+              <TransitionLink
+                key={link.href}
+                href={link.href}
+                className="transition-colors hover:text-foreground"
+              >
+                {link.label}
+              </TransitionLink>
+            ))}
+          </nav>
+        </div>
+
+        <div className="mt-10 flex items-center justify-between border-t border-border/40 pt-6 text-xs text-muted-foreground">
+          <p>
+            &copy; {currentYear} {appConfig.displayName}
+          </p>
+          <div className="flex items-center gap-2">
+            <ModeToggle />
+            <GoToTopButton />
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+}
 
 function MinimalFooter() {
   return (

@@ -4,7 +4,9 @@ import BlurFade from "@/components/magicui/blur-fade";
 import { StyleModels, StylingModel } from "@/constants/ui";
 import useStorage from "@/hooks/use-storage";
 import { cn } from "@/lib/utils";
-import { AnimatePresence, motion, useInView } from "framer-motion";
+import { motion, useInView } from "framer-motion";
+import { StyleSwap } from "@/components/animated/style-swap";
+import { Serif, StoryChapter, StoryReveal } from "@/components/application/story.frame";
 import { Code2, Cpu, Globe, Layers, Quote, Rocket } from "lucide-react";
 import { useRef } from "react";
 import Markdown from "react-markdown";
@@ -47,41 +49,67 @@ export default function SectionAbout() {
   );
 
   return (
-    <AnimatePresence mode="wait" initial={false}>
+    <StyleSwap swapKey={selectedStyle}>
       {selectedStyle === "minimal" ? (
-        <motion.div
-          key="about-minimal"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.25 }}
-        >
-          <MinimalAbout />
-        </motion.div>
+        <MinimalAbout />
       ) : selectedStyle === "static" ? (
-        <motion.div
-          key="about-static"
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 12 }}
-          transition={{ type: "spring", stiffness: 300, damping: 28 }}
-        >
-          <StaticAbout />
-        </motion.div>
+        <StaticAbout />
+      ) : selectedStyle === "story" ? (
+        <StoryAbout />
       ) : (
-        <motion.div
-          key="about-dynamic"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 20 }}
-          transition={{ type: "spring", stiffness: 260, damping: 24 }}
-        >
-          <SpotlightReveal>
-            <DynamicAbout />
-          </SpotlightReveal>
-        </motion.div>
+        <SpotlightReveal>
+          <DynamicAbout />
+        </SpotlightReveal>
       )}
-    </AnimatePresence>
+    </StyleSwap>
+  );
+}
+
+function StoryAbout() {
+  return (
+    <StoryChapter
+      index={1}
+      kicker="The person"
+      id="about"
+      title={<>Beyond the <Serif className="text-muted-foreground/80">résumé</Serif>.</>}
+    >
+      <StoryReveal className="space-y-5 text-base leading-relaxed text-muted-foreground">
+        <p>
+          I&apos;m a product engineer who likes owning the whole thing, from the
+          database schema all the way to the last few pixels.
+        </p>
+        <p>
+          What keeps me interested is the craft in the parts people feel but
+          rarely notice: the loading state that never flickers, the copy that
+          sounds like a person, the transition that just feels right.
+        </p>
+      </StoryReveal>
+
+      <StoryReveal delay={0.1} className="mt-8 grid gap-x-8 gap-y-5 sm:grid-cols-2">
+        {PILLARS.map((pillar) => (
+          <div key={pillar.label} className="flex gap-3">
+            <pillar.icon className="size-5 shrink-0 text-primary/70" />
+            <div>
+              <p className="text-sm font-semibold text-foreground">{pillar.label}</p>
+              <p className="text-sm leading-relaxed text-muted-foreground">
+                {pillar.description}
+              </p>
+            </div>
+          </div>
+        ))}
+      </StoryReveal>
+
+      <StoryReveal delay={0.16} className="mt-8 flex flex-wrap gap-2">
+        {TRAITS.map((trait) => (
+          <span
+            key={trait}
+            className="rounded-full border border-border/60 bg-card/40 px-3 py-1 text-xs font-medium text-muted-foreground"
+          >
+            {trait}
+          </span>
+        ))}
+      </StoryReveal>
+    </StoryChapter>
   );
 }
 
@@ -98,9 +126,8 @@ function MinimalAbout() {
       <PanelContent
         className={cn(
           "prose dark:prose-invert max-w-none",
-          "prose-headings:font-mono prose-headings:tracking-tight prose-headings:font-bold",
-          "prose-p:font-mono prose-p:leading-6 prose-p:text-zinc-600 dark:prose-p:text-zinc-300",
-          "prose-li:font-mono",
+          "prose-headings:tracking-tight prose-headings:font-bold",
+          "prose-p:leading-7 prose-p:text-zinc-600 dark:prose-p:text-zinc-300",
         )}
       >
         <Markdown>{appConfig.summary}</Markdown>

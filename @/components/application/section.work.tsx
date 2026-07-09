@@ -5,7 +5,9 @@ import BlurFade from "@/components/magicui/blur-fade";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { StyleModels, StylingModel } from "@/constants/ui";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
+import { StyleSwap } from "@/components/animated/style-swap";
+import { Serif, StoryChapter, StoryReveal } from "@/components/application/story.frame";
 import { ArrowUpRight, BriefcaseBusinessIcon, InfinityIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -23,6 +25,38 @@ import { Panel, PanelHeader, PanelTitle } from "./panel";
 
 const BLUR_FADE_DELAY = 0.04;
 
+
+function StoryWork({ experiences }: { experiences: WorkExperienceType[] }) {
+  return (
+    <StoryChapter
+      index={2}
+      kicker="The work"
+      id="work"
+      title={<>Where I&apos;ve <Serif className="text-muted-foreground/80">shown up</Serif>.</>}
+    >
+      <div className="space-y-6">
+        {experiences.map((work, i) => (
+          <StoryReveal key={work.company + work.startDate} delay={Math.min(i * 0.05, 0.3)}>
+            <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+              <h3 className="text-base font-semibold text-foreground">
+                {work.title}
+                <span className="font-normal text-muted-foreground"> · {work.company}</span>
+              </h3>
+              <span className="shrink-0 font-mono text-xs tabular-nums text-muted-foreground/70">
+                {work.startDate} to {work.endDate ?? "Present"}
+              </span>
+            </div>
+            {Array.isArray(work.badges) && work.badges.length > 0 && (
+              <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+                {work.badges.join(" · ")}
+              </p>
+            )}
+          </StoryReveal>
+        ))}
+      </div>
+    </StoryChapter>
+  );
+}
 
 function MinimalWork({ experiences }: { experiences: WorkExperienceType[] }) {
   return (
@@ -132,46 +166,31 @@ function DynamicWork({ experiences }: { experiences: WorkExperienceType[] }) {
 
 
 export default function WorkSection() {
-  const workExperiences = useMemo(() => getWorkExperienceList(), []);
+  // Latest experience first, oldest last (source order isn't chronological).
+  const workExperiences = useMemo(
+    () =>
+      [...getWorkExperienceList()].sort(
+        (a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime(),
+      ),
+    [],
+  );
   const [selectedStyle] = useStorage<StylingModel>(
     "styling.model",
     StyleModels[0].id,
   );
 
   return (
-    <AnimatePresence mode="wait" initial={false}>
+    <StyleSwap swapKey={selectedStyle}>
       {selectedStyle === "minimal" ? (
-        <motion.div
-          key="work-minimal"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.25 }}
-        >
-          <MinimalWork experiences={workExperiences} />
-        </motion.div>
+        <MinimalWork experiences={workExperiences} />
       ) : selectedStyle === "static" ? (
-        <motion.div
-          key="work-static"
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 12 }}
-          transition={{ type: "spring", stiffness: 300, damping: 28 }}
-        >
-          <StaticWork experiences={workExperiences} />
-        </motion.div>
+        <StaticWork experiences={workExperiences} />
+      ) : selectedStyle === "story" ? (
+        <StoryWork experiences={workExperiences} />
       ) : (
-        <motion.div
-          key="work-dynamic"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 20 }}
-          transition={{ type: "spring", stiffness: 260, damping: 24 }}
-        >
-          <DynamicWork experiences={workExperiences} />
-        </motion.div>
+        <DynamicWork experiences={workExperiences} />
       )}
-    </AnimatePresence>
+    </StyleSwap>
   );
 }
 
@@ -247,7 +266,7 @@ export function ExperienceItem({ experience }: { experience: WorkExperienceType 
                 <dt className="sr-only">Employment Period</dt>
                 <dd className="flex items-center gap-0.5">
                   <span>{experience.startDate}</span>
-                  <span className="font-mono">—</span>
+                  <span className="font-mono text-xs">to</span>
                   {experience.isOngoing ? (
                     <>
                       <InfinityIcon
@@ -349,7 +368,7 @@ function WorkCard({ work }: { work: WorkExperienceType }) {
             <span className="text-xs text-muted-foreground/60 font-mono truncate">{work.locationType}</span>
           </div>
           <time className="shrink-0 font-mono text-[11px] tabular-nums text-muted-foreground/50" dateTime={work.startDate}>
-            {work.startDate} — {work.endDate ?? "Present"}
+            {work.startDate} to {work.endDate ?? "Present"}
           </time>
         </div>
 

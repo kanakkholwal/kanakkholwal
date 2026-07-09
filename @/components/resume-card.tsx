@@ -51,6 +51,8 @@ export const ResumeCard = ({
             <AvatarImage
               src={logoUrl}
               alt={altText}
+                height={50}
+            width={50}
               className="object-contain"
             />
             <AvatarFallback>{altText[0]}</AvatarFallback>

@@ -58,9 +58,12 @@ export function Header({ transition }: { transition: boolean }) {
           <MinimalNavbar key="minimal" />
         ) : selectedStyle === "dynamic" ? (
           <DynamicIslandNavbar key="dynamic" />
-        ) : selectedStyle === "static" ? (
+        ) : (
+          // Static + Story (and any future mode) share the floating capsule so
+          // the style selector is always reachable — Story has no navbar of its
+          // own, and without this there's no way to switch back out of it.
           <StaticNavbar key="static" />
-        ) : null}
+        )}
       </AnimatePresence>
     </motion.header>
   );

@@ -3,11 +3,16 @@ import {
   ExpandableProjectCards
 } from "@/components/application/projects.card";
 import BlurFade from "@/components/magicui/blur-fade";
-import { ButtonLink, ButtonTransitionLink } from "@/components/utils/link";
+import { ButtonLink, ButtonTransitionLink, TransitionLink } from "@/components/utils/link";
+import { Serif, StoryChapter, StoryReveal } from "@/components/application/story.frame";
+import { PersonaLens, useStoryLens } from "@/components/story/persona-lens";
+import { StoryCardList } from "@/components/story/story-card-list";
 import { StyleModels, StylingModel } from "@/constants/ui";
 import useStorage from "@/hooks/use-storage";
 import { getProjectList } from "@/lib/project.source";
-import { AnimatePresence, motion } from "framer-motion";
+import { getStory } from "~/data/story";
+import { motion } from "framer-motion";
+import { StyleSwap } from "@/components/animated/style-swap";
 import { ArrowRight, BarChart2, BoxIcon, FolderOpen, Layers } from "lucide-react";
 import Link from "next/link";
 import { useMemo } from "react";
@@ -110,6 +115,38 @@ function ProjectsCta() {
 /* ─────────────────────────────────────────────────────────────
    Sub-components
 ───────────────────────────────────────────────────────────── */
+
+function StoryProjects() {
+  const [lens, setLens] = useStoryLens();
+  // The same persona-lens case-study cards used on /journey, curated to the
+  // featured projects. The lens is shared, so switching it here or on /journey
+  // stays in sync.
+  const chapters = useMemo(() => getStory().projects, []);
+
+  return (
+    <StoryChapter
+      index={4}
+      kicker="The proof"
+      id="projects"
+      title={<>Things I&apos;ve <Serif className="text-muted-foreground/80">shipped</Serif>.</>}
+    >
+      <div className="space-y-6">
+        <PersonaLens value={lens} onChange={setLens} />
+        <StoryCardList chapters={chapters} lens={lens} />
+      </div>
+
+      <StoryReveal delay={0.2} className="mt-8">
+        <TransitionLink
+          href="/journey"
+          className="inline-flex items-center gap-1.5 text-sm font-medium text-foreground transition-all hover:gap-2.5"
+        >
+          Read the full story
+          <ArrowRight className="size-4" />
+        </TransitionLink>
+      </StoryReveal>
+    </StoryChapter>
+  );
+}
 
 function MinimalProjects({ projects }: { projects: ReturnType<typeof getProjectList> }) {
   return (
@@ -316,38 +353,16 @@ export default function ProjectsSection() {
   );
 
   return (
-    <AnimatePresence mode="wait" initial={false}>
+    <StyleSwap swapKey={selectedStyle}>
       {selectedStyle === "minimal" ? (
-        <motion.div
-          key="projects-minimal"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.25 }}
-        >
-          <MinimalProjects projects={projectsList} />
-        </motion.div>
+        <MinimalProjects projects={projectsList} />
       ) : selectedStyle === "static" ? (
-        <motion.div
-          key="projects-static"
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 12 }}
-          transition={{ type: "spring", stiffness: 300, damping: 28 }}
-        >
-          <StaticProjects projects={projectsList} />
-        </motion.div>
+        <StaticProjects projects={projectsList} />
+      ) : selectedStyle === "story" ? (
+        <StoryProjects />
       ) : (
-        <motion.div
-          key="projects-dynamic"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 20 }}
-          transition={{ type: "spring", stiffness: 260, damping: 24 }}
-        >
-          <DynamicProjects projects={projectsList} />
-        </motion.div>
+        <DynamicProjects projects={projectsList} />
       )}
-    </AnimatePresence>
+    </StyleSwap>
   );
 }

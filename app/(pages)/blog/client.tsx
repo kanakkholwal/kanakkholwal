@@ -5,7 +5,9 @@ import BlurFade from "@/components/magicui/blur-fade";
 import { Badge } from "@/components/ui/badge";
 import { StyleModels, StylingModel } from "@/constants/ui";
 import useStorage from "@/hooks/use-storage";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
+import { StyleSwap } from "@/components/animated/style-swap";
+import { Serif, StoryReveal } from "@/components/application/story.frame";
 import { ArrowUpRight, BookOpen, CalendarDays, Clock } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -37,39 +39,17 @@ export default function AnimatedMediumPosts({ posts, now, mediumUrl }: Props) {
   );
 
   return (
-    <AnimatePresence mode="wait" initial={false}>
+    <StyleSwap swapKey={selectedStyle}>
       {selectedStyle === "minimal" ? (
-        <motion.div
-          key="blog-minimal"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
-        >
-          <MinimalBlog posts={posts} now={now} mediumUrl={mediumUrl} />
-        </motion.div>
+        <MinimalBlog posts={posts} now={now} mediumUrl={mediumUrl} />
       ) : selectedStyle === "static" ? (
-        <motion.div
-          key="blog-static"
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 12 }}
-          transition={{ type: "spring", stiffness: 300, damping: 28 }}
-        >
-          <StaticBlog posts={posts} now={now} mediumUrl={mediumUrl} />
-        </motion.div>
+        <StaticBlog posts={posts} now={now} mediumUrl={mediumUrl} />
+      ) : selectedStyle === "story" ? (
+        <StoryBlog posts={posts} now={now} mediumUrl={mediumUrl} />
       ) : (
-        <motion.div
-          key="blog-dynamic"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 20 }}
-          transition={{ type: "spring", stiffness: 260, damping: 24 }}
-        >
-          <DynamicBlog posts={posts} now={now} mediumUrl={mediumUrl} />
-        </motion.div>
+        <DynamicBlog posts={posts} now={now} mediumUrl={mediumUrl} />
       )}
-    </AnimatePresence>
+    </StyleSwap>
   );
 }
 
@@ -88,7 +68,7 @@ function MinimalBlog({ posts, now, mediumUrl }: Props) {
               Blog
             </h1>
             <p className="text-sm text-muted-foreground font-mono">
-              {posts.length} articles — published on Medium
+              {posts.length} articles, published on Medium
             </p>
           </div>
         </BlurFade>
@@ -222,6 +202,67 @@ function StaticBlog({ posts, now, mediumUrl }: Props) {
   );
 }
 
+
+function StoryBlog({ posts, mediumUrl }: Props) {
+  return (
+    <main className="mx-auto w-full max-w-3xl px-6 pb-24 pt-28 md:pt-36">
+      <StoryReveal>
+        <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
+          Writing
+        </p>
+        <h1 className="mt-3 text-4xl font-bold leading-tight tracking-tighter text-foreground md:text-5xl">
+          Notes, in <Serif className="text-muted-foreground/80">long form</Serif>.
+        </h1>
+        <p className="mt-5 max-w-xl text-base leading-relaxed text-muted-foreground">
+          Everything I have taken the time to write down properly, mostly over
+          on Medium. Distributed systems, frontend architecture, and whatever I
+          happened to be wrestling with that week.
+        </p>
+      </StoryReveal>
+
+      <div className="mt-14 space-y-6">
+        {posts.map((post, i) => (
+          <StoryReveal key={post.link} delay={Math.min(i * 0.05, 0.3)}>
+            <a
+              href={post.link}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="group block border-b border-border/40 pb-5"
+            >
+              <div className="flex items-baseline justify-between gap-3">
+                <h3 className="text-base font-semibold text-foreground transition-colors group-hover:text-primary">
+                  {post.title}
+                </h3>
+                <span className="shrink-0 font-mono text-xs text-muted-foreground/70">
+                  {new Date(post.pubDate).toLocaleDateString("en-US", {
+                    month: "short",
+                    day: "numeric",
+                    year: "numeric",
+                  })}
+                </span>
+              </div>
+              <p className="mt-1 line-clamp-2 text-sm leading-relaxed text-muted-foreground">
+                {post.snippet.replace(/<[^>]*>?/gm, "")}
+              </p>
+            </a>
+          </StoryReveal>
+        ))}
+      </div>
+
+      <StoryReveal className="mt-14" delay={0.1}>
+        <a
+          href={mediumUrl}
+          target="_blank"
+          rel="noreferrer noopener"
+          className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground transition-colors hover:text-primary"
+        >
+          Read more on Medium
+          <ArrowUpRight className="size-3.5" />
+        </a>
+      </StoryReveal>
+    </main>
+  );
+}
 
 function DynamicBlog({ posts, now, mediumUrl }: Props) {
   const [featured, ...rest] = posts;
