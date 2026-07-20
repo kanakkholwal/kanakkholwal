@@ -41,7 +41,7 @@ function SpotlightCard({
           background: useMotionTemplate`
             radial-gradient(
               650px circle at ${mouseX}px ${mouseY}px,
-              hsl(var(--primary) / 0.15), 
+              color-mix(in oklab, var(--primary) 15%, transparent),
               transparent 80%
             )
           `,

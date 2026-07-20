@@ -39,7 +39,7 @@ const appConfig = {
   skills: {
 
     frontend: Array.from(new Set(["react", "nextjs", "svelte", "typescript", "tailwindcss", "vite", "tauri", "sass", "bootstrap", "html", "css", "svg"])),
-    backend: Array.from(new Set(["nodejs", "go", "python", "express", "graphql", "bun"])),
+    backend: Array.from(new Set(["nodejs", "go", "rust", "python", "express", "graphql", "bun"])),
     database: Array.from(new Set(["postgres", "mongodb", "redis", "firebase"])),
     devops: Array.from(new Set(["docker", "gcp", "azure", "vercel", "cloudflare", "git", "github"])),
     tools: Array.from(new Set(["figma", "notion", "postman", "npm", "pnpm", "yarn", "git"])),

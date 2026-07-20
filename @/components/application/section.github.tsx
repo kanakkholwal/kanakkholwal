@@ -838,10 +838,13 @@ function WeeklyChart({ data }: { data: ContributionActivity[] }) {
           <CartesianGrid
             vertical={false}
             strokeDasharray="3 3"
-            stroke="hsl(var(--primary)/0.3)"
+            stroke="color-mix(in oklab, var(--primary) 30%, transparent)"
           />
           <ChartTooltip
-            cursor={{ fill: "hsl(var(--primary)/0.1)", radius: 4 }}
+            cursor={{
+              fill: "color-mix(in oklab, var(--primary) 10%, transparent)",
+              radius: 4,
+            }}
             content={
               <ChartTooltipContent
                 hideLabel
@@ -873,7 +876,7 @@ function WeeklyChart({ data }: { data: ContributionActivity[] }) {
             axisLine={false}
             tickLine={false}
             minTickGap={40}
-            tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }}
+            tick={{ fontSize: 10, fill: "var(--muted-foreground)" }}
             dy={10}
           />
         </BarChart>

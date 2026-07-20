@@ -271,12 +271,12 @@ export function GenericAreaChart({
                 >
                   <stop
                     offset="5%"
-                    stopColor={s.color || `hsl(var(--chart-${index + 1}))`}
+                    stopColor={s.color || `var(--chart-${index + 1})`}
                     stopOpacity={gradientOpacity.start}
                   />
                   <stop
                     offset="95%"
-                    stopColor={s.color || `hsl(var(--chart-${index + 1}))`}
+                    stopColor={s.color || `var(--chart-${index + 1})`}
                     stopOpacity={gradientOpacity.end}
                   />
                 </linearGradient>
@@ -337,7 +337,7 @@ export function GenericAreaChart({
                 dataKey={s.dataKey}
                 type={curveType}
                 fill={`url(#fill${s.dataKey})`}
-                stroke={s.color || `hsl(var(--chart-${index + 1}))`}
+                stroke={s.color || `var(--chart-${index + 1})`}
                 strokeWidth={2}
                 stackId={stacked ? "a" : undefined}
               />
@@ -369,7 +369,7 @@ export function UserGrowthChart({ data }: { data: any }) {
     <GenericAreaChart
       data={chartData}
       series={[
-        { dataKey: "users", label: "New Users", color: "hsl(var(--chart-1))" },
+        { dataKey: "users", label: "New Users", color: "var(--chart-1)" },
       ]}
       title="User Growth"
       description="New user registrations over time"
@@ -406,8 +406,8 @@ export function UserGrowthChart({ data }: { data: any }) {
 //         <GenericAreaChart
 //             data={chartData}
 //             series={[
-//                 { dataKey: "users", label: "New Users", color: "hsl(var(--chart-1))" },
-//                 { dataKey: "sessions", label: "Sessions", color: "hsl(var(--chart-2))" },
+//                 { dataKey: "users", label: "New Users", color: "var(--chart-1)" },
+//                 { dataKey: "sessions", label: "Sessions", color: "var(--chart-2)" },
 //             ]}
 //             title="Users & Sessions"
 //             description="Combined analytics overview"

@@ -160,7 +160,7 @@ function DynamicHero() {
     >
       {/* ── Background: subtle dot grid only (no glows / vignette) ── */}
       <div className="pointer-events-none absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-[radial-gradient(circle,_hsl(var(--foreground)/0.08)_1px,_transparent_1px)] bg-[size:28px_28px]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle,_color-mix(in_oklab,var(--foreground)_8%,transparent)_1px,_transparent_1px)] bg-[size:28px_28px]" />
       </div>
 
       {/* ── Top status strip ── */}
@@ -241,8 +241,8 @@ function DynamicHero() {
               text={appConfig.description}
               duration={2.5}
               wave
-              color="hsl(var(--muted-foreground))"
-              shimmeringColor="hsl(var(--foreground))"
+              color="var(--muted-foreground)"
+              shimmeringColor="var(--foreground)"
             />
           </motion.p>
 
@@ -383,7 +383,7 @@ function MinimalHero() {
             <div className="h-12.5 border-t border-edge py-1 pl-4 sm:h-9">
               <motion.div layoutId="hero-role">
                 <TextFlip
-                  className="font-pixel-square text-sm text-balance text-muted-foreground"
+                  className="font-mono text-sm text-balance text-muted-foreground"
                   variants={{
                     initial: { y: -10, opacity: 0 },
                     animate: { y: -1, opacity: 1 },

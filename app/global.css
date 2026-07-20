@@ -232,6 +232,10 @@
   --color-sidebar-ring: var(--sidebar-ring);
 
   --color-edge: var(--edge);
+  /* Quiet hover surface for cards/rows. Derived from the neutral tokens so it
+     tracks both themes — `--accent` is tinted in light mode and would read as
+     a colour wash here. */
+  --color-accent-muted: color-mix(in oklab, var(--muted) 60%, var(--background));
   --width-app: var(--max-app-width);
 
 
@@ -413,50 +417,59 @@
   }
 
   html::-webkit-scrollbar-track {
-    background: hsl(var(--muted));
+    background: var(--muted);
     border-radius: 0.5rem;
   }
 
   html::-webkit-scrollbar-thumb {
     background: linear-gradient(135deg,
-        hsl(var(--primary) / 0.6),
-        hsl(var(--secondary) / 0.8));
+        color-mix(in oklab, var(--primary) 60%, transparent),
+        color-mix(in oklab, var(--secondary) 80%, transparent));
     border-radius: 0.5rem;
-    border: 2px solid hsl(var(--background));
-    transition: all 0.2s ease-in-out;
+    border: 2px solid var(--background);
+    transition: background 0.2s ease-in-out;
   }
 
   html::-webkit-scrollbar-thumb:hover {
     background: linear-gradient(135deg,
-        hsl(var(--primary) / 0.8),
-        hsl(var(--secondary) / 1));
-    transform: scale(1.1);
+        color-mix(in oklab, var(--primary) 80%, transparent),
+        var(--secondary));
   }
 
   html::-webkit-scrollbar-thumb:active {
     background: linear-gradient(135deg,
-        hsl(var(--primary)),
-        hsl(var(--secondary)));
+        var(--primary),
+        var(--secondary));
   }
 
   html::-webkit-scrollbar-corner {
-    background: hsl(var(--background));
+    background: var(--background);
   }
 
   /* Firefox scrollbar support */
   html {
-    scroll-behavior: smooth;
     scrollbar-width: thin;
-    scrollbar-color: hsl(var(--primary) / 0.6) hsl(var(--muted));
+    scrollbar-color: color-mix(in oklab, var(--primary) 60%, transparent) var(--muted);
   }
 
   button:not(:disabled),
   [role="button"]:not(:disabled),
   a {
     cursor: pointer;
-    outline: none;
     text-decoration: none;
-    cursor: pointer;
+  }
+
+  /* Never blanket `outline: none` here — it strips the focus ring from every
+     raw <a>/<button> on the site. Suppress the ring for pointer input only,
+     and always keep it for keyboard focus. */
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
   }
 
   button:disabled,
@@ -479,11 +492,9 @@
     font: inherit;
     font-size: inherit;
     font-family: inherit;
-    -webkit-box-shadow: 0 0 0 1000px hsl(var(--background)) inset !important;
-    box-shadow: 0 0 0 1000px hsl(var(--background)) inset !important;
-    -webkit-text-fill-color: hsl(var(--foreground)) !important;
-    @apply border-emerald-500 bg-emerald-200 dark:border-emerald-900 dark:bg-emerald-700;
-
+    -webkit-box-shadow: 0 0 0 1000px var(--background) inset !important;
+    box-shadow: 0 0 0 1000px var(--background) inset !important;
+    -webkit-text-fill-color: var(--foreground) !important;
   }
 
 

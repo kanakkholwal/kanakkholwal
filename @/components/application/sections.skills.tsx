@@ -1,10 +1,10 @@
 "use client";
 
+import { StyleSwap } from "@/components/animated/style-swap";
+import { Serif, StoryChapter, StoryReveal } from "@/components/application/story.frame";
 import { StyleModels, StylingModel } from "@/constants/ui";
 import useStorage from "@/hooks/use-storage";
 import { motion } from "framer-motion";
-import { StyleSwap } from "@/components/animated/style-swap";
-import { Serif, StoryChapter, StoryReveal } from "@/components/application/story.frame";
 import { Cloud, Database, Layout, Server, Terminal } from "lucide-react";
 import Image from "next/image";
 import { appConfig } from "root/project.config";
@@ -19,20 +19,20 @@ const BLUR_FADE_DELAY = 0.04;
 
 const CATEGORIES = [
   {
-    id: "frontend",
-    title: "Frontend Engineering",
-    icon: Layout,
-    description: "Building responsive, pixel-perfect web experiences.",
-    className: "md:col-span-2 lg:col-span-2",
-    skills: appConfig.skills.frontend,
-  },
-  {
     id: "backend",
     title: "Backend & API",
     icon: Server,
     description: "Scalable server-side architectures.",
     className: "md:col-span-1 lg:col-span-1",
     skills: appConfig.skills.backend,
+  },
+  {
+    id: "frontend",
+    title: "Frontend Engineering",
+    icon: Layout,
+    description: "Building responsive, pixel-perfect web experiences.",
+    className: "md:col-span-2 lg:col-span-2",
+    skills: appConfig.skills.frontend,
   },
   {
     id: "database",
@@ -64,10 +64,10 @@ export type SkillCategory = (typeof CATEGORIES)[number];
 
 function StorySkills() {
   const groups = [
-    { label: "Frontend", items: appConfig.skills.frontend },
     { label: "Backend", items: appConfig.skills.backend },
     { label: "Data", items: appConfig.skills.database },
     { label: "Infra", items: appConfig.skills.devops },
+    { label: "Frontend", items: appConfig.skills.frontend },
     { label: "Tools", items: appConfig.skills.tools },
   ];
   return (
@@ -98,7 +98,13 @@ function StorySkills() {
 }
 
 function MinimalSkills() {
-  const allSkills = Array.from(new Set(Object.values(appConfig.skills).flat()));
+  const allSkills = Array.from(new Set([
+    ...appConfig.skills.backend,
+    ...appConfig.skills.database,
+    ...appConfig.skills.devops,
+    ...appConfig.skills.frontend,
+    ...appConfig.skills.tools
+  ]));
   return (
     <Panel id="stack">
       <PanelHeader>

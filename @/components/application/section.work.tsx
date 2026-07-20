@@ -59,8 +59,9 @@ function StoryWork({ experiences }: { experiences: WorkExperienceType[] }) {
 }
 
 function MinimalWork({ experiences }: { experiences: WorkExperienceType[] }) {
+  // id must match the other three styles — NAV_ITEMS links to /#work
   return (
-    <Panel id="experience">
+    <Panel id="work">
       <PanelHeader>
         <motion.div layoutId="work-label" className="contents">
           <PanelTitle>Experience</PanelTitle>
@@ -335,7 +336,7 @@ function WorkCard({ work }: { work: WorkExperienceType }) {
         {/* Spine line */}
         <div className="absolute top-0 bottom-0 left-1/2 -translate-x-1/2 w-px bg-gradient-to-b from-transparent via-border/60 to-transparent" />
         {/* Avatar node — sits on top of the line */}
-        <div className="relative z-10 mt-1 rounded-xl border border-border/60 bg-background shadow-sm group-hover:border-primary/30 group-hover:shadow-[0_0_14px_2px_hsl(var(--primary)/0.15)] transition-all duration-500">
+        <div className="relative z-10 mt-1 rounded-xl border border-border/60 bg-background shadow-sm group-hover:border-primary/30 group-hover:shadow-[0_0_14px_2px_color-mix(in_oklab,var(--primary)_15%,transparent)] transition-all duration-500">
           <Avatar className="size-10 rounded-xl bg-muted/40">
             <AvatarImage src={work.logoUrl} alt={work.company} className="object-contain p-1 rounded-full" />
             <AvatarFallback className="rounded-xl text-[11px] font-bold text-muted-foreground">

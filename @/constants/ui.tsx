@@ -34,7 +34,12 @@ export type AnimationMode = {
 export const animationModes: AnimationMode[] = [
   { id: "none", label: "None", disabled: true, icon: "default" },
   { id: "stars", label: "Stars Background", disabled: false, icon: "stars" },
-  { id: "flickering", label: "Flickering Grid", disabled: false, icon: "grid-mode" },
+  {
+    id: "flickering",
+    label: "Flickering Grid",
+    disabled: false,
+    icon: "grid-mode",
+  },
   { id: "bubbles", label: "Bubbles", disabled: true, icon: "bubbles" },
   { id: "confetti", label: "Confetti", disabled: true, icon: "confetti" },
 ];
@@ -42,6 +47,7 @@ export const animationModes: AnimationMode[] = [
 export const NAV_ITEMS = [
   { label: "Work", href: "/#work" },
   { label: "Projects", href: "/projects" },
+  { label: "Stats", href: "/stats" },
   { label: "Blog", href: "/blog" },
   { label: "Docs", href: "/docs" },
 ];

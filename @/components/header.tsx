@@ -4,8 +4,13 @@ import { Icon } from "@/components/icons";
 import { Logo } from "@/components/logo";
 import { ModeToggle } from "@/components/mode-toggle";
 import { Socials } from "@/components/socials";
+import { StyleHint } from "@/components/style-hint";
 import { Label } from "@/components/ui/label";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Switch } from "@/components/ui/switch";
 import { TransitionLink } from "@/components/utils/link";
 import {
@@ -21,9 +26,26 @@ import useStorage from "@/hooks/use-storage";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, LinkIcon, Menu, Palette, X } from "lucide-react";
+import { usePathname } from "next/navigation";
 import { useRef, useState } from "react";
 
 export type NavbarType = "static" | "dynamic" | "minimal";
+
+/**
+ * Marks the nav item matching the current route. In-page anchors (`/#work`)
+ * are never "current" — the route alone can't tell us which section is in view.
+ */
+function useIsCurrent() {
+  const pathname = usePathname();
+
+  return function isCurrent(href: string) {
+    if (href.startsWith("/#") || href === "/") return false;
+    return pathname === href || pathname.startsWith(`${href}/`);
+  };
+}
+
+/** Applied on top of each navbar's own link classes when the route matches. */
+const ACTIVE_LINK = "text-foreground font-medium";
 
 export function Header({ transition }: { transition: boolean }) {
   const [selectedStyle] = useStorage<StylingModel>(
@@ -67,12 +89,12 @@ export function Header({ transition }: { transition: boolean }) {
       </AnimatePresence>
     </motion.header>
   );
-};
-
+}
 
 function DynamicIslandNavbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<"links" | "design">("links");
+  const isCurrent = useIsCurrent();
 
   const ref = useRef<HTMLDivElement>(null);
   useOutsideClick(ref as React.RefObject<HTMLDivElement>, () =>
@@ -107,6 +129,7 @@ function DynamicIslandNavbar() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
+              id="dynamic-island-menu"
               className="px-4 pb-2 pt-4 flex flex-col gap-4"
             >
               <div className="grid grid-cols-2 p-1 bg-muted/40 rounded-xl relative overflow-hidden">
@@ -116,18 +139,28 @@ function DynamicIslandNavbar() {
                     onClick={() => setActiveTab(tab)}
                     className={cn(
                       "relative z-10 py-2 text-sm font-medium transition-colors duration-200 flex items-center justify-center gap-2",
-                      activeTab === tab ? "text-foreground" : "text-muted-foreground",
+                      activeTab === tab
+                        ? "text-foreground"
+                        : "text-muted-foreground",
                     )}
                   >
                     {activeTab === tab && (
                       <motion.div
                         layoutId="dynamic-tab-bg"
                         className="absolute inset-0 bg-background rounded-lg shadow-sm border border-border/50"
-                        transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                        transition={{
+                          type: "spring",
+                          bounce: 0.2,
+                          duration: 0.6,
+                        }}
                       />
                     )}
                     <span className="relative z-10 flex items-center gap-2 capitalize">
-                      {tab === "links" ? <LinkIcon size={14} /> : <Palette size={14} />}
+                      {tab === "links" ? (
+                        <LinkIcon size={14} />
+                      ) : (
+                        <Palette size={14} />
+                      )}
                       {tab}
                     </span>
                   </button>
@@ -142,7 +175,11 @@ function DynamicIslandNavbar() {
                       initial={{ x: -50, opacity: 0 }}
                       animate={{ x: 0, opacity: 1 }}
                       exit={{ x: -50, opacity: 0 }}
-                      transition={{ type: "tween", duration: 0.2, ease: "easeInOut" }}
+                      transition={{
+                        type: "tween",
+                        duration: 0.2,
+                        ease: "easeInOut",
+                      }}
                       className="flex flex-col gap-1"
                     >
                       {NAV_ITEMS.map((item) => (
@@ -150,9 +187,17 @@ function DynamicIslandNavbar() {
                           key={item.href}
                           href={item.href}
                           onClick={() => setIsOpen(false)}
-                          className="flex items-center justify-between p-3 rounded-xl hover:bg-muted/50 group transition-colors"
+                          aria-current={
+                            isCurrent(item.href) ? "page" : undefined
+                          }
+                          className={cn(
+                            "flex items-center justify-between p-3 rounded-xl hover:bg-muted/50 group transition-colors",
+                            isCurrent(item.href) && "bg-muted/40",
+                          )}
                         >
-                          <span className="text-sm font-medium">{item.label}</span>
+                          <span className="text-sm font-medium">
+                            {item.label}
+                          </span>
                           <ArrowRight className="size-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-muted-foreground" />
                         </TransitionLink>
                       ))}
@@ -163,7 +208,11 @@ function DynamicIslandNavbar() {
                       initial={{ x: 50, opacity: 0 }}
                       animate={{ x: 0, opacity: 1 }}
                       exit={{ x: 50, opacity: 0 }}
-                      transition={{ type: "tween", duration: 0.2, ease: "easeInOut" }}
+                      transition={{
+                        type: "tween",
+                        duration: 0.2,
+                        ease: "easeInOut",
+                      }}
                     >
                       <StyleSelector />
                     </motion.div>
@@ -190,6 +239,9 @@ function DynamicIslandNavbar() {
             <ModeToggle />
             <button
               onClick={() => setIsOpen(!isOpen)}
+              aria-label={isOpen ? "Close menu" : "Open menu"}
+              aria-expanded={isOpen}
+              aria-controls="dynamic-island-menu"
               className="p-2 rounded-full hover:bg-muted/60 transition-colors bg-muted/20"
             >
               <AnimatePresence mode="wait" initial={false}>
@@ -221,10 +273,11 @@ function DynamicIslandNavbar() {
       </motion.div>
     </motion.div>
   );
-};
+}
 function StaticNavbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
+  const isCurrent = useIsCurrent();
 
   return (
     <motion.div
@@ -236,8 +289,15 @@ function StaticNavbar() {
     >
       <div className="flex items-center justify-between w-full gap-3">
         {/* Left capsule — logo + nav */}
-        <motion.div layoutId="brand-main" className="flex items-center gap-1 px-3 py-2 rounded-full border border-border/60 bg-background/70 backdrop-blur-xl shadow-sm shrink-0">
-          <TransitionLink href="/" title="Home Page" className="flex items-center mr-2 shrink-0">
+        <motion.div
+          layoutId="brand-main"
+          className="flex items-center gap-1 px-3 py-2 rounded-full border border-border/60 bg-background/70 backdrop-blur-xl shadow-sm shrink-0"
+        >
+          <TransitionLink
+            href="/"
+            title="Home Page"
+            className="flex items-center mr-2 shrink-0"
+          >
             <motion.div layoutId="brand-logo">
               <Logo size="sm" />
             </motion.div>
@@ -245,15 +305,24 @@ function StaticNavbar() {
 
           <div className="w-px h-4 bg-border/60 mr-1 hidden md:block" />
 
-          <motion.nav layoutId="header-links" className="hidden md:flex items-center gap-0.5">
+          <motion.nav
+            layoutId="header-links"
+            className="hidden md:flex items-center gap-0.5"
+          >
             {NAV_ITEMS.map((item) => (
               <TransitionLink
                 key={item.href}
                 href={item.href}
                 title={item.label}
+                aria-current={isCurrent(item.href) ? "page" : undefined}
                 onMouseEnter={() => setHoveredItem(item.href)}
                 onMouseLeave={() => setHoveredItem(null)}
-                className="relative px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors duration-150 rounded-full"
+                onFocus={() => setHoveredItem(item.href)}
+                onBlur={() => setHoveredItem(null)}
+                className={cn(
+                  "relative px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors duration-150 rounded-full",
+                  isCurrent(item.href) && ACTIVE_LINK,
+                )}
               >
                 {hoveredItem === item.href && (
                   <motion.span
@@ -274,18 +343,37 @@ function StaticNavbar() {
             <Socials className="hidden sm:inline-flex items-center gap-x-1 border-r border-border/50 pr-2 mr-0.5" />
           </motion.div>
           <ModeToggle />
-          <StyleSelectorPopover triggerVariant="pill" align="end" layoutId="static-style-check" />
+          <StyleSelectorPopover
+            triggerVariant="pill"
+            align="end"
+            layoutId="static-style-check"
+          />
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={isMobileMenuOpen}
+            aria-controls="static-mobile-menu"
             className="md:hidden p-2 rounded-full hover:bg-muted/50 transition-colors active:scale-90"
           >
             <AnimatePresence mode="wait" initial={false}>
               {isMobileMenuOpen ? (
-                <motion.div key="close" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.15 }}>
+                <motion.div
+                  key="close"
+                  initial={{ rotate: -90, opacity: 0 }}
+                  animate={{ rotate: 0, opacity: 1 }}
+                  exit={{ rotate: 90, opacity: 0 }}
+                  transition={{ duration: 0.15 }}
+                >
                   <X className="size-4" />
                 </motion.div>
               ) : (
-                <motion.div key="menu" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.15 }}>
+                <motion.div
+                  key="menu"
+                  initial={{ rotate: 90, opacity: 0 }}
+                  animate={{ rotate: 0, opacity: 1 }}
+                  exit={{ rotate: -90, opacity: 0 }}
+                  transition={{ duration: 0.15 }}
+                >
                   <Menu className="size-4" />
                 </motion.div>
               )}
@@ -302,6 +390,7 @@ function StaticNavbar() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -8, scale: 0.97 }}
             transition={{ type: "spring", bounce: 0, duration: 0.3 }}
+            id="static-mobile-menu"
             className="md:hidden w-full mt-2 overflow-hidden rounded-3xl border border-border/60 bg-background/90 backdrop-blur-xl shadow-md"
           >
             <nav className="flex flex-col p-2 gap-0.5">
@@ -310,7 +399,11 @@ function StaticNavbar() {
                   key={item.href}
                   href={item.href}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="flex items-center justify-between px-4 py-2.5 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/50 rounded-2xl transition-colors"
+                  aria-current={isCurrent(item.href) ? "page" : undefined}
+                  className={cn(
+                    "flex items-center justify-between px-4 py-2.5 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/50 rounded-2xl transition-colors",
+                    isCurrent(item.href) && ACTIVE_LINK,
+                  )}
                 >
                   {item.label}
                   <ArrowRight className="size-3.5 opacity-40" />
@@ -329,6 +422,7 @@ function StaticNavbar() {
 
 function MinimalNavbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const isCurrent = useIsCurrent();
 
   return (
     <motion.div
@@ -340,43 +434,77 @@ function MinimalNavbar() {
     >
       <motion.div
         layoutId="brand-main"
-        className="flex items-center justify-between px-6 py-3 border-b border-border/50 bg-background/80 backdrop-blur-md"
+        className="flex items-center justify-between gap-6 px-6 py-3 border-b border-border/50 bg-background/80 backdrop-blur-md"
       >
-        <TransitionLink href="/">
+        <TransitionLink
+          href="/"
+          title="Home Page"
+          aria-label="Home"
+          className="shrink-0"
+        >
           <motion.div layoutId="brand-logo">
-            <Logo size="sm" />
+            <Logo size="sm" pathOnly/>
           </motion.div>
         </TransitionLink>
 
-        <motion.nav layoutId="header-links" className="hidden md:flex items-center gap-6">
+        <motion.nav
+          layoutId="header-links"
+          className="hidden md:flex items-center gap-5"
+        >
           {NAV_ITEMS.map((item) => (
             <TransitionLink
               key={item.href}
               href={item.href}
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+              aria-current={isCurrent(item.href) ? "page" : undefined}
+              className={cn(
+                "text-sm text-muted-foreground hover:text-foreground transition-colors",
+                isCurrent(item.href) && ACTIVE_LINK,
+              )}
             >
               {item.label}
             </TransitionLink>
           ))}
         </motion.nav>
 
-        <div className="flex items-center gap-2">
+        <div className="flex shrink-0 items-center gap-2">
+          {/* Socials only once there's real room — on the home page this bar
+              sits directly above the hero's social grid, so below xl they're
+              pure duplication competing with the nav for space. */}
           <motion.div layoutId="socials">
-            <Socials className="hidden sm:inline-flex items-center gap-x-1 border-r border-border/50 pr-2 mr-1" />
+            <Socials className="hidden xl:inline-flex items-center gap-x-1 border-r border-border/50 pr-2 mr-1" />
           </motion.div>
           <ModeToggle />
-          <StyleSelectorPopover triggerVariant="ghost" align="end" layoutId="minimal-style-check" />
+          <StyleSelectorPopover
+            triggerVariant="ghost"
+            align="end"
+            layoutId="minimal-style-check"
+          />
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={isMobileMenuOpen}
+            aria-controls="minimal-mobile-menu"
             className="md:hidden p-2 rounded-full hover:bg-muted/50 transition-colors"
           >
             <AnimatePresence mode="wait" initial={false}>
               {isMobileMenuOpen ? (
-                <motion.div key="close" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.2 }}>
+                <motion.div
+                  key="close"
+                  initial={{ rotate: -90, opacity: 0 }}
+                  animate={{ rotate: 0, opacity: 1 }}
+                  exit={{ rotate: 90, opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
                   <X className="size-4" />
                 </motion.div>
               ) : (
-                <motion.div key="menu" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.2 }}>
+                <motion.div
+                  key="menu"
+                  initial={{ rotate: 90, opacity: 0 }}
+                  animate={{ rotate: 0, opacity: 1 }}
+                  exit={{ rotate: -90, opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
                   <Menu className="size-4" />
                 </motion.div>
               )}
@@ -392,6 +520,7 @@ function MinimalNavbar() {
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ type: "spring", bounce: 0, duration: 0.4 }}
+            id="minimal-mobile-menu"
             className="md:hidden overflow-hidden border-b border-border/50 bg-background/80 backdrop-blur-md"
           >
             <div className="flex flex-col px-6 py-3 gap-1">
@@ -400,7 +529,11 @@ function MinimalNavbar() {
                   key={item.href}
                   href={item.href}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="py-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                  aria-current={isCurrent(item.href) ? "page" : undefined}
+                  className={cn(
+                    "py-2 text-sm text-muted-foreground hover:text-foreground transition-colors",
+                    isCurrent(item.href) && ACTIVE_LINK,
+                  )}
                 >
                   {item.label}
                 </TransitionLink>
@@ -438,120 +571,154 @@ function StyleSelectorPopover({
     "stars",
   );
   const current = StyleModels.find((s) => s.id === selectedStyle);
+  const [open, setOpen] = useState(false);
 
   return (
-    <Popover>
-      <PopoverTrigger asChild aria-label="Select style">
-        {triggerVariant === "pill" ? (
-          <button className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full border border-border/60 bg-background/70 hover:bg-muted/50 transition-colors text-muted-foreground hover:text-foreground text-xs font-medium">
-            {current ? (
-              <current.icon className={cn("size-3.5", current.color)} />
-            ) : (
-              <Palette className="size-3.5" />
-            )}
-            <span className="hidden sm:block">{current?.label ?? "Style"}</span>
-          </button>
-        ) : (
-          <button className="p-2 rounded-full hover:bg-muted/50 transition-colors text-muted-foreground hover:text-foreground">
-            {current ? (
-              <current.icon className={cn("size-4", current.color)} />
-            ) : (
-              <Palette className="size-4" />
-            )}
-          </button>
-        )}
-      </PopoverTrigger>
-      <PopoverContent
-        align={align}
-        sideOffset={8}
-        className="w-56 p-3 rounded-2xl border border-border/60 bg-background/90 backdrop-blur-md shadow-lg"
-      >
-        <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider mb-2 px-1">
-          Style
-        </p>
-        <div className="flex flex-col gap-0.5">
-          {StyleModels.map((style) => (
+    <div className="relative">
+      {/* Shows on every load while still on the default style; switching to
+          anything else is what retires it. The popover opens right on top of
+          this, so hide it while open. */}
+      <StyleHint
+        active={selectedStyle === StyleModels[0].id}
+        suppressed={open}
+      />
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
+          {triggerVariant === "pill" ? (
             <button
-              key={style.id}
-              onClick={() => setSelectedStyle(style.id)}
-              disabled={style?.disabled}
-              aria-label={`Select ${style.label} style`}
-              className={cn(
-                "flex items-center gap-3 w-full px-2 py-1.5 rounded-lg text-sm transition-colors",
-                selectedStyle === style.id
-                  ? "bg-muted text-foreground"
-                  : "text-muted-foreground hover:bg-muted/50 hover:text-foreground",
-              )}
+              aria-label={`Change site style, currently ${current?.label ?? "default"}`}
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full border border-border/60 bg-background/70 hover:bg-muted/50 transition-colors text-muted-foreground hover:text-foreground text-xs font-medium"
             >
-              <style.icon
-                className={cn(
-                  "size-4 shrink-0",
-                  selectedStyle === style.id ? style.color : "text-muted-foreground",
-                )}
-              />
-              {style.label}
-              {selectedStyle === style.id && (
-                <motion.div
-                  layoutId={layoutId}
-                  className="ml-auto size-1.5 rounded-full bg-foreground"
-                />
+              {current ? (
+                <current.icon className={cn("size-3.5", current.color)} />
+              ) : (
+                <Palette className="size-3.5" />
               )}
+              <span className="hidden sm:block">
+                {current?.label ?? "Style"}
+              </span>
             </button>
-          ))}
-        </div>
-
-        <div className="mt-3 pt-3 border-t border-border/50 flex items-center justify-between px-1">
-          <Label htmlFor={`${layoutId}-animations`} className="text-xs text-muted-foreground">
-            Animations
-          </Label>
-          <Switch
-            id={`${layoutId}-animations`}
-            checked={animationEnabled}
-            onCheckedChange={setAnimationEnabled}
-          />
-        </div>
-
-        <AnimatePresence initial={false}>
-          {animationEnabled && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              className="overflow-hidden"
+          ) : (
+            // Icon-only reads as decoration — a bare dash especially so. Keep the
+            // label alongside it wherever there's room.
+            <button
+              aria-label={`Change site style, currently ${current?.label ?? "default"}`}
+              className="flex items-center gap-1.5 rounded-full px-2 py-2 sm:px-2.5 sm:py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted/50 hover:text-foreground"
             >
-              <div className="mt-2 flex flex-col gap-1 px-1">
-                {animationModes.map((mode) => {
-                  if (mode.disabled) return null;
-                  return (
-                    <div key={mode.id} className="flex items-center justify-between">
-                      <Label
-                        htmlFor={`${layoutId}-mode-${mode.id}`}
-                        className={cn(
-                          "text-xs inline-flex items-center gap-2",
-                          animationMode === mode.id
-                            ? "text-foreground"
-                            : "text-muted-foreground",
-                        )}
-                      >
-                        <Icon name={mode.icon} className="size-3.5" />
-                        {mode.label}
-                      </Label>
-                      <Switch
-                        id={`${layoutId}-mode-${mode.id}`}
-                        checked={animationMode === mode.id}
-                        onCheckedChange={(checked) =>
-                          setAnimationMode(checked ? mode.id : "none")
-                        }
-                      />
-                    </div>
-                  );
-                })}
-              </div>
-            </motion.div>
+              {current ? (
+                <current.icon
+                  className={cn("size-4 sm:size-3.5", current.color)}
+                />
+              ) : (
+                <Palette className="size-4 sm:size-3.5" />
+              )}
+              <span className="hidden sm:block">
+                {current?.label ?? "Style"}
+              </span>
+            </button>
           )}
-        </AnimatePresence>
-      </PopoverContent>
-    </Popover>
+        </PopoverTrigger>
+        <PopoverContent
+          align={align}
+          sideOffset={8}
+          className="w-56 p-3 rounded-2xl border border-border/60 bg-background/90 backdrop-blur-md shadow-lg"
+        >
+          <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider mb-2 px-1">
+            Style
+          </p>
+          <div className="flex flex-col gap-0.5">
+            {StyleModels.map((style) => (
+              <button
+                key={style.id}
+                onClick={() => setSelectedStyle(style.id)}
+                disabled={style?.disabled}
+                aria-current={selectedStyle === style.id ? "true" : undefined}
+                aria-label={`Select ${style.label} style`}
+                className={cn(
+                  "flex items-center gap-3 w-full px-2 py-1.5 rounded-lg text-sm transition-colors",
+                  selectedStyle === style.id
+                    ? "bg-muted text-foreground"
+                    : "text-muted-foreground hover:bg-muted/50 hover:text-foreground",
+                )}
+              >
+                <style.icon
+                  className={cn(
+                    "size-4 shrink-0",
+                    selectedStyle === style.id
+                      ? style.color
+                      : "text-muted-foreground",
+                  )}
+                />
+                {style.label}
+                {selectedStyle === style.id && (
+                  <motion.div
+                    layoutId={layoutId}
+                    className="ml-auto size-1.5 rounded-full bg-foreground"
+                  />
+                )}
+              </button>
+            ))}
+          </div>
+
+          <div className="mt-3 pt-3 border-t border-border/50 flex items-center justify-between px-1">
+            <Label
+              htmlFor={`${layoutId}-animations`}
+              className="text-xs text-muted-foreground"
+            >
+              Animations
+            </Label>
+            <Switch
+              id={`${layoutId}-animations`}
+              checked={animationEnabled}
+              onCheckedChange={setAnimationEnabled}
+            />
+          </div>
+
+          <AnimatePresence initial={false}>
+            {animationEnabled && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                className="overflow-hidden"
+              >
+                <div className="mt-2 flex flex-col gap-1 px-1">
+                  {animationModes.map((mode) => {
+                    if (mode.disabled) return null;
+                    return (
+                      <div
+                        key={mode.id}
+                        className="flex items-center justify-between"
+                      >
+                        <Label
+                          htmlFor={`${layoutId}-mode-${mode.id}`}
+                          className={cn(
+                            "text-xs inline-flex items-center gap-2",
+                            animationMode === mode.id
+                              ? "text-foreground"
+                              : "text-muted-foreground",
+                          )}
+                        >
+                          <Icon name={mode.icon} className="size-3.5" />
+                          {mode.label}
+                        </Label>
+                        <Switch
+                          id={`${layoutId}-mode-${mode.id}`}
+                          checked={animationMode === mode.id}
+                          onCheckedChange={(checked) =>
+                            setAnimationMode(checked ? mode.id : "none")
+                          }
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </PopoverContent>
+      </Popover>
+    </div>
   );
 }
 
@@ -560,7 +727,6 @@ function StyleSelector() {
     "styling.model",
     StyleModels[0].id,
   );
-
 
   const [animationEnabled, setAnimationEnabled] = useStorage<boolean>(
     "animations.enabled",
@@ -572,14 +738,13 @@ function StyleSelector() {
   );
 
   return (
-    <div
-      className="grid grid-cols-2 gap-2"
-    >
+    <div className="grid grid-cols-2 gap-2">
       {StyleModels.map((style) => (
         <button
           key={style.id}
           onClick={() => setSelectedStyle(style.id)}
           disabled={style?.disabled}
+          aria-current={selectedStyle === style.id ? "true" : undefined}
           className={cn(
             "flex flex-col items-center justify-center gap-2 p-3 rounded-xl border transition-all duration-200",
             selectedStyle === style.id
@@ -669,5 +834,5 @@ function StyleSelector() {
         )}
       </AnimatePresence>
     </div>
-  )
+  );
 }
