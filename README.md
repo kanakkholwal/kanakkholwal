@@ -45,11 +45,6 @@
 - [Muse](https://github.com/kanakkholwal/muse-mvp) : AI-powered fashion discovery
 - [NexoNauts.com](https://github.com/kanakkholwal/nexonauts) | [Live](https://nexonauts.com) : Ecosystem for developers (Next.js, Shadcn UI, MongoDB)_
 
-**:zap: Recent Activity:**
-
-<!--START_SECTION:activity-->
-<!-- Your activity will be automatically inserted here -->
-<!--END_SECTION:activity-->
   
 ### Open Source 
 
@@ -117,5 +112,14 @@ KoinX builds crypto tax software, the tool people across different countries use
 
 
 ---
+
+
+**:zap: Recent Activity:**
+
+<!--START_SECTION:activity-->
+1. ℹ️ Assigned PR [#96](https://github.com/kanakkholwal/recast/pull/96) in [kanakkholwal/recast](https://github.com/kanakkholwal/recast)
+<!--END_SECTION:activity-->
+
+
 
 [![activity graph](https://github-readme-activity-graph.vercel.app/graph?username=kanakkholwal&theme=github-dark-dimmed&custom_title=Kanak%20Activity%20Graph&hide_border=true)](https://github.com/ashutosh00710/github-readme-activity-graph)
