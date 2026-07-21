@@ -88,14 +88,32 @@ export function HeroOrbitRow({ item, variant = "card" }: HeroOrbitRowProps) {
   return <span className={containerClass}>{rowInner(item, variant)}</span>;
 }
 
-export function HeroOrbitMinimal({ activity, fallback }: HeroOrbitPayload) {
-  if (!activity.length) return null;
+export function HeroOrbitMinimal({ activity, fallback, stats }: HeroOrbitPayload) {
+  const items = activity.length
+    ? activity.slice(0, 3)
+    : [
+        {
+          kind: "rocket" as const,
+          label: "Projects",
+          value: `${stats.projects}+ shipped`,
+          occurredAt: null,
+          time: "ongoing",
+          url: "/projects",
+        },
+        {
+          kind: "stars:bs" as const,
+          label: "Experience",
+          value: `${stats.yearsExp}+ yrs`,
+          occurredAt: null,
+          time: "ongoing",
+        },
+      ];
   return (
     <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-muted-foreground">
       <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground/60">
         Latest
       </span>
-      {activity.slice(0, 3).map((item, idx) => (
+      {items.map((item, idx) => (
         <HeroOrbitRow key={`${item.kind}-${idx}`} item={item} variant="minimal" />
       ))}
       {fallback && (

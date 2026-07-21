@@ -1,4 +1,5 @@
 import { cache } from "react";
+import { unstable_cache } from "next/cache";
 import { formatDistanceToNowStrict } from "date-fns";
 
 export type HeroOrbitActivityKind =
@@ -676,19 +677,6 @@ const HERO_ORBIT_QUERY = `
             }
           }
         }
-        issueCommentContributions(first: 10) {
-          nodes {
-            occurredAt
-            issue {
-              number
-              title
-              url
-              repository {
-                nameWithOwner
-              }
-            }
-          }
-        }
       }
       starredRepositories(first: 5, orderBy: { field: STARRED_AT, direction: DESC }) {
         nodes {
@@ -756,16 +744,6 @@ type RawReviewContribution = {
     title: string;
     url: string;
     state: string;
-    repository: { nameWithOwner: string };
-  } | null;
-};
-
-type RawCommentContribution = {
-  occurredAt: string | null;
-  issue: {
-    number: number;
-    title: string;
-    url: string;
     repository: { nameWithOwner: string };
   } | null;
 };
@@ -846,25 +824,6 @@ function pushReviewActivity(
   }
 }
 
-function pushCommentActivity(
-  comments: RawCommentContribution[],
-  bucket: HeroOrbitActivityItem[],
-): void {
-  for (const node of comments) {
-    const issue = node.issue;
-    if (!issue || !node.occurredAt) continue;
-    const repo = pickRepoSlug(issue.repository?.nameWithOwner);
-    bucket.push({
-      kind: "message-circle",
-      label: "Commented",
-      value: shorten(`${repo}#${issue.number} · ${issue.title}`),
-      occurredAt: node.occurredAt,
-      time: formatRelative(new Date(node.occurredAt), "recently"),
-      url: issue.url,
-    });
-  }
-}
-
 function pushStarredActivity(
   stars: RawStarredRepo[],
   bucket: HeroOrbitActivityItem[],
@@ -882,39 +841,29 @@ function pushStarredActivity(
 }
 
 /**
- * Fetches a compact payload for the hero orbit panel.
- *
  * Issues a single GraphQL query against the GitHub API and merges the
  * following signals into a unified, time-sorted activity feed:
  *  - Releases from the user's own non-fork repos (most recent).
  *  - Pull requests the user opened or got merged (via contributionsCollection).
  *  - Pull request reviews the user submitted.
- *  - Issue/PR comments the user wrote.
  *  - Repos the user recently starred.
  *  - A rolling total-stars-earned row that anchors the feed.
  *
- * Stats:
- *  - `ossRepos`: count of owned non-fork repos with at least one star.
- *  - `totalStars`: sum of stargazerCount across the same set.
- *  - `projects`: filled by the caller from the local portfolio source.
- *
- * Cached via React `cache` so repeated calls within a single render are
- * deduped. Revalidates once per hour server-side.
+ * Logs and rethrows on failure so callers can decide how to recover. Cache
+ * lifetimes and dedup are handled by {@link fetchHeroOrbitPayload}.
  *
  * Designed to run server-side; never expose GITHUB_TOKEN to the client.
  *
- * @param username - GitHub login to fetch the data for.
- * @returns A promise resolving to a {@link HeroOrbitData} payload.
- *
  * @throws {Error} If GITHUB_TOKEN is missing or the GraphQL request fails.
  */
-export const getHeroOrbitData = cache(
-  async (username: string): Promise<HeroOrbitData> => {
-    if (!GITHUB_TOKEN) {
-      throw new Error("GitHub token is not defined");
-    }
+async function fetchHeroOrbitPayload(username: string): Promise<HeroOrbitData> {
+  if (!GITHUB_TOKEN) {
+    throw new Error("GitHub token is not defined");
+  }
 
-    const response = await fetch("https://api.github.com/graphql", {
+  let response: Response;
+  try {
+    response = await fetch("https://api.github.com/graphql", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -925,62 +874,182 @@ export const getHeroOrbitData = cache(
         variables: { login: username },
       }),
       next: { revalidate: 3600 },
+      cache: "force-cache",
     });
+  } catch (err) {
+    const wrapped = new Error(
+      `Network error while contacting GitHub: ${(err as Error).message}`,
+    ) as Error & { cause?: unknown };
+    wrapped.cause = err;
+    throw wrapped;
+  }
 
-    if (!response.ok) {
-      throw new Error(`Failed to fetch hero orbit data (${response.status})`);
+  if (!response.ok) {
+    const err = new Error(
+      `GitHub GraphQL returned ${response.status} ${response.statusText}`,
+    ) as Error & { status?: number; rateLimited?: boolean };
+    err.status = response.status;
+    err.rateLimited = response.status === 429 || response.status === 403;
+    throw err;
+  }
+
+  let json: any;
+  try {
+    json = await response.json();
+  } catch (err) {
+    throw new Error(
+      `Invalid JSON from GitHub GraphQL: ${(err as Error).message}`,
+    );
+  }
+
+  if (json?.errors?.length) {
+    const first = json.errors[0];
+    throw new Error(`GitHub GraphQL error: ${first?.message ?? "unknown"}`);
+  }
+
+  if (!json?.data?.user) {
+    throw new Error(`GitHub user "${username}" not found or inaccessible`);
+  }
+
+  const user = json.data.user;
+  const repos: RawRepoNode[] = user.repositories?.nodes ?? [];
+  const collection = user.contributionsCollection ?? {};
+  const starred: RawStarredRepo[] = user.starredRepositories?.nodes ?? [];
+
+  const ossRepos = repos.filter((r) => r.stargazerCount >= 1).length;
+  const totalStars = repos.reduce((acc, r) => acc + r.stargazerCount, 0);
+
+  const bucket: HeroOrbitActivityItem[] = [];
+  pushRelease(repos, bucket);
+  pushPullRequestActivity(
+    collection.pullRequestContributions?.nodes ?? [],
+    bucket,
+  );
+  pushReviewActivity(
+    collection.pullRequestReviewContributions?.nodes ?? [],
+    bucket,
+  );
+  pushStarredActivity(starred, bucket);
+
+  bucket.push({
+    kind: "stars:bs",
+    label: "Stars",
+    value: `${totalStars}+ earned`,
+    occurredAt: null,
+    time: "ongoing",
+  });
+
+  bucket.sort((a, b) => {
+    const at = a.occurredAt ? new Date(a.occurredAt).getTime() : 0;
+    const bt = b.occurredAt ? new Date(b.occurredAt).getTime() : 0;
+    return bt - at;
+  });
+
+  return {
+    stats: {
+      projects: 0,
+      ossRepos,
+      totalStars,
+    },
+    activity: bucket.slice(0, 4),
+  };
+}
+
+const EMPTY_HERO_ORBIT: HeroOrbitData = {
+  stats: { projects: 0, ossRepos: 0, totalStars: 0 },
+  activity: [],
+};
+
+/**
+ * Structured log entry for hero-orbit failures. Always printed so server
+ * operators can spot rate-limit / auth / network errors in the logs even
+ * when the page degrades gracefully to the fallback state.
+ */
+function logHeroOrbitFailure(
+  stage: "fetch" | "cache" | "rate-limit",
+  err: unknown,
+  context: Record<string, unknown> = {},
+) {
+  const message = err instanceof Error ? err.message : String(err);
+  const payload = {
+    tag: "hero-orbit",
+    stage,
+    message,
+    ...context,
+  };
+  if (stage === "rate-limit") {
+    console.warn("[hero-orbit] rate-limited by GitHub:", payload);
+  } else {
+    console.error("[hero-orbit] failure:", payload);
+  }
+}
+
+// Cross-request cache for SUCCESSFUL payloads only. We deliberately do NOT
+// catch errors inside this wrapper — when the inner function throws,
+// `unstable_cache` does not store the result, so the next call retries.
+// This means a single transient failure never poisons the cache for an
+// hour; only successful payloads get warm-cached.
+const cachedHeroOrbitFetch = unstable_cache(
+  async (username: string): Promise<HeroOrbitData> => {
+    return await fetchHeroOrbitPayload(username);
+  },
+  ["hero-orbit-data"],
+  { revalidate: 3600, tags: ["hero-orbit"] },
+);
+
+/**
+ * Fetches a compact payload for the hero orbit panel.
+ *
+ * Caching strategy:
+ *  - {@link unstable_cache} stores **successful** responses only (the inner
+ *    fetch throws on every failure mode, so failures are never cached).
+ *  - React `cache` dedupes calls within a single render.
+ *
+ * Behaviour on failure:
+ *  - Logs the error with stage context (`fetch` / `cache` / `rate-limit`).
+ *  - Returns `null`; the caller is expected to substitute its own
+ *    fallback payload. The next render will retry.
+ *
+ * @param username - GitHub login to fetch the data for.
+ * @returns A promise resolving to the payload, or `null` on failure.
+ */
+export const getHeroOrbitData = cache(
+  async (username: string): Promise<HeroOrbitData | null> => {
+    try {
+      return await cachedHeroOrbitFetch(username);
+    } catch (err) {
+      // Distinguish rate-limit from generic failures so logs are greppable.
+      const status = (err as { status?: number })?.status;
+      const stage: "fetch" | "cache" | "rate-limit" =
+        status === 429 || status === 403 ? "rate-limit" : "fetch";
+      logHeroOrbitFailure(stage, err, {
+        username,
+        status,
+        willRetryNextRender: true,
+      });
+      return null;
     }
-
-    const json = await response.json();
-    if (json.errors) {
-      throw new Error(json.errors[0]?.message ?? "GraphQL error");
-    }
-
-    const user = json.data?.user ?? {};
-    const repos: RawRepoNode[] = user.repositories?.nodes ?? [];
-    const collection = user.contributionsCollection ?? {};
-    const starred: RawStarredRepo[] = user.starredRepositories?.nodes ?? [];
-
-    const ossRepos = repos.filter((r) => r.stargazerCount >= 1).length;
-    const totalStars = repos.reduce((acc, r) => acc + r.stargazerCount, 0);
-
-    const bucket: HeroOrbitActivityItem[] = [];
-    pushRelease(repos, bucket);
-    pushPullRequestActivity(
-      collection.pullRequestContributions?.nodes ?? [],
-      bucket,
-    );
-    pushReviewActivity(
-      collection.pullRequestReviewContributions?.nodes ?? [],
-      bucket,
-    );
-    pushCommentActivity(
-      collection.issueCommentContributions?.nodes ?? [],
-      bucket,
-    );
-    pushStarredActivity(starred, bucket);
-
-    bucket.push({
-      kind: "stars:bs",
-      label: "Stars",
-      value: `${totalStars}+ earned`,
-      occurredAt: null,
-      time: "ongoing",
-    });
-
-    bucket.sort((a, b) => {
-      const at = a.occurredAt ? new Date(a.occurredAt).getTime() : 0;
-      const bt = b.occurredAt ? new Date(b.occurredAt).getTime() : 0;
-      return bt - at;
-    });
-
-    return {
-      stats: {
-        projects: 0,
-        ossRepos,
-        totalStars,
-      },
-      activity: bucket.slice(0, 4),
-    };
   },
 );
+
+/**
+ * Like {@link getHeroOrbitData} but always returns a non-null payload,
+ * substituting {@link EMPTY_HERO_ORBIT} when the upstream call failed.
+ * Convenient for callers that don't want to branch on `null`.
+ */
+export const getHeroOrbitDataSafe = cache(
+  async (username: string): Promise<HeroOrbitData> => {
+    const result = await getHeroOrbitData(username);
+    return result ?? EMPTY_HERO_ORBIT;
+  },
+);
+
+/**
+ * Manually invalidate the cross-request hero-orbit cache. Useful after
+ * pushing a release or doing something that should reflect immediately.
+ * Can be called from a route handler / server action.
+ */
+export async function revalidateHeroOrbit(): Promise<void> {
+  const { revalidateTag } = await import("next/cache");
+  revalidateTag("hero-orbit");
+}
