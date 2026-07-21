@@ -7,7 +7,12 @@ import { TbChartGridDots } from "react-icons/tb";
 import {
   ChevronsDownUpIcon,
   ChevronsUpDownIcon,
+  Code2,
   DownloadCloud,
+  GitCommit,
+  GitPullRequest,
+  MessageCircle,
+  Star,
 } from "lucide-react";
 import { BsStars } from "react-icons/bs";
 import { GiBubbles } from "react-icons/gi";
@@ -201,6 +206,11 @@ export const IconComponentCollection = {
   "chevrons-down-up": ChevronsDownUpIcon,
   "chevrons-up-down": ChevronsUpDownIcon,
   "grid-mode": TbChartGridDots,
+  // activity / git
+  "git-commit": GitCommit,
+  "git-pull-request": GitPullRequest,
+  "message-circle": MessageCircle,
+  star: Star,
   // bodies
   moon: PiMoonDuotone,
   sun: PiSunDuotone,

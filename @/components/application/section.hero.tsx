@@ -1,21 +1,26 @@
 "use client";
 import { GlowFillButton } from "@/components/animated/button.fill";
+import { StyleSwap } from "@/components/animated/style-swap";
+import { StoryOpening, StoryReveal } from "@/components/application/story.frame";
+import { HeroOrbit } from "@/components/application/hero.orbit.client";
+import {
+  HeroOrbitMinimal,
+  HeroOrbitStatic,
+  HeroOrbitStory,
+  type HeroOrbitPayload,
+} from "@/components/application/hero.orbit.shared";
 import { Icon, IconType } from "@/components/icons";
 import { ButtonLink, TransitionLink } from "@/components/utils/link";
 import { StyleModels, StylingModel } from "@/constants/ui";
-import { Variants, motion, useMotionValue, useSpring, useTransform } from "framer-motion";
-import { StyleSwap } from "@/components/animated/style-swap";
-import { StoryOpening, StoryReveal } from "@/components/application/story.frame";
+import { Variants, motion } from "framer-motion";
 import { ArrowRight, MapPin } from "lucide-react";
 import { appConfig, resume_link } from "root/project.config";
 
 import useStorage from "@/hooks/use-storage";
-import * as React from "react";
 
 import Magnet from "@/components/animated/elements.magnet";
 import { SpotlightReveal } from "@/components/animated/section.reveal";
 import { TextFlip } from "@/components/animated/text-flip";
-import { CountingNumber } from "@/components/animated/text.counter";
 import { Panel } from "@/components/application/panel";
 import { Logo } from "@/components/logo";
 import { GreaterSeparator } from "@/components/ui/separator";
@@ -26,7 +31,7 @@ import RotatingText from "../animated/text.rotate";
 import { ShimmeringText } from "../animated/text.shimmer";
 
 
-export default function Section() {
+export default function Section({ orbitData }: { orbitData?: HeroOrbitPayload }) {
   const [selectedStyle] = useStorage<StylingModel>(
     "styling.model",
     StyleModels[0].id,
@@ -35,14 +40,14 @@ export default function Section() {
   return (
     <StyleSwap swapKey={selectedStyle}>
       {selectedStyle === "minimal" ? (
-        <MinimalHero />
+        <MinimalHero orbitData={orbitData} />
       ) : selectedStyle === "static" ? (
-        <StaticHero />
+        <StaticHero orbitData={orbitData} />
       ) : selectedStyle === "story" ? (
-        <StoryHero />
+        <StoryHero orbitData={orbitData} />
       ) : (
         <SpotlightReveal>
-          <DynamicHero />
+          <DynamicHero orbitData={orbitData} />
         </SpotlightReveal>
       )}
     </StyleSwap>
@@ -50,7 +55,7 @@ export default function Section() {
 }
 
 
-function StoryHero() {
+function StoryHero({ orbitData }: { orbitData?: HeroOrbitPayload } = {}) {
   return (
     <StoryOpening id="hero">
       {/* Avatar / name / role carry the same layoutIds as the other heroes, so
@@ -133,11 +138,13 @@ function StoryHero() {
           </a>
         ))}
       </motion.div>
+
+      {orbitData && <HeroOrbitStory {...orbitData} />}
     </StoryOpening>
   );
 }
 
-function DynamicHero() {
+function DynamicHero({ orbitData }: { orbitData?: HeroOrbitPayload } = {}) {
   const fadeUp: Variants = {
     hidden: { opacity: 0, y: 32, filter: "blur(8px)" },
     show: {
@@ -160,7 +167,7 @@ function DynamicHero() {
     >
       {/* ── Background: subtle dot grid only (no glows / vignette) ── */}
       <div className="pointer-events-none absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-[radial-gradient(circle,_color-mix(in_oklab,var(--foreground)_8%,transparent)_1px,_transparent_1px)] bg-[size:28px_28px]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle,color-mix(in_oklab,var(--foreground)_8%,transparent)_1px,transparent_1px)] bg-[size:28px_28px]" />
       </div>
 
       {/* ── Top status strip ── */}
@@ -221,7 +228,7 @@ function DynamicHero() {
               className="flex items-center gap-3 text-[clamp(1rem,2.5vw,1.4rem)] font-semibold text-muted-foreground"
             >
               <span>I</span>
-              <div className="overflow-hidden rounded-lg bg-primary/10 border border-primary/20 px-3 py-1 min-w-[180px]">
+              <div className="overflow-hidden rounded-lg bg-primary/10 border border-primary/20 px-3 py-1 min-w-45">
                 <RotatingText
                   texts={appConfig.applicableRoles}
                   mainClassName="text-primary font-bold"
@@ -269,16 +276,23 @@ function DynamicHero() {
 
           {/* Stat pills */}
           <motion.div variants={fadeUp} className="flex flex-wrap gap-2">
-            {[
-              { value: "2+", label: "yrs exp" },
-              { value: "20+", label: "projects" },
-              { value: "10+", label: "OSS repos" },
-            ].map((s) => (
+            {(orbitData
+              ? [
+                  { value: `${orbitData.stats.yearsExp}+`, label: "yrs exp" },
+                  { value: `${orbitData.stats.projects}+`, label: "projects" },
+                  { value: `${orbitData.stats.ossRepos}+`, label: "OSS repos" },
+                ]
+              : [
+                  { value: "2+", label: "yrs exp" },
+                  { value: "20+", label: "projects" },
+                  { value: "10+", label: "OSS repos" },
+                ]
+            ).map((s) => (
               <div
                 key={s.label}
                 className="flex items-baseline gap-1.5 px-3 py-1.5 rounded-full border border-border/60 bg-card/40 backdrop-blur-sm"
               >
-                <span className="text-sm font-black tracking-tight">{s.value}</span>
+                <span className="text-sm font-black tracking-tight tabular-nums">{s.value}</span>
                 <span className="text-xs text-muted-foreground">{s.label}</span>
               </div>
             ))}
@@ -286,7 +300,13 @@ function DynamicHero() {
         </motion.div>
 
         <div className="hidden lg:flex items-center justify-center">
-          <HeroOrbit />
+          {orbitData ? (
+            <HeroOrbit
+              stats={orbitData.stats}
+              activity={orbitData.activity}
+              fallback={orbitData.fallback}
+            />
+          ) : null}
         </div>
       </div>
 
@@ -328,7 +348,7 @@ function DynamicHero() {
 
 
 
-function MinimalHero() {
+function MinimalHero({ orbitData }: { orbitData?: HeroOrbitPayload } = {}) {
   return (
     <>
       <div
@@ -442,11 +462,17 @@ function MinimalHero() {
           </div>
         </Panel>
       </motion.div>
+
+      {orbitData && (
+        <div className="border-x border-edge px-3 py-3">
+          <HeroOrbitMinimal {...orbitData} />
+        </div>
+      )}
     </>
   );
 }
 
-function StaticHero() {
+function StaticHero({ orbitData }: { orbitData?: HeroOrbitPayload } = {}) {
   return (
     <section
       id="hero"
@@ -465,7 +491,7 @@ function StaticHero() {
       </motion.div>
 
       {/* Text */}
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-3 flex-1 min-w-0">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <motion.h1
@@ -543,183 +569,9 @@ function StaticHero() {
             ))}
           </div>
         </motion.div>
+
+        {orbitData && <HeroOrbitStatic {...orbitData} />}
       </div>
     </section>
-  );
-}
-
-/** Activity items shown on the right panel */
-const ACTIVITY = [
-  { icon: "rocket" as IconType, label: "Shipped", value: "nexo-mdx v2", time: "2d ago" },
-  { icon: "package" as IconType, label: "Published", value: "custom-domain-sdk", time: "1w ago" },
-  { icon: "code" as IconType, label: "PR merged", value: "college-ecosystem", time: "3d ago" },
-  { icon: "stars:bs" as IconType, label: "Starred", value: "20+ repos", time: "ongoing" },
-] as const;
-
-const ORBIT_INNER = ["github", "linkedin", "twitter"] as const;
-
-function HeroOrbit() {
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const rotateX = useTransform(
-    useSpring(y, { stiffness: 380, damping: 80 }),
-    [-0.4, 0.4],
-    [10, -10],
-  );
-  const rotateY = useTransform(
-    useSpring(x, { stiffness: 380, damping: 80 }),
-    [-0.4, 0.4],
-    [-10, 10],
-  );
-
-  function onMouseMove({ currentTarget, clientX, clientY }: React.MouseEvent) {
-    const { left, top, width, height } = currentTarget.getBoundingClientRect();
-    x.set((clientX - left) / width - 0.5);
-    y.set((clientY - top) / height - 0.5);
-  }
-
-  const itemVariants: Variants = {
-    hidden: { opacity: 0, x: 16 },
-    show: {
-      opacity: 1,
-      x: 0,
-      transition: { type: "spring", stiffness: 260, damping: 22 } as never,
-    },
-  };
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.9, y: 16 }}
-      animate={{ opacity: 1, scale: 1, y: 0 }}
-      transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.3 }}
-      className="select-none"
-      onMouseMove={onMouseMove}
-      onMouseLeave={() => {
-        x.set(0);
-        y.set(0);
-      }}
-      style={{ rotateX, rotateY, transformStyle: "preserve-3d", perspective: 900 }}
-    >
-      {/* Card shell */}
-      <div className="relative w-[340px] rounded-2xl border border-border/60 bg-card/80 backdrop-blur-xl shadow-2xl overflow-hidden">
-
-        {/* Top bar */}
-        <div className="flex items-center justify-between px-4 py-3 border-b border-border/40">
-          <div className="flex items-center gap-1.5">
-            <span className="size-2.5 rounded-full bg-red-500/80" />
-            <span className="size-2.5 rounded-full bg-yellow-500/80" />
-            <span className="size-2.5 rounded-full bg-emerald-500/80" />
-          </div>
-          <span className="text-[10px] font-mono text-muted-foreground tracking-widest">
-            {appConfig.usernames?.github ?? "kanakkholwal"}
-          </span>
-          <div className="flex items-center gap-1 text-emerald-500">
-            <span className="relative flex size-1.5">
-              <span className="animate-ping absolute inline-flex size-full rounded-full bg-emerald-500 opacity-75" />
-              <span className="relative inline-flex size-1.5 rounded-full bg-emerald-500" />
-            </span>
-            <span className="text-[10px] font-mono">active</span>
-          </div>
-        </div>
-
-        {/* Avatar + identity */}
-        <div className="flex items-center gap-4 px-5 py-4 border-b border-border/30">
-          <div className="relative shrink-0">
-            <div className="relative size-14 rounded-full ring-2 ring-border ring-offset-2 ring-offset-card overflow-hidden">
-              <Image
-                src={appConfig.avatar}
-                alt={appConfig.displayName}
-                width={56}
-                height={56}
-                className="w-full h-full object-cover"
-                fetchPriority="high"
-              />
-            </div>
-            <span className="absolute bottom-0 right-0 size-3 rounded-full bg-emerald-500 ring-2 ring-card" />
-          </div>
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-1.5">
-              <p className="text-sm font-semibold truncate">{appConfig.displayName}</p>
-              <Icon name="verified:color" className="size-3.5 text-sky-500 shrink-0" />
-            </div>
-            <p className="text-xs text-muted-foreground truncate">{appConfig.role}</p>
-            <p className="text-[10px] text-muted-foreground/60 mt-0.5 font-mono truncate">
-              {appConfig.location}
-            </p>
-          </div>
-        </div>
-
-        {/* Stats row */}
-        <div className="grid grid-cols-3 divide-x divide-border/40 border-b border-border/30">
-          {[
-            { to: 20, suffix: "+", label: "Projects" },
-            { to: 10, suffix: "+", label: "OSS repos" },
-            { to: 2, suffix: "+", label: "Yrs exp" },
-          ].map((s) => (
-            <div key={s.label} className="flex flex-col items-center py-3 gap-0.5">
-              <span className="text-base font-black tracking-tight tabular-nums">
-                <CountingNumber to={s.to} suffix={s.suffix} duration={1.8} startOnView once />
-              </span>
-              <span className="text-[9px] text-muted-foreground uppercase tracking-wider">{s.label}</span>
-            </div>
-          ))}
-        </div>
-
-        {/* Activity feed */}
-        <div className="px-4 py-3">
-          <p className="text-[9px] font-mono text-muted-foreground/50 uppercase tracking-widest mb-2.5">
-            Recent activity
-          </p>
-          <motion.ul
-            variants={{ show: { transition: { staggerChildren: 0.1, delayChildren: 0.5 } } }}
-            initial="hidden"
-            animate="show"
-            className="space-y-2"
-          >
-            {ACTIVITY.map((item) => (
-              <motion.li
-                key={item.value}
-                variants={itemVariants}
-                className="flex items-center gap-2.5"
-              >
-                <div className="flex items-center justify-center size-6 rounded-md bg-muted/60 shrink-0">
-                  <Icon name={item.icon} className="size-3 text-muted-foreground" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <span className="text-[11px] text-muted-foreground">{item.label}{" "}</span>
-                  <span className="text-[11px] font-medium text-foreground truncate">{item.value}</span>
-                </div>
-                <span className="text-[9px] font-mono text-muted-foreground/50 shrink-0">{item.time}</span>
-              </motion.li>
-            ))}
-          </motion.ul>
-        </div>
-
-        {/* Social footer */}
-        <div className="flex items-center justify-between px-5 py-3 border-t border-border/30">
-          {ORBIT_INNER.map((key) => (
-            <a
-              key={key}
-              href={appConfig.social[key]}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
-            >
-              <Icon name={key as IconType} className="size-3.5" />
-              <span className="capitalize font-medium text-[11px]">{key}</span>
-            </a>
-          ))}
-          <a
-            href={appConfig.social["cal.com"]}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
-          >
-            <Icon name="cal.com" className="size-3.5" />
-            <span className="font-medium text-[11px]">Book a call</span>
-          </a>
-        </div>
-      </div>
-    </motion.div>
   );
 }

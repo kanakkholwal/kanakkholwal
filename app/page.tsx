@@ -1,4 +1,5 @@
 import AboutSection from "@/components/application/section.about";
+import { loadHeroOrbitData } from "@/components/application/hero.orbit.server";
 import HeroSection from "@/components/application/section.hero";
 import Wrapper from "@/components/wrapper";
 import dynamic from "next/dynamic";
@@ -14,10 +15,11 @@ const ContactSection = dynamic(
 );
 
 
-export default function HomePage() {
+export default async function HomePage() {
+  const orbitData = await loadHeroOrbitData();
   return (
     <Wrapper isHome={true}>
-      <HeroSection />
+      <HeroSection orbitData={orbitData} />
       <AboutSection />
       <WorkSection />
       <SkillSection />

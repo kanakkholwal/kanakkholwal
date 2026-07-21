@@ -1,4 +1,41 @@
 import { cache } from "react";
+import { formatDistanceToNowStrict } from "date-fns";
+
+export type HeroOrbitActivityKind =
+  | "rocket"
+  | "package"
+  | "code"
+  | "stars:bs"
+  | "git-commit"
+  | "git-pull-request"
+  | "message-circle"
+  | "star";
+
+export type HeroOrbitActivityItem = {
+  kind: HeroOrbitActivityKind;
+  label: string;
+  value: string;
+  /** ISO timestamp for the activity (used to sort). */
+  occurredAt: string | null;
+  /** Pre-formatted relative time, e.g. "2d ago". */
+  time: string;
+  /** Optional URL the row links to. */
+  url?: string;
+};
+
+export type HeroOrbitStats = {
+  /** Total projects listed in the portfolio (counted from local source). */
+  projects: number;
+  /** GitHub repos owned by the user with at least one star. */
+  ossRepos: number;
+  /** Total stars earned across all own repos. */
+  totalStars: number;
+};
+
+export type HeroOrbitData = {
+  stats: HeroOrbitStats;
+  activity: HeroOrbitActivityItem[];
+};
 
 export type ContributionActivity = {
   date: string;
@@ -579,6 +616,371 @@ export const getCachedContributions = cache(
       contributions: contributionByYear,
       total: contribData.total,
       stats,
+    };
+  },
+);
+
+const HERO_ORBIT_QUERY = `
+  query($login: String!) {
+    user(login: $login) {
+      repositories(
+        ownerAffiliations: OWNER
+        isFork: false
+        first: 50
+        orderBy: { field: PUSHED_AT, direction: DESC }
+      ) {
+        totalCount
+        nodes {
+          name
+          stargazerCount
+          url
+          pushedAt
+          releases(first: 1, orderBy: { field: CREATED_AT, direction: DESC }) {
+            nodes {
+              tagName
+              name
+              publishedAt
+              url
+            }
+          }
+        }
+      }
+      contributionsCollection {
+        pullRequestContributions(first: 10) {
+          nodes {
+            occurredAt
+            pullRequest {
+              number
+              title
+              url
+              state
+              merged
+              mergedAt
+              repository {
+                nameWithOwner
+              }
+            }
+          }
+        }
+        pullRequestReviewContributions(first: 10) {
+          nodes {
+            occurredAt
+            pullRequest {
+              number
+              title
+              url
+              state
+              repository {
+                nameWithOwner
+              }
+            }
+          }
+        }
+        issueCommentContributions(first: 10) {
+          nodes {
+            occurredAt
+            issue {
+              number
+              title
+              url
+              repository {
+                nameWithOwner
+              }
+            }
+          }
+        }
+      }
+      starredRepositories(first: 5, orderBy: { field: STARRED_AT, direction: DESC }) {
+        nodes {
+          nameWithOwner
+          description
+          url
+        }
+      }
+    }
+  }
+`;
+
+function formatRelative(date: Date | null, fallback: string): string {
+  if (!date) return fallback;
+  const diff = Date.now() - date.getTime();
+  if (diff < 0) return fallback;
+  if (diff < 60_000) return "just now";
+  return `${formatDistanceToNowStrict(date, { addSuffix: false })} ago`;
+}
+
+function shorten(text: string, max = 34): string {
+  if (!text) return "";
+  if (text.length <= max) return text;
+  return `${text.slice(0, max - 1).trimEnd()}…`;
+}
+
+function pickRepoSlug(nameWithOwner: string | null | undefined): string {
+  if (!nameWithOwner) return "";
+  const slash = nameWithOwner.indexOf("/");
+  return slash >= 0 ? nameWithOwner.slice(slash + 1) : nameWithOwner;
+}
+
+type RawRelease = {
+  tagName: string | null;
+  name: string | null;
+  publishedAt: string | null;
+  url: string | null;
+};
+
+type RawRepoNode = {
+  name: string;
+  stargazerCount: number;
+  url: string;
+  pushedAt: string | null;
+  releases: { nodes: RawRelease[] };
+};
+
+type RawPRContribution = {
+  occurredAt: string | null;
+  pullRequest: {
+    number: number;
+    title: string;
+    url: string;
+    state: string;
+    merged: boolean;
+    mergedAt: string | null;
+    repository: { nameWithOwner: string };
+  } | null;
+};
+
+type RawReviewContribution = {
+  occurredAt: string | null;
+  pullRequest: {
+    number: number;
+    title: string;
+    url: string;
+    state: string;
+    repository: { nameWithOwner: string };
+  } | null;
+};
+
+type RawCommentContribution = {
+  occurredAt: string | null;
+  issue: {
+    number: number;
+    title: string;
+    url: string;
+    repository: { nameWithOwner: string };
+  } | null;
+};
+
+type RawStarredRepo = {
+  nameWithOwner: string;
+  description: string | null;
+  url: string;
+};
+
+function pushRelease(
+  repos: RawRepoNode[],
+  bucket: HeroOrbitActivityItem[],
+): void {
+  let best: { repo: string; tag: string; url: string; date: Date } | null = null;
+  for (const r of repos) {
+    for (const rel of r.releases.nodes) {
+      if (!rel.publishedAt) continue;
+      const d = new Date(rel.publishedAt);
+      if (!best || d.getTime() > best.date.getTime()) {
+        best = {
+          repo: r.name,
+          tag: rel.tagName ?? rel.name ?? "release",
+          url: rel.url ?? r.url,
+          date: d,
+        };
+      }
+    }
+  }
+  if (best) {
+    bucket.push({
+      kind: "rocket",
+      label: "Shipped",
+      value: shorten(`${best.repo} ${best.tag}`),
+      occurredAt: best.date.toISOString(),
+      time: formatRelative(best.date, "recently"),
+      url: best.url,
+    });
+  }
+}
+
+function pushPullRequestActivity(
+  prs: RawPRContribution[],
+  bucket: HeroOrbitActivityItem[],
+): void {
+  for (const node of prs) {
+    const pr = node.pullRequest;
+    if (!pr || !node.occurredAt) continue;
+    const repo = pickRepoSlug(pr.repository?.nameWithOwner);
+    const isMerged = pr.merged || pr.state === "MERGED";
+    bucket.push({
+      kind: "git-pull-request",
+      label: isMerged ? "Merged" : "Opened",
+      value: shorten(`${repo}#${pr.number} · ${pr.title}`),
+      occurredAt: node.occurredAt,
+      time: formatRelative(new Date(node.occurredAt), "recently"),
+      url: pr.url,
+    });
+  }
+}
+
+function pushReviewActivity(
+  reviews: RawReviewContribution[],
+  bucket: HeroOrbitActivityItem[],
+): void {
+  for (const node of reviews) {
+    const pr = node.pullRequest;
+    if (!pr || !node.occurredAt) continue;
+    const repo = pickRepoSlug(pr.repository?.nameWithOwner);
+    bucket.push({
+      kind: "code",
+      label: "Reviewed",
+      value: shorten(`${repo}#${pr.number} · ${pr.title}`),
+      occurredAt: node.occurredAt,
+      time: formatRelative(new Date(node.occurredAt), "recently"),
+      url: pr.url,
+    });
+  }
+}
+
+function pushCommentActivity(
+  comments: RawCommentContribution[],
+  bucket: HeroOrbitActivityItem[],
+): void {
+  for (const node of comments) {
+    const issue = node.issue;
+    if (!issue || !node.occurredAt) continue;
+    const repo = pickRepoSlug(issue.repository?.nameWithOwner);
+    bucket.push({
+      kind: "message-circle",
+      label: "Commented",
+      value: shorten(`${repo}#${issue.number} · ${issue.title}`),
+      occurredAt: node.occurredAt,
+      time: formatRelative(new Date(node.occurredAt), "recently"),
+      url: issue.url,
+    });
+  }
+}
+
+function pushStarredActivity(
+  stars: RawStarredRepo[],
+  bucket: HeroOrbitActivityItem[],
+): void {
+  for (const repo of stars) {
+    bucket.push({
+      kind: "star",
+      label: "Starred",
+      value: shorten(repo.description || repo.nameWithOwner),
+      occurredAt: null,
+      time: "recently",
+      url: repo.url,
+    });
+  }
+}
+
+/**
+ * Fetches a compact payload for the hero orbit panel.
+ *
+ * Issues a single GraphQL query against the GitHub API and merges the
+ * following signals into a unified, time-sorted activity feed:
+ *  - Releases from the user's own non-fork repos (most recent).
+ *  - Pull requests the user opened or got merged (via contributionsCollection).
+ *  - Pull request reviews the user submitted.
+ *  - Issue/PR comments the user wrote.
+ *  - Repos the user recently starred.
+ *  - A rolling total-stars-earned row that anchors the feed.
+ *
+ * Stats:
+ *  - `ossRepos`: count of owned non-fork repos with at least one star.
+ *  - `totalStars`: sum of stargazerCount across the same set.
+ *  - `projects`: filled by the caller from the local portfolio source.
+ *
+ * Cached via React `cache` so repeated calls within a single render are
+ * deduped. Revalidates once per hour server-side.
+ *
+ * Designed to run server-side; never expose GITHUB_TOKEN to the client.
+ *
+ * @param username - GitHub login to fetch the data for.
+ * @returns A promise resolving to a {@link HeroOrbitData} payload.
+ *
+ * @throws {Error} If GITHUB_TOKEN is missing or the GraphQL request fails.
+ */
+export const getHeroOrbitData = cache(
+  async (username: string): Promise<HeroOrbitData> => {
+    if (!GITHUB_TOKEN) {
+      throw new Error("GitHub token is not defined");
+    }
+
+    const response = await fetch("https://api.github.com/graphql", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${GITHUB_TOKEN}`,
+      },
+      body: JSON.stringify({
+        query: HERO_ORBIT_QUERY,
+        variables: { login: username },
+      }),
+      next: { revalidate: 3600 },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch hero orbit data (${response.status})`);
+    }
+
+    const json = await response.json();
+    if (json.errors) {
+      throw new Error(json.errors[0]?.message ?? "GraphQL error");
+    }
+
+    const user = json.data?.user ?? {};
+    const repos: RawRepoNode[] = user.repositories?.nodes ?? [];
+    const collection = user.contributionsCollection ?? {};
+    const starred: RawStarredRepo[] = user.starredRepositories?.nodes ?? [];
+
+    const ossRepos = repos.filter((r) => r.stargazerCount >= 1).length;
+    const totalStars = repos.reduce((acc, r) => acc + r.stargazerCount, 0);
+
+    const bucket: HeroOrbitActivityItem[] = [];
+    pushRelease(repos, bucket);
+    pushPullRequestActivity(
+      collection.pullRequestContributions?.nodes ?? [],
+      bucket,
+    );
+    pushReviewActivity(
+      collection.pullRequestReviewContributions?.nodes ?? [],
+      bucket,
+    );
+    pushCommentActivity(
+      collection.issueCommentContributions?.nodes ?? [],
+      bucket,
+    );
+    pushStarredActivity(starred, bucket);
+
+    bucket.push({
+      kind: "stars:bs",
+      label: "Stars",
+      value: `${totalStars}+ earned`,
+      occurredAt: null,
+      time: "ongoing",
+    });
+
+    bucket.sort((a, b) => {
+      const at = a.occurredAt ? new Date(a.occurredAt).getTime() : 0;
+      const bt = b.occurredAt ? new Date(b.occurredAt).getTime() : 0;
+      return bt - at;
+    });
+
+    return {
+      stats: {
+        projects: 0,
+        ossRepos,
+        totalStars,
+      },
+      activity: bucket.slice(0, 4),
     };
   },
 );
