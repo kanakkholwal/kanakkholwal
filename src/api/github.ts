@@ -840,6 +840,114 @@ function pushStarredActivity(
   }
 }
 
+const AGGREGATION_WINDOW_MS = 7 * 24 * 60 * 60 * 1000;
+
+function pluralizeNoun(item: HeroOrbitActivityItem): string {
+  switch (item.kind) {
+    case "git-pull-request":
+      return item.label === "Merged" ? "PRs merged" : "PRs opened";
+    case "code":
+      return item.label === "Reviewed" ? "reviews submitted" : "contributions";
+    case "rocket":
+      return "releases shipped";
+    case "message-circle":
+      return "comments posted";
+    default:
+      return "items";
+  }
+}
+
+function extractRepoSlug(item: HeroOrbitActivityItem): string {
+  if (!item.url) return "";
+  const match = /github\.com\/[^/]+\/([^/?#]+)/.exec(item.url);
+  return match?.[1] ?? "";
+}
+
+/**
+ * Coalesces duplicate-style activity into a single summary row when several
+ * items share the same action and the same repository within a rolling
+ * 7-day window. Items without a clear repo (e.g. starred repos) group only
+ * by action. The output is capped at 4 entries and always preserves the
+ * rolling stars-earned summary at the tail.
+ *
+ * Examples (recent → displayed):
+ *  - 6 PR merges in `orbit` this week
+ *      → `Merged · 6 PRs merged in orbit · this week`
+ *  - 4 starred repos within the window
+ *      → `Starred · 4 repos · this week`
+ *  - 1 merge + 2 reviews in different repos
+ *      → shown individually as separate rows
+ */
+function aggregateActivity(items: HeroOrbitActivityItem[]): HeroOrbitActivityItem[] {
+  const summary = items.find((item) => item.kind === "stars:bs");
+  const timeBound = items.filter((item) => item.kind !== "stars:bs");
+
+  // Group key includes the repo so actions on different repos stay distinct.
+  const groups = new Map<string, HeroOrbitActivityItem[]>();
+  for (const item of timeBound) {
+    const repo = extractRepoSlug(item);
+    const key = `${repo}::${item.kind}::${item.label}`;
+    let bucket = groups.get(key);
+    if (!bucket) {
+      bucket = [];
+      groups.set(key, bucket);
+    }
+    bucket.push(item);
+  }
+
+  const now = Date.now();
+  const out: HeroOrbitActivityItem[] = [];
+
+  for (const group of groups.values()) {
+    group.sort((a, b) => {
+      const at = a.occurredAt ? new Date(a.occurredAt).getTime() : 0;
+      const bt = b.occurredAt ? new Date(b.occurredAt).getTime() : 0;
+      return bt - at;
+    });
+
+    const recent = group.filter((item) => {
+      if (!item.occurredAt) return false;
+      const t = new Date(item.occurredAt).getTime();
+      return now - t <= AGGREGATION_WINDOW_MS;
+    });
+
+    if (recent.length >= 2) {
+      const latest = recent[0];
+      const repo = extractRepoSlug(latest);
+      const noun = pluralizeNoun(latest);
+      // Stars are about the *target* repos — saying "in {repo}" reads
+      // weirdly, so drop the suffix for that kind.
+      const value =
+        latest.kind === "star"
+          ? `${recent.length} repos`
+          : repo
+            ? `${recent.length} ${noun} in ${repo}`
+            : `${recent.length} ${noun}`;
+      out.push({
+        kind: latest.kind,
+        label: latest.label,
+        value,
+        occurredAt: latest.occurredAt,
+        time: "this week",
+        url: latest.url,
+      });
+    } else if (group[0]) {
+      // Either one recent item or older items only — show the freshest one.
+      out.push(group[0]);
+    }
+  }
+
+  if (summary) out.push(summary);
+
+  out.sort((a, b) => {
+    const at = a.occurredAt ? new Date(a.occurredAt).getTime() : 0;
+    const bt = b.occurredAt ? new Date(b.occurredAt).getTime() : 0;
+    return bt - at;
+  });
+
+  return out.slice(0, 4);
+}
+
 /**
  * Issues a single GraphQL query against the GitHub API and merges the
  * following signals into a unified, time-sorted activity feed:
@@ -939,19 +1047,13 @@ async function fetchHeroOrbitPayload(username: string): Promise<HeroOrbitData> {
     time: "ongoing",
   });
 
-  bucket.sort((a, b) => {
-    const at = a.occurredAt ? new Date(a.occurredAt).getTime() : 0;
-    const bt = b.occurredAt ? new Date(b.occurredAt).getTime() : 0;
-    return bt - at;
-  });
-
   return {
     stats: {
       projects: 0,
       ossRepos,
       totalStars,
     },
-    activity: bucket.slice(0, 4),
+    activity: aggregateActivity(bucket),
   };
 }
 
