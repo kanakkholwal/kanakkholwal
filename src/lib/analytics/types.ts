@@ -1,5 +1,13 @@
 export type AnalyticsSource = "ga" | "posthog" | "mock";
 
+export type RangeKey = "7d" | "30d" | "90d";
+
+export const RANGES: { key: RangeKey; days: number; label: string; short: string }[] = [
+  { key: "7d", days: 7, label: "7 days", short: "7d" },
+  { key: "30d", days: 30, label: "30 days", short: "30d" },
+  { key: "90d", days: 90, label: "90 days", short: "90d" },
+];
+
 export interface AnalyticsPoint {
   date: string;
   users: number;
@@ -36,9 +44,14 @@ export interface AnalyticsSnapshot {
   generatedAt: string;
 }
 
-export interface AnalyticsFile {
-  site: AnalyticsSnapshot;
-  projects: Record<string, AnalyticsSnapshot>;
+// A range-selectable result. ok=false means no data (show a banner + zeros), never fake numbers.
+export interface AnalyticsResult {
+  ok: boolean;
+  error: string | null;
+  label: string;
+  source: AnalyticsSource;
+  ranges: Record<RangeKey, AnalyticsSnapshot>;
+  generatedAt: string;
 }
 
 export type Trend = -1 | 0 | 1;

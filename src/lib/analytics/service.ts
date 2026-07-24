@@ -21,7 +21,7 @@ function serviceAccount(): ServiceAccount | null {
 async function buildSite(): Promise<AnalyticsSnapshot> {
   const sa = serviceAccount();
   const cfg = appConfig.analytics.site;
-  const propertyId = process.env.GA_SITE_PROPERTY_ID || cfg.propertyId;
+  const propertyId =  cfg.propertyId || process.env.GA_SITE_PROPERTY_ID || "123456";
   if (sa && propertyId) {
     try {
       return await fetchGaSnapshot({ sa, propertyId, label: cfg.label });

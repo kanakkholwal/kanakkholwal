@@ -201,10 +201,11 @@ const appConfig = {
       label: "kanak.eu.org",
       source: "ga" as const,
       measurementId: "G-95KQZNMSSE",
-      propertyId: "", // fill numeric GA4 property id (Admin → Property Settings)
+      propertyId: "504095479", // fill numeric GA4 property id (Admin → Property Settings)
     },
     projects: [
-      { id: "college-ecosystem", source: "ga" as const, label: "nith.eu.org", propertyId: "" },
+      { id: "college-ecosystem", source: "ga" as const, label: "nith.eu.org", propertyId: "381127908" },
+      { id: "orbit", source: "ga" as const, label: "orbit.nexonauts.com", propertyId: "525140272" },
       { id: "recast", source: "posthog" as const, label: "recast", projectId: "" },
     ],
   },
