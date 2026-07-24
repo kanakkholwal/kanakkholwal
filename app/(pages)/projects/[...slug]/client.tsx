@@ -11,6 +11,7 @@ import { StyleModels, StylingModel } from "@/constants/ui";
 import useStorage from "@/hooks/use-storage";
 import { ProjectType } from "@/lib/project.source";
 import { cn } from "@/lib/utils";
+import type { AnalyticsSnapshot } from "~/lib/analytics/types";
 import { motion } from "framer-motion";
 import { StyleSwap } from "@/components/animated/style-swap";
 import {
@@ -25,6 +26,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import { ProjectContent } from "./_components/project-analytics";
 import { OtherProjects } from "./other-projects";
 
 const BLUR_FADE_DELAY = 0.04;
@@ -33,10 +35,11 @@ type ProjectData = Omit<ProjectType, "body" | "getText" | "getMDAST" | "info" | 
 
 interface ProjectPageProps {
   project: ProjectData;
+  analytics: AnalyticsSnapshot | null;
   children: React.ReactNode;
 }
 
-export default function ProjectPageClient({ project, children }: ProjectPageProps) {
+export default function ProjectPageClient({ project, analytics, children }: ProjectPageProps) {
   const [selectedStyle] = useStorage<StylingModel>(
     "styling.model",
     StyleModels[0].id,
@@ -45,20 +48,20 @@ export default function ProjectPageClient({ project, children }: ProjectPageProp
   return (
     <StyleSwap swapKey={selectedStyle}>
       {selectedStyle === "minimal" ? (
-        <MinimalProjectPage project={project}>{children}</MinimalProjectPage>
+        <MinimalProjectPage project={project} analytics={analytics}>{children}</MinimalProjectPage>
       ) : selectedStyle === "static" ? (
-        <StaticProjectPage project={project}>{children}</StaticProjectPage>
+        <StaticProjectPage project={project} analytics={analytics}>{children}</StaticProjectPage>
       ) : selectedStyle === "story" ? (
-        <StoryProjectPage project={project}>{children}</StoryProjectPage>
+        <StoryProjectPage project={project} analytics={analytics}>{children}</StoryProjectPage>
       ) : (
-        <DynamicProjectPage project={project}>{children}</DynamicProjectPage>
+        <DynamicProjectPage project={project} analytics={analytics}>{children}</DynamicProjectPage>
       )}
     </StyleSwap>
   );
 }
 
 /*  MINIMAL  */
-function MinimalProjectPage({ project, children }: ProjectPageProps) {
+function MinimalProjectPage({ project, analytics, children }: ProjectPageProps) {
   return (
     <main className="min-h-screen w-full max-w-3xl mx-auto px-6 py-24 md:py-32">
       <BlurFade delay={BLUR_FADE_DELAY}>
@@ -150,9 +153,12 @@ function MinimalProjectPage({ project, children }: ProjectPageProps) {
       </BlurFade>
 
       <BlurFade delay={BLUR_FADE_DELAY * 8}>
-        <div className="prose dark:prose-invert max-w-none prose-p:font-mono prose-p:leading-relaxed prose-headings:font-mono prose-headings:tracking-tight">
+        <ProjectContent
+          snapshot={analytics}
+          proseClassName="prose dark:prose-invert max-w-none prose-p:font-mono prose-p:leading-relaxed prose-headings:font-mono prose-headings:tracking-tight"
+        >
           {children}
-        </div>
+        </ProjectContent>
       </BlurFade>
 
       <OtherProjects currentProjectId={project.id} />
@@ -161,7 +167,7 @@ function MinimalProjectPage({ project, children }: ProjectPageProps) {
 }
 
 /*  STATIC  */
-function StaticProjectPage({ project, children }: ProjectPageProps) {
+function StaticProjectPage({ project, analytics, children }: ProjectPageProps) {
   return (
     <main className="min-h-screen w-full overflow-x-hidden">
 
@@ -247,14 +253,17 @@ function StaticProjectPage({ project, children }: ProjectPageProps) {
               </BlurFade>
             )}
             <BlurFade delay={BLUR_FADE_DELAY * 7}>
-              <div className={cn(
-                "prose dark:prose-invert max-w-none",
-                "prose-headings:font-mono prose-headings:tracking-tight prose-headings:font-bold",
-                "prose-p:font-mono prose-p:leading-6 prose-p:text-zinc-600 dark:prose-p:text-zinc-300",
-                "prose-li:font-mono [&_a[data-card].peer]:no-underline",
-              )}>
+              <ProjectContent
+                snapshot={analytics}
+                proseClassName={cn(
+                  "prose dark:prose-invert max-w-none",
+                  "prose-headings:font-mono prose-headings:tracking-tight prose-headings:font-bold",
+                  "prose-p:font-mono prose-p:leading-6 prose-p:text-zinc-600 dark:prose-p:text-zinc-300",
+                  "prose-li:font-mono [&_a[data-card].peer]:no-underline",
+                )}
+              >
                 {children}
-              </div>
+              </ProjectContent>
             </BlurFade>
           </article>
 
@@ -313,7 +322,7 @@ function StaticProjectPage({ project, children }: ProjectPageProps) {
 }
 
 /*  DYNAMIC  */
-function DynamicProjectPage({ project, children }: ProjectPageProps) {
+function DynamicProjectPage({ project, analytics, children }: ProjectPageProps) {
   return (
     <main className="min-h-screen w-full overflow-x-hidden">
       {/* Full-bleed hero */}
@@ -429,14 +438,17 @@ function DynamicProjectPage({ project, children }: ProjectPageProps) {
             transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
             className="lg:col-span-8"
           >
-            <div className={cn(
-              "prose dark:prose-invert max-w-none",
-              "prose-headings:font-mono prose-headings:tracking-tight prose-headings:font-bold",
-              "prose-p:font-mono prose-p:leading-6 prose-p:text-zinc-600 dark:prose-p:text-zinc-300",
-              "prose-li:font-mono [&_a[data-card].peer]:no-underline",
-            )}>
+            <ProjectContent
+              snapshot={analytics}
+              proseClassName={cn(
+                "prose dark:prose-invert max-w-none",
+                "prose-headings:font-mono prose-headings:tracking-tight prose-headings:font-bold",
+                "prose-p:font-mono prose-p:leading-6 prose-p:text-zinc-600 dark:prose-p:text-zinc-300",
+                "prose-li:font-mono [&_a[data-card].peer]:no-underline",
+              )}
+            >
               {children}
-            </div>
+            </ProjectContent>
           </motion.article>
 
           <aside className="lg:col-span-4">
@@ -518,7 +530,7 @@ function DynamicProjectPage({ project, children }: ProjectPageProps) {
 }
 
 /*  STORY  */
-function StoryProjectPage({ project, children }: ProjectPageProps) {
+function StoryProjectPage({ project, analytics, children }: ProjectPageProps) {
   return (
     <main className="mx-auto w-full max-w-3xl px-6 pb-24 pt-28 md:pt-36">
       <StoryReveal>
@@ -592,11 +604,13 @@ function StoryProjectPage({ project, children }: ProjectPageProps) {
           </span>
         ))}
       </StoryReveal>
-      <StoryReveal
-        delay={0.2}
-        className="prose dark:prose-invert mt-10 max-w-none prose-headings:tracking-tight"
-      >
-        {children}
+      <StoryReveal delay={0.2} className="mt-10">
+        <ProjectContent
+          snapshot={analytics}
+          proseClassName="prose dark:prose-invert max-w-none prose-headings:tracking-tight"
+        >
+          {children}
+        </ProjectContent>
       </StoryReveal>
       <OtherProjects currentProjectId={project.id} />
     </main>

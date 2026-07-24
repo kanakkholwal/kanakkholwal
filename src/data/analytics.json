@@ -1,0 +1,868 @@
+{
+  "site": {
+    "source": "mock",
+    "live": false,
+    "label": "kanak.eu.org",
+    "propertyId": null,
+    "range": {
+      "start": "2026-06-25",
+      "end": "2026-07-24",
+      "days": 30
+    },
+    "totals": {
+      "users": 4111,
+      "pageViews": 14302,
+      "sessions": 5562,
+      "avgEngagementSeconds": 117,
+      "bounceRate": 0.42
+    },
+    "previousTotals": {
+      "users": 3790,
+      "pageViews": 12121,
+      "sessions": 4981,
+      "avgEngagementSeconds": 98,
+      "bounceRate": 0.375
+    },
+    "series": [
+      {
+        "date": "2026-06-25",
+        "users": 157,
+        "pageViews": 655,
+        "sessions": 223
+      },
+      {
+        "date": "2026-06-26",
+        "users": 140,
+        "pageViews": 477,
+        "sessions": 196
+      },
+      {
+        "date": "2026-06-27",
+        "users": 93,
+        "pageViews": 367,
+        "sessions": 135
+      },
+      {
+        "date": "2026-06-28",
+        "users": 98,
+        "pageViews": 228,
+        "sessions": 124
+      },
+      {
+        "date": "2026-06-29",
+        "users": 164,
+        "pageViews": 700,
+        "sessions": 227
+      },
+      {
+        "date": "2026-06-30",
+        "users": 124,
+        "pageViews": 373,
+        "sessions": 171
+      },
+      {
+        "date": "2026-07-01",
+        "users": 134,
+        "pageViews": 471,
+        "sessions": 175
+      },
+      {
+        "date": "2026-07-02",
+        "users": 129,
+        "pageViews": 445,
+        "sessions": 200
+      },
+      {
+        "date": "2026-07-03",
+        "users": 141,
+        "pageViews": 498,
+        "sessions": 194
+      },
+      {
+        "date": "2026-07-04",
+        "users": 90,
+        "pageViews": 248,
+        "sessions": 112
+      },
+      {
+        "date": "2026-07-05",
+        "users": 89,
+        "pageViews": 284,
+        "sessions": 105
+      },
+      {
+        "date": "2026-07-06",
+        "users": 118,
+        "pageViews": 275,
+        "sessions": 148
+      },
+      {
+        "date": "2026-07-07",
+        "users": 123,
+        "pageViews": 378,
+        "sessions": 165
+      },
+      {
+        "date": "2026-07-08",
+        "users": 156,
+        "pageViews": 557,
+        "sessions": 235
+      },
+      {
+        "date": "2026-07-09",
+        "users": 148,
+        "pageViews": 584,
+        "sessions": 202
+      },
+      {
+        "date": "2026-07-10",
+        "users": 138,
+        "pageViews": 422,
+        "sessions": 162
+      },
+      {
+        "date": "2026-07-11",
+        "users": 96,
+        "pageViews": 311,
+        "sessions": 124
+      },
+      {
+        "date": "2026-07-12",
+        "users": 110,
+        "pageViews": 487,
+        "sessions": 168
+      },
+      {
+        "date": "2026-07-13",
+        "users": 137,
+        "pageViews": 313,
+        "sessions": 155
+      },
+      {
+        "date": "2026-07-14",
+        "users": 167,
+        "pageViews": 763,
+        "sessions": 247
+      },
+      {
+        "date": "2026-07-15",
+        "users": 170,
+        "pageViews": 750,
+        "sessions": 258
+      },
+      {
+        "date": "2026-07-16",
+        "users": 158,
+        "pageViews": 615,
+        "sessions": 209
+      },
+      {
+        "date": "2026-07-17",
+        "users": 161,
+        "pageViews": 661,
+        "sessions": 253
+      },
+      {
+        "date": "2026-07-18",
+        "users": 133,
+        "pageViews": 355,
+        "sessions": 156
+      },
+      {
+        "date": "2026-07-19",
+        "users": 101,
+        "pageViews": 395,
+        "sessions": 144
+      },
+      {
+        "date": "2026-07-20",
+        "users": 186,
+        "pageViews": 674,
+        "sessions": 248
+      },
+      {
+        "date": "2026-07-21",
+        "users": 151,
+        "pageViews": 330,
+        "sessions": 177
+      },
+      {
+        "date": "2026-07-22",
+        "users": 157,
+        "pageViews": 593,
+        "sessions": 217
+      },
+      {
+        "date": "2026-07-23",
+        "users": 179,
+        "pageViews": 571,
+        "sessions": 214
+      },
+      {
+        "date": "2026-07-24",
+        "users": 163,
+        "pageViews": 522,
+        "sessions": 218
+      }
+    ],
+    "topPages": [
+      {
+        "label": "/",
+        "value": 2014
+      },
+      {
+        "label": "/projects",
+        "value": 863
+      },
+      {
+        "label": "/blog",
+        "value": 617
+      },
+      {
+        "label": "/stats",
+        "value": 329
+      },
+      {
+        "label": "/contact",
+        "value": 288
+      }
+    ],
+    "topCountries": [
+      {
+        "label": "India",
+        "value": 2179
+      },
+      {
+        "label": "United States",
+        "value": 904
+      },
+      {
+        "label": "Canada",
+        "value": 452
+      },
+      {
+        "label": "Germany",
+        "value": 370
+      },
+      {
+        "label": "United Kingdom",
+        "value": 206
+      }
+    ],
+    "topReferrers": [
+      {
+        "label": "Google",
+        "value": 1644
+      },
+      {
+        "label": "Direct",
+        "value": 1521
+      },
+      {
+        "label": "LinkedIn",
+        "value": 370
+      },
+      {
+        "label": "GitHub",
+        "value": 329
+      },
+      {
+        "label": "Twitter",
+        "value": 247
+      }
+    ],
+    "devices": [
+      {
+        "label": "Desktop",
+        "value": 1891
+      },
+      {
+        "label": "Tablet",
+        "value": 1151
+      },
+      {
+        "label": "Mobile",
+        "value": 1069
+      }
+    ],
+    "generatedAt": "2026-07-24T06:44:53.121Z"
+  },
+  "projects": {
+    "college-ecosystem": {
+      "source": "mock",
+      "live": false,
+      "label": "nith.eu.org",
+      "propertyId": null,
+      "range": {
+        "start": "2026-06-25",
+        "end": "2026-07-24",
+        "days": 30
+      },
+      "totals": {
+        "users": 2385,
+        "pageViews": 8533,
+        "sessions": 3303,
+        "avgEngagementSeconds": 172,
+        "bounceRate": 0.502
+      },
+      "previousTotals": {
+        "users": 2584,
+        "pageViews": 9080,
+        "sessions": 3481,
+        "avgEngagementSeconds": 152,
+        "bounceRate": 0.42
+      },
+      "series": [
+        {
+          "date": "2026-06-25",
+          "users": 109,
+          "pageViews": 419,
+          "sessions": 172
+        },
+        {
+          "date": "2026-06-26",
+          "users": 102,
+          "pageViews": 445,
+          "sessions": 153
+        },
+        {
+          "date": "2026-06-27",
+          "users": 70,
+          "pageViews": 233,
+          "sessions": 94
+        },
+        {
+          "date": "2026-06-28",
+          "users": 61,
+          "pageViews": 194,
+          "sessions": 80
+        },
+        {
+          "date": "2026-06-29",
+          "users": 75,
+          "pageViews": 163,
+          "sessions": 89
+        },
+        {
+          "date": "2026-06-30",
+          "users": 94,
+          "pageViews": 282,
+          "sessions": 150
+        },
+        {
+          "date": "2026-07-01",
+          "users": 78,
+          "pageViews": 289,
+          "sessions": 105
+        },
+        {
+          "date": "2026-07-02",
+          "users": 76,
+          "pageViews": 311,
+          "sessions": 114
+        },
+        {
+          "date": "2026-07-03",
+          "users": 84,
+          "pageViews": 294,
+          "sessions": 126
+        },
+        {
+          "date": "2026-07-04",
+          "users": 57,
+          "pageViews": 219,
+          "sessions": 78
+        },
+        {
+          "date": "2026-07-05",
+          "users": 53,
+          "pageViews": 230,
+          "sessions": 80
+        },
+        {
+          "date": "2026-07-06",
+          "users": 82,
+          "pageViews": 315,
+          "sessions": 105
+        },
+        {
+          "date": "2026-07-07",
+          "users": 77,
+          "pageViews": 297,
+          "sessions": 103
+        },
+        {
+          "date": "2026-07-08",
+          "users": 91,
+          "pageViews": 296,
+          "sessions": 125
+        },
+        {
+          "date": "2026-07-09",
+          "users": 79,
+          "pageViews": 289,
+          "sessions": 98
+        },
+        {
+          "date": "2026-07-10",
+          "users": 91,
+          "pageViews": 337,
+          "sessions": 138
+        },
+        {
+          "date": "2026-07-11",
+          "users": 60,
+          "pageViews": 236,
+          "sessions": 94
+        },
+        {
+          "date": "2026-07-12",
+          "users": 53,
+          "pageViews": 178,
+          "sessions": 77
+        },
+        {
+          "date": "2026-07-13",
+          "users": 92,
+          "pageViews": 260,
+          "sessions": 119
+        },
+        {
+          "date": "2026-07-14",
+          "users": 83,
+          "pageViews": 373,
+          "sessions": 122
+        },
+        {
+          "date": "2026-07-15",
+          "users": 71,
+          "pageViews": 219,
+          "sessions": 80
+        },
+        {
+          "date": "2026-07-16",
+          "users": 89,
+          "pageViews": 412,
+          "sessions": 135
+        },
+        {
+          "date": "2026-07-17",
+          "users": 90,
+          "pageViews": 280,
+          "sessions": 112
+        },
+        {
+          "date": "2026-07-18",
+          "users": 60,
+          "pageViews": 232,
+          "sessions": 89
+        },
+        {
+          "date": "2026-07-19",
+          "users": 61,
+          "pageViews": 183,
+          "sessions": 85
+        },
+        {
+          "date": "2026-07-20",
+          "users": 85,
+          "pageViews": 271,
+          "sessions": 99
+        },
+        {
+          "date": "2026-07-21",
+          "users": 87,
+          "pageViews": 355,
+          "sessions": 120
+        },
+        {
+          "date": "2026-07-22",
+          "users": 82,
+          "pageViews": 204,
+          "sessions": 94
+        },
+        {
+          "date": "2026-07-23",
+          "users": 89,
+          "pageViews": 402,
+          "sessions": 138
+        },
+        {
+          "date": "2026-07-24",
+          "users": 104,
+          "pageViews": 315,
+          "sessions": 129
+        }
+      ],
+      "topPages": [
+        {
+          "label": "/",
+          "value": 1479
+        },
+        {
+          "label": "/projects",
+          "value": 572
+        },
+        {
+          "label": "/blog",
+          "value": 191
+        },
+        {
+          "label": "/contact",
+          "value": 95
+        },
+        {
+          "label": "/stats",
+          "value": 48
+        }
+      ],
+      "topCountries": [
+        {
+          "label": "India",
+          "value": 906
+        },
+        {
+          "label": "United States",
+          "value": 835
+        },
+        {
+          "label": "Canada",
+          "value": 262
+        },
+        {
+          "label": "Germany",
+          "value": 239
+        },
+        {
+          "label": "United Kingdom",
+          "value": 143
+        }
+      ],
+      "topReferrers": [
+        {
+          "label": "Direct",
+          "value": 1479
+        },
+        {
+          "label": "Google",
+          "value": 382
+        },
+        {
+          "label": "GitHub",
+          "value": 262
+        },
+        {
+          "label": "Twitter",
+          "value": 167
+        },
+        {
+          "label": "LinkedIn",
+          "value": 95
+        }
+      ],
+      "devices": [
+        {
+          "label": "Desktop",
+          "value": 1383
+        },
+        {
+          "label": "Mobile",
+          "value": 549
+        },
+        {
+          "label": "Tablet",
+          "value": 453
+        }
+      ],
+      "generatedAt": "2026-07-24T06:44:53.122Z"
+    },
+    "recast": {
+      "source": "mock",
+      "live": false,
+      "label": "recast",
+      "propertyId": null,
+      "range": {
+        "start": "2026-06-25",
+        "end": "2026-07-24",
+        "days": 30
+      },
+      "totals": {
+        "users": 1228,
+        "pageViews": 4028,
+        "sessions": 1652,
+        "avgEngagementSeconds": 153,
+        "bounceRate": 0.527
+      },
+      "previousTotals": {
+        "users": 1015,
+        "pageViews": 3341,
+        "sessions": 1371,
+        "avgEngagementSeconds": 113,
+        "bounceRate": 0.567
+      },
+      "series": [
+        {
+          "date": "2026-06-25",
+          "users": 46,
+          "pageViews": 162,
+          "sessions": 67
+        },
+        {
+          "date": "2026-06-26",
+          "users": 46,
+          "pageViews": 156,
+          "sessions": 62
+        },
+        {
+          "date": "2026-06-27",
+          "users": 30,
+          "pageViews": 76,
+          "sessions": 36
+        },
+        {
+          "date": "2026-06-28",
+          "users": 33,
+          "pageViews": 88,
+          "sessions": 40
+        },
+        {
+          "date": "2026-06-29",
+          "users": 37,
+          "pageViews": 94,
+          "sessions": 42
+        },
+        {
+          "date": "2026-06-30",
+          "users": 41,
+          "pageViews": 172,
+          "sessions": 60
+        },
+        {
+          "date": "2026-07-01",
+          "users": 33,
+          "pageViews": 128,
+          "sessions": 53
+        },
+        {
+          "date": "2026-07-02",
+          "users": 38,
+          "pageViews": 111,
+          "sessions": 55
+        },
+        {
+          "date": "2026-07-03",
+          "users": 34,
+          "pageViews": 111,
+          "sessions": 38
+        },
+        {
+          "date": "2026-07-04",
+          "users": 23,
+          "pageViews": 94,
+          "sessions": 36
+        },
+        {
+          "date": "2026-07-05",
+          "users": 24,
+          "pageViews": 79,
+          "sessions": 38
+        },
+        {
+          "date": "2026-07-06",
+          "users": 43,
+          "pageViews": 183,
+          "sessions": 59
+        },
+        {
+          "date": "2026-07-07",
+          "users": 44,
+          "pageViews": 153,
+          "sessions": 70
+        },
+        {
+          "date": "2026-07-08",
+          "users": 40,
+          "pageViews": 135,
+          "sessions": 54
+        },
+        {
+          "date": "2026-07-09",
+          "users": 38,
+          "pageViews": 141,
+          "sessions": 49
+        },
+        {
+          "date": "2026-07-10",
+          "users": 51,
+          "pageViews": 146,
+          "sessions": 67
+        },
+        {
+          "date": "2026-07-11",
+          "users": 31,
+          "pageViews": 101,
+          "sessions": 40
+        },
+        {
+          "date": "2026-07-12",
+          "users": 29,
+          "pageViews": 83,
+          "sessions": 33
+        },
+        {
+          "date": "2026-07-13",
+          "users": 45,
+          "pageViews": 136,
+          "sessions": 71
+        },
+        {
+          "date": "2026-07-14",
+          "users": 45,
+          "pageViews": 151,
+          "sessions": 50
+        },
+        {
+          "date": "2026-07-15",
+          "users": 44,
+          "pageViews": 163,
+          "sessions": 57
+        },
+        {
+          "date": "2026-07-16",
+          "users": 49,
+          "pageViews": 133,
+          "sessions": 68
+        },
+        {
+          "date": "2026-07-17",
+          "users": 44,
+          "pageViews": 159,
+          "sessions": 54
+        },
+        {
+          "date": "2026-07-18",
+          "users": 38,
+          "pageViews": 114,
+          "sessions": 54
+        },
+        {
+          "date": "2026-07-19",
+          "users": 41,
+          "pageViews": 174,
+          "sessions": 58
+        },
+        {
+          "date": "2026-07-20",
+          "users": 44,
+          "pageViews": 117,
+          "sessions": 56
+        },
+        {
+          "date": "2026-07-21",
+          "users": 48,
+          "pageViews": 111,
+          "sessions": 58
+        },
+        {
+          "date": "2026-07-22",
+          "users": 48,
+          "pageViews": 204,
+          "sessions": 75
+        },
+        {
+          "date": "2026-07-23",
+          "users": 55,
+          "pageViews": 133,
+          "sessions": 65
+        },
+        {
+          "date": "2026-07-24",
+          "users": 66,
+          "pageViews": 220,
+          "sessions": 87
+        }
+      ],
+      "topPages": [
+        {
+          "label": "/",
+          "value": 528
+        },
+        {
+          "label": "/projects",
+          "value": 344
+        },
+        {
+          "label": "/blog",
+          "value": 209
+        },
+        {
+          "label": "/contact",
+          "value": 86
+        },
+        {
+          "label": "/stats",
+          "value": 61
+        }
+      ],
+      "topCountries": [
+        {
+          "label": "India",
+          "value": 602
+        },
+        {
+          "label": "United States",
+          "value": 282
+        },
+        {
+          "label": "Germany",
+          "value": 196
+        },
+        {
+          "label": "Canada",
+          "value": 86
+        },
+        {
+          "label": "United Kingdom",
+          "value": 61
+        }
+      ],
+      "topReferrers": [
+        {
+          "label": "Direct",
+          "value": 516
+        },
+        {
+          "label": "Google",
+          "value": 319
+        },
+        {
+          "label": "GitHub",
+          "value": 246
+        },
+        {
+          "label": "Twitter",
+          "value": 86
+        },
+        {
+          "label": "LinkedIn",
+          "value": 61
+        }
+      ],
+      "devices": [
+        {
+          "label": "Desktop",
+          "value": 700
+        },
+        {
+          "label": "Tablet",
+          "value": 332
+        },
+        {
+          "label": "Mobile",
+          "value": 196
+        }
+      ],
+      "generatedAt": "2026-07-24T06:44:53.123Z"
+    }
+  }
+}

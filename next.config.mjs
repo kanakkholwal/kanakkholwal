@@ -10,7 +10,7 @@ const nextConfig = {
   reactStrictMode: true,
   crossOrigin: "anonymous",
   poweredByHeader: false,
-  compress: true,
+  // compress: true,
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: '**' },
