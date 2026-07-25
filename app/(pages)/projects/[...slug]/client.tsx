@@ -304,11 +304,9 @@ function StaticProjectPage({ project, analytics, children }: ProjectPageProps) {
               </BlurFade>
               <BlurFade delay={BLUR_FADE_DELAY * 8}>
                 <SidebarCard title="Context" icon={<Layers className="w-3 h-3" />}>
-                  <div className="-my-2.5">
-                    <MetaRow label="Timeline" value={project.dates} />
-                    <MetaRow label="Type" value={project.tags?.[0] || "Project"} />
-                    <MetaRow label="Status" value={project.status} last />
-                  </div>
+                  <MetaRow label="Timeline" value={project.dates} />
+                  <MetaRow label="Type" value={project.tags?.[0] || "Project"} />
+                  <MetaRow label="Status" value={project.status} last />
                 </SidebarCard>
               </BlurFade>
             </div>
@@ -658,7 +656,7 @@ function SidebarCard({ title, icon, children }: { title: string; icon: React.Rea
 
 function MetaRow({ label, value, last }: { label: string; value: string; last?: boolean }) {
   return (
-    <div className={cn("flex items-center justify-between gap-4 py-2.5", !last && "border-b border-border/50")}>
+    <div className={cn("flex items-center justify-between gap-4 py-2", !last && "border-b border-border/40")}>
       <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">{label}</span>
       <span className="text-sm font-medium capitalize text-foreground">{value}</span>
     </div>
