@@ -1,0 +1,4 @@
+* text=auto
+
+# CRLF here breaks the shebang on Vercel's Linux builders.
+*.sh text eol=lf
