@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 
 import { Metadata } from "next";
 import { appConfig } from "root/project.config";
-import { getProjectSnapshot } from "~/lib/analytics/service";
+import { getProjectResult } from "~/lib/analytics/service";
 import ProjectPageClient from "./client";
 
 export const revalidate = 3600;
@@ -30,7 +30,7 @@ export default async function Page(props: {
       ...project
     } = pageSource.data;
 
-    const analytics = await getProjectSnapshot(project.id);
+    const analytics = await getProjectResult(project.id);
 
     return <ProjectPageClient project={project} analytics={analytics}>
       <Mdx components={defaultMdxComponents}/>

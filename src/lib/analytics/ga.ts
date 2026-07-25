@@ -1,8 +1,13 @@
-import type { AnalyticsBreakdownItem, AnalyticsSnapshot } from "./types";
+import {
+  RANGES,
+  type AnalyticsBreakdownItem,
+  type AnalyticsResult,
+  type AnalyticsSnapshot,
+  type RangeKey,
+} from "./types";
 
 const TOKEN_URL = "https://oauth2.googleapis.com/token";
 const GA_BASE = "https://analyticsdata.googleapis.com/v1beta";
-const DAYS = 30;
 
 export type ServiceAccount = { client_email: string; private_key: string };
 
@@ -66,24 +71,19 @@ async function runReport(token: string, propertyId: string, body: Record<string,
   return (await res.json()) as { rows?: GaRow[] };
 }
 
-export async function fetchGaSnapshot({
-  sa,
-  propertyId,
-  label,
-}: {
-  sa: ServiceAccount;
-  propertyId: string;
-  label: string;
-}): Promise<AnalyticsSnapshot> {
-  const token = await getAccessToken(sa);
-
+async function snapshotForRange(
+  token: string,
+  propertyId: string,
+  label: string,
+  days: number,
+): Promise<AnalyticsSnapshot> {
   const ts = await runReport(token, propertyId, {
-    dateRanges: [{ startDate: `${DAYS * 2}daysAgo`, endDate: "yesterday" }],
+    dateRanges: [{ startDate: `${days}daysAgo`, endDate: "yesterday" }],
     dimensions: [{ name: "date" }],
     metrics: [{ name: "activeUsers" }, { name: "screenPageViews" }, { name: "sessions" }],
     orderBys: [{ dimension: { dimensionName: "date" } }],
   });
-  const points = (ts.rows || []).map((r) => {
+  const series = (ts.rows || []).map((r) => {
     const d = r.dimensionValues[0].value;
     return {
       date: `${d.slice(0, 4)}-${d.slice(4, 6)}-${d.slice(6, 8)}`,
@@ -92,7 +92,6 @@ export async function fetchGaSnapshot({
       sessions: +r.metricValues[2].value,
     };
   });
-  const series = points.slice(-DAYS);
 
   const totalsFor = async (range: { startDate: string; endDate: string }) => {
     const rep = await runReport(token, propertyId, {
@@ -117,7 +116,7 @@ export async function fetchGaSnapshot({
 
   const dim = async (name: string, size = 5): Promise<AnalyticsBreakdownItem[]> => {
     const rep = await runReport(token, propertyId, {
-      dateRanges: [{ startDate: `${DAYS}daysAgo`, endDate: "yesterday" }],
+      dateRanges: [{ startDate: `${days}daysAgo`, endDate: "yesterday" }],
       dimensions: [{ name }],
       metrics: [{ name: "activeUsers" }],
       orderBys: [{ metric: { metricName: "activeUsers" }, desc: true }],
@@ -130,8 +129,8 @@ export async function fetchGaSnapshot({
   };
 
   const [totals, previousTotals, topPages, topCountries, topReferrers, devices] = await Promise.all([
-    totalsFor({ startDate: `${DAYS}daysAgo`, endDate: "yesterday" }),
-    totalsFor({ startDate: `${DAYS * 2}daysAgo`, endDate: `${DAYS + 1}daysAgo` }),
+    totalsFor({ startDate: `${days}daysAgo`, endDate: "yesterday" }),
+    totalsFor({ startDate: `${days * 2}daysAgo`, endDate: `${days + 1}daysAgo` }),
     dim("pagePath"),
     dim("country"),
     dim("sessionDefaultChannelGroup"),
@@ -143,7 +142,7 @@ export async function fetchGaSnapshot({
     live: true,
     label,
     propertyId,
-    range: { start: series[0]?.date ?? "", end: series.at(-1)?.date ?? "", days: DAYS },
+    range: { start: series[0]?.date ?? "", end: series.at(-1)?.date ?? "", days },
     totals,
     previousTotals,
     series,
@@ -151,6 +150,34 @@ export async function fetchGaSnapshot({
     topCountries,
     topReferrers,
     devices,
+    generatedAt: new Date().toISOString(),
+  };
+}
+
+// Fetches every selectable range with a single minted token.
+export async function fetchGaResult({
+  sa,
+  propertyId,
+  label,
+}: {
+  sa: ServiceAccount;
+  propertyId: string;
+  label: string;
+}): Promise<AnalyticsResult> {
+  const token = await getAccessToken(sa);
+  const snapshots = await Promise.all(
+    RANGES.map((r) => snapshotForRange(token, propertyId, label, r.days)),
+  );
+  const ranges = Object.fromEntries(
+    RANGES.map((r, i) => [r.key, snapshots[i]]),
+  ) as Record<RangeKey, AnalyticsSnapshot>;
+
+  return {
+    ok: true,
+    error: null,
+    label,
+    source: "ga",
+    ranges,
     generatedAt: new Date().toISOString(),
   };
 }

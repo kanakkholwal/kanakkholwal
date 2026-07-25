@@ -11,7 +11,7 @@ import { StyleModels, StylingModel } from "@/constants/ui";
 import useStorage from "@/hooks/use-storage";
 import { ProjectType } from "@/lib/project.source";
 import { cn } from "@/lib/utils";
-import type { AnalyticsSnapshot } from "~/lib/analytics/types";
+import type { AnalyticsResult } from "~/lib/analytics/types";
 import { motion } from "framer-motion";
 import { StyleSwap } from "@/components/animated/style-swap";
 import {
@@ -35,7 +35,7 @@ type ProjectData = Omit<ProjectType, "body" | "getText" | "getMDAST" | "info" | 
 
 interface ProjectPageProps {
   project: ProjectData;
-  analytics: AnalyticsSnapshot | null;
+  analytics: AnalyticsResult | null;
   children: React.ReactNode;
 }
 
@@ -154,7 +154,7 @@ function MinimalProjectPage({ project, analytics, children }: ProjectPageProps) 
 
       <BlurFade delay={BLUR_FADE_DELAY * 8}>
         <ProjectContent
-          snapshot={analytics}
+          result={analytics}
           proseClassName="prose dark:prose-invert max-w-none prose-p:font-mono prose-p:leading-relaxed prose-headings:font-mono prose-headings:tracking-tight"
         >
           {children}
@@ -225,17 +225,19 @@ function StaticProjectPage({ project, analytics, children }: ProjectPageProps) {
         )}
       </section>
 
-      <BlurFade delay={BLUR_FADE_DELAY * 5} className="max-w-3xl mx-auto px-4 md:px-8 mb-20">
-        <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl border border-border shadow-xl bg-card">
-          {project.video ? (
+
+          {project.video ? (<BlurFade delay={BLUR_FADE_DELAY * 5} className="max-w-3xl mx-auto px-4 md:px-8 mb-20">
+            <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl border border-border shadow-xl bg-card">
             <video src={project.video} autoPlay loop muted playsInline className="w-full h-full object-cover" />
+            </div>
+          </BlurFade>
           ) : project.image ? (
+          <BlurFade delay={BLUR_FADE_DELAY * 5} className="max-w-3xl mx-auto px-4 md:px-8 mb-20">
+            <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl border border-border shadow-xl bg-card">
             <Image src={project.image} alt={project.title} width={1920} height={1080} className="w-full h-full object-cover" priority />
-          ) : (
-            <ProjectFallback title={project.title} description={project.description} />
-          )}
-        </div>
-      </BlurFade>
+            </div>
+          </BlurFade> ) : null}
+
 
       <div className="max-w-6xl mx-auto px-6 md:px-12 pb-32">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
@@ -254,7 +256,7 @@ function StaticProjectPage({ project, analytics, children }: ProjectPageProps) {
             )}
             <BlurFade delay={BLUR_FADE_DELAY * 7}>
               <ProjectContent
-                snapshot={analytics}
+                result={analytics}
                 proseClassName={cn(
                   "prose dark:prose-invert max-w-none",
                   "prose-headings:font-mono prose-headings:tracking-tight prose-headings:font-bold",
@@ -304,7 +306,7 @@ function StaticProjectPage({ project, analytics, children }: ProjectPageProps) {
               </BlurFade>
               <BlurFade delay={BLUR_FADE_DELAY * 8}>
                 <SidebarCard title="Context" icon={<Layers className="w-3 h-3" />}>
-                  <div className="space-y-3 text-sm">
+                  <div className="-my-2.5">
                     <MetaRow label="Timeline" value={project.dates} />
                     <MetaRow label="Type" value={project.tags?.[0] || "Project"} />
                     <MetaRow label="Status" value={project.status} last />
@@ -439,7 +441,7 @@ function DynamicProjectPage({ project, analytics, children }: ProjectPageProps) 
             className="lg:col-span-8"
           >
             <ProjectContent
-              snapshot={analytics}
+              result={analytics}
               proseClassName={cn(
                 "prose dark:prose-invert max-w-none",
                 "prose-headings:font-mono prose-headings:tracking-tight prose-headings:font-bold",
@@ -606,7 +608,7 @@ function StoryProjectPage({ project, analytics, children }: ProjectPageProps) {
       </StoryReveal>
       <StoryReveal delay={0.2} className="mt-10">
         <ProjectContent
-          snapshot={analytics}
+          result={analytics}
           proseClassName="prose dark:prose-invert max-w-none prose-headings:tracking-tight"
         >
           {children}
@@ -647,27 +649,32 @@ const StatusPill = ({ status, minimal }: { status: string; minimal?: boolean }) 
 
 function SidebarCard({ title, icon, children }: { title: string; icon: React.ReactNode; children: React.ReactNode }) {
   return (
-    <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
-      <h3 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-4 flex items-center gap-2">
-        {icon} {title}
-      </h3>
-      {children}
+    <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
+      <div className="flex items-center gap-2.5 border-b border-border/60 bg-muted/30 px-5 py-3.5">
+        <span className="inline-flex size-6 shrink-0 items-center justify-center rounded-md border border-border bg-background text-muted-foreground shadow-sm">
+          {icon}
+        </span>
+        <h3 className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground">
+          {title}
+        </h3>
+      </div>
+      <div className="p-5">{children}</div>
     </div>
   );
 }
 
 function MetaRow({ label, value, last }: { label: string; value: string; last?: boolean }) {
   return (
-    <div className={cn("flex justify-between py-2", !last && "border-b border-border/50")}>
-      <span className="text-muted-foreground">{label}</span>
-      <span className="font-medium capitalize">{value}</span>
+    <div className={cn("flex items-center justify-between gap-4 py-2.5", !last && "border-b border-border/50")}>
+      <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">{label}</span>
+      <span className="text-sm font-medium capitalize text-foreground">{value}</span>
     </div>
   );
 }
 
 const TechItem = ({ children }: { children: React.ReactNode }) => (
-  <li className="flex items-center gap-2 text-sm text-muted-foreground border border-border/50 bg-zinc-50/50 dark:bg-zinc-900/50 px-2.5 py-1.5 rounded-md list-none">
-    <div className="w-1 h-1 rounded-full bg-primary/40" />
+  <span className="inline-flex items-center gap-1.5 rounded-md border border-border/60 bg-secondary/40 px-2.5 py-1 text-xs font-medium text-muted-foreground transition-colors hover:border-primary/30 hover:text-foreground">
+    <span className="size-1 rounded-full bg-primary/50" />
     {children}
-  </li>
+  </span>
 );

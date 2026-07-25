@@ -97,7 +97,9 @@ export const loadHeroOrbitData = cache(async (): Promise<HeroOrbitPayload> => {
   return {
     stats: {
       projects,
-      ossRepos: orbitResult.stats.ossRepos,
+      // GitHub can be down/rate-limited at runtime; fall back to the tracked
+      // repo list so the tile never shows a false "0".
+      ossRepos: orbitResult.stats.ossRepos || appConfig.statsConfig.repositories.length,
       yearsExp,
     },
     activity: mergedActivity,

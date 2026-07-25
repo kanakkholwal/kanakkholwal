@@ -28,7 +28,7 @@ import Markdown from "react-markdown";
 import { Icon, IconType } from "../icons";
 import { ProjectFallback } from "./projects.card.fallback";
 
-/* 
+/*
    STATUS badge colours
 ─ */
 const STATUS_STYLES: Record<string, string> = {
@@ -59,7 +59,7 @@ function StatusBadge({ status }: { status?: string }) {
   );
 }
 
-/* 
+/*
    EXPANDABLE CARDS (Dynamic variant with Drawer)
     responsive bento grid + side drawer
  */
@@ -313,7 +313,7 @@ function ExpandableCard({
   );
 }
 
-/* 
+/*
    SIMPLE CARDS  (Static variant)
  */
 export function SimpleProjectCards({
@@ -376,7 +376,7 @@ function ProjectCard({
           "group relative h-full flex flex-col overflow-hidden rounded-3xl",
           "bg-zinc-50 dark:bg-zinc-900/40",
           "border border-zinc-200 dark:border-white/10",
-          "p-2 transition-all duration-300 hover:border-zinc-300 dark:hover:border-white/20 hover:shadow-xl dark:hover:shadow-2xl dark:hover:shadow-black/50",
+          "p-2 transition-all duration-300 hover:border-zinc-300 dark:hover:border-white/20",
         )}
       >
         <div className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl bg-zinc-200 dark:bg-zinc-800 border border-black/5 dark:border-white/5">

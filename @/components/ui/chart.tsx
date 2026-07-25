@@ -6,7 +6,7 @@ import * as React from "react";
 import * as RechartsPrimitive from "recharts";
 
 import { cn } from "@/lib/utils";
-import type { LegendPayload } from "recharts/types/component/DefaultLegendContent";
+import type { Payload as LegendPayload } from "recharts/types/component/DefaultLegendContent";
 import type {
   NameType,
   Payload,
