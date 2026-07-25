@@ -59,14 +59,9 @@ export default async function StatsPage(props: StatsPageProps) {
           <span className="text-[10px] uppercase font-mono text-muted-foreground">
             Sources
           </span>
-          <span className="font-medium text-sm">GitHub / NPM</span>
+          <span className="font-medium text-sm whitespace-nowrap">GitHub / NPM</span>
         </div>
-        <div className="px-4 py-2 flex flex-col justify-center">
-          <span className="text-[10px] uppercase font-mono text-muted-foreground">
-            Region
-          </span>
-          <span className="font-medium text-sm">Global</span>
-        </div>
+
       </div>
     </div>
   );
@@ -154,7 +149,7 @@ export const metadata = generateMetadata({
   ],
 });
 
-//  LOADERS 
+//  LOADERS
 type VersionsLoaderProps = {
   searchParams: Promise<SearchParams>;
 };

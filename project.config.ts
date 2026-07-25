@@ -194,6 +194,21 @@ const appConfig = {
     "google.analytics": "G-95KQZNMSSE",
     "google.adsense": "ca-pub-2219281381026289",
   },
+  // Public analytics mapping (no secrets). Fetched at runtime and cached by Next.js;
+  // the GA read key is a server env var (GA_SERVICE_ACCOUNT_KEY). propertyId is numeric GA4.
+  analytics: {
+    site: {
+      label: "kanak.eu.org",
+      source: "ga" as const,
+      measurementId: "G-95KQZNMSSE",
+      propertyId: "504095479", // fill numeric GA4 property id (Admin → Property Settings)
+    },
+    projects: [
+      { id: "college-ecosystem", source: "ga" as const, label: "nith.eu.org", propertyId: "381127908" },
+      { id: "orbit", source: "ga" as const, label: "orbit.nexonauts.com", propertyId: "525140272" },
+      { id: "recast", source: "posthog" as const, label: "recast", projectId: "" },
+    ],
+  },
   statsConfig: {
     npmPackages: ["custom-domain-sdk", "nexo-editor", "nexo-mdx","remark-plugins","pdf-tables-parser","barcode-react","mailer-easy","nexo-html2jsx","nexo-deck-swiper"],
     repositories: [
@@ -268,6 +283,10 @@ const appConfig = {
       {
         label: "OS Stats",
         href: "/stats",
+      },
+      {
+        label: "Analytics",
+        href: "/analytics",
       },
     ],
     specifics: [

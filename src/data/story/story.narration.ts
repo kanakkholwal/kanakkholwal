@@ -1,9 +1,5 @@
 import type { StoryBeat } from "./story.types";
 
-// The creative layer: cinematic narration for the milestones worth hand-tuning.
-// Facts (dates, role, links, tech, metrics) live in the resume MDX and are
-// merged in by story.build.ts — only the story lives here.
-
 // Keyed by work `company` (lowercased).
 export const WORK_NARRATION: Record<string, StoryBeat[]> = {
   "textify ai": [

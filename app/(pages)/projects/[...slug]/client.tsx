@@ -11,6 +11,7 @@ import { StyleModels, StylingModel } from "@/constants/ui";
 import useStorage from "@/hooks/use-storage";
 import { ProjectType } from "@/lib/project.source";
 import { cn } from "@/lib/utils";
+import type { AnalyticsResult } from "~/lib/analytics/types";
 import { motion } from "framer-motion";
 import { StyleSwap } from "@/components/animated/style-swap";
 import {
@@ -25,6 +26,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import { ProjectContent } from "./_components/project-analytics";
 import { OtherProjects } from "./other-projects";
 
 const BLUR_FADE_DELAY = 0.04;
@@ -33,10 +35,11 @@ type ProjectData = Omit<ProjectType, "body" | "getText" | "getMDAST" | "info" | 
 
 interface ProjectPageProps {
   project: ProjectData;
+  analytics: AnalyticsResult | null;
   children: React.ReactNode;
 }
 
-export default function ProjectPageClient({ project, children }: ProjectPageProps) {
+export default function ProjectPageClient({ project, analytics, children }: ProjectPageProps) {
   const [selectedStyle] = useStorage<StylingModel>(
     "styling.model",
     StyleModels[0].id,
@@ -45,20 +48,20 @@ export default function ProjectPageClient({ project, children }: ProjectPageProp
   return (
     <StyleSwap swapKey={selectedStyle}>
       {selectedStyle === "minimal" ? (
-        <MinimalProjectPage project={project}>{children}</MinimalProjectPage>
+        <MinimalProjectPage project={project} analytics={analytics}>{children}</MinimalProjectPage>
       ) : selectedStyle === "static" ? (
-        <StaticProjectPage project={project}>{children}</StaticProjectPage>
+        <StaticProjectPage project={project} analytics={analytics}>{children}</StaticProjectPage>
       ) : selectedStyle === "story" ? (
-        <StoryProjectPage project={project}>{children}</StoryProjectPage>
+        <StoryProjectPage project={project} analytics={analytics}>{children}</StoryProjectPage>
       ) : (
-        <DynamicProjectPage project={project}>{children}</DynamicProjectPage>
+        <DynamicProjectPage project={project} analytics={analytics}>{children}</DynamicProjectPage>
       )}
     </StyleSwap>
   );
 }
 
 /*  MINIMAL  */
-function MinimalProjectPage({ project, children }: ProjectPageProps) {
+function MinimalProjectPage({ project, analytics, children }: ProjectPageProps) {
   return (
     <main className="min-h-screen w-full max-w-3xl mx-auto px-6 py-24 md:py-32">
       <BlurFade delay={BLUR_FADE_DELAY}>
@@ -150,9 +153,12 @@ function MinimalProjectPage({ project, children }: ProjectPageProps) {
       </BlurFade>
 
       <BlurFade delay={BLUR_FADE_DELAY * 8}>
-        <div className="prose dark:prose-invert max-w-none prose-p:font-mono prose-p:leading-relaxed prose-headings:font-mono prose-headings:tracking-tight">
+        <ProjectContent
+          result={analytics}
+          proseClassName="prose dark:prose-invert max-w-none prose-p:font-mono prose-p:leading-relaxed prose-headings:font-mono prose-headings:tracking-tight"
+        >
           {children}
-        </div>
+        </ProjectContent>
       </BlurFade>
 
       <OtherProjects currentProjectId={project.id} />
@@ -161,7 +167,7 @@ function MinimalProjectPage({ project, children }: ProjectPageProps) {
 }
 
 /*  STATIC  */
-function StaticProjectPage({ project, children }: ProjectPageProps) {
+function StaticProjectPage({ project, analytics, children }: ProjectPageProps) {
   return (
     <main className="min-h-screen w-full overflow-x-hidden">
 
@@ -219,17 +225,19 @@ function StaticProjectPage({ project, children }: ProjectPageProps) {
         )}
       </section>
 
-      <BlurFade delay={BLUR_FADE_DELAY * 5} className="max-w-3xl mx-auto px-4 md:px-8 mb-20">
-        <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl border border-border shadow-xl bg-card">
-          {project.video ? (
+
+          {project.video ? (<BlurFade delay={BLUR_FADE_DELAY * 5} className="max-w-3xl mx-auto px-4 md:px-8 mb-20">
+            <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl border border-border shadow-xl bg-card">
             <video src={project.video} autoPlay loop muted playsInline className="w-full h-full object-cover" />
+            </div>
+          </BlurFade>
           ) : project.image ? (
+          <BlurFade delay={BLUR_FADE_DELAY * 5} className="max-w-3xl mx-auto px-4 md:px-8 mb-20">
+            <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl border border-border shadow-xl bg-card">
             <Image src={project.image} alt={project.title} width={1920} height={1080} className="w-full h-full object-cover" priority />
-          ) : (
-            <ProjectFallback title={project.title} description={project.description} />
-          )}
-        </div>
-      </BlurFade>
+            </div>
+          </BlurFade> ) : null}
+
 
       <div className="max-w-6xl mx-auto px-6 md:px-12 pb-32">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
@@ -247,14 +255,17 @@ function StaticProjectPage({ project, children }: ProjectPageProps) {
               </BlurFade>
             )}
             <BlurFade delay={BLUR_FADE_DELAY * 7}>
-              <div className={cn(
-                "prose dark:prose-invert max-w-none",
-                "prose-headings:font-mono prose-headings:tracking-tight prose-headings:font-bold",
-                "prose-p:font-mono prose-p:leading-6 prose-p:text-zinc-600 dark:prose-p:text-zinc-300",
-                "prose-li:font-mono [&_a[data-card].peer]:no-underline",
-              )}>
+              <ProjectContent
+                result={analytics}
+                proseClassName={cn(
+                  "prose dark:prose-invert max-w-none",
+                  "prose-headings:font-mono prose-headings:tracking-tight prose-headings:font-bold",
+                  "prose-p:font-mono prose-p:leading-6 prose-p:text-zinc-600 dark:prose-p:text-zinc-300",
+                  "prose-li:font-mono [&_a[data-card].peer]:no-underline",
+                )}
+              >
                 {children}
-              </div>
+              </ProjectContent>
             </BlurFade>
           </article>
 
@@ -262,24 +273,22 @@ function StaticProjectPage({ project, children }: ProjectPageProps) {
             <div className="sticky top-24 space-y-6">
               <BlurFade delay={BLUR_FADE_DELAY * 6}>
                 <SidebarCard title="Project Links" icon={<Rocket className="w-3 h-3" />}>
-                  <div className="flex flex-col gap-2">
+                  <div className="-mx-2 flex flex-col">
                     {project.links?.map((link, i) => (
                       <Link key={i} href={link.url} target="_blank" rel="noreferrer"
-                        className="group flex items-center justify-between p-3 rounded-lg bg-secondary/50 hover:bg-primary/5 border border-transparent hover:border-primary/20 transition-all"
+                        className="group flex items-center justify-between rounded-lg px-2 py-2 transition-colors hover:bg-muted/50"
                       >
-                        <span className="flex items-center gap-3 font-medium text-sm">
+                        <span className="flex items-center gap-2.5 text-sm font-medium">
                           {link.icon && (
-                            <span className="bg-background size-8 inline-flex items-center justify-center p-1.5 rounded-md border border-border shadow-sm group-hover:text-primary transition-colors">
-                              <Icon name={link.icon as IconType} className="size-5" />
-                            </span>
+                            <Icon name={link.icon as IconType} className="size-4 text-muted-foreground transition-colors group-hover:text-primary" />
                           )}
                           {link.label}
                         </span>
-                        <ArrowUpRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                        <ArrowUpRight className="size-4 text-muted-foreground/50 transition-colors group-hover:text-primary" />
                       </Link>
                     ))}
                     {(!project.links || project.links.length === 0) && (
-                      <span className="text-sm text-muted-foreground italic">No public links available.</span>
+                      <span className="px-2 text-sm italic text-muted-foreground">No public links available.</span>
                     )}
                   </div>
                 </SidebarCard>
@@ -295,11 +304,9 @@ function StaticProjectPage({ project, children }: ProjectPageProps) {
               </BlurFade>
               <BlurFade delay={BLUR_FADE_DELAY * 8}>
                 <SidebarCard title="Context" icon={<Layers className="w-3 h-3" />}>
-                  <div className="space-y-3 text-sm">
-                    <MetaRow label="Timeline" value={project.dates} />
-                    <MetaRow label="Type" value={project.tags?.[0] || "Project"} />
-                    <MetaRow label="Status" value={project.status} last />
-                  </div>
+                  <MetaRow label="Timeline" value={project.dates} />
+                  <MetaRow label="Type" value={project.tags?.[0] || "Project"} />
+                  <MetaRow label="Status" value={project.status} last />
                 </SidebarCard>
               </BlurFade>
             </div>
@@ -313,7 +320,7 @@ function StaticProjectPage({ project, children }: ProjectPageProps) {
 }
 
 /*  DYNAMIC  */
-function DynamicProjectPage({ project, children }: ProjectPageProps) {
+function DynamicProjectPage({ project, analytics, children }: ProjectPageProps) {
   return (
     <main className="min-h-screen w-full overflow-x-hidden">
       {/* Full-bleed hero */}
@@ -429,14 +436,17 @@ function DynamicProjectPage({ project, children }: ProjectPageProps) {
             transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
             className="lg:col-span-8"
           >
-            <div className={cn(
-              "prose dark:prose-invert max-w-none",
-              "prose-headings:font-mono prose-headings:tracking-tight prose-headings:font-bold",
-              "prose-p:font-mono prose-p:leading-6 prose-p:text-zinc-600 dark:prose-p:text-zinc-300",
-              "prose-li:font-mono [&_a[data-card].peer]:no-underline",
-            )}>
+            <ProjectContent
+              result={analytics}
+              proseClassName={cn(
+                "prose dark:prose-invert max-w-none",
+                "prose-headings:font-mono prose-headings:tracking-tight prose-headings:font-bold",
+                "prose-p:font-mono prose-p:leading-6 prose-p:text-zinc-600 dark:prose-p:text-zinc-300",
+                "prose-li:font-mono [&_a[data-card].peer]:no-underline",
+              )}
+            >
               {children}
-            </div>
+            </ProjectContent>
           </motion.article>
 
           <aside className="lg:col-span-4">
@@ -518,7 +528,7 @@ function DynamicProjectPage({ project, children }: ProjectPageProps) {
 }
 
 /*  STORY  */
-function StoryProjectPage({ project, children }: ProjectPageProps) {
+function StoryProjectPage({ project, analytics, children }: ProjectPageProps) {
   return (
     <main className="mx-auto w-full max-w-3xl px-6 pb-24 pt-28 md:pt-36">
       <StoryReveal>
@@ -592,11 +602,13 @@ function StoryProjectPage({ project, children }: ProjectPageProps) {
           </span>
         ))}
       </StoryReveal>
-      <StoryReveal
-        delay={0.2}
-        className="prose dark:prose-invert mt-10 max-w-none prose-headings:tracking-tight"
-      >
-        {children}
+      <StoryReveal delay={0.2} className="mt-10">
+        <ProjectContent
+          result={analytics}
+          proseClassName="prose dark:prose-invert max-w-none prose-headings:tracking-tight"
+        >
+          {children}
+        </ProjectContent>
       </StoryReveal>
       <OtherProjects currentProjectId={project.id} />
     </main>
@@ -633,8 +645,8 @@ const StatusPill = ({ status, minimal }: { status: string; minimal?: boolean }) 
 
 function SidebarCard({ title, icon, children }: { title: string; icon: React.ReactNode; children: React.ReactNode }) {
   return (
-    <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
-      <h3 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-4 flex items-center gap-2">
+    <div className="rounded-xl border border-border/60 p-5">
+      <h3 className="mb-4 flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
         {icon} {title}
       </h3>
       {children}
@@ -644,16 +656,16 @@ function SidebarCard({ title, icon, children }: { title: string; icon: React.Rea
 
 function MetaRow({ label, value, last }: { label: string; value: string; last?: boolean }) {
   return (
-    <div className={cn("flex justify-between py-2", !last && "border-b border-border/50")}>
-      <span className="text-muted-foreground">{label}</span>
-      <span className="font-medium capitalize">{value}</span>
+    <div className={cn("flex items-center justify-between gap-4 py-2", !last && "border-b border-border/40")}>
+      <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">{label}</span>
+      <span className="text-sm font-medium capitalize text-foreground">{value}</span>
     </div>
   );
 }
 
 const TechItem = ({ children }: { children: React.ReactNode }) => (
-  <li className="flex items-center gap-2 text-sm text-muted-foreground border border-border/50 bg-zinc-50/50 dark:bg-zinc-900/50 px-2.5 py-1.5 rounded-md list-none">
-    <div className="w-1 h-1 rounded-full bg-primary/40" />
+  <span className="inline-flex items-center gap-1.5 rounded-md border border-border/60 px-2.5 py-1 text-xs text-muted-foreground transition-colors hover:text-foreground">
+    <span className="size-1 rounded-full bg-primary/50" />
     {children}
-  </li>
+  </span>
 );
