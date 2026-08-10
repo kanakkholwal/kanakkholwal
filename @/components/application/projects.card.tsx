@@ -236,23 +236,21 @@ function ExpandableCard({
   isActive: boolean;
 }) {
   return (
-    <motion.button
-      onClick={onClick}
-      type="button"
-      aria-haspopup="dialog"
-      aria-expanded={isActive}
-      // Without this the name is the concatenation of everything inside —
-      // status, title, dates and every technology chip, read as one string.
-      aria-label={`${card.title} — view details`}
-      // Lift only. `scale` scales an element's children, so 1.01 resampled the
-      // title and chips on every hover, and compounded with the image's own
-      // group-hover:scale-105.
+    // An <article> wrapping the trigger, not a <button> wrapping the card.
+    // `role=button` marks all its descendants presentational, so a heading
+    // inside one is never exposed — the sr-only <h3> added here in a previous
+    // pass could not have worked. The trigger is the arrow, stretched over the
+    // whole card by `after:inset-0`, so the card stays clickable edge to edge
+    // while the title sits outside the control and keeps its semantics.
+    <motion.article
       whileHover={isActive ? {} : { y: -4 }}
       transition={{ type: "spring", stiffness: 360, damping: 30 }}
       className={cn(
         "group relative flex w-full flex-col overflow-hidden rounded-3xl text-left",
         "border border-border bg-card",
         "transition-shadow duration-300 hover:shadow-2xl dark:hover:shadow-black/60",
+        // The ring belongs to the card, since the stretched hit area is the card.
+        "has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-ring",
         isActive && "pointer-events-none opacity-40",
       )}
     >
@@ -261,7 +259,7 @@ function ExpandableCard({
         {card.image ? (
           <Image
             src={card.image}
-            alt={card.title}
+            alt=""
             fill
             className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
           />
@@ -269,16 +267,14 @@ function ExpandableCard({
           <ProjectFallback title={card.title} meta={card.dates} />
         )}
 
-        {/* Status - top left */}
-        <div className="absolute top-3 left-3 z-10">
+        <div className="absolute left-3 top-3 z-10">
           <StatusBadge status={card.status} />
         </div>
 
-        {/* Expand hint - top right */}
         {/* Was black/60 + white/80 — theme-blind, and unmeasurable over whatever
             the artwork happens to be. Also hover-only, so the sole affordance
             saying the card opens something never reached the keyboard. */}
-        <div className="absolute right-3 top-3 z-10 opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100">
+        <div className="absolute right-3 top-3 z-10 opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-has-[:focus-visible]:opacity-100">
           <div className="flex items-center gap-1.5 rounded-full border border-border bg-background px-2.5 py-1 font-mono text-2xs text-foreground">
             <ArrowUpRight className="size-3" />
             Details
@@ -287,45 +283,57 @@ function ExpandableCard({
       </div>
 
       {/* Info strip */}
-      <div className="px-4 py-3.5 flex items-center justify-between gap-3 bg-card border-t border-border/60">
+      <div className="flex items-center justify-between gap-3 border-t border-border/60 bg-card px-4 py-3.5">
         <div className="min-w-0 space-y-1.5">
-          {card.image ? (
-            <div>
-              <h3 className="truncate text-sm font-bold leading-snug text-foreground">
-                {card.title}
-              </h3>
+          <div>
+            {/* Always a real heading. Image-less cards draw the title as artwork,
+                so the visible copy would be a duplicate — but the element itself
+                still has to exist, or those projects are absent from the outline. */}
+            <h3
+              className={cn(
+                "truncate text-sm font-bold leading-snug text-foreground",
+                !card.image && "sr-only",
+              )}
+            >
+              {card.title}
+            </h3>
+            {card.image && (
               <p className="mt-0.5 flex items-center gap-1 font-mono text-2xs text-muted-foreground">
                 <Calendar className="size-3 shrink-0" />
                 {card.dates}
               </p>
-            </div>
-          ) : (
-            // The branded fallback draws the title as artwork, so repeating it
-            // visually is noise — but skipping the element left every image-less
-            // project with no heading at all, and out of the document outline.
-            <h3 className="sr-only">{card.title}</h3>
-          )}
+            )}
+          </div>
           <div className="flex flex-wrap gap-1">
             {card.technologies?.slice(0, 3).map((tech) => (
               <span
                 key={tech}
-                className="inline-flex items-center px-1.5 py-0.5 rounded-sm bg-muted text-2xs text-muted-foreground border border-border/60"
+                className="inline-flex items-center rounded-sm border border-border/60 bg-muted px-1.5 py-0.5 text-2xs text-muted-foreground"
               >
                 {tech}
               </span>
             ))}
             {card.technologies && card.technologies.length > 3 && (
-              <span className="text-2xs text-muted-foreground self-center">
+              <span className="self-center text-2xs text-muted-foreground">
                 +{card.technologies.length - 3}
               </span>
             )}
           </div>
         </div>
-        <div className="flex size-8 shrink-0 items-center justify-center rounded-full border border-border bg-muted/40 text-muted-foreground transition-[color,background-color,border-color,transform] duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:border-foreground group-hover:bg-foreground group-hover:text-background">
+
+        <button
+          type="button"
+          onClick={onClick}
+          aria-haspopup="dialog"
+          aria-expanded={isActive}
+          aria-label={`${card.title} — view details`}
+          // Stretched: the visible control is the chip, the hit area is the card.
+          className="flex size-8 shrink-0 items-center justify-center rounded-full border border-border bg-muted/40 text-muted-foreground outline-none transition-[color,background-color,border-color,transform] duration-300 after:absolute after:inset-0 after:content-[''] group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:border-foreground group-hover:bg-foreground group-hover:text-background"
+        >
           <ArrowUpRight className="size-3.5" />
-        </div>
+        </button>
       </div>
-    </motion.button>
+    </motion.article>
   );
 }
 
