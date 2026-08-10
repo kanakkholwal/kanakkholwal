@@ -1,4 +1,6 @@
 "use client";
+
+import { DynamicHeading } from "@/components/application/dynamic.heading";
 import { CountingNumber } from "@/components/animated/text.counter";
 import {
   ContributionGraph,
@@ -35,6 +37,8 @@ import {
   DetailedActivity,
 } from "~/api/github";
 
+import { StyleSwap } from "@/components/animated/style-swap";
+import { Serif, StoryChapter, StoryReveal } from "@/components/application/story.frame";
 import {
   ChartConfig,
   ChartContainer,
@@ -45,8 +49,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { StyleModels, StylingModel } from "@/constants/ui";
 import useStorage from "@/hooks/use-storage";
 import { motion } from "framer-motion";
-import { StyleSwap } from "@/components/animated/style-swap";
-import { Serif, StoryChapter, StoryReveal } from "@/components/application/story.frame";
 import Link from "next/link";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 import { appConfig } from "root/project.config";
@@ -59,34 +61,10 @@ import { Panel, PanelContent, PanelHeader, PanelTitle } from "./panel";
 
 // Configuration for the stats ribbon
 const STATS_CONFIG = [
-  {
-    label: "Followers",
-    icon: Users,
-    key: "followers",
-    color: "text-purple-500",
-    bg: "bg-purple-500/10",
-  },
-  {
-    label: "Stars",
-    icon: Star,
-    key: "stars",
-    color: "text-amber-500",
-    bg: "bg-amber-500/10",
-  },
-  {
-    label: "Repos",
-    icon: BookOpen,
-    key: "repos",
-    color: "text-emerald-500",
-    bg: "bg-emerald-500/10",
-  },
-  {
-    label: "Forks",
-    icon: GitFork,
-    key: "forks",
-    color: "text-blue-500",
-    bg: "bg-blue-500/10",
-  },
+  { label: "Followers", icon: Users, key: "followers" },
+  { label: "Stars", icon: Star, key: "stars" },
+  { label: "Repos", icon: BookOpen, key: "repos" },
+  { label: "Forks", icon: GitFork, key: "forks" },
 ] as const;
 const chartConfig = {
   contributions: {
@@ -142,6 +120,7 @@ function MinimalGithub({ data }: { data: Contributions }) {
           }
         />
       </PanelContent>
+      <MinimalStats stats={data.stats} />
     </Panel>
   );
 }
@@ -180,7 +159,7 @@ function StoryGithub({ data }: { data: Contributions }) {
                 once
               />
             </div>
-            <p className="mt-1 font-mono text-xs uppercase tracking-widest text-muted-foreground/70">
+            <p className="mt-1 font-mono text-xs uppercase tracking-widest text-muted-foreground">
               {stat.label}
             </p>
           </div>
@@ -192,89 +171,98 @@ function StoryGithub({ data }: { data: Contributions }) {
           href={appConfig.social.github}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-1.5 text-sm font-medium text-foreground transition-all hover:gap-2.5"
+          className="group inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-foreground"
         >
           See the full profile
-          <ArrowUpRight className="size-4" />
+          <ArrowUpRight className="size-4 transition-transform duration-150 ease-out group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
         </Link>
       </StoryReveal>
     </StoryChapter>
   );
 }
 
-function StatsStrip({
-  stats,
-  variant = "static",
-}: {
-  stats: Contributions["stats"];
-  variant?: "static" | "dynamic";
-}) {
+/* Each variant owns its own stat treatment. These were one component branching
+   on a `variant` prop, which is where the two designs quietly drifted apart —
+   different paddings, radii, count durations and hover surfaces, all decided by
+   ternaries rather than by design. */
+
+/** Static — a bordered card grid. Icon over number, centred, quiet. */
+function StaticStats({ stats }: { stats: Contributions["stats"] }) {
   return (
-    <div
-      className={cn(
-        "grid grid-cols-2 md:grid-cols-4 divide-x divide-border border-b border-border",
-        variant === "dynamic" && "bg-card",
-      )}
-    >
-      {STATS_CONFIG.map((stat, i) => (
+    <div className="grid grid-cols-2 divide-x divide-y divide-border border-b border-border md:grid-cols-4 md:divide-y-0">
+      {STATS_CONFIG.map((stat) => (
         <div
           key={stat.key}
-          className={cn(
-            "group flex items-center justify-between p-5 md:p-6 transition-colors",
-            variant === "static"
-              ? "flex-col justify-center p-6 md:p-8 bg-background/50 hover:bg-background"
-              : "hover:bg-background/60",
-          )}
+          className="flex flex-col items-center justify-center gap-2 bg-background/50 p-6 transition-colors duration-150 ease-out md:p-8 hoverable:bg-background"
         >
-          {variant === "static" ? (
-            <>
-              <div
-                className={cn(
-                  "mb-3 p-3 rounded-lg transition-colors duration-300",
-                  stat.color,
-                  stat.bg,
-                )}
-              >
-                <stat.icon className="size-5 md:size-6" />
-              </div>
-              <p className="text-2xl md:text-4xl font-bold tracking-tight text-foreground font-mono">
-                <CountingNumber
-                  from={0}
-                  to={stats[stat.key as keyof typeof stats]}
-                  duration={2.5}
-                />
-              </p>
-              <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mt-2">
-                {stat.label}
-              </p>
-            </>
-          ) : (
-            <>
-              <div className="space-y-1">
-                <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                  {stat.label}
-                </span>
-                <div className="text-2xl md:text-3xl font-bold font-mono tracking-tight text-foreground">
-                  <CountingNumber
-                    from={0}
-                    to={stats[stat.key as keyof typeof stats]}
-                    duration={2 + i * 0.2}
-                  />
-                </div>
-              </div>
-              <div
-                className={cn(
-                  "p-3 rounded-2xl transition-all duration-300 group-hover:scale-110",
-                  stat.bg,
-                )}
-              >
-                <stat.icon className={cn("size-5", stat.color)} />
-              </div>
-            </>
-          )}
+          <span className="rounded-lg bg-muted p-3 text-muted-foreground">
+            <stat.icon className="size-5 md:size-6" />
+          </span>
+          <p className="font-mono text-2xl font-bold tabular-nums tracking-tight text-foreground md:text-4xl">
+            <CountingNumber
+              from={0}
+              to={stats[stat.key as keyof typeof stats]}
+              duration={1.4}
+              startOnView
+              once
+            />
+          </p>
+          <p className="text-2xs font-medium uppercase tracking-wider text-muted-foreground">
+            {stat.label}
+          </p>
         </div>
       ))}
     </div>
+  );
+}
+
+/** Dynamic — a dense ledger row. Label and number left, icon right. */
+function DynamicStats({ stats }: { stats: Contributions["stats"] }) {
+  return (
+    <div className="grid grid-cols-2 divide-x divide-y divide-border bg-card md:grid-cols-4 md:divide-y-0">
+      {STATS_CONFIG.map((stat) => (
+        <div
+          key={stat.key}
+          className="group flex items-center justify-between gap-3 p-5 transition-colors duration-150 ease-out md:p-6 hoverable:bg-background/60"
+        >
+          <div className="min-w-0 space-y-1">
+            <span className="block text-2xs font-medium uppercase tracking-wider text-muted-foreground">
+              {stat.label}
+            </span>
+            <div className="font-mono text-2xl font-bold tabular-nums tracking-tight text-foreground md:text-3xl">
+              <CountingNumber
+                from={0}
+                to={stats[stat.key as keyof typeof stats]}
+                duration={1.4}
+                startOnView
+                once
+              />
+            </div>
+          </div>
+          <span className="rounded-2xl bg-primary/10 p-3 text-primary transition-transform duration-200 ease-out group-hover:scale-105">
+            <stat.icon className="size-5" />
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/** Minimal — no chrome at all. A hairline-ruled inline row, mono, no icons. */
+function MinimalStats({ stats }: { stats: Contributions["stats"] }) {
+  return (
+    <dl className="flex flex-wrap items-baseline gap-x-8 gap-y-3 border-t border-edge px-4 py-4">
+      {STATS_CONFIG.map((stat) => (
+        <div key={stat.key} className="flex items-baseline gap-2">
+          <dt className="font-mono text-2xs uppercase tracking-widest text-muted-foreground">
+            {stat.label}
+          </dt>
+          <dd className="font-mono text-sm font-medium tabular-nums text-foreground">
+            {stats[stat.key as keyof typeof stats]}
+          </dd>
+        </div>
+      ))}
+    </dl>
   );
 }
 
@@ -290,12 +278,12 @@ export function StaticGithubSection({ data }: { data: Contributions }) {
       id="github"
     >
       <BlurFade delay={0.04}>
-        <div className="space-y-2">
+        <div className="space-y-2 mb-5">
           <motion.span
             layoutId="github-label"
             className="inline-block text-xs font-mono font-medium tracking-widest uppercase text-muted-foreground"
           >
-            // Open Source
+            Open source
           </motion.span>
           <motion.h2
             layoutId="github-heading"
@@ -311,7 +299,7 @@ export function StaticGithubSection({ data }: { data: Contributions }) {
 
       <BlurFade delay={0.1}>
         <div className="rounded-2xl border border-border bg-card overflow-hidden">
-          <StatsStrip stats={data.stats} variant="static" />
+          <StaticStats stats={data.stats} />
 
           <ContributionGraph data={data.contributions[year]} className="w-full">
             <Tabs defaultValue="graph">
@@ -320,9 +308,9 @@ export function StaticGithubSection({ data }: { data: Contributions }) {
                   {({ totalCount, year: y }) => (
                     <div className="space-y-0.5">
                       <div className="flex items-center gap-2 text-sm font-semibold">
-                        <span className="relative flex h-2 w-2">
-                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                          <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+                        <span className="relative flex size-2">
+                          <span className="absolute inline-flex size-full animate-ping rounded-full bg-success opacity-75 motion-reduce:animate-none" />
+                          <span className="relative inline-flex size-2 rounded-full bg-success" />
                         </span>
                         Live Activity Map
                       </div>
@@ -392,51 +380,39 @@ export function DynamicGithubSection({
       id="github"
     >
       <BlurFade delay={0.1}>
-        <div className="flex flex-col md:flex-row justify-between items-end gap-6">
-          <div className="space-y-2">
-            <motion.span
-              layoutId="github-label"
-              className="inline-flex items-center gap-2 text-xs font-mono text-muted-foreground uppercase tracking-widest"
-            >
-              <GitCommitHorizontal className="size-4" />
-              Open Source
-            </motion.span>
-            <motion.h2
-              layoutId="github-heading"
-              className="text-4xl md:text-6xl font-bold tracking-tighter leading-none"
-            >
-              <span className="font-serif italic font-normal text-muted-foreground/70 mr-3">
-                Code
-              </span>
-              Contributions
-            </motion.h2>
-            <p className="text-muted-foreground text-base max-w-lg">
-              A live visualization of my commit history and open source impact on GitHub.
-            </p>
-          </div>
-          <Select defaultValue={year} onValueChange={setYear}>
-            <SelectTrigger className="h-10 w-[140px] rounded-full border-border/60 bg-input/50 backdrop-blur font-mono text-xs focus:ring-0 shrink-0">
-              <span className="text-muted-foreground mr-2">Year:</span>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {Object.keys(data.stats.total)
-                .toReversed()
-                .map((y) => (
-                  <SelectItem key={y} value={y} className="font-mono text-xs">
-                    {y}
-                  </SelectItem>
-                ))}
-            </SelectContent>
-          </Select>
-        </div>
+        <DynamicHeading
+          id="github"
+          label="Open source"
+          icon={GitCommitHorizontal}
+          serif="Code"
+          lead="A live visualization of my commit history and open source impact on GitHub."
+          aside={
+            <Select defaultValue={year} onValueChange={setYear}>
+              <SelectTrigger className="h-10 w-[140px] rounded-full border-input bg-card/80 backdrop-blur font-mono text-xs focus:ring-0 shrink-0">
+                <span className="text-muted-foreground mr-2">Year:</span>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {Object.keys(data.stats.total)
+                  .toReversed()
+                  .map((y) => (
+                    <SelectItem key={y} value={y} className="font-mono text-xs">
+                      {y}
+                    </SelectItem>
+                  ))}
+              </SelectContent>
+            </Select>
+          }
+        >
+          Contributions
+        </DynamicHeading>
       </BlurFade>
 
       <BlurFade delay={0.2} className="mt-4 w-full rounded-3xl border border-border/60 bg-card/40 backdrop-blur-xl overflow-hidden">
-        <StatsStrip stats={data.stats.stats} variant="dynamic" />
+        <DynamicStats stats={data.stats.stats} />
 
         <div className="p-6 md:p-10 relative w-full bg-card/50">
-          <div className="absolute inset-0 -z-10 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] dark:bg-[radial-gradient(#ffffff08_1px,transparent_1px)] opacity-50" />
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(color-mix(in_oklab,var(--foreground)_10%,transparent)_1px,transparent_1px)] [background-size:16px_16px]" />
 
           <ContributionGraph
             data={data.stats.contributions[year]}
@@ -488,7 +464,7 @@ export function DynamicGithubSection({
                 value="graph"
                 className="w-full mt-0 outline-none animate-in fade-in slide-in-from-bottom-2 duration-500"
               >
-                <div className="overflow-x-auto pb-4 scrollbar-hide w-full">
+                <div className="overflow-x-auto pb-4 no-scrollbar w-full">
                   <GithubContributionGraphCalender className="min-w-full max-h-96 no-scrollbar px-2" />
                 </div>
                 <div className="flex justify-end mt-4">
@@ -514,6 +490,7 @@ export function DynamicGithubSection({
                   key={org.name}
                   href={org.url}
                   target="_blank"
+                  rel="noopener noreferrer"
                   className="flex items-center gap-2 px-3 py-1.5 rounded-md border border-border bg-muted/50 hover:bg-muted/25 transition-all group"
                 >
                   <Image
@@ -618,14 +595,19 @@ function ActivityDistributionChart({ data }: { data: CodeReviewDistribution }) {
   const pPRs = getPoint(data.pullRequests, "bottom");
 
   return (
-    <svg viewBox={`0 0 ${size} ${size}`} className="w-full h-full">
+    <svg
+      viewBox={`0 0 ${size} ${size}`}
+      className="size-full"
+      role="img"
+      aria-label={`Contribution mix: ${data.commits}% commits, ${data.codeReviews}% code reviews, ${data.issues}% issues, ${data.pullRequests}% pull requests`}
+    >
       {/* 1. AXIS LINES (Crosshair) */}
       <line
         x1={center}
         y1={center - radius}
         x2={center}
         y2={center + radius}
-        stroke="#30363d"
+        stroke="var(--border)"
         strokeWidth="2"
         strokeLinecap="round"
       />
@@ -634,7 +616,7 @@ function ActivityDistributionChart({ data }: { data: CodeReviewDistribution }) {
         y1={center}
         x2={center + radius}
         y2={center}
-        stroke="#30363d"
+        stroke="var(--border)"
         strokeWidth="2"
         strokeLinecap="round"
       />
@@ -644,7 +626,7 @@ function ActivityDistributionChart({ data }: { data: CodeReviewDistribution }) {
         x={center}
         y={center - radius - 15}
         textAnchor="middle"
-        fill="#7d8590"
+        fill="var(--muted-foreground)"
         fontSize="12"
         fontWeight="500"
       >
@@ -654,7 +636,7 @@ function ActivityDistributionChart({ data }: { data: CodeReviewDistribution }) {
         x={center + radius + 10}
         y={center + 4}
         textAnchor="start"
-        fill="#7d8590"
+        fill="var(--muted-foreground)"
         fontSize="12"
         fontWeight="500"
       >
@@ -664,7 +646,7 @@ function ActivityDistributionChart({ data }: { data: CodeReviewDistribution }) {
         x={center}
         y={center + radius + 20}
         textAnchor="middle"
-        fill="#7d8590"
+        fill="var(--muted-foreground)"
         fontSize="12"
         fontWeight="500"
       >
@@ -674,7 +656,7 @@ function ActivityDistributionChart({ data }: { data: CodeReviewDistribution }) {
         x={center - radius - 10}
         y={center + 4}
         textAnchor="end"
-        fill="#7d8590"
+        fill="var(--muted-foreground)"
         fontSize="12"
         fontWeight="500"
       >
@@ -684,34 +666,34 @@ function ActivityDistributionChart({ data }: { data: CodeReviewDistribution }) {
       {/* 3. DATA LINES (The Green Glow) */}
       <path
         d={`M${center},${center} L${pCommits.x},${pCommits.y}`}
-        stroke="#3fb950"
+        stroke="var(--primary)"
         strokeWidth="3"
         strokeLinecap="round"
-        className="drop-shadow-[0_0_8px_rgba(63,185,80,0.5)]"
+        
       />
       <path
         d={`M${center},${center} L${pReview.x},${pReview.y}`}
-        stroke="#3fb950"
+        stroke="var(--primary)"
         strokeWidth="3"
         strokeLinecap="round"
       />
       <path
         d={`M${center},${center} L${pIssues.x},${pIssues.y}`}
-        stroke="#3fb950"
+        stroke="var(--primary)"
         strokeWidth="3"
         strokeLinecap="round"
-        className="drop-shadow-[0_0_8px_rgba(63,185,80,0.5)]"
+        
       />
       <path
         d={`M${center},${center} L${pPRs.x},${pPRs.y}`}
-        stroke="#3fb950"
+        stroke="var(--primary)"
         strokeWidth="3"
         strokeLinecap="round"
       />
 
       {/* 4. DATA DOTS & DYNAMIC LABELS */}
       {/* Center Anchor */}
-      <circle cx={center} cy={center} r="3" fill="#3fb950" />
+      <circle cx={center} cy={center} r="3" fill="var(--primary)" />
 
       {/* Commits (Left Axis) - Label Above Dot */}
       {data.commits > 0 && (
@@ -720,14 +702,14 @@ function ActivityDistributionChart({ data }: { data: CodeReviewDistribution }) {
             cx={pCommits.x}
             cy={pCommits.y}
             r="4"
-            fill="#3fb950"
-            stroke="#0d1117"
+            fill="var(--primary)"
+            stroke="var(--card)"
             strokeWidth="2"
           />
           <text
             x={pCommits.x}
             y={pCommits.y - 12}
-            fill="#7d8590"
+            fill="var(--muted-foreground)"
             fontSize="11"
             textAnchor="middle"
           >
@@ -743,14 +725,14 @@ function ActivityDistributionChart({ data }: { data: CodeReviewDistribution }) {
             cx={pIssues.x}
             cy={pIssues.y}
             r="4"
-            fill="#3fb950"
-            stroke="#0d1117"
+            fill="var(--primary)"
+            stroke="var(--card)"
             strokeWidth="2"
           />
           <text
             x={pIssues.x}
             y={pIssues.y - 12}
-            fill="#7d8590"
+            fill="var(--muted-foreground)"
             fontSize="11"
             textAnchor="middle"
           >
@@ -766,14 +748,14 @@ function ActivityDistributionChart({ data }: { data: CodeReviewDistribution }) {
             cx={pPRs.x}
             cy={pPRs.y}
             r="4"
-            fill="#3fb950"
-            stroke="#0d1117"
+            fill="var(--primary)"
+            stroke="var(--card)"
             strokeWidth="2"
           />
           <text
             x={pPRs.x + 10}
             y={pPRs.y + 4}
-            fill="#7d8590"
+            fill="var(--muted-foreground)"
             fontSize="11"
             textAnchor="start"
           >
@@ -789,14 +771,14 @@ function ActivityDistributionChart({ data }: { data: CodeReviewDistribution }) {
             cx={pReview.x}
             cy={pReview.y}
             r="4"
-            fill="#3fb950"
-            stroke="#0d1117"
+            fill="var(--primary)"
+            stroke="var(--card)"
             strokeWidth="2"
           />
           <text
             x={pReview.x + 10}
             y={pReview.y + 4}
-            fill="#7d8590"
+            fill="var(--muted-foreground)"
             fontSize="11"
             textAnchor="start"
           >

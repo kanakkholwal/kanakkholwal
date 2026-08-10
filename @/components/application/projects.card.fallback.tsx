@@ -1,59 +1,49 @@
 "use client";
 
 /**
- * Branded placeholder shown when a project has no image/video. Reads like an OG
- * card: a monogram + wordmark lockup with the project's tagline underneath.
+ * Stands in for a project screenshot. Reads as a poster: the project name set as
+ * the artwork itself, anchored bottom-left over a dot field.
  *
  * One brand colour, not a per-title hash. The old version picked from five
- * hard-coded hexes that were theme-blind and unmeasured — every new project
- * silently drew a colour nobody had checked against either background.
+ * hard-coded hexes that were theme-blind and unmeasured.
  */
 export function ProjectFallback({
   title,
-  description,
   meta,
 }: {
   title: string;
-  description?: string;
-  /** Optional small line under the tagline (e.g. dates) — only pass it when the
-   * surrounding card doesn't already show this info. */
+  /** Small line under the name — dates, usually. Omit where the surrounding
+   * card already shows it, or it prints twice. */
   meta?: string;
 }) {
-  const initial = title.trim().charAt(0).toUpperCase() || "•";
-
   return (
-    <div className="relative flex size-full flex-col items-center justify-center overflow-hidden bg-muted px-8 text-center">
-      {/* Dotted grid */}
+    <div className="relative flex size-full flex-col justify-end overflow-hidden bg-muted p-6">
+      {/* 10%, matching the hero and the contribution section. It was 18% here —
+          visible enough to read as texture behind the type rather than under it. */}
       <div
         aria-hidden="true"
         className="absolute inset-0"
         style={{
           backgroundImage:
-            "radial-gradient(color-mix(in oklab, var(--foreground) 18%, transparent) 1px, transparent 1px)",
+            "radial-gradient(color-mix(in oklab, var(--foreground) 10%, transparent) 1px, transparent 1px)",
           backgroundSize: "22px 22px",
         }}
       />
 
-      {/* Logo lockup: monogram + wordmark */}
-      <div className="relative z-10 flex items-center justify-center gap-3">
-        <div className="flex size-11 shrink-0 items-center justify-center rounded-xl border border-primary/35 bg-primary/12 text-lg font-bold text-primary">
-          {initial}
-        </div>
-        <span className="text-2xl font-semibold leading-tight tracking-tight text-foreground">
-          {title}
-        </span>
-      </div>
+      {/* The same rule that opens the hero eyebrow, so the placeholder speaks the
+          variant's language instead of inventing a badge. The monogram it
+          replaces restated the first letter of the word sitting next to it, and
+          measured 3.77:1 on its own primary/12 chip. */}
+      <div aria-hidden="true" className="relative mb-4 h-0.5 w-8 bg-primary" />
 
-      {/* Tagline */}
-      {description && (
-        <p className="relative z-10 mt-4 line-clamp-2 max-w-[85%] font-mono text-xs leading-relaxed text-muted-foreground">
-          {description}
-        </p>
-      )}
+      <p className="relative text-balance text-2xl font-semibold leading-tight tracking-tight text-foreground line-clamp-3 md:text-3xl">
+        {title}
+      </p>
 
-      {/* Optional meta (e.g. dates) */}
       {meta && (
-        <p className="relative z-10 mt-3 font-mono text-2xs uppercase tracking-widest text-subtle-foreground">
+        // muted, not subtle: subtle is tuned against `background` and reads
+        // 4.25:1 on `muted`.
+        <p className="relative mt-2 font-mono text-2xs uppercase tracking-widest text-muted-foreground">
           {meta}
         </p>
       )}

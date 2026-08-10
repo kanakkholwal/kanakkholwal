@@ -226,9 +226,7 @@ const Button = React.forwardRef<
         {isLoading ? <Spinner /> : null}
         {!isLoading && Icon && iconPlacement === "left" ? (
           expanding ? (
-            <span className="inline-flex w-0 -translate-x-1 overflow-hidden opacity-0 transition-[width,transform,opacity,padding] duration-200 ease-out group-hover:w-[1.25em] group-hover:translate-x-0 group-hover:pr-2 group-hover:opacity-100">
-              <Icon />
-            </span>
+            <ExpandingIcon icon={Icon} placement="left" />
           ) : (
             <Icon />
           )
@@ -236,9 +234,7 @@ const Button = React.forwardRef<
         <Slottable>{children}</Slottable>
         {!isLoading && Icon && iconPlacement === "right" ? (
           expanding ? (
-            <span className="inline-flex w-0 translate-x-1 overflow-hidden opacity-0 transition-[width,transform,opacity,padding] duration-200 ease-out group-hover:w-[1.25em] group-hover:translate-x-0 group-hover:pl-2 group-hover:opacity-100">
-              <Icon />
-            </span>
+            <ExpandingIcon icon={Icon} placement="right" />
           ) : (
             <Icon />
           )
@@ -248,5 +244,40 @@ const Button = React.forwardRef<
   },
 );
 Button.displayName = "Button";
+
+/**
+ * The `expandIcon` reveal. Sizes itself to the icon via an animatable
+ * `0fr → 1fr` grid track rather than a hard-coded width.
+ *
+ * The previous version paired `w-[1.25em]` with `group-hover:pl-2`. Preflight
+ * makes that width border-box, so the padding came out of it: at `lg` the
+ * content box was 12px for a 20px icon — 40% of the glyph clipped by
+ * `overflow-hidden`, and every other size clipped too. `1.25em` was also below
+ * the icon size at `xl` on its own, so no single constant could have worked
+ * across a scale where font size and icon size step independently.
+ */
+function ExpandingIcon({
+  icon: Icon,
+  placement,
+}: {
+  icon: React.ElementType;
+  placement: "left" | "right";
+}) {
+  return (
+    <span
+      className={cn(
+        "grid grid-cols-[0fr] opacity-0 transition-[grid-template-columns,opacity,margin] duration-200 ease-out",
+        "group-hover:grid-cols-[1fr] group-hover:opacity-100",
+        // Margin, not padding — it sits outside the animated track instead of
+        // being subtracted from it.
+        placement === "right" ? "group-hover:ml-2" : "group-hover:mr-2",
+      )}
+    >
+      <span className="overflow-hidden">
+        <Icon />
+      </span>
+    </span>
+  );
+}
 
 export { Button, buttonVariants };

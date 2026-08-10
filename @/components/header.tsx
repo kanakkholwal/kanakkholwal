@@ -93,26 +93,34 @@ export function Header() {
       // Padding was a spring on paddingTop/Left/Right — layout properties
       // recalculated every frame. A class swap costs one layout, not sixty.
       className={cn(
-        "fixed top-0 left-0 right-0 z-40 flex justify-center pointer-events-none",
+        "pointer-events-none fixed inset-x-0 top-0 z-40",
         "transition-[padding] duration-300 ease-out",
         isMinimal ? "p-0" : "px-4 pt-6",
       )}
     >
-      {/* popLayout, not wait: `wait` unmounts the outgoing navbar before the
-          incoming one exists, which leaves every shared layoutId below without
-          a counterpart to travel to. */}
-      <AnimatePresence mode="popLayout" initial={false}>
-        {isMinimal ? (
-          <MinimalNavbar key="minimal" animate={animateSwap} />
-        ) : selectedStyle === "dynamic" ? (
-          <DynamicIslandNavbar key="dynamic" animate={animateSwap} />
-        ) : (
-          // Static + Story (and any future mode) share the floating capsule so
-          // the style selector is always reachable — Story has no navbar of its
-          // own, and without this there's no way to switch back out of it.
-          <StaticNavbar key="static" animate={animateSwap} />
-        )}
-      </AnimatePresence>
+      {/* Every navbar is absolutely positioned inside this box rather than a
+          flex child of it. During a swap both are mounted at once (that is what
+          lets the shared layoutIds morph), and as flex siblings they shared a
+          row — so each got shoved off-centre for the length of the transition,
+          which read as the navbar flying in from the right. Stacked, they
+          overlay each other and neither can move the other. */}
+      <div className="relative w-full">
+        {/* popLayout, not wait: `wait` unmounts the outgoing navbar before the
+            incoming one exists, which leaves every shared layoutId below
+            without a counterpart to travel to. */}
+        <AnimatePresence mode="popLayout" initial={false}>
+          {isMinimal ? (
+            <MinimalNavbar key="minimal" animate={animateSwap} />
+          ) : selectedStyle === "dynamic" ? (
+            <DynamicIslandNavbar key="dynamic" animate={animateSwap} />
+          ) : (
+            // Static + Story (and any future mode) share the floating capsule so
+            // the style selector is always reachable — Story has no navbar of its
+            // own, and without this there's no way to switch back out of it.
+            <StaticNavbar key="static" animate={animateSwap} />
+          )}
+        </AnimatePresence>
+      </div>
     </header>
   );
 }
@@ -147,29 +155,42 @@ function DynamicIslandNavbar({ animate = true }: { animate?: boolean }) {
     >
       {/* `layout` alone sizes this. The old version also animated width/height
           to `auto`/`min-content`, which Framer cannot interpolate — the two
-          systems fought and the island snapped on open. min-w-sm (384px) also
-          overflowed any phone narrower than that; it is a max now. */}
+          systems fought and the island snapped on open.
+          `w-full max-w-sm` then pinned it to a constant 384px in a centred flex
+          parent, so `layout` could only ever animate height — an island that
+          cannot change width is an accordion. Worse, at md+ the collapsed row
+          measures 439px (16 + 134 logo + 16 + 177 socials + 16 + 72 controls +
+          8), so the content ran 55px past the cap and flex-shrink squeezed the
+          social hit targets from 32px to ~27px while their glyphs stayed 20px.
+          Content-sized now, capped against the viewport instead of a guess. */}
       <motion.div
         layout
         transition={NAV_SPRING}
         className={cn(
-          "flex w-full max-w-sm flex-col overflow-hidden rounded-3xl border border-border",
+          "flex w-auto max-w-[calc(100vw-2rem)] flex-col overflow-hidden rounded-3xl border border-border",
           "bg-background/80 backdrop-blur-xl shadow-lg pointer-events-auto",
         )}
         ref={ref}
       >
         {/* Rendered after the control row in the DOM so Tab moves from the
             toggle into the menu, not past it. `order` puts it back on top. */}
-        <div className="flex h-14 items-center justify-between gap-4 px-2 pl-4 order-2">
-          <motion.div layoutId="brand-logo">
+        {/* layout="position" so the row translates during the width morph
+            instead of being scaled by the projection, which stretches glyphs. */}
+        <motion.div
+          layout="position"
+          className="flex h-14 items-center justify-between gap-4 px-2 pl-4 order-2"
+        >
+          {/* shrink-0 throughout: these are icons and a wordmark, and a flex
+              deficit was resolving itself by compressing them. */}
+          <motion.div layoutId="brand-logo" className="shrink-0">
             <TransitionLink href="/" title="Home Page">
               <Logo size="sm" />
             </TransitionLink>
           </motion.div>
-          <motion.div layoutId="socials">
-            <Socials className="items-center gap-x-1 border-r border-border/50 hidden md:inline-flex" />
+          <motion.div layoutId="socials" className="shrink-0">
+            <Socials className="items-center gap-x-1 border-r border-border/50 hidden md:inline-flex [&>a]:shrink-0" />
           </motion.div>
-          <div className="flex items-center gap-1">
+          <div className="flex shrink-0 items-center gap-1">
             <ModeToggle />
             <button
               type="button"
@@ -182,7 +203,7 @@ function DynamicIslandNavbar({ animate = true }: { animate?: boolean }) {
               <MenuIcon isOpen={isOpen} />
             </button>
           </div>
-        </div>
+        </motion.div>
 
         <AnimatePresence initial={false}>
           {isOpen && (
@@ -192,7 +213,10 @@ function DynamicIslandNavbar({ animate = true }: { animate?: boolean }) {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.16, ease: [0.23, 1, 0.32, 1] }}
               id="dynamic-island-menu"
-              className="order-1 px-4 pb-2 pt-4 flex flex-col gap-4"
+              // A floor, not a fixed width. Below md the collapsed row is only
+              // ~246px (socials hidden), and the menu would otherwise open at
+              // that width with the tab pair crushed against each other.
+              className="order-1 flex min-w-[min(20rem,calc(100vw-2rem))] flex-col gap-4 px-4 pb-2 pt-4"
             >
               {/* role=tablist so the two panels announce as tabs, not buttons */}
               <div
@@ -334,12 +358,11 @@ function StaticNavbar({ animate = true }: { animate?: boolean }) {
       animate={{ opacity: 1, y: 0 }}
       exit={animate ? { opacity: 0, y: -16 } : undefined}
       transition={NAV_SPRING}
-      className="pointer-events-auto relative flex flex-col items-center w-full max-w-4xl"
+      className="pointer-events-auto absolute inset-x-0 top-0 mx-auto flex w-full max-w-4xl flex-col items-center"
     >
       <div className="flex items-center justify-between w-full gap-3">
         {/* Left capsule — logo + nav */}
         <motion.div
-          layoutId="brand-main"
           className="flex items-center gap-1 px-3 py-2 rounded-full border border-border/60 bg-background/70 backdrop-blur-xl shadow-sm shrink-0"
         >
           <TransitionLink
@@ -458,7 +481,7 @@ function MinimalNavbar({ animate = true }: { animate?: boolean }) {
 
   return (
     <motion.div
-      className="pointer-events-auto w-full mx-auto"
+      className="pointer-events-auto absolute inset-x-0 top-0 w-full"
       initial={animate ? { opacity: 0, y: -8 } : false}
       animate={{ opacity: 1, y: 0 }}
       exit={animate ? { opacity: 0, y: -8 } : undefined}
@@ -467,7 +490,6 @@ function MinimalNavbar({ animate = true }: { animate?: boolean }) {
       {/* The rule runs full-bleed; the row inside sits on the page measure. The
           bar used to be capped at max-w-3xl, so its bottom border floated. */}
       <motion.div
-        layoutId="brand-main"
         className="border-b border-border/50 bg-background/80 px-6 py-3 backdrop-blur-md"
       >
         <div className="mx-auto flex w-full max-w-5xl items-center justify-between gap-6">

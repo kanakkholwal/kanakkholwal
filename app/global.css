@@ -506,15 +506,22 @@
     scrollbar-gutter: stable;
   }
 
-  /* Radix locks scroll through react-remove-scroll-bar, which pads the body to
-     replace the scrollbar it just hid. The gutter above already reserves that
-     space, so the padding double-counts — and because the body is centred with
-     `margin-inline: auto` under border-box, it shifts the whole page sideways
-     every time a select or dialog opens. */
+  /* Radix locks scroll through react-remove-scroll-bar, which rewrites the
+     body's box to compensate for a scrollbar it hid. Its default `margin` gap
+     mode emits, among other things:
+
+       margin-left: 0;  margin-right: <gap>px !important;  padding-right: <gap>px;
+
+     `margin-left: 0` cancels this page's `margin-inline: auto`, so the whole
+     centred layout slams to the left edge the moment a select or dialog opens.
+     `scrollbar-gutter: stable` above means none of that compensation is needed
+     in the first place — the gutter was never given up. Undo all of it and keep
+     only the scroll lock itself. */
   body[data-scroll-locked] {
-    padding-right: 0 !important;
+    overflow: hidden !important;
+    margin-left: auto !important;
     margin-right: auto !important;
-    overflow-y: hidden !important;
+    padding-right: 0 !important;
   }
 
   button:not(:disabled),
@@ -580,6 +587,18 @@ body {
      pinned to the left edge on anything wider than the max. */
   max-width: var(--max-app-width);
   margin-inline: auto;
+
+  /* Two jobs. It clips any stray horizontal overflow — and, because `clip`
+     establishes a block formatting context, it keeps body's formatting context
+     *stable* when Radix sets `overflow: hidden` during a scroll lock. Without
+     it body flips from no-BFC to BFC as a select opens, which re-resolves
+     margin collapsing and shifts the page. `clip` is exempt from the rule that
+     coerces a `visible` sibling axis to `auto`, so this creates no scroll
+     container and leaves vertical scrolling alone.
+
+     This is a stabiliser, not a mask: the 11 grid tracks and the `min-w-screen`
+     that actually overflowed are fixed (findings 34, 45). */
+  overflow-x: clip;
 }
 
 ::view-transition-group(root) {

@@ -18,6 +18,7 @@ import { appConfig, resume_link } from "root/project.config";
 import useStorage from "@/hooks/use-storage";
 
 import Magnet from "@/components/animated/elements.magnet";
+import { ContainerTextFlip } from "@/components/animated/text.container-flip";
 import { SpotlightReveal } from "@/components/animated/section.reveal";
 import { TextFlip } from "@/components/animated/text-flip";
 import { Panel } from "@/components/application/panel";
@@ -197,8 +198,9 @@ function DynamicHero({ orbitData }: { orbitData?: HeroOrbitPayload } = {}) {
           </span>
         </div>
         {/* Was muted-foreground/50 — roughly 2.3:1. The subtle token is the
-            third tier and still clears 4.5:1. */}
-        <span className="hidden font-mono text-xs text-subtle-foreground sm:block">
+            third tier and still clears 4.5:1. Unconditional now: the orbit card
+            no longer repeats the location, and below sm the card is hidden. */}
+        <span className="font-mono text-xs text-subtle-foreground">
           {appConfig.location}
         </span>
       </motion.div>
@@ -240,17 +242,13 @@ function DynamicHero({ orbitData }: { orbitData?: HeroOrbitPayload } = {}) {
               className="flex flex-wrap items-center gap-3 text-[clamp(1rem,2.5vw,1.4rem)] font-semibold text-muted-foreground"
             >
               <span>I</span>
-              {/* Sits on the card so text-primary reads at 4.05:1 rather than
-                  the 3.42:1 a 10% primary wash gave. Width is a min, not a
-                  fixed 45 — a longer role used to clip. */}
-              <div className="min-w-44 overflow-hidden rounded-lg border border-primary/25 bg-card px-3 py-1">
-                <RotatingText
-                  texts={appConfig.applicableRoles}
-                  mainClassName="text-primary font-bold"
-                  rotationInterval={2800}
-                  transition={{ type: "spring", bounce: 0, duration: 0.4 }}
-                />
-              </div>
+              {/* text-primary on bg-card measures 4.93:1 light / 7.70:1 dark, so
+                  it holds at the clamp's 16px floor where large-text relief
+                  doesn't apply yet. */}
+              <ContainerTextFlip
+                words={appConfig.applicableRoles}
+                textClassName="font-bold text-primary"
+              />
             </motion.div>
           </motion.div>
 
@@ -289,8 +287,10 @@ function DynamicHero({ orbitData }: { orbitData?: HeroOrbitPayload } = {}) {
             </ButtonLink>
           </motion.div>
 
-          {/* Stat pills */}
-          <motion.div variants={fadeUp} className="flex flex-wrap gap-2">
+          {/* Stat pills — below md only. The orbit card owns these numbers from
+              md up (counted, larger, better ranked); rendering both put the same
+              three figures on screen twice, in a different order. */}
+          <motion.div variants={fadeUp} className="flex flex-wrap gap-2 md:hidden">
             {(orbitData
               ? [
                   { value: `${orbitData.stats.yearsExp}+`, label: "yrs exp" },
@@ -541,7 +541,8 @@ function StaticHero({ orbitData }: { orbitData?: HeroOrbitPayload } = {}) {
             </motion.h1>
             <Icon
               name="verified:color"
-              className="size-4 text-sky-500 select-none"
+              role="img"
+              className="size-4 text-primary select-none"
               aria-label="Verified"
             />
           </div>

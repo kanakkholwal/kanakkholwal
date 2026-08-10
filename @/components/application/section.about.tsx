@@ -1,14 +1,16 @@
 "use client";
 
+import { DynamicHeading } from "@/components/application/dynamic.heading";
+
+import { hingeDown, liftIn } from "@/components/animated/dynamic-motion";
 import BlurFade from "@/components/magicui/blur-fade";
 import { StyleModels, StylingModel } from "@/constants/ui";
 import useStorage from "@/hooks/use-storage";
 import { cn } from "@/lib/utils";
-import { motion, useInView } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { StyleSwap } from "@/components/animated/style-swap";
 import { Serif, StoryChapter, StoryReveal } from "@/components/application/story.frame";
-import { Code2, Cpu, Globe, Layers, Quote, Rocket } from "lucide-react";
-import { useRef } from "react";
+import { Code2, Cpu, Globe, Layers, Rocket } from "lucide-react";
 import Markdown from "react-markdown";
 import { appConfig } from "root/project.config";
 import { SpotlightReveal } from "../animated/section.reveal";
@@ -127,7 +129,7 @@ function MinimalAbout() {
         className={cn(
           "prose dark:prose-invert max-w-none",
           "prose-headings:tracking-tight prose-headings:font-bold",
-          "prose-p:leading-7 prose-p:text-zinc-600 dark:prose-p:text-zinc-300",
+          "prose-p:leading-7 prose-p:text-muted-foreground",
         )}
       >
         <Markdown>{appConfig.summary}</Markdown>
@@ -216,126 +218,84 @@ function StaticAbout() {
 //  Dynamic
 
 function DynamicAbout() {
+  const reduce = Boolean(useReducedMotion());
+  const { lede, rest } = splitLede(appConfig.summary);
+
   return (
     <section
       id="about"
-      className="relative w-full py-24 md:py-32 px-4 md:px-12 overflow-hidden mx-auto max-w-app"
+      className="relative mx-auto w-full max-w-app px-4 py-24 md:px-12 md:py-32"
     >
-
-
-      <div className="relative z-10 max-w-app mx-auto space-y-14">
-
+      <div className="space-y-16 md:space-y-20">
         {/* ── Header ── */}
         <BlurFade delay={BLUR_FADE_DELAY}>
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-            <div className="space-y-3">
-              <motion.span
-                layoutId="about-label"
-                className="inline-flex items-center gap-2 text-xs font-mono text-muted-foreground uppercase tracking-widest"
-              >
-                <Code2 className="size-3.5" />
-                About me
-              </motion.span>
-              <motion.h2
-                layoutId="about-heading"
-                className="text-4xl md:text-6xl font-bold tracking-tighter leading-none"
-              >
-                <span className="font-serif italic font-normal text-muted-foreground/70 mr-3">
-                  My
-                </span>
-                Approach
-              </motion.h2>
-            </div>
-
-            <div className="flex flex-wrap gap-2 md:justify-end md:max-w-xs">
-              {TRAITS.map((t) => (
-                <span
-                  key={t}
-                  className="px-3 py-1 rounded-full border border-primary/15 bg-primary/5 text-xs font-medium text-primary/80"
-                >
-                  {t}
-                </span>
-              ))}
-            </div>
-          </div>
+          <DynamicHeading id="about" label="About me" icon={Code2} serif="My">
+            Approach
+          </DynamicHeading>
         </BlurFade>
 
-        {/* ── Two-column body ── */}
-        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_360px] gap-10 lg:gap-16 items-start">
-
-          {/* Left — prose */}
-          <SummaryReveal text={appConfig.summary} />
-
-          {/* Right — pillars card with window chrome */}
-          <BlurFade delay={BLUR_FADE_DELAY * 6} className="lg:sticky lg:top-28">
-            <div className="group relative overflow-hidden rounded-2xl border border-border bg-card/50 backdrop-blur-xl shadow-xl">
-              {/* Window chrome */}
-              <div className="flex items-center justify-between px-4 py-3 border-b border-border/40 bg-card/60">
-                <div className="flex gap-1.5">
-                  <div className="size-2.5 rounded-full bg-red-500/30 border border-red-500/50" />
-                  <div className="size-2.5 rounded-full bg-amber-500/30 border border-amber-500/50" />
-                  <div className="size-2.5 rounded-full bg-emerald-500/30 border border-emerald-500/50" />
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="size-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                  <span className="text-2xs font-mono text-muted-foreground tracking-widest">
-                    engineering_pillars.ts
-                  </span>
-                </div>
-              </div>
-
-              {/* Pillars list */}
-              <div className="p-4 space-y-1">
-                {PILLARS.map(({ icon: Icon, label, description }, i) => (
-                  <motion.div
-                    key={label}
-                    initial={{ opacity: 0, x: 12 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.08 + i * 0.07, duration: 0.45 }}
-                    viewport={{ once: true }}
-                    className="group/item flex items-start gap-3 p-3 rounded-xl hover:bg-muted/40 transition-colors cursor-default"
-                  >
-                    <div className="mt-0.5 p-1.5 rounded-lg bg-primary/8 group-hover/item:bg-primary/15 transition-colors shrink-0">
-                      <Icon className="size-3.5 text-primary/70" />
-                    </div>
-                    <div className="space-y-0.5 min-w-0">
-                      <p className="text-xs font-semibold text-foreground">{label}</p>
-                      <p className="text-2xs text-muted-foreground leading-snug">{description}</p>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-
-              {/* Bottom bar */}
-              <div className="px-4 py-3 border-t border-border/40 bg-muted/20">
-                <p className="text-2xs font-mono text-muted-foreground/50 text-center tracking-wider">
-                  {PILLARS.length} core principles · always evolving
-                </p>
-              </div>
+        {/* ── Statement, then elaboration ──
+            The summary was a single undifferentiated prose block. Its first
+            sentence is the thesis; the rest is support. Setting them at one
+            size threw that away. */}
+        <div className="grid gap-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:gap-16">
+          <Reveal reduce={reduce}>
+            <p className="text-balance text-2xl font-medium leading-snug tracking-tight text-foreground md:text-3xl">
+              {lede}
+            </p>
+          </Reveal>
+          <Reveal reduce={reduce} delay={0.08}>
+            <div className="prose prose-base max-w-none text-pretty leading-relaxed text-muted-foreground dark:prose-invert prose-p:mb-4 prose-strong:font-semibold prose-strong:text-foreground">
+              <Markdown>{rest}</Markdown>
             </div>
-          </BlurFade>
+          </Reveal>
         </div>
 
-        {/* ── Sign-off ── */}
-        <motion.div
-          initial={{ opacity: 0, x: 16 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.3, duration: 0.7 }}
-          viewport={{ once: true }}
-          className="flex items-center gap-4 border-t border-border/40 pt-8"
-        >
-          <motion.div
-            animate={{ y: [0, -6, 0], rotate: [0, 3, 0] }}
-            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-            className="text-primary/10 select-none"
-            aria-hidden
-          >
-            <Quote size={32} />
-          </motion.div>
-          <span className="font-serif italic text-xl text-muted-foreground">
-            Always building.
-          </span>
-        </motion.div>
+        {/* ── Pillars ──
+            No cards. The rest of this variant is already card-heavy — hero
+            profile, work, projects, bento — and four more rounded boxes with
+            icon chips is the default shape, not a decision. A ruled four-column
+            spec reads as capability, and gives the section its own texture.
+            Each block hinges down off its own rule: the perspective device has
+            something to be hinged to, instead of floating for its own sake. */}
+        <div className="grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
+          {PILLARS.map(({ icon: Icon, label, description }, i) => (
+            <motion.div
+              key={label}
+              variants={hingeDown(reduce)}
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ delay: i * 0.07 }}
+              style={{ transformOrigin: "top" }}
+              className="group border-t border-border pt-5"
+            >
+              <Icon className="size-4 text-subtle-foreground transition-colors duration-200 ease-out group-hover:text-primary" />
+              <p className="mt-4 text-sm font-semibold tracking-tight text-foreground">
+                {label}
+              </p>
+              <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+                {description}
+              </p>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* ── Closing rail ──
+            The traits used to float in the header opposite the heading, four
+            adjectives with nothing to attach to that paraphrased the pillars
+            below them. Set as a single mono line they read as a summary of the
+            section rather than four more chips. */}
+        <Reveal reduce={reduce}>
+          <div className="flex flex-wrap items-baseline justify-between gap-x-8 gap-y-3 border-t border-border pt-6">
+            <p className="font-mono text-xs uppercase tracking-widest text-subtle-foreground">
+              {TRAITS.join(" · ")}
+            </p>
+            <span className="font-serif text-xl italic text-muted-foreground">
+              Always building.
+            </span>
+          </div>
+        </Reveal>
       </div>
     </section>
   );
@@ -343,40 +303,34 @@ function DynamicAbout() {
 
 // ─── helpers ──────────────────────────────────────────────────────────────────
 
-function SummaryReveal({ text }: { text: string }) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-80px" });
+/** First sentence carries the claim; the remainder supports it. */
+function splitLede(text: string) {
+  const match = text.match(/^(.*?[.!?])\s+([\s\S]+)$/);
+  return match
+    ? { lede: match[1], rest: match[2] }
+    : { lede: text, rest: "" };
+}
 
+/** No `filter: blur()` — it is paint-bound, and the hero dropped it for exactly
+ *  that reason. Dynamic reveals with depth instead. */
+function Reveal({
+  children,
+  reduce,
+  delay = 0,
+}: {
+  children: React.ReactNode;
+  reduce: boolean;
+  delay?: number;
+}) {
   return (
     <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 16, filter: "blur(8px)" }}
-      animate={isInView ? { opacity: 1, y: 0, filter: "blur(0px)" } : {}}
-      transition={{ duration: 0.7, ease: "easeOut" }}
-      className="prose prose-base md:prose-lg dark:prose-invert max-w-none text-muted-foreground leading-relaxed"
+      variants={liftIn(reduce)}
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ delay }}
     >
-      <Markdown
-        components={{
-          p: ({ children }) => <p className="mb-5 text-pretty">{children}</p>,
-          strong: ({ children }) => (
-            <span className="text-foreground font-semibold bg-primary/5 px-1 rounded">
-              {children}
-            </span>
-          ),
-          ul: ({ children }) => (
-            <ul className="space-y-2 mb-5 list-none border-l-2 border-primary/20 pl-5">
-              {children}
-            </ul>
-          ),
-          li: ({ children }) => (
-            <li className="relative pl-2 before:absolute before:left-[-20px] before:top-[10px] before:h-1.5 before:w-1.5 before:rounded-full before:bg-primary/50 before:content-['']">
-              {children}
-            </li>
-          ),
-        }}
-      >
-        {text}
-      </Markdown>
+      {children}
     </motion.div>
   );
 }

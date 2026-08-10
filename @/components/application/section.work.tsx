@@ -1,5 +1,7 @@
 "use client";
 
+import { DynamicHeading } from "@/components/application/dynamic.heading";
+
 import { WorkExperienceCard } from "@/components/card.work";
 import BlurFade from "@/components/magicui/blur-fade";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -8,7 +10,7 @@ import { StyleModels, StylingModel } from "@/constants/ui";
 import { motion } from "framer-motion";
 import { StyleSwap } from "@/components/animated/style-swap";
 import { Serif, StoryChapter, StoryReveal } from "@/components/application/story.frame";
-import { ArrowUpRight, BriefcaseBusinessIcon, InfinityIcon } from "lucide-react";
+import { ArrowUpRight, Briefcase, BriefcaseBusinessIcon, InfinityIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -120,30 +122,18 @@ function DynamicWork({ experiences }: { experiences: WorkExperienceType[] }) {
     <DynamicSection
       id="work"
     >
-      {/* Header */}
       <BlurFade delay={BLUR_FADE_DELAY * 4}>
         <div className="mb-16 md:mb-24">
-          <motion.span
-            layoutId="work-label"
-            className="inline-block text-xs font-mono font-medium tracking-widest uppercase text-muted-foreground mb-3"
+          <DynamicHeading
+            id="work"
+            label="Career"
+            icon={Briefcase}
+            serif="Professional"
+            lead="A record of roles, responsibilities, and technical impact."
           >
-            // Career
-          </motion.span>
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
-            <motion.h2
-              layoutId="work-heading"
-              className="text-4xl md:text-6xl font-bold tracking-tighter leading-none"
-            >
-              <span className="font-serif italic font-normal text-muted-foreground/70 mr-3">
-                Professional
-              </span>
-              Journey
-            </motion.h2>
-            <p className="text-sm text-muted-foreground max-w-xs leading-relaxed md:text-right">
-              A record of roles, responsibilities,<br className="hidden md:block" /> and technical impact.
-            </p>
-          </div>
-          <div className="mt-6 h-px w-full bg-gradient-to-r from-border via-border/40 to-transparent" />
+            Journey
+          </DynamicHeading>
+          <div className="mt-6 h-px w-full bg-linear-to-r from-border via-border/40 to-transparent" />
         </div>
       </BlurFade>
 
@@ -301,7 +291,7 @@ export function ExperienceItem({ experience }: { experience: WorkExperienceType 
         className={cn(
           "prose dark:prose-invert max-w-none",
           "prose-headings:font-mono prose-headings:tracking-tight prose-headings:font-bold",
-          "prose-p:font-mono prose-p:leading-6 prose-p:text-zinc-600 dark:prose-p:text-zinc-300",
+          "prose-p:font-mono prose-p:leading-6 prose-p:text-muted-foreground",
           "prose-li:font-mono",
           "pt-2 pl-9",
           // override typography anchor underline
@@ -374,7 +364,11 @@ function WorkCard({ work }: { work: WorkExperienceType }) {
         </div>
 
         {/* Role title */}
-        <h3 className="text-xl md:text-3xl font-bold tracking-tight leading-snug text-foreground group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-foreground group-hover:to-muted-foreground transition-all duration-500">
+        {/* A gradient cannot interpolate from `none`, so `transition-all
+            duration-500` animated nothing and the fill snapped. And it was
+            hover-only — no keyboard equivalent for the same card. A colour
+            transition actually animates, and works on focus. */}
+        <h3 className="text-xl font-bold leading-snug tracking-tight text-foreground transition-colors duration-200 ease-out group-hover:text-primary group-focus-visible:text-primary md:text-3xl">
           {work.title}
           {work.employmentType && (
             <span className="ml-3 align-middle font-mono text-2xs font-normal text-muted-foreground/50 uppercase tracking-widest not-italic">

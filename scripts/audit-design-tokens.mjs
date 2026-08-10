@@ -183,7 +183,15 @@ console.log("\nSTRUCTURE");
 const structural = [
   [!/ring-ring\/50/.test(CODE), "focus ring is not run at half opacity"],
   [/scrollbar-gutter:\s*stable/.test(CODE), "scrollbar gutter is reserved"],
-  [/body\[data-scroll-locked\]/.test(CODE), "scroll-lock padding compensation is neutralised"],
+  // react-remove-scroll-bar emits `margin-left: 0` alongside the padding gap.
+  // Undoing only the padding leaves a centred body slamming to the left edge
+  // every time a select or dialog opens, so both margins must be reclaimed.
+  [
+    /body\[data-scroll-locked\][^}]*margin-left:\s*auto\s*!important/.test(CODE) &&
+      /body\[data-scroll-locked\][^}]*margin-right:\s*auto\s*!important/.test(CODE) &&
+      /body\[data-scroll-locked\][^}]*padding-right:\s*0\s*!important/.test(CODE),
+    "scroll-lock reclaims both margins and the padding gap",
+  ],
   [/prefers-reduced-motion:\s*reduce/.test(CODE), "reduced-motion block exists"],
   [/@custom-variant hoverable/.test(CODE), "hoverable variant is defined"],
   [!/var\(--gray-100\)/.test(CODE), "no reference to the undefined --gray-100"],
@@ -223,10 +231,58 @@ function sourceGates() {
   // Tokens that no longer exist resolve to nothing, silently.
   const deadChart = offenders(/var\(--chart-(9|1[0-5])\)/);
 
+  // HARD RULE: a component may not serve two design variants through a prop.
+  // That is where the variants silently drift into each other.
+  const variantProp = offenders(/variant\?:\s*"(static|minimal|dynamic|story)"/);
+
+  // Colours baked into SVG chart attributes bypass the token system entirely,
+  // so they are only ever right in one theme.
+  const hardCodedSvg = offenders(/(?:stroke|fill)="#[0-9a-fA-F]{3,8}"/);
+
+  // Framer's transformPropOrder has no bare `perspective`, so putting it in a
+  // style object next to rotateX/rotateY emits the CSS property — which applies
+  // to children — and the element's own tilt loses its foreshortening. The
+  // transform-function form is `transformPerspective`. A `perspective` on a
+  // plain parent wrapping rotated children is correct and not matched here.
+  const flatTilt = files.filter((f) => {
+    const s = stripComments(read(f));
+    return [...s.matchAll(/style=\{\{([\s\S]{0,600}?)\}\}/g)].some(
+      ([, body]) => /\brotate[XY]\b/.test(body) && /(?<!transform)[Pp]erspective\s*:/.test(body),
+    );
+  });
+
+  // The homepage variants are fully tokenised; a raw palette utility there is
+  // theme-blind by construction and unmeasured against either surface.
+  const VARIANT_DIRS = ["@/components/application", "@/components/animated"];
+  const rawPalette = files.filter(
+    (f) =>
+      VARIANT_DIRS.some((d) => f.replace(/\\/g, "/").startsWith(d)) &&
+      /\b(?:bg|text|border|ring|from|via|to|fill|stroke|divide)-(?:red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose|zinc)-\d{2,3}\b/.test(
+        stripComments(read(f)),
+      ),
+  );
+
+  // Gradient text whose tail runs below ~50% alpha: `to-foreground/30` measures
+  // 1.93:1 light and 2.40:1 dark, and it always lands on the half of the
+  // headline the sentence was building toward.
+  const fadedText = offenders(
+    /bg-clip-text[\s\S]{0,220}?\b(?:via|to)-(?:foreground|primary)\/(?:[0-9]|[0-4][0-9])\b/,
+  );
+
+  // react-markdown emits its own <p>; a <p> inside a <p> is auto-closed by the
+  // parser, so the rendered DOM is not the one in the source.
+  const nestedP = offenders(/<p[^>]*>\s*(?:\{\s*)?<Markdown/);
+
   return [
+    [fadedText.length === 0, `no gradient text fading below legibility${fadedText.length ? ` (${fadedText[0]}…)` : ""}`],
+    [nestedP.length === 0, `no <Markdown> inside a <p>${nestedP.length ? ` (${nestedP[0]}…)` : ""}`],
+    [flatTilt.length === 0, `perspective tilts use transformPerspective${flatTilt.length ? ` (${flatTilt[0]}…)` : ""}`],
+    [rawPalette.length === 0, `homepage variants use tokens, not raw palette${rawPalette.length ? ` (${rawPalette[0]}…)` : ""}`],
     [serif.length === 0, `no dead font-instrument-serif class${serif.length ? ` (${serif[0]}…)` : ""}`],
     [shadow.length === 0, `nothing shadows the --accent design token${shadow.length ? ` (${shadow[0]}…)` : ""}`],
     [deadChart.length === 0, `no references to deleted chart tokens${deadChart.length ? ` (${deadChart[0]}…)` : ""}`],
+    [variantProp.length === 0, `no component branches on a design-variant prop${variantProp.length ? ` (${variantProp[0]}…)` : ""}`],
+    [hardCodedSvg.length === 0, `no hard-coded colours in SVG chart attributes${hardCodedSvg.length ? ` (${hardCodedSvg[0]}…)` : ""}`],
   ];
 }
 for (const [passed, label] of structural) {

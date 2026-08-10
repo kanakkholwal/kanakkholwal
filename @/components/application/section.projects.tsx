@@ -1,4 +1,6 @@
 "use client";
+
+import { DynamicHeading } from "@/components/application/dynamic.heading";
 import {
   ExpandableProjectCards
 } from "@/components/application/projects.card";
@@ -14,7 +16,7 @@ import { getProjectList } from "@/lib/project.source";
 import { getStory } from "~/data/story";
 import { motion, useReducedMotion } from "framer-motion";
 import { StyleSwap } from "@/components/animated/style-swap";
-import { ArrowRight, BarChart2, BoxIcon, FolderOpen, Layers } from "lucide-react";
+import { ArrowRight, BarChart2, BoxIcon, FolderGit2, FolderOpen, Layers } from "lucide-react";
 import Link from "next/link";
 import { useMemo } from "react";
 import { Icon } from "../icons";
@@ -322,28 +324,15 @@ function DynamicProjects({ projects }: { projects: ReturnType<typeof getProjectL
       className="w-full space-y-16 px-6 py-24 md:px-12"
     >
       <BlurFade delay={BLUR_FADE_DELAY * 11}>
-        <div className="relative z-10 mb-16 flex flex-col items-center space-y-4 text-center">
-          <motion.span
-            layoutId="projects-label"
-            className="font-mono text-xs uppercase tracking-widest text-muted-foreground"
-          >
-            Portfolio
-          </motion.span>
-          <motion.h2
-            layoutId="projects-heading"
-            className="text-balance text-4xl font-bold md:text-6xl"
-          >
-            {/* `font-serif` is not a generated utility — the serif
-                treatment never rendered. The theme exposes it as `font-serif`. */}
-            <span className="mr-3 font-serif font-normal italic text-muted-foreground">
-              Real world
-            </span>
-            Projects
-          </motion.h2>
-          <p className="max-w-xl text-lg text-muted-foreground">
-            From full-stack applications to open-source libraries.
-          </p>
-        </div>
+        <DynamicHeading
+          id="projects"
+          label="Portfolio"
+          icon={FolderGit2}
+          serif="Real world"
+          lead="From full-stack applications to open-source libraries."
+        >
+          Projects
+        </DynamicHeading>
       </BlurFade>
 
       <ExpandableProjectCards cards={projects} />

@@ -370,9 +370,11 @@ function DynamicContact({
             >
               Let’s build the{" "}
               <br className="hidden md:block" />
-              <span className="text-transparent bg-clip-text bg-linear-to-r from-foreground via-foreground/80 to-foreground/30">
-                next big thing.
-              </span>
+              {/* Was a gradient fading to foreground/30 — 1.93:1 light,
+                  2.40:1 dark, on the payoff half of the headline. Muted is the
+                  same de-emphasis the other section headings use, and measures
+                  5.75:1 / 7.96:1. */}
+              <span className="text-muted-foreground">next big thing.</span>
             </motion.h2>
             <p className="text-base text-muted-foreground max-w-xs mx-auto md:mx-0 leading-relaxed">
               Open to freelance, collabs, and full-time roles. Let’s turn

@@ -28,30 +28,33 @@ import Markdown from "react-markdown";
 import { Icon, IconType } from "../icons";
 import { ProjectFallback } from "./projects.card.fallback";
 
-/*
-   STATUS badge colours
-─ */
+// Semantic tokens, and no fill. On the raw palette these read 1.99:1 (amber),
+// 2.31:1 (emerald) and 3.28:1 (blue) against their own /10 wash in light theme;
+// even the tokens only reach 4.3–4.7:1 through a wash. Unfilled, the worst pair
+// is 4.76:1. The tinted border still carries the hue.
 const STATUS_STYLES: Record<string, string> = {
-  "In Progress": "bg-amber-500/10 border-amber-500/30 text-amber-500",
-  Active: "bg-emerald-500/10 border-emerald-500/30 text-emerald-500",
-  Shipped: "bg-blue-500/10 border-blue-500/30 text-blue-500",
-  Completed: "bg-blue-500/10 border-blue-500/30 text-blue-500",
-  Archived: "bg-zinc-500/10 border-zinc-500/30 text-zinc-400",
+  "In Progress": "border-warning/35 text-warning",
+  Active: "border-success/35 text-success",
+  Shipped: "border-info/35 text-info",
+  Completed: "border-info/35 text-info",
+  Archived: "border-border text-subtle-foreground",
 };
 
 function StatusBadge({ status }: { status?: string }) {
   if (!status) return null;
   const cls =
-    STATUS_STYLES[status] ?? "bg-muted border-border text-muted-foreground";
+    STATUS_STYLES[status] ?? "border-border text-muted-foreground";
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-2xs font-mono font-semibold uppercase tracking-widest border",
+        // Opaque surface, not a tint. Two of the three placements sit on top of
+        // project artwork, so the backdrop is otherwise whatever the photo is.
+        "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-card text-2xs font-mono font-semibold uppercase tracking-widest border",
         cls,
       )}
     >
       <span className="relative flex h-1.5 w-1.5">
-        <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 bg-current" />
+        <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 bg-current motion-reduce:animate-none" />
         <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-current" />
       </span>
       {status}
@@ -96,9 +99,12 @@ export function ExpandableProjectCards({
               <ScrollArea className="flex-1 overflow-y-auto">
                 <div className="p-5 space-y-6">
                   {/* description */}
-                  <p className="text-sm text-muted-foreground leading-relaxed">
+                  {/* Not a <p>. react-markdown emits its own <p>, and a <p>
+                      inside a <p> is auto-closed by the parser — the DOM that
+                      renders is not the one written here. */}
+                  <div className="text-sm leading-relaxed text-muted-foreground">
                     <Markdown>{active.description}</Markdown>
-                  </p>
+                  </div>
                   {/* metrics */}
                   {active.metrics && active.metrics.length > 0 && (
                     <div>
@@ -232,18 +238,26 @@ function ExpandableCard({
   return (
     <motion.button
       onClick={onClick}
-      whileHover={isActive ? {} : { y: -4, scale: 1.01 }}
+      type="button"
+      aria-haspopup="dialog"
+      aria-expanded={isActive}
+      // Without this the name is the concatenation of everything inside —
+      // status, title, dates and every technology chip, read as one string.
+      aria-label={`${card.title} — view details`}
+      // Lift only. `scale` scales an element's children, so 1.01 resampled the
+      // title and chips on every hover, and compounded with the image's own
+      // group-hover:scale-105.
+      whileHover={isActive ? {} : { y: -4 }}
       transition={{ type: "spring", stiffness: 360, damping: 30 }}
       className={cn(
-        "group relative flex flex-col text-left w-full overflow-hidden",
-        "bg-card border border-border",
+        "group relative flex w-full flex-col overflow-hidden rounded-3xl text-left",
+        "border border-border bg-card",
         "transition-shadow duration-300 hover:shadow-2xl dark:hover:shadow-black/60",
-        isActive && "opacity-40 pointer-events-none",
+        isActive && "pointer-events-none opacity-40",
       )}
-      style={{ borderRadius: 24 }}
     >
       {/* Media */}
-      <div className="relative aspect-[16/10] w-full overflow-hidden bg-zinc-900">
+      <div className="relative aspect-16/10 w-full overflow-hidden bg-muted">
         {card.image ? (
           <Image
             src={card.image}
@@ -252,11 +266,7 @@ function ExpandableCard({
             className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
           />
         ) : (
-          <ProjectFallback
-            title={card.title}
-            description={card.description}
-            meta={card.dates}
-          />
+          <ProjectFallback title={card.title} meta={card.dates} />
         )}
 
         {/* Status - top left */}
@@ -265,8 +275,11 @@ function ExpandableCard({
         </div>
 
         {/* Expand hint - top right */}
-        <div className="absolute top-3 right-3 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-2xs font-mono text-white/80">
+        {/* Was black/60 + white/80 — theme-blind, and unmeasurable over whatever
+            the artwork happens to be. Also hover-only, so the sole affordance
+            saying the card opens something never reached the keyboard. */}
+        <div className="absolute right-3 top-3 z-10 opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100">
+          <div className="flex items-center gap-1.5 rounded-full border border-border bg-background px-2.5 py-1 font-mono text-2xs text-foreground">
             <ArrowUpRight className="size-3" />
             Details
           </div>
@@ -276,9 +289,7 @@ function ExpandableCard({
       {/* Info strip */}
       <div className="px-4 py-3.5 flex items-center justify-between gap-3 bg-card border-t border-border/60">
         <div className="min-w-0 space-y-1.5">
-          {/* Image cards need their title/date here; the branded fallback
-              already shows them, so skip to avoid repeating. */}
-          {card.image && (
+          {card.image ? (
             <div>
               <h3 className="truncate text-sm font-bold leading-snug text-foreground">
                 {card.title}
@@ -288,12 +299,17 @@ function ExpandableCard({
                 {card.dates}
               </p>
             </div>
+          ) : (
+            // The branded fallback draws the title as artwork, so repeating it
+            // visually is noise — but skipping the element left every image-less
+            // project with no heading at all, and out of the document outline.
+            <h3 className="sr-only">{card.title}</h3>
           )}
           <div className="flex flex-wrap gap-1">
             {card.technologies?.slice(0, 3).map((tech) => (
               <span
                 key={tech}
-                className="inline-flex items-center px-1.5 py-0.5 rounded-[4px] bg-muted text-2xs text-muted-foreground border border-border/60"
+                className="inline-flex items-center px-1.5 py-0.5 rounded-sm bg-muted text-2xs text-muted-foreground border border-border/60"
               >
                 {tech}
               </span>
@@ -305,7 +321,7 @@ function ExpandableCard({
             )}
           </div>
         </div>
-        <div className="flex items-center justify-center size-8 rounded-full border border-border bg-muted/40 text-muted-foreground group-hover:bg-foreground group-hover:text-background group-hover:border-foreground transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 shrink-0">
+        <div className="flex size-8 shrink-0 items-center justify-center rounded-full border border-border bg-muted/40 text-muted-foreground transition-[color,background-color,border-color,transform] duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:border-foreground group-hover:bg-foreground group-hover:text-background">
           <ArrowUpRight className="size-3.5" />
         </div>
       </div>
@@ -374,12 +390,13 @@ function ProjectCard({
         onMouseLeave={handleMouseLeave}
         className={cn(
           "group relative h-full flex flex-col overflow-hidden rounded-3xl",
-          "bg-zinc-50 dark:bg-zinc-900/40",
-          "border border-zinc-200 dark:border-white/10",
-          "p-2 transition-all duration-300 hover:border-zinc-300 dark:hover:border-white/20",
+          "bg-card border border-border",
+          // transition-all animates every property including layout ones; only the
+          // border colour actually changes here.
+          "p-2 transition-colors duration-300 hoverable:border-input",
         )}
       >
-        <div className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl bg-zinc-200 dark:bg-zinc-800 border border-black/5 dark:border-white/5">
+        <div className="relative aspect-16/10 w-full overflow-hidden rounded-2xl bg-muted border border-border">
           {card.video ? (
             <motion.div
               initial={{ opacity: 0 }}
@@ -407,7 +424,7 @@ function ProjectCard({
               )}
             />
           ) : (
-            <ProjectFallback title={card.title} description={card.description} />
+            <ProjectFallback title={card.title} meta={card.dates} />
           )}
 
           <div className="absolute top-3 left-3 z-20">
@@ -426,10 +443,10 @@ function ProjectCard({
         <div className="flex flex-col flex-1 px-2 pt-5 pb-2">
           <div className="flex items-start justify-between mb-3">
             <div>
-              <h3 className="text-lg font-bold tracking-tight text-zinc-900 dark:text-zinc-100 group-hover:text-primary transition-colors">
+              <h3 className="text-lg font-bold tracking-tight text-foreground group-hover:text-primary transition-colors">
                 {card.title}
               </h3>
-              <div className="flex items-center gap-2 text-xs text-zinc-500 dark:text-zinc-400 font-mono mt-1">
+              <div className="flex items-center gap-2 text-xs text-subtle-foreground font-mono mt-1">
                 <span>{card.dates}</span>
                 {card.tags?.[0] && (
                   <>
@@ -440,27 +457,27 @@ function ProjectCard({
               </div>
             </div>
 
-            <div className="relative flex items-center justify-center w-8 h-8 rounded-full border border-zinc-200 dark:border-white/10 bg-white dark:bg-zinc-800 text-zinc-400 group-hover:bg-zinc-900 group-hover:dark:bg-white group-hover:text-white group-hover:dark:text-black transition-all duration-300 group-hover:-translate-y-1 group-hover:translate-x-1 shrink-0">
+            <div className="relative flex items-center justify-center w-8 h-8 rounded-full border border-border bg-card text-muted-foreground group-hover:border-primary group-hover:bg-primary group-hover:text-primary-foreground transition-[color,background-color,border-color,transform] duration-300 group-hover:-translate-y-1 group-hover:translate-x-1 shrink-0">
               <ArrowUpRight className="w-4 h-4" />
             </div>
           </div>
 
-          <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed line-clamp-2 mb-6">
+          <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2 mb-6">
             {card.description}
           </p>
 
-          <div className="mt-auto pt-4 border-t border-dashed border-zinc-200 dark:border-white/10">
+          <div className="mt-auto pt-4 border-t border-dashed border-border">
             <div className="flex flex-wrap gap-2">
               {card.tags?.slice(0, 3).map((tag, i) => (
                 <span
                   key={i}
-                  className="inline-flex items-center px-2 py-1 rounded-md bg-zinc-100 dark:bg-zinc-800/50 text-2xs font-medium text-zinc-500 dark:text-zinc-400 border border-transparent group-hover:border-zinc-200 group-hover:dark:border-white/10 transition-colors"
+                  className="inline-flex items-center px-2 py-1 rounded-md bg-muted text-2xs font-medium text-muted-foreground border border-transparent group-hover:border-border transition-colors"
                 >
                   {tag}
                 </span>
               ))}
               {card.tags && card.tags.length > 3 && (
-                <span className="text-2xs py-1 text-zinc-400 self-center">
+                <span className="text-2xs py-1 text-subtle-foreground self-center">
                   +{card.tags.length - 3}
                 </span>
               )}

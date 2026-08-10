@@ -315,9 +315,8 @@ function DynamicProjects({
               <h3 className="text-3xl font-bold tracking-tight leading-tight">
                 Curious about
                 <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-foreground via-foreground/70 to-foreground/30">
-                  the numbers?
-                </span>
+                {/* Same gradient tail as the contact heading: 1.93:1 light. */}
+                <span className="text-muted-foreground">the numbers?</span>
               </h3>
               <p className="text-sm text-muted-foreground max-w-xs mx-auto md:mx-0">
                 Commit history, open-source contributions, and GitHub activity,

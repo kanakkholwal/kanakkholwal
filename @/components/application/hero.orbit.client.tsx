@@ -1,15 +1,26 @@
 "use client";
 
 import { CountingNumber } from "@/components/animated/text.counter";
-import { Icon, IconType } from "@/components/icons";
-import { Variants, motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { Icon } from "@/components/icons";
+import {
+  DEPTH,
+  TILT_DEGREES,
+  TILT_RANGE,
+  TILT_SPRING,
+} from "@/components/animated/dynamic-motion";
+import {
+  Variants,
+  motion,
+  useMotionValue,
+  useReducedMotion,
+  useSpring,
+  useTransform,
+} from "framer-motion";
 import Image from "next/image";
 import * as React from "react";
 import { appConfig } from "root/project.config";
 import type { HeroOrbitActivityItem } from "~/api/github";
 import { HeroOrbitRow } from "./hero.orbit.shared";
-
-const ORBIT_INNER = ["github", "linkedin", "twitter"] as const;
 
 export type HeroOrbitProps = {
   stats: {
@@ -23,20 +34,22 @@ export type HeroOrbitProps = {
 };
 
 export function HeroOrbit({ stats, activity, fallback = false }: HeroOrbitProps) {
+  const reduce = useReducedMotion();
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const rotateX = useTransform(
-    useSpring(y, { stiffness: 380, damping: 80 }),
-    [-0.4, 0.4],
-    [10, -10],
+    useSpring(y, TILT_SPRING),
+    TILT_RANGE,
+    [TILT_DEGREES, -TILT_DEGREES],
   );
   const rotateY = useTransform(
-    useSpring(x, { stiffness: 380, damping: 80 }),
-    [-0.4, 0.4],
-    [-10, 10],
+    useSpring(x, TILT_SPRING),
+    TILT_RANGE,
+    [-TILT_DEGREES, TILT_DEGREES],
   );
 
   function onMouseMove({ currentTarget, clientX, clientY }: React.MouseEvent) {
+    if (reduce) return;
     const { left, top, width, height } = currentTarget.getBoundingClientRect();
     x.set((clientX - left) / width - 0.5);
     y.set((clientY - top) / height - 0.5);
@@ -59,16 +72,32 @@ export function HeroOrbit({ stats, activity, fallback = false }: HeroOrbitProps)
 
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.9, y: 16 }}
-      animate={{ opacity: 1, scale: 1, y: 0 }}
-      transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.3 }}
+      // Entrance touches scale/y/opacity only. rotateX/rotateY belong to the
+      // pointer MotionValues below; animating them here too would give one
+      // transform prop two writers.
+      initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.94, y: 20 }}
+      animate={reduce ? { opacity: 1 } : { opacity: 1, scale: 1, y: 0 }}
+      transition={
+        reduce
+          ? { duration: 0.2 }
+          : { type: "spring", bounce: 0, duration: 0.6, delay: 0.25 }
+      }
       className="w-full max-w-85 select-none"
       onMouseMove={onMouseMove}
       onMouseLeave={() => {
         x.set(0);
         y.set(0);
       }}
-      style={{ rotateX, rotateY, transformStyle: "preserve-3d", perspective: 900 }}
+      // `transformPerspective`, not `perspective`. Framer's transformPropOrder
+      // has no bare `perspective`, so that emitted the CSS property — which
+      // applies to children — and the card's own tilt rendered as a flat shear
+      // with no foreshortening.
+      style={{
+        rotateX,
+        rotateY,
+        transformPerspective: DEPTH,
+        transformStyle: "preserve-3d",
+      }}
     >
       {/* Fluid, capped. A fixed w-[340px] overflowed its grid column whenever
           the column shrank below that. */}
@@ -111,12 +140,18 @@ export function HeroOrbit({ stats, activity, fallback = false }: HeroOrbitProps)
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-1.5">
               <p className="text-sm font-semibold truncate">{appConfig.displayName}</p>
-              <Icon name="verified:color" className="size-3.5 text-sky-500 shrink-0" />
+              {/* text-sky-500 is 2.77:1 on the light card and belongs to no
+                  token. Same mark, same meaning as Minimal's — same colour. */}
+              <Icon
+                name="verified:color"
+                role="img"
+                aria-label="Verified"
+                className="size-3.5 text-primary shrink-0"
+              />
             </div>
             <p className="text-xs text-muted-foreground truncate">{appConfig.role}</p>
-            <p className="text-2xs text-muted-foreground/60 mt-0.5 font-mono truncate">
-              {appConfig.location}
-            </p>
+            {/* Location lives in the hero's status strip. It was printed here
+                too, ~600px away in the same viewport. */}
           </div>
         </div>
 
@@ -135,11 +170,13 @@ export function HeroOrbit({ stats, activity, fallback = false }: HeroOrbitProps)
         {/* Activity feed */}
         <div className="px-4 py-3">
           <div className="flex items-center justify-between mb-2">
-            <p className="text-2xs font-mono text-muted-foreground/50 uppercase tracking-widest">
+            {/* /50 and /40 measured 2.15:1 and 1.81:1 on the light card. The
+                third text tier exists precisely so these aren't alpha guesses. */}
+            <p className="text-2xs font-mono text-subtle-foreground uppercase tracking-widest">
               Recent activity
             </p>
             {fallback && (
-              <span className="text-2xs font-mono text-muted-foreground/40 uppercase tracking-widest">
+              <span className="text-2xs font-mono text-subtle-foreground uppercase tracking-widest">
                 cached
               </span>
             )}
@@ -160,37 +197,25 @@ export function HeroOrbit({ stats, activity, fallback = false }: HeroOrbitProps)
               </motion.li>
             ))}
             {activity.length === 0 && (
-              <li className="text-2xs text-muted-foreground/60 italic py-1">
+              <li className="text-2xs text-subtle-foreground italic py-1">
                 No recent activity to show.
               </li>
             )}
           </motion.ul>
         </div>
 
-        {/* Social footer */}
-        <div className="flex items-center justify-between px-5 py-3 border-t border-border/30">
-          {ORBIT_INNER.map((key) => (
-            <a
-              key={key}
-              href={appConfig.social[key]}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
-            >
-              <Icon name={key as IconType} className="size-3.5" />
-              <span className="capitalize font-medium text-2xs">{key}</span>
-            </a>
-          ))}
-          <a
-            href={appConfig.social["cal.com"]}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
-          >
-            <Icon name="cal.com" className="size-3.5" />
-            <span className="font-medium text-2xs">Book a call</span>
-          </a>
-        </div>
+        {/* Footer — one action, not a second social list. The hero's own strip
+            already renders every social link a few hundred pixels below this,
+            and the two disagreed on labels ("Twitter" vs "X Twitter"). */}
+        <a
+          href={appConfig.social["cal.com"]}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex min-h-11 items-center justify-center gap-2 border-t border-border/30 px-5 text-sm font-medium text-primary transition-colors duration-150 ease-out hoverable:bg-primary/8"
+        >
+          <Icon name="cal.com" className="size-4" />
+          Book a call
+        </a>
       </div>
     </motion.div>
   );

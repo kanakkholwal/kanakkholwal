@@ -78,9 +78,8 @@ function BentoCard({
       }}
       className={cn(
         "group relative flex flex-col justify-between overflow-hidden rounded-3xl",
-        "bg-white/50 dark:bg-zinc-900/50", // Light/Dark Backgrounds
-        "border border-zinc-200 dark:border-white/10", // Light/Dark Borders
-        "p-6 md:p-8 hover:bg-white/80 dark:hover:bg-zinc-900/80 transition-colors duration-500",
+        "bg-card/50 border border-border",
+        "p-6 md:p-8 hoverable:bg-card/80 transition-colors duration-500",
         className,
       )}
       onMouseMove={handleMouseMove}
@@ -120,11 +119,10 @@ function BentoCard({
           <div
             className={cn(
               "inline-flex items-center justify-center rounded-xl p-3 shadow-sm transition-transform group-hover:scale-105 duration-300",
-              "bg-zinc-100 dark:bg-zinc-800/50", // Light/Dark Icon Bg
-              "ring-1 ring-inset ring-black/5 dark:ring-white/10",
+              "bg-muted ring-1 ring-inset ring-border",
             )}
           >
-            <Icon className="h-5 w-5 text-zinc-800 dark:text-zinc-100" />
+            <Icon className="h-5 w-5 text-foreground" />
           </div>
           <Globe className="h-12 w-12 text-black/5 dark:text-white/5 absolute -right-2 -top-2 opacity-0 group-hover:opacity-100 transition-all duration-500 rotate-12" />
         </div>
@@ -150,10 +148,8 @@ function SkillPill({ icon }: { icon: string }) {
       whileHover={{ scale: 1.05, y: -2 }}
       className={cn(
         "group/pill flex items-center gap-2 rounded-lg border px-3 py-1.5 text-xs font-medium transition-all cursor-default",
-        // Light Mode Styles
-        "bg-white border-zinc-200 text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900 hover:border-zinc-300",
-        // Dark Mode Styles
-        "dark:bg-zinc-800/50 dark:border-white/5 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100 dark:hover:border-white/20",
+        "bg-card border-border text-muted-foreground",
+        "hoverable:bg-accent hoverable:text-foreground hoverable:border-input",
       )}
     >
       <div className="relative h-4 w-4 overflow-hidden rounded-[4px] grayscale opacity-60 transition-all duration-300 group-hover/pill:grayscale-0 group-hover/pill:opacity-100">

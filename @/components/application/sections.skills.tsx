@@ -1,11 +1,13 @@
 "use client";
 
+import { DynamicHeading } from "@/components/application/dynamic.heading";
+
 import { StyleSwap } from "@/components/animated/style-swap";
 import { Serif, StoryChapter, StoryReveal } from "@/components/application/story.frame";
 import { StyleModels, StylingModel } from "@/constants/ui";
 import useStorage from "@/hooks/use-storage";
 import { motion } from "framer-motion";
-import { Cloud, Database, Layout, Server, Terminal } from "lucide-react";
+import { Cloud, Database, Layout, Server, Terminal, Wrench } from "lucide-react";
 import Image from "next/image";
 import { appConfig } from "root/project.config";
 
@@ -208,27 +210,16 @@ function DynamicSkills() {
       className="relative overflow-hidden"
     >
 
-      <div className="flex flex-col items-center text-center mb-16 space-y-4 relative z-10">
-        <motion.span
-          layoutId="skills-label"
-          className="text-sm font-mono text-muted-foreground uppercase tracking-widest"
-        >
-          {`// The Toolkit`}
-        </motion.span>
-        <motion.h2
-          layoutId="skills-heading"
-          className="text-4xl md:text-6xl font-bold tracking-tighter text-foreground"
-        >
-          <span className="font-serif italic font-normal text-muted-foreground/80 mr-3">
-            My Technical
-          </span>
-          <span>Arsenal</span>
-        </motion.h2>
-        <p className="max-w-xl text-muted-foreground text-lg">
-          A comprehensive suite of tools and technologies I use to architect
-          scalable digital solutions.
-        </p>
-      </div>
+      <DynamicHeading
+        id="skills"
+        label="The toolkit"
+        icon={Wrench}
+        serif="My technical"
+        lead="A comprehensive suite of tools and technologies I use to architect scalable digital solutions."
+        className="mb-16"
+      >
+        Arsenal
+      </DynamicHeading>
 
       <BentoSkillsSection categories={CATEGORIES} />
     </DynamicSection>
