@@ -5,32 +5,47 @@ import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { Icon } from "./icons";
 
+// system -> light -> dark -> system. A two-state toggle makes "follow the OS"
+// unreachable the moment it is clicked once.
+const ORDER = ["system", "light", "dark"] as const;
+type Mode = (typeof ORDER)[number];
+
+const LABEL: Record<Mode, string> = {
+  system: "System theme",
+  light: "Light theme",
+  dark: "Dark theme",
+};
+
 export function ModeToggle() {
-  // `theme` can be the literal "system" — switching off it would leave the
-  // rendered appearance unchanged, so branch on what's actually on screen.
-  const { resolvedTheme, setTheme } = useTheme();
+  const { theme, resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => setMounted(true), []);
 
+  const current = (mounted ? (theme as Mode) : "system") ?? "system";
+  const next = ORDER[(ORDER.indexOf(current) + 1) % ORDER.length];
   const isDark = resolvedTheme === "dark";
-  const nextTheme = isDark ? "light" : "dark";
 
   return (
     <Button
       variant="ghost"
-      type="button"
       size="icon_sm"
       rounded="full"
-      className="hover:[&>svg]:rotate-360 [&>svg]:duration-500"
-      onClick={() => setTheme(nextTheme)}
-      aria-pressed={mounted ? isDark : undefined}
+      onClick={() => setTheme(next)}
       // Before hydration we don't know the resolved theme, so keep the label
       // generic rather than announcing a state that may be wrong.
-      aria-label={mounted ? `Switch to ${nextTheme} theme` : "Toggle theme"}
+      aria-label={mounted ? `Theme: ${LABEL[current]}. Switch to ${LABEL[next].toLowerCase()}` : "Toggle theme"}
     >
-      <Icon name="sun" className="dark:hidden" />
-      <Icon name="moon" className="hidden dark:block" />
+      {/* A hard swap, not a 360° spin. The old spin declared duration-500 with
+          no transition-property, so it snapped anyway — and a control used
+          dozens of times a session should not animate at all. */}
+      {mounted && current === "system" ? (
+        <Icon name="monitor" />
+      ) : isDark ? (
+        <Icon name="moon" />
+      ) : (
+        <Icon name="sun" />
+      )}
     </Button>
   );
 }

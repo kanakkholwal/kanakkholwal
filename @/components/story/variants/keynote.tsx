@@ -127,7 +127,7 @@ function Slide({ chapter, no }: { chapter: StoryChapter; no: number }) {
         {f.beats.map((beat) => (
           <div key={beat.id}>
             <p className="text-sm font-medium text-muted-foreground">{beat.heading}</p>
-            <p className="mt-0.5 text-[15px] leading-relaxed text-foreground/85">
+            <p className="mt-0.5 text-base leading-relaxed text-foreground/85">
               {beat.body}
             </p>
           </div>

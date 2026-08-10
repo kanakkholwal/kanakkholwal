@@ -196,7 +196,7 @@ function StaticAbout() {
               >
                 <Icon className="size-4 text-muted-foreground" />
                 <span className="text-xs font-semibold text-foreground">{label}</span>
-                <span className="text-[11px] text-muted-foreground leading-snug">{description}</span>
+                <span className="text-2xs text-muted-foreground leading-snug">{description}</span>
               </div>
             ))}
           </div>
@@ -261,7 +261,7 @@ function DynamicAbout() {
         </BlurFade>
 
         {/* ── Two-column body ── */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-10 lg:gap-16 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_360px] gap-10 lg:gap-16 items-start">
 
           {/* Left — prose */}
           <SummaryReveal text={appConfig.summary} />
@@ -278,7 +278,7 @@ function DynamicAbout() {
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="size-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                  <span className="text-[10px] font-mono text-muted-foreground tracking-widest">
+                  <span className="text-2xs font-mono text-muted-foreground tracking-widest">
                     engineering_pillars.ts
                   </span>
                 </div>
@@ -300,7 +300,7 @@ function DynamicAbout() {
                     </div>
                     <div className="space-y-0.5 min-w-0">
                       <p className="text-xs font-semibold text-foreground">{label}</p>
-                      <p className="text-[11px] text-muted-foreground leading-snug">{description}</p>
+                      <p className="text-2xs text-muted-foreground leading-snug">{description}</p>
                     </div>
                   </motion.div>
                 ))}
@@ -308,7 +308,7 @@ function DynamicAbout() {
 
               {/* Bottom bar */}
               <div className="px-4 py-3 border-t border-border/40 bg-muted/20">
-                <p className="text-[10px] font-mono text-muted-foreground/50 text-center tracking-wider">
+                <p className="text-2xs font-mono text-muted-foreground/50 text-center tracking-wider">
                   {PILLARS.length} core principles · always evolving
                 </p>
               </div>

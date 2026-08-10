@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Instrument_Serif, Quicksand } from "next/font/google";
 import { appConfig } from "root/project.config";
 import "./global.css";
@@ -68,6 +68,16 @@ export const metadata: Metadata = {
   },
 };
 
+// Without this the mobile browser chrome stays one theme while the page is in
+// the other. Values track --background in each theme block.
+export const viewport: Viewport = {
+  colorScheme: "light dark",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#fafafa" },
+    { media: "(prefers-color-scheme: dark)", color: "#0b0b0b" },
+  ],
+};
+
 // Editorial font for headers (keeps the "Design" feel)
 const fontInstrumentSerif = Instrument_Serif({
   subsets: ["latin"],
@@ -98,20 +108,25 @@ export default function RootLayout({
       </head>
       <body
         className={cn(
-          // Base Layout
-          "min-h-screen min-w-screen w-full antialiased overflow-x-clip no-scrollbar h-full",
-          // Colors: Ensure these are defined in your Tailwind CSS
+          // `min-w-screen` was here and beat the max-width clamp in global.css,
+          // so the fluid width never applied — and 100vw includes the scrollbar
+          // gutter, which is the overflow `overflow-x-clip` was hiding.
+          "min-h-dvh w-full antialiased",
           "bg-background text-foreground",
-          // Typography Variables
           GeistSans.variable,
           GeistMono.variable,
           logoFont.variable,
           fontInstrumentSerif.variable,
-          "selection:bg-primary/20 selection:text-primary",
         )}
       >
         <Provider>
-          <div className="fixed inset-0 z-50 pointer-events-none opacity-[0.03] bg-[url('/noise.svg')] mix-blend-overlay"></div>
+          {/* z-0, not z-50: at z-50 this painted over the header. mix-blend is
+              gone too — a full-viewport blend layer forces a compositing pass
+              on every paint, and costs most on the phones it helps least. */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none fixed inset-0 z-0 bg-[url('/noise.svg')] opacity-[0.035]"
+          />
           {children}
         </Provider>
 

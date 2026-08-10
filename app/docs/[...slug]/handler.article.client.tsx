@@ -117,7 +117,7 @@ function MinimalArticle({
                                 {article.description}
                             </p>
                         )}
-                        <div className="flex flex-wrap items-center gap-4 text-[11px] font-mono text-muted-foreground pt-2 border-t border-dashed border-border/50">
+                        <div className="flex flex-wrap items-center gap-4 text-2xs font-mono text-muted-foreground pt-2 border-t border-dashed border-border/50">
                             {article.author && <span>{article.author}</span>}
                             {article.lastModified && (
                                 <time>
@@ -176,7 +176,7 @@ function MinimalArticle({
                 {/* Other articles */}
                 <BlurFade delay={BLUR_FADE_DELAY * 6}>
                     <div className="mt-16">
-                        <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground mb-5">
+                        <p className="text-2xs font-mono uppercase tracking-widest text-muted-foreground mb-5">
               // more entries
                         </p>
                         {otherArticles}
@@ -264,7 +264,7 @@ function StaticArticle({
                 </header>
 
                 {/* 2-col body */}
-                <div className="grid grid-cols-1 lg:grid-cols-[1fr_250px] gap-12">
+                <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_250px] gap-12">
                     <article className="min-w-0">
                         <div className="lg:hidden mb-8">{toc}</div>
                         <div
@@ -425,14 +425,14 @@ function DynamicArticle({
                         / docs / {article.category.toLowerCase()}
                     </Link>
 
-                    <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-8 items-end">
+                    <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_auto] gap-8 items-end">
                         <div className="space-y-4">
                             {article.tags && article.tags.length > 0 && (
                                 <div className="flex flex-wrap gap-2">
                                     {article.tags.map((tag) => (
                                         <span
                                             key={tag}
-                                            className="text-[9px] font-mono uppercase tracking-widest px-2 py-0.5 rounded-full border border-border/50 text-muted-foreground"
+                                            className="text-2xs font-mono uppercase tracking-widest px-2 py-0.5 rounded-full border border-border/50 text-muted-foreground"
                                         >
                                             #{tag}
                                         </span>
@@ -475,7 +475,7 @@ function DynamicArticle({
 
             {/* Body */}
             <div className="mx-auto max-w-7xl px-6 py-14">
-                <div className="grid grid-cols-1 lg:grid-cols-[1fr_260px] gap-12">
+                <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_260px] gap-12">
                     {/* Article */}
                     <motion.article
                         className="min-w-0"
@@ -534,7 +534,7 @@ function DynamicArticle({
                         <div className="sticky top-24 space-y-6">
                             {/* TOC card */}
                             <div className="p-5 rounded-xl border border-border/50 bg-card/50 backdrop-blur-sm space-y-3">
-                                <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
+                                <p className="text-2xs font-mono uppercase tracking-widest text-muted-foreground">
                                     On This Page
                                 </p>
                                 <div className="text-sm">{toc}</div>
@@ -571,7 +571,7 @@ function DynamicArticle({
                         </span>
                         <div>
                             <h5 className="font-semibold text-foreground">Other articles</h5>
-                            <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
+                            <p className="text-2xs font-mono uppercase tracking-widest text-muted-foreground">
                                 Keep reading
                             </p>
                         </div>

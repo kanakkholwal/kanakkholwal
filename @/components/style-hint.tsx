@@ -57,7 +57,7 @@ export function StyleHint({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: reduceMotion ? 0 : 0.45 }}
-            className="mt-5 font-mono text-[11px] whitespace-nowrap text-muted-foreground"
+            className="mt-5 font-mono text-2xs whitespace-nowrap text-muted-foreground"
           >
             {label}
           </motion.span>

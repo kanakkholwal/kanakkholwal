@@ -61,7 +61,7 @@ function MinimalBlog({ posts, now, mediumUrl }: Props) {
         {/* Header */}
         <BlurFade delay={BLUR_FADE_DELAY}>
           <div className="mb-16 space-y-4">
-            <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
+            <p className="text-2xs font-mono uppercase tracking-widest text-muted-foreground">
               // the engineering log
             </p>
             <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground">
@@ -97,12 +97,12 @@ function MinimalBlog({ posts, now, mediumUrl }: Props) {
                           {post.title}
                         </h3>
                         {isRecent && (
-                          <span className="text-[9px] font-mono uppercase tracking-widest text-emerald-500">
+                          <span className="text-2xs font-mono uppercase tracking-widest text-emerald-500">
                             new
                           </span>
                         )}
                       </div>
-                      <div className="flex items-center gap-3 text-[10px] font-mono text-muted-foreground/50 uppercase tracking-widest">
+                      <div className="flex items-center gap-3 text-2xs font-mono text-muted-foreground/50 uppercase tracking-widest">
                         <time>
                           {new Date(post.pubDate).toLocaleDateString("en-US", {
                             month: "short",
@@ -310,7 +310,7 @@ function DynamicBlog({ posts, now, mediumUrl }: Props) {
             <span className="text-4xl md:text-5xl font-bold font-mono text-foreground/10 leading-none select-none">
               {String(posts.length).padStart(2, "0")}
             </span>
-            <span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
+            <span className="text-2xs font-mono uppercase tracking-widest text-muted-foreground">
               Articles
             </span>
           </div>
@@ -326,7 +326,7 @@ function DynamicBlog({ posts, now, mediumUrl }: Props) {
             transition={{ delay: 0.15, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             className="mb-14"
           >
-            <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground mb-5 flex items-center gap-2">
+            <p className="text-2xs font-mono uppercase tracking-widest text-muted-foreground mb-5 flex items-center gap-2">
               <span className="h-px w-4 bg-border inline-block" />
               Latest
             </p>
@@ -334,12 +334,12 @@ function DynamicBlog({ posts, now, mediumUrl }: Props) {
               href={featured.link}
               target="_blank"
               rel="noreferrer noopener"
-              className="group grid md:grid-cols-[1fr_360px] gap-8 rounded-2xl border border-border/50 bg-card/50 backdrop-blur-sm p-6 hover:border-primary/30 hover:bg-card transition-all duration-300 overflow-hidden relative"
+              className="group grid md:grid-cols-[minmax(0,1fr)_360px] gap-8 rounded-2xl border border-border/50 bg-card/50 backdrop-blur-sm p-6 hover:border-primary/30 hover:bg-card transition-all duration-300 overflow-hidden relative"
             >
               <span className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <div className="flex flex-col justify-between">
                 <div className="space-y-3">
-                  <div className="flex items-center gap-3 text-[10px] font-mono uppercase tracking-widest text-muted-foreground/50">
+                  <div className="flex items-center gap-3 text-2xs font-mono uppercase tracking-widest text-muted-foreground/50">
                     <time>
                       {new Date(featured.pubDate).toLocaleDateString("en-US", {
                         month: "long",
@@ -361,7 +361,7 @@ function DynamicBlog({ posts, now, mediumUrl }: Props) {
                   {featured.tags.slice(0, 3).map((tag) => (
                     <span
                       key={tag}
-                      className="text-[9px] font-mono uppercase tracking-widest px-2 py-0.5 rounded-full border border-border/50 text-muted-foreground group-hover:border-primary/30 transition-colors"
+                      className="text-2xs font-mono uppercase tracking-widest px-2 py-0.5 rounded-full border border-border/50 text-muted-foreground group-hover:border-primary/30 transition-colors"
                     >
                       #{tag}
                     </span>
@@ -389,7 +389,7 @@ function DynamicBlog({ posts, now, mediumUrl }: Props) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.3 }}
-              className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground mb-6 flex items-center gap-2"
+              className="text-2xs font-mono uppercase tracking-widest text-muted-foreground mb-6 flex items-center gap-2"
             >
               <span className="h-px w-4 bg-border inline-block" />
               More Articles
@@ -427,14 +427,14 @@ function DynamicBlog({ posts, now, mediumUrl }: Props) {
                             className="object-cover transition-transform duration-500 group-hover:scale-105"
                           />
                           {isRecent && (
-                            <div className="absolute top-2 left-2 px-1.5 py-0.5 bg-emerald-500/90 text-white text-[9px] font-bold uppercase tracking-wider rounded">
+                            <div className="absolute top-2 left-2 px-1.5 py-0.5 bg-emerald-500/90 text-white text-2xs font-bold uppercase tracking-wider rounded">
                               New
                             </div>
                           )}
                         </div>
                       )}
                       <div className="flex flex-col flex-1 space-y-2">
-                        <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest text-muted-foreground/50">
+                        <div className="flex items-center gap-2 text-2xs font-mono uppercase tracking-widest text-muted-foreground/50">
                           <time>
                             {new Date(post.pubDate).toLocaleDateString(
                               "en-US",
@@ -453,7 +453,7 @@ function DynamicBlog({ posts, now, mediumUrl }: Props) {
                           {post.tags.slice(0, 2).map((tag) => (
                             <span
                               key={tag}
-                              className="text-[9px] font-mono uppercase tracking-widest px-1.5 py-0.5 rounded-full border border-border/40 text-muted-foreground"
+                              className="text-2xs font-mono uppercase tracking-widest px-1.5 py-0.5 rounded-full border border-border/40 text-muted-foreground"
                             >
                               #{tag}
                             </span>
@@ -524,7 +524,7 @@ function PostCard({
           </div>
         )}
         {isRecent && (
-          <div className="absolute top-3 left-3 px-2 py-1 bg-emerald-500/90 backdrop-blur-md text-white text-[10px] font-bold uppercase tracking-wider rounded-md shadow-sm">
+          <div className="absolute top-3 left-3 px-2 py-1 bg-emerald-500/90 backdrop-blur-md text-white text-2xs font-bold uppercase tracking-wider rounded-md shadow-sm">
             New
           </div>
         )}
@@ -566,7 +566,7 @@ function PostCard({
               <Badge
                 key={tag}
                 variant="secondary"
-                className="rounded-md px-2 py-0.5 text-[10px] font-mono font-normal bg-background border border-border/50 text-muted-foreground group-hover:border-primary/20 transition-colors"
+                className="rounded-md px-2 py-0.5 text-2xs font-mono font-normal bg-background border border-border/50 text-muted-foreground group-hover:border-primary/20 transition-colors"
               >
                 #{tag}
               </Badge>

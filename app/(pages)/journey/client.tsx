@@ -46,7 +46,7 @@ function MinimalJourney() {
         {/* Header */}
         <BlurFade delay={BLUR_FADE_DELAY}>
           <div className="mb-16 space-y-3">
-            <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
+            <p className="text-2xs font-mono uppercase tracking-widest text-muted-foreground">
               // the archives
             </p>
             <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground">
@@ -64,10 +64,10 @@ function MinimalJourney() {
             <BlurFade key={entry.date} delay={BLUR_FADE_DELAY * (i + 2)}>
               <li className="py-8 space-y-3">
                 <div className="flex items-center gap-3">
-                  <span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground/50 w-6 shrink-0">
+                  <span className="text-2xs font-mono uppercase tracking-widest text-muted-foreground/50 w-6 shrink-0">
                     {String(i + 1).padStart(2, "0")}
                   </span>
-                  <Badge variant="outline" className="rounded-sm font-mono text-[10px] uppercase tracking-wider">
+                  <Badge variant="outline" className="rounded-sm font-mono text-2xs uppercase tracking-wider">
                     {entry.date}
                   </Badge>
                   <span className="text-sm font-semibold text-foreground">
@@ -139,7 +139,7 @@ function DynamicJourney() {
             <span className="text-4xl md:text-5xl font-bold font-mono text-foreground/10 leading-none select-none">
               {String(entries.length).padStart(2, "0")}
             </span>
-            <span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
+            <span className="text-2xs font-mono uppercase tracking-widest text-muted-foreground">
               Milestones
             </span>
           </div>
@@ -180,7 +180,7 @@ function DynamicJourney() {
                     <div className="flex flex-wrap items-center gap-3 mb-4">
                       <Badge
                         variant="outline"
-                        className="rounded-sm font-mono text-[10px] uppercase tracking-wider shrink-0"
+                        className="rounded-sm font-mono text-2xs uppercase tracking-wider shrink-0"
                       >
                         {entry.date}
                       </Badge>

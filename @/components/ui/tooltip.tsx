@@ -5,7 +5,21 @@ import * as React from "react";
 
 import { cn } from "@/lib/utils";
 
-const TooltipProvider = TooltipPrimitive.Provider;
+function TooltipProvider({
+  delayDuration = 400,
+  skipDelayDuration = 300,
+  ...props
+}: React.ComponentProps<typeof TooltipPrimitive.Provider>) {
+  // skipDelayDuration is what makes a toolbar feel fast: the first tooltip
+  // waits, every adjacent one inside the window opens instantly.
+  return (
+    <TooltipPrimitive.Provider
+      delayDuration={delayDuration}
+      skipDelayDuration={skipDelayDuration}
+      {...props}
+    />
+  );
+}
 
 const Tooltip = TooltipPrimitive.Root;
 
@@ -14,13 +28,19 @@ const TooltipTrigger = TooltipPrimitive.Trigger;
 const TooltipContent = React.forwardRef<
   React.ElementRef<typeof TooltipPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Content>
->(({ className, sideOffset = 4, ...props }, ref) => (
+>(({ className, sideOffset = 6, ...props }, ref) => (
   <TooltipPrimitive.Portal>
     <TooltipPrimitive.Content
       ref={ref}
       sideOffset={sideOffset}
       className={cn(
-        "z-50 overflow-hidden rounded-md bg-popover shadow px-3 py-1.5 text-xs text-popover-foreground animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 origin-[--radix-tooltip-content-transform-origin]",
+        "z-50 overflow-hidden rounded-md border border-border bg-popover px-2.5 py-1.5 text-xs text-popover-foreground shadow-md",
+        // Scales from the trigger, not from its own centre. The v3 spelling
+        // `origin-[--radix-...]` compiles to an invalid value under v4 and
+        // silently falls back to `center`.
+        "origin-(--radix-tooltip-content-transform-origin)",
+        "animate-in fade-in-0 zoom-in-95 duration-150 ease-out",
+        "data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=closed]:duration-100",
         className,
       )}
       {...props}
@@ -30,4 +50,3 @@ const TooltipContent = React.forwardRef<
 TooltipContent.displayName = TooltipPrimitive.Content.displayName;
 
 export { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger };
-

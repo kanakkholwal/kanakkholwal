@@ -24,7 +24,7 @@ export function BarList({ title, items, color = "var(--chart-1)", className }: P
       ref={ref}
       className={cn("rounded-xl border border-border bg-card/50 p-5 backdrop-blur-sm", className)}
     >
-      <h3 className="mb-4 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+      <h3 className="mb-4 font-mono text-2xs uppercase tracking-widest text-muted-foreground">
         {title}
       </h3>
       <div className="space-y-2">

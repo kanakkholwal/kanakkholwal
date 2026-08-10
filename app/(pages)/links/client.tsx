@@ -99,7 +99,7 @@ function MinimalLinks({ displayName, avatar, email, url }: LinksPageClientProps)
         <div className="space-y-10">
           <BlurFade delay={BLUR_FADE_DELAY * 2}>
             <section className="space-y-3">
-              <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
+              <p className="text-2xs font-mono uppercase tracking-widest text-muted-foreground">
                 // connect
               </p>
               <ol className="divide-y divide-border/60">
@@ -114,7 +114,7 @@ function MinimalLinks({ displayName, avatar, email, url }: LinksPageClientProps)
                       rel="noopener noreferrer"
                       className="group flex items-center gap-3 py-4 hover:text-primary transition-colors"
                     >
-                      <span className="text-[10px] font-mono text-muted-foreground/40 w-5 shrink-0">
+                      <span className="text-2xs font-mono text-muted-foreground/40 w-5 shrink-0">
                         {String(i + 1).padStart(2, "0")}
                       </span>
                       <Icon className="size-4 text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
@@ -122,7 +122,7 @@ function MinimalLinks({ displayName, avatar, email, url }: LinksPageClientProps)
                         <p className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors">
                           {label}
                         </p>
-                        <p className="text-[10px] font-mono text-muted-foreground truncate">
+                        <p className="text-2xs font-mono text-muted-foreground truncate">
                           {sub}
                         </p>
                       </div>
@@ -136,7 +136,7 @@ function MinimalLinks({ displayName, avatar, email, url }: LinksPageClientProps)
 
           <BlurFade delay={BLUR_FADE_DELAY * 3}>
             <section className="space-y-3">
-              <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
+              <p className="text-2xs font-mono uppercase tracking-widest text-muted-foreground">
                 // socials
               </p>
               <Socials />
@@ -364,7 +364,7 @@ function DynamicLinks({ displayName, avatar, email, url }: LinksPageClientProps)
               {["Developer", "Freelancer", "Builder"].map((tag) => (
                 <span
                   key={tag}
-                  className="text-[9px] font-mono uppercase tracking-widest px-2 py-0.5 rounded-full border border-border/50 text-muted-foreground"
+                  className="text-2xs font-mono uppercase tracking-widest px-2 py-0.5 rounded-full border border-border/50 text-muted-foreground"
                 >
                   {tag}
                 </span>
@@ -380,7 +380,7 @@ function DynamicLinks({ displayName, avatar, email, url }: LinksPageClientProps)
           transition={{ delay: 0.2, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           className="space-y-3"
         >
-          <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
+          <p className="text-2xs font-mono uppercase tracking-widest text-muted-foreground">
             Connect
           </p>
           <div className="grid gap-3">
@@ -441,7 +441,7 @@ function DynamicLinks({ displayName, avatar, email, url }: LinksPageClientProps)
           transition={{ delay: 0.45, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           className="space-y-3"
         >
-          <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
+          <p className="text-2xs font-mono uppercase tracking-widest text-muted-foreground">
             Social Presence
           </p>
           <Socials />

@@ -1,52 +1,20 @@
-"use client";
+import { Logo } from "@/components/logo";
 
-import { StarsBackground } from "@/components/animated/bg.stars";
-import { Logo } from "@/components/logo"; // Ensure Logo accepts className
-import { useIsMobile } from "@/hooks/use-mobile";
-import { cn } from "@/lib/utils";
-import { motion } from "framer-motion";
-import { useTheme } from "next-themes";
-
+// A route-loading fallback runs while the browser is already busy fetching the
+// route. It previously mounted a canvas particle system and an infinite
+// brightness pulse — both competing for the main thread with the work being
+// waited on. A static mark and a determinate-looking bar is the whole job.
 export default function LoadingPage() {
-  const { resolvedTheme } = useTheme();
-  const isMobile = useIsMobile();
-
   return (
-    <div className="relative h-dvh w-full overflow-hidden bg-background">
-      <div className="relative z-50 flex size-full flex-col items-center justify-center gap-6">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{
-            opacity: 1,
-            scale: 1,
-            transition: { duration: 0.5 },
-          }}
-        >
-          {/* Add a pulsing effect while waiting for server */}
-          <motion.div
-            animate={{
-              filter: ["brightness(1)", "brightness(1.3)", "brightness(1)"],
-              scale: [1, 1.02, 1],
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          >
-            {/* Ensure your Logo component passes props through */}
-            <Logo size={isMobile ? "lg" : "xl"} draw isLoader />
-          </motion.div>
-        </motion.div>
+    <div
+      role="status"
+      aria-label="Loading"
+      className="flex h-dvh w-full flex-col items-center justify-center gap-6 bg-background"
+    >
+      <Logo size="lg" />
+      <div className="h-px w-32 overflow-hidden rounded-full bg-border">
+        <div className="h-full w-1/3 animate-[loading-sweep_1.1s_ease-in-out_infinite] rounded-full bg-primary motion-reduce:w-full motion-reduce:animate-none" />
       </div>
-
-      <StarsBackground
-        starColor={resolvedTheme === "dark" ? "#FFF" : "#000"}
-        className={cn(
-          "fixed inset-0 -z-10 h-full w-full opacity-50",
-          "dark:bg-[radial-gradient(ellipse_at_bottom,_#262626_0%,_#000_100%)] bg-[radial-gradient(ellipse_at_bottom,_#f5f5f5_0%,_#fff_100%)]",
-        )}
-      />
     </div>
   );
 }

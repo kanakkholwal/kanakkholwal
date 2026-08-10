@@ -133,7 +133,7 @@ export function AreaSpark({
             style={{ left: leftOf(active), top: `${pts[active][1]}%`, background: "currentColor" }}
           />
           <div
-            className="pointer-events-none absolute z-10 -translate-x-1/2 -translate-y-[140%] whitespace-nowrap rounded-md border border-border bg-popover px-2 py-1 font-mono text-[10px] shadow-md"
+            className="pointer-events-none absolute z-10 -translate-x-1/2 -translate-y-[140%] whitespace-nowrap rounded-md border border-border bg-popover px-2 py-1 font-mono text-2xs shadow-md"
             style={{ left: leftOf(active), top: `${pts[active][1]}%` }}
           >
             <span className="font-semibold text-foreground">{formatValue(safe[active])}</span>

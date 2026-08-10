@@ -80,7 +80,7 @@ function MinimalBucketList({ items, total, completed, percentage }: BucketListCl
         {/* Header */}
         <BlurFade delay={BLUR_FADE_DELAY}>
           <div className="mb-14 space-y-4">
-            <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
+            <p className="text-2xs font-mono uppercase tracking-widest text-muted-foreground">
               // life roadmap v1.0
             </p>
             <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground">
@@ -103,7 +103,7 @@ function MinimalBucketList({ items, total, completed, percentage }: BucketListCl
         {done.length > 0 && (
           <BlurFade delay={BLUR_FADE_DELAY * 2}>
             <section className="mb-10">
-              <p className="text-[10px] font-mono uppercase tracking-widest text-emerald-500 mb-4">
+              <p className="text-2xs font-mono uppercase tracking-widest text-emerald-500 mb-4">
                 ✓ Completed
               </p>
               <ol className="divide-y divide-border/60">
@@ -137,7 +137,7 @@ function MinimalBucketList({ items, total, completed, percentage }: BucketListCl
         {pending.length > 0 && (
           <BlurFade delay={BLUR_FADE_DELAY * 3}>
             <section>
-              <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground/50 mb-4">
+              <p className="text-2xs font-mono uppercase tracking-widest text-muted-foreground/50 mb-4">
                 ○ Pending
               </p>
               <ol className="divide-y divide-border/60">
@@ -250,7 +250,7 @@ function DynamicBucketList({ items, total, completed, percentage }: BucketListCl
         className="w-full border-b border-border/40"
       >
         <div className="mx-auto max-w-6xl px-6 py-14 md:py-20">
-          <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-10 items-end">
+          <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_auto] gap-10 items-end">
             <div className="space-y-5">
               <p className="text-xs font-mono uppercase tracking-widest text-muted-foreground flex items-center gap-2">
                 <span className="relative flex h-2 w-2">
@@ -270,7 +270,7 @@ function DynamicBucketList({ items, total, completed, percentage }: BucketListCl
 
               {/* Animated progress */}
               <div className="max-w-sm space-y-2 pt-2">
-                <div className="flex justify-between text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
+                <div className="flex justify-between text-2xs font-mono uppercase tracking-widest text-muted-foreground">
                   <span>Progress</span>
                   <span>{percentage}%</span>
                 </div>
@@ -291,7 +291,7 @@ function DynamicBucketList({ items, total, completed, percentage }: BucketListCl
                 <span className="text-4xl md:text-5xl font-bold font-mono text-foreground/10 leading-none select-none block">
                   {String(completed).padStart(2, "0")}
                 </span>
-                <span className="text-[10px] font-mono uppercase tracking-widest text-emerald-500">
+                <span className="text-2xs font-mono uppercase tracking-widest text-emerald-500">
                   Completed
                 </span>
               </div>
@@ -299,7 +299,7 @@ function DynamicBucketList({ items, total, completed, percentage }: BucketListCl
                 <span className="text-4xl md:text-5xl font-bold font-mono text-foreground/10 leading-none select-none block">
                   {String(total - completed).padStart(2, "0")}
                 </span>
-                <span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
+                <span className="text-2xs font-mono uppercase tracking-widest text-muted-foreground">
                   Pending
                 </span>
               </div>
@@ -321,7 +321,7 @@ function DynamicBucketList({ items, total, completed, percentage }: BucketListCl
               <CheckCircle2 className="size-5 text-emerald-500 shrink-0" />
               <div>
                 <h2 className="text-lg font-bold text-foreground">Completed</h2>
-                <p className="text-[10px] font-mono uppercase tracking-widest text-emerald-500">
+                <p className="text-2xs font-mono uppercase tracking-widest text-emerald-500">
                   {done.length} adventures unlocked
                 </p>
               </div>
@@ -361,7 +361,7 @@ function DynamicBucketList({ items, total, completed, percentage }: BucketListCl
                 <h2 className="text-lg font-bold text-foreground">
                   On the list
                 </h2>
-                <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
+                <p className="text-2xs font-mono uppercase tracking-widest text-muted-foreground">
                   {pending.length} experiences to unlock
                 </p>
               </div>
@@ -479,7 +479,7 @@ function BucketCard({ item }: { item: BucketItem }) {
           <Badge
             variant={item.completed ? "default" : "secondary"}
             className={cn(
-              "backdrop-blur-md shadow-sm border font-mono text-[10px] uppercase tracking-wider px-2 py-1",
+              "backdrop-blur-md shadow-sm border font-mono text-2xs uppercase tracking-wider px-2 py-1",
               item.completed
                 ? "bg-emerald-500/90 hover:bg-emerald-500 text-white border-transparent"
                 : "bg-black/50 text-white border-white/20",

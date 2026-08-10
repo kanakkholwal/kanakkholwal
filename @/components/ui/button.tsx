@@ -6,99 +6,94 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 
 export const intents = {
-  // Standard variants
-  default: "bg-primary text-primary-foreground shadow-sm hover:bg-primary/90",
+  default: "bg-primary text-primary-foreground shadow-sm hoverable:bg-primary/88",
   default_soft:
-    "bg-primary/10 text-primary hover:bg-primary/20 dark:bg-primary/10 dark:text-primary hover:dark:bg-primary/5 hover:dark:text-primary",
-  secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/90",
-  secondary_soft:
-    "bg-secondary/10 text-secondary hover:bg-secondary/20 dark:bg-secondary/10 dark:text-secondary hover:dark:bg-secondary/5 hover:dark:text-secondary",
-  tertiary: "bg-tertiary text-tertiary-foreground hover:bg-tertiary/90",
-  tertiary_soft:
-    "bg-tertiary/10 text-tertiary hover:bg-tertiary/20 dark:bg-tertiary/10 dark:text-tertiary hover:dark:bg-tertiary/5 hover:dark:text-tertiary",
-  accent: "bg-accent text-accent-foreground hover:bg-accent/90",
-  muted: "bg-muted text-muted-foreground hover:bg-muted/90",
+    "bg-primary/10 text-primary hoverable:bg-primary/18 dark:bg-primary/15 dark:hoverable:bg-primary/25",
+  secondary:
+    "bg-secondary text-secondary-foreground hoverable:bg-secondary/80",
+  tertiary:
+    "bg-tertiary text-tertiary-foreground shadow-sm hoverable:bg-tertiary/88",
+  accent: "bg-accent text-accent-foreground hoverable:bg-accent/70",
+  muted: "bg-muted text-muted-foreground hoverable:bg-muted/70",
 
-  // Colored variants
-  success: "bg-emerald-600 hover:bg-emerald-500 text-emerald-100",
-  success_soft: "bg-emerald-600/10 text-emerald-600 hover:bg-emerald-600/20",
-  info: "bg-sky-600 hover:bg-sky-500 text-sky-100",
-  info_soft: "bg-sky-600/10 text-sky-600 hover:bg-sky-600/20",
-  warning: "bg-amber-600 hover:bg-amber-500 text-amber-100",
-  warning_soft: "bg-amber-600/10 text-amber-600 hover:bg-amber-600/20",
-  destructive: "bg-rose-600 hover:bg-rose-500 text-rose-100",
-  destructive_soft: "bg-rose-600/10 text-rose-600 hover:bg-rose-600/20",
+  // Semantic. These read from the tokens rather than raw palette steps, so the
+  // label/fill pair is measured once in global.css instead of per variant.
+  success:
+    "bg-success text-success-foreground hoverable:bg-success/88",
+  success_soft:
+    "bg-success/12 text-success hoverable:bg-success/20",
+  info: "bg-info text-info-foreground hoverable:bg-info/88",
+  info_soft: "bg-info/12 text-info hoverable:bg-info/20",
+  warning:
+    "bg-warning text-warning-foreground hoverable:bg-warning/88",
+  warning_soft:
+    "bg-warning/12 text-warning hoverable:bg-warning/20",
+  destructive:
+    "bg-destructive text-destructive-foreground hoverable:bg-destructive/88",
+  destructive_soft:
+    "bg-destructive/12 text-destructive hoverable:bg-destructive/20",
 
   outline:
-    "border border-border bg-card hover:bg-card/80 dark:bg-muted text-foreground dark:text-muted-foreground dark:hover:text-foreground hover:border-primary",
+    "border border-input bg-card text-foreground hoverable:bg-accent hoverable:text-accent-foreground",
   ghost:
-    "bg-transparent dark:hover:bg-accent text-muted-foreground hover:text-accent-foreground dark:text-muted-foreground dark:hover:text-white",
+    "bg-transparent text-muted-foreground hoverable:bg-accent hoverable:text-accent-foreground",
+  link: "text-primary underline underline-offset-4 decoration-primary/40 hoverable:decoration-primary",
+  dark: "bg-foreground text-background hoverable:bg-foreground/88",
+  glass:
+    "border border-border bg-background/70 text-foreground backdrop-blur-md hoverable:bg-background/85",
 
-  gray: "bg-gray-200 hover:bg-gray-300 text-gray-700 dark:bg-gray-600 dark:text-gray-200 dark:hover:bg-gray-500 dark:hover:text-gray-100",
-  link: "text-primary underline-offset-4 hover:underline",
-  dark: "bg-neutral-900 text-white hover:bg-neutral-800 dark:bg-neutral-800/50 dark:hover:bg-neutral-800",
-  light:
-    "bg-white shadow text-gray-700 hover:text-gray-700 border border-border",
-  glass: "bg-white/10 backdrop-blur-sm shadow-lg border border-white/5",
-
-  // Fancy variants
-  rainbow:
-    "animate-rainbow border-0 bg-[linear-gradient(#121213,#121213),linear-gradient(#121213_50%,rgba(18,18,19,0.6)_80%,rgba(18,18,19,0)),linear-gradient(90deg,var(--color-1),var(--color-5),var(--color-3),var(--color-4),var(--color-2))] bg-[length:200%] text-primary-foreground dark:text-black [background-clip:padding-box,border-box,border-box] [background-origin:border-box] [border:calc(0.125rem)_solid_transparent] before:absolute before:bottom-[-20%] before:left-1/2 before:z-0 before:h-1/5 before:w-3/5 before:-translate-x-1/2 before:animate-rainbow before:bg-[linear-gradient(90deg,var(--color-1),var(--color-5),var(--color-3),var(--color-4),var(--color-2))] before:[filter:blur(0.75rem)] dark:bg-[linear-gradient(#fff,#fff),linear-gradient(#fff_50%,rgba(255,255,255,0.6)_80%,rgba(0,0,0,0)),linear-gradient(90deg,var(--color-1),var(--color-5),var(--color-3),var(--color-4),var(--color-2))]",
-  rainbow_outline:
-    "border border-input border-b-transparent bg-[linear-gradient(#ffffff,#ffffff),linear-gradient(#ffffff_50%,rgba(18,18,19,0.6)_80%,rgba(18,18,19,0)),linear-gradient(90deg,var(--color-1),var(--color-5),var(--color-3),var(--color-4),var(--color-2))] bg-[length:200%] text-accent-foreground dark:text-primary-foreground [background-clip:padding-box,border-box,border-box] [background-origin:border-box] before:absolute before:bottom-[-20%] before:left-1/2 before:z-0 before:h-1/5 before:w-3/5 before:-translate-x-1/2 before:animate-rainbow before:bg-[linear-gradient(90deg,var(--color-1),var(--color-5),var(--color-3),var(--color-4),var(--color-2))] before:[filter:blur(0.75rem)] dark:bg-[linear-gradient(#0a0a0a,#0a0a0a),linear-gradient(#0a0a0a_50%,rgba(255,255,255,0.6)_80%,rgba(0,0,0,0)),linear-gradient(90deg,var(--color-1),var(--color-5),var(--color-3),var(--color-4),var(--color-2))]",
-  // base
   raw: "",
 } as const;
+
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium capitalize transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none  shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-all relative cursor-pointer group user-select-none",
+  [
+    "relative inline-flex shrink-0 select-none items-center justify-center gap-2 whitespace-nowrap font-medium",
+    "cursor-pointer disabled:pointer-events-none disabled:opacity-55",
+    // Never `transition-all`: it animates layout properties and fades the focus
+    // ring in, which defeats the point of a focus ring.
+    "transition-[color,background-color,border-color,box-shadow,transform,opacity] duration-150 ease-out",
+    // Full-opacity 2px ring. At `ring/50` this measured 1.92:1 against the page.
+    "outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+    "aria-invalid:outline-destructive aria-invalid:border-destructive",
+    "[&_svg]:pointer-events-none [&_svg]:shrink-0",
+  ].join(" "),
   {
-    // [&_svg:not([class*='size-'])]:size-4
     variants: {
       variant: intents,
+      // Heights step 24 / 32 / 40 / 44 / 56 with padding that steps with them.
+      // Nothing below 24px — that is the WCAG 2.5.8 target floor.
       size: {
-        default: "h-10 px-5 py-2 [&>svg]:size-5 has-[>svg]:px-5",
-        xs: "h-6 rounded-md px-2.5 py-1.5 text-xs [&>svg]:size-3",
-        sm: "h-8 rounded-md px-3 py-2 text-xs [&>svg]:size-4 has-[>svg]:pl-4",
-        lg: "px-5 py-3 h-11 [&>svg]:size-6",
-        xl: "px-6 py-3.5 h-14 text-base [&>svg]:size-8",
-        icon: "size-10 p-3 [&>svg]:size-5",
-        icon_xs: "size-5 rounded-md [&>svg]:size-3",
-        icon_sm: "size-8 p-2 [&>svg]:size-4",
-        icon_lg: "size-12 p-3.5 [&>svg]:size-6",
-        icon_xl: "size-14 p-4 [&>svg]:size-8",
+        xs: "h-6 gap-1.5 px-2.5 text-2xs [&_svg]:size-3",
+        sm: "h-8 gap-1.5 px-3 text-xs [&_svg]:size-4",
+        default: "h-10 px-4 text-sm [&_svg]:size-4",
+        lg: "h-11 gap-2.5 px-6 text-base [&_svg]:size-5",
+        xl: "h-14 gap-3 px-8 text-lg [&_svg]:size-6",
+        icon_xs: "size-6 [&_svg]:size-3",
+        icon_sm: "size-8 [&_svg]:size-4",
+        icon: "size-10 [&_svg]:size-4",
+        icon_lg: "size-11 [&_svg]:size-5",
+        icon_xl: "size-14 [&_svg]:size-6",
         responsive_lg:
-          "h-9 px-4 py-2 text-sm md:h-11 md:px-5 md:py-3 md:text-base [&>svg]:size-4 md:[&>svg]:size-6 ",
+          "h-10 px-4 text-sm md:h-11 md:px-6 md:text-base [&_svg]:size-4 md:[&_svg]:size-5",
       },
       effect: {
         none: "",
         expandIcon: "group gap-0",
         ringHover:
-          "hover:ring-2 hover:ring-primary/20 hover:ring-offset-2 transition-all",
-        shine:
-          "before:animate-shine relative overflow-hidden before:absolute before:inset-0 before:rounded-[inherit] before:bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.2)_50%,transparent_75%,transparent_100%)] before:bg-[length:250%_250%,100%_100%] before:bg-no-repeat background-position_0s_ease",
-        shineHover:
-          "relative overflow-hidden before:absolute before:inset-0 before:rounded-[inherit] before:bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.2)_50%,transparent_75%,transparent_100%)] before:bg-[length:250%_250%,100%_100%] before:bg-[position:200%_0,0_0] before:bg-no-repeat before:transition-[background-position_0s_ease] hover:before:bg-[position:-100%_0,0_0] before:duration-1000",
-        gooeyRight:
-          "relative z-0 overflow-hidden transition-all duration-300 before:absolute before:inset-0 before:-z-10 before:translate-x-[150%] before:translate-y-[150%] before:scale-[2.5] before:rounded-[100%] before:bg-gradient-to-r from-white/20 before:transition-transform before:duration-500 hover:before:translate-x-[0%] hover:before:translate-y-[0%]",
-        gooeyLeft:
-          "relative z-0 overflow-hidden transition-all duration-300 after:absolute after:inset-0 after:-z-10 after:translate-x-[-150%] after:translate-y-[150%] after:scale-[2.5] after:rounded-[100%] after:bg-gradient-to-l from-white/20 after:transition-transform after:duration-500 hover:after:translate-x-[0%] hover:after:translate-y-[0%]",
+          "hoverable:ring-2 hoverable:ring-primary/25 hoverable:ring-offset-2 hoverable:ring-offset-background",
         underline:
-          "relative !no-underline after:absolute after:bg-primary after:bottom-2 after:h-[1px] after:w-2/3 after:origin-bottom-left after:scale-x-100 hover:after:origin-bottom-right hover:after:scale-x-0 after:transition-transform after:ease-in-out after:duration-300",
+          "!no-underline after:absolute after:bottom-1.5 after:h-px after:w-2/3 after:origin-bottom-left after:scale-x-100 after:bg-current after:transition-transform after:duration-200 after:ease-out hoverable:after:origin-bottom-right hoverable:after:scale-x-0",
         hoverUnderline:
-          "relative !no-underline after:absolute after:bg-primary after:bottom-2 after:h-[1px] after:w-2/3 after:origin-bottom-right after:scale-x-0 hover:after:origin-bottom-left hover:after:scale-x-100 after:transition-transform after:ease-in-out after:duration-300",
-      },
-      hoverEffect: {
-        none: "",
+          "!no-underline after:absolute after:bottom-1.5 after:h-px after:w-2/3 after:origin-bottom-right after:scale-x-0 after:bg-current after:transition-transform after:duration-200 after:ease-out hoverable:after:origin-bottom-left hoverable:after:scale-x-100",
       },
       width: {
         default: "w-auto",
         full: "w-full",
-        fit: "w-fit mx-auto",
-        content: "max-w-content mx-auto",
-        xs: "w-full max-w-xs mx-auto",
-        sm: "w-full max-w-sm mx-auto",
-        md: "w-full max-w-md mx-auto",
-        lg: "w-full max-w-lg mx-auto",
+        fit: "mx-auto w-fit",
+        xs: "mx-auto w-full max-w-xs",
+        sm: "mx-auto w-full max-w-sm",
+        md: "mx-auto w-full max-w-md",
+        lg: "mx-auto w-full max-w-lg",
       },
       rounded: {
         default: "rounded-md",
@@ -106,48 +101,42 @@ const buttonVariants = cva(
         large: "rounded-lg",
         none: "rounded-none",
       },
+      // 0.97 is the smallest press that reads as a press. The old default was
+      // 0.99, which is below the perception threshold.
       transition: {
         none: "",
-        damped: "active:scale-99",
-        scale: "hover:scale-105 active:scale-95",
-        lift: "transition-all hover:-translate-y-0.5 hover:shadow-lg",
-        press: "transition-all active:translate-y-0.5",
+        damped: "active:scale-[0.97]",
+        scale: "hoverable:scale-[1.02] active:scale-[0.97]",
+        lift: "hoverable:-translate-y-0.5 hoverable:shadow-lg active:translate-y-0 active:scale-[0.98]",
+        press: "active:translate-y-px active:scale-[0.98]",
       },
-      // Shadows are now mostly integrated into variants for better "native" feel,
-      // but these helpers remain for overrides.
       shadow: {
         none: "shadow-none",
-        default: "shadow-lg shadow-primary/40",
-        default_soft: "shadow-md shadow-primary/20",
-        destructive: "shadow-lg shadow-destructive/40",
-        success: "shadow-md shadow-emerald-500/50",
-        warning: "shadow-md shadow-amber-500/40",
-        dark: "shadow-lg shadow-black/40",
-        light: "shadow-md shadow-gray-200/50",
-        glass: "shadow-lg shadow-black/5",
+        default: "shadow-lg shadow-primary/25",
+        default_soft: "shadow-md shadow-primary/15",
+        destructive: "shadow-lg shadow-destructive/25",
+        success: "shadow-md shadow-success/25",
+        warning: "shadow-md shadow-warning/25",
+        dark: "shadow-lg shadow-black/30",
+        light: "shadow-md shadow-black/10",
       },
     },
     defaultVariants: {
       variant: "default",
       size: "default",
       transition: "damped",
-      hoverEffect: "none",
       effect: "none",
       rounded: "default",
       shadow: "none",
     },
     compoundVariants: [
-      {
-        variant: "default",
-        size: "lg",
-        shadow: "none",
-        className: "shadow-lg shadow-primary/40",
-      },
+      { variant: "default", size: "lg", shadow: "none", className: "shadow-md shadow-primary/25" },
       { variant: "default_soft", shadow: "default_soft" },
       { variant: "destructive", shadow: "destructive" },
     ],
   },
 );
+
 interface IconProps {
   icon: React.ElementType;
   iconPlacement: "left" | "right";
@@ -159,14 +148,33 @@ interface IconRefProps {
 }
 
 export interface ButtonProps
-  extends
-  React.ButtonHTMLAttributes<HTMLButtonElement>,
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
   VariantProps<typeof buttonVariants> {
+  /** Swaps the label for a spinner and blocks interaction. */
   isLoading?: boolean;
   asChild?: boolean;
 }
 
 export type ButtonIconProps = IconProps | IconRefProps;
+
+function Spinner() {
+  return (
+    <svg
+      className="size-[1em] animate-spin motion-reduce:animate-none"
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+    >
+      <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2.5" opacity="0.25" />
+      <path
+        d="M21 12a9 9 0 0 0-9-9"
+        stroke="currentColor"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
 
 const Button = React.forwardRef<
   HTMLButtonElement,
@@ -182,14 +190,19 @@ const Button = React.forwardRef<
       transition,
       width,
       effect,
-      hoverEffect,
+      isLoading = false,
+      disabled,
       icon: Icon,
       iconPlacement,
+      type,
+      children,
       ...props
     },
     ref,
   ) => {
     const Comp = asChild ? Slot : "button";
+    const expanding = effect === "expandIcon";
+
     return (
       <Comp
         className={cn(
@@ -201,31 +214,35 @@ const Button = React.forwardRef<
             rounded,
             width,
             effect,
-            hoverEffect,
           }),
         )}
         ref={ref}
+        // Without this, any Button inside a <form> submits it.
+        type={asChild ? undefined : (type ?? "button")}
+        disabled={asChild ? undefined : disabled || isLoading}
+        aria-busy={isLoading || undefined}
         {...props}
       >
-        {Icon &&
-          iconPlacement === "left" &&
-          (effect === "expandIcon" ? (
-            <div className="w-0 translate-x-[0%] pr-0 opacity-0 transition-all duration-200 group-hover:w-5 group-hover:translate-x-100 group-hover:pr-2 group-hover:opacity-100">
+        {isLoading ? <Spinner /> : null}
+        {!isLoading && Icon && iconPlacement === "left" ? (
+          expanding ? (
+            <span className="inline-flex w-0 -translate-x-1 overflow-hidden opacity-0 transition-[width,transform,opacity,padding] duration-200 ease-out group-hover:w-[1.25em] group-hover:translate-x-0 group-hover:pr-2 group-hover:opacity-100">
               <Icon />
-            </div>
+            </span>
           ) : (
             <Icon />
-          ))}
-        <Slottable>{props.children}</Slottable>
-        {Icon &&
-          iconPlacement === "right" &&
-          (effect === "expandIcon" ? (
-            <div className="w-0 translate-x-[100%] pl-0 opacity-0 transition-all duration-200 group-hover:w-5 group-hover:translate-x-0 group-hover:pl-2 group-hover:opacity-100">
+          )
+        ) : null}
+        <Slottable>{children}</Slottable>
+        {!isLoading && Icon && iconPlacement === "right" ? (
+          expanding ? (
+            <span className="inline-flex w-0 translate-x-1 overflow-hidden opacity-0 transition-[width,transform,opacity,padding] duration-200 ease-out group-hover:w-[1.25em] group-hover:translate-x-0 group-hover:pl-2 group-hover:opacity-100">
               <Icon />
-            </div>
+            </span>
           ) : (
             <Icon />
-          ))}
+          )
+        ) : null}
       </Comp>
     );
   },

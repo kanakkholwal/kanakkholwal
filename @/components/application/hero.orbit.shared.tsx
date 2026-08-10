@@ -34,11 +34,11 @@ function rowInner(item: HeroOrbitActivityItem, variant: "card" | "minimal" | "st
     return (
       <>
         <Icon name={iconName} className="size-3 text-muted-foreground shrink-0" />
-        <span className="text-[11px] text-muted-foreground shrink-0">{item.label}</span>
-        <span className="text-[11px] font-medium text-foreground truncate max-w-[180px]">
+        <span className="text-2xs text-muted-foreground shrink-0">{item.label}</span>
+        <span className="text-2xs font-medium text-foreground truncate max-w-[180px]">
           {item.value}
         </span>
-        <span className="text-[10px] font-mono text-muted-foreground/50 tabular-nums shrink-0">
+        <span className="text-2xs font-mono text-muted-foreground/50 tabular-nums shrink-0">
           {item.time}
         </span>
       </>
@@ -49,11 +49,11 @@ function rowInner(item: HeroOrbitActivityItem, variant: "card" | "minimal" | "st
       <span className="shrink-0 inline-flex items-center justify-center size-5 rounded bg-muted/60 text-muted-foreground">
         <Icon name={iconName} className="size-3" />
       </span>
-      <span className="text-[11px] text-muted-foreground shrink-0">{item.label}</span>
-      <span className="flex-1 min-w-0 truncate text-[11px] font-medium text-foreground">
+      <span className="text-2xs text-muted-foreground shrink-0">{item.label}</span>
+      <span className="flex-1 min-w-0 truncate text-2xs font-medium text-foreground">
         {item.value}
       </span>
-      <span className="shrink-0 text-[10px] font-mono text-muted-foreground/50 tabular-nums">
+      <span className="shrink-0 text-2xs font-mono text-muted-foreground/50 tabular-nums">
         {item.time}
       </span>
     </>
@@ -110,14 +110,14 @@ export function HeroOrbitMinimal({ activity, fallback, stats }: HeroOrbitPayload
       ];
   return (
     <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-muted-foreground">
-      <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground/60">
+      <span className="font-mono text-2xs uppercase tracking-widest text-muted-foreground/60">
         Latest
       </span>
       {items.map((item, idx) => (
         <HeroOrbitRow key={`${item.kind}-${idx}`} item={item} variant="minimal" />
       ))}
       {fallback && (
-        <span className="font-mono text-[10px] text-muted-foreground/40">cached</span>
+        <span className="font-mono text-2xs text-muted-foreground/40">cached</span>
       )}
     </div>
   );
@@ -134,14 +134,14 @@ export function HeroOrbitStatic({ activity, stats, fallback }: HeroOrbitPayload)
         ].map((s) => (
           <div key={s.label} className="flex flex-col items-center py-2">
             <span className="text-sm font-bold tabular-nums">{s.value}+</span>
-            <span className="text-[10px] text-muted-foreground uppercase tracking-wider">
+            <span className="text-2xs text-muted-foreground uppercase tracking-wider">
               {s.label}
             </span>
           </div>
         ))}
       </div>
       <div className="px-3 py-2">
-        <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground/60 mb-1.5">
+        <p className="text-2xs font-mono uppercase tracking-widest text-muted-foreground/60 mb-1.5">
           Recent activity {fallback && "· cached"}
         </p>
         <ul className="space-y-0">
@@ -165,7 +165,7 @@ export function HeroOrbitStory({ activity, stats }: HeroOrbitPayload) {
   if (!activity.length && !stats.projects) return null;
   return (
     <div className="mt-8">
-      <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+      <p className="font-mono text-2xs uppercase tracking-[0.2em] text-muted-foreground">
         Recent activity
       </p>
       <ul className="mt-3 space-y-1 border-l border-border/30 pl-4">

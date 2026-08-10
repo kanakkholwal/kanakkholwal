@@ -81,7 +81,7 @@ function MinimalError({ error, reset }: ErrorPageClientProps) {
       {/* Header */}
       <BlurFade delay={BLUR_FADE_DELAY}>
         <div className="space-y-3">
-          <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
+          <p className="text-2xs font-mono uppercase tracking-widest text-muted-foreground">
             // runtime error
           </p>
           <h1 className="text-xl font-bold tracking-tight text-foreground">
@@ -102,7 +102,7 @@ function MinimalError({ error, reset }: ErrorPageClientProps) {
             onClick={copy}
             className="group flex w-full items-center gap-3 rounded-lg border border-border/50 bg-muted/40 px-3 py-2 transition-colors hover:bg-muted/70 text-left"
           >
-            <span className="shrink-0 text-[9px] font-bold uppercase tracking-widest text-muted-foreground/60">
+            <span className="shrink-0 text-2xs font-bold uppercase tracking-widest text-muted-foreground/60">
               ID
             </span>
             <code className="flex-1 truncate text-xs font-mono text-foreground">
@@ -186,7 +186,7 @@ function StaticError({ error, reset }: ErrorPageClientProps) {
             onClick={copy}
             className="group inline-flex items-center gap-2 rounded-full border border-border/50 bg-muted/40 px-4 py-1.5 transition-colors hover:bg-muted/70"
           >
-            <span className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground/60">
+            <span className="text-2xs font-bold uppercase tracking-widest text-muted-foreground/60">
               Error ID
             </span>
             <code className="max-w-[180px] truncate text-xs font-mono text-foreground">
@@ -194,7 +194,7 @@ function StaticError({ error, reset }: ErrorPageClientProps) {
             </code>
             <Copy className="size-3 text-muted-foreground/40 group-hover:text-muted-foreground transition-colors" />
             {copied && (
-              <span className="text-[9px] font-mono text-emerald-500">
+              <span className="text-2xs font-mono text-emerald-500">
                 copied!
               </span>
             )}
@@ -309,7 +309,7 @@ function DynamicError({ error, reset }: ErrorPageClientProps) {
 
       {/* Hero strip */}
       <div className="w-full border-b border-border/40 bg-background/60 backdrop-blur-md py-20 px-6">
-        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-[1fr_auto] items-center gap-12">
+        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_auto] items-center gap-12">
           {/* Left — identity */}
           <div className="space-y-5">
             <motion.div
@@ -372,7 +372,7 @@ function DynamicError({ error, reset }: ErrorPageClientProps) {
       </div>
 
       {/* Content */}
-      <div className="max-w-5xl mx-auto px-6 py-16 grid grid-cols-1 md:grid-cols-[1fr_320px] gap-12">
+      <div className="max-w-5xl mx-auto px-6 py-16 grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_320px] gap-12">
         {/* Left — debug info */}
         <div className="space-y-8">
           {/* Stack trace toggle */}
@@ -386,7 +386,7 @@ function DynamicError({ error, reset }: ErrorPageClientProps) {
             >
               <button
                 onClick={() => setShowStack((v) => !v)}
-                className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest text-muted-foreground hover:text-foreground transition-colors group"
+                className="flex items-center gap-2 text-2xs font-mono uppercase tracking-widest text-muted-foreground hover:text-foreground transition-colors group"
               >
                 <Terminal className="size-3.5 group-hover:text-primary transition-colors" />
                 // stack trace
@@ -411,18 +411,18 @@ function DynamicError({ error, reset }: ErrorPageClientProps) {
                           <div className="size-2.5 rounded-full bg-amber-500/40" />
                           <div className="size-2.5 rounded-full bg-emerald-500/40" />
                         </div>
-                        <span className="text-[10px] font-mono text-muted-foreground/60">
+                        <span className="text-2xs font-mono text-muted-foreground/60">
                           stack.trace
                         </span>
                         <button
                           onClick={copy}
-                          className="flex items-center gap-1 text-[10px] font-mono text-muted-foreground hover:text-foreground transition-colors"
+                          className="flex items-center gap-1 text-2xs font-mono text-muted-foreground hover:text-foreground transition-colors"
                         >
                           <Copy className="size-3" />
                           {copied ? "copied" : "copy"}
                         </button>
                       </div>
-                      <pre className="p-4 text-[11px] font-mono text-muted-foreground leading-relaxed overflow-x-auto whitespace-pre-wrap break-all max-h-56 overflow-y-auto">
+                      <pre className="p-4 text-2xs font-mono text-muted-foreground leading-relaxed overflow-x-auto whitespace-pre-wrap break-all max-h-56 overflow-y-auto">
                         {error.stack}
                       </pre>
                     </div>
@@ -441,7 +441,7 @@ function DynamicError({ error, reset }: ErrorPageClientProps) {
               transition={{ delay: 0.1, duration: 0.5 }}
               className="space-y-2"
             >
-              <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
+              <p className="text-2xs font-mono uppercase tracking-widest text-muted-foreground">
                 // error id
               </p>
               <button
@@ -454,7 +454,7 @@ function DynamicError({ error, reset }: ErrorPageClientProps) {
                 </code>
                 <Copy className="size-3.5 text-muted-foreground/40 group-hover:text-muted-foreground transition-colors shrink-0" />
                 {copied && (
-                  <span className="text-[9px] font-mono text-emerald-500 shrink-0">
+                  <span className="text-2xs font-mono text-emerald-500 shrink-0">
                     copied!
                   </span>
                 )}
@@ -471,7 +471,7 @@ function DynamicError({ error, reset }: ErrorPageClientProps) {
           transition={{ delay: 0.15, duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
           className="space-y-4"
         >
-          <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
+          <p className="text-2xs font-mono uppercase tracking-widest text-muted-foreground">
             // what to do
           </p>
 

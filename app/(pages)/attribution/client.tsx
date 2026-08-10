@@ -77,7 +77,7 @@ function MinimalAttribution({ journey, credits, displayName, email }: Attributio
     <main className="min-h-screen py-24 px-6 max-w-3xl mx-auto space-y-16">
       <BlurFade delay={BLUR_FADE_DELAY}>
         <header className="space-y-3">
-          <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
+          <p className="text-2xs font-mono uppercase tracking-widest text-muted-foreground">
             // credits
           </p>
           <h1 className="text-2xl font-bold tracking-tight">
@@ -88,7 +88,7 @@ function MinimalAttribution({ journey, credits, displayName, email }: Attributio
 
       <BlurFade delay={BLUR_FADE_DELAY * 2}>
         <section className="space-y-5">
-          <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
+          <p className="text-2xs font-mono uppercase tracking-widest text-muted-foreground">
             // story
           </p>
           <div className="space-y-4">
@@ -106,7 +106,7 @@ function MinimalAttribution({ journey, credits, displayName, email }: Attributio
 
       <BlurFade delay={BLUR_FADE_DELAY * 3}>
         <section className="space-y-5">
-          <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
+          <p className="text-2xs font-mono uppercase tracking-widest text-muted-foreground">
             // acknowledgements
           </p>
           <ol className="divide-y divide-border/60">
@@ -115,7 +115,7 @@ function MinimalAttribution({ journey, credits, displayName, email }: Attributio
                 key={i}
                 className="flex items-center gap-4 py-4 text-sm"
               >
-                <span className="text-[10px] font-mono text-muted-foreground/40 w-5 shrink-0">
+                <span className="text-2xs font-mono text-muted-foreground/40 w-5 shrink-0">
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <div className="flex items-center justify-center size-8 rounded-full bg-secondary text-foreground font-bold text-xs shrink-0">
@@ -324,7 +324,7 @@ function DynamicAttribution({ journey, credits, displayName, email }: Attributio
         {/* Right — credits + CTA */}
         <div className="space-y-10">
           <div className="space-y-3">
-            <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
+            <p className="text-2xs font-mono uppercase tracking-widest text-muted-foreground">
               // acknowledgements
             </p>
             <div className="divide-y divide-border/40">

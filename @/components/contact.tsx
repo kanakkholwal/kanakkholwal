@@ -38,15 +38,22 @@ export function ContactSection() {
   );
   const [copied, setCopied] = useState(false);
   const email = appConfig.emails[0];
+  const resetRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(email);
     setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    if (resetRef.current) clearTimeout(resetRef.current);
+    resetRef.current = setTimeout(() => setCopied(false), 2000);
   };
 
   return (
     <StyleSwap swapKey={selectedStyle}>
+      {/* The icon swap was the only success signal, so screen reader users got
+          nothing back from pressing Copy. */}
+      <p aria-live="polite" className="sr-only">
+        {copied ? `${email} copied to clipboard` : ""}
+      </p>
       {selectedStyle === "minimal" ? (
         <MinimalContact email={email} copied={copied} onCopy={handleCopy} />
       ) : selectedStyle === "static" ? (
@@ -90,10 +97,11 @@ function StoryContact({
         <button
           type="button"
           onClick={onCopy}
+            aria-label={copied ? "Email address copied" : `Copy email address ${email}`}
           className="inline-flex items-center gap-2 rounded-full border border-border/60 bg-card/50 px-4 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted"
         >
           {copied ? (
-            <Check className="size-4 text-emerald-500" />
+            <Check className="size-4 text-success" />
           ) : (
             <Copy className="size-4" />
           )}
@@ -103,7 +111,7 @@ function StoryContact({
           href={appConfig.social["cal.com"]}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-1.5 rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
+          className="inline-flex items-center gap-1.5 rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-colors duration-150 ease-out hoverable:bg-primary/88"
         >
           <CalendarDays className="size-4" />
           Book a call
@@ -131,7 +139,7 @@ function MinimalContact({
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
         <div className="space-y-2">
           <h2 className="text-lg font-semibold tracking-tight">
-            Let's work together
+            Let’s work together
           </h2>
           <p className="text-sm text-muted-foreground max-w-sm">
             Have a project in mind? Reach out and let's build something great.
@@ -141,10 +149,11 @@ function MinimalContact({
         <div className="flex items-center gap-3 shrink-0">
           <button
             onClick={onCopy}
+            aria-label={copied ? "Email address copied" : `Copy email address ${email}`}
             className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
           >
             {copied ? (
-              <Check className="size-3.5 text-emerald-500" />
+              <Check className="size-3.5 text-success" />
             ) : (
               <Copy className="size-3.5" />
             )}
@@ -188,13 +197,13 @@ function StaticContact({
                   layoutId="contact-label"
                   className="inline-block text-xs font-mono font-medium tracking-widest uppercase text-muted-foreground"
                 >
-                  // Get in Touch
+                  Get in touch
                 </motion.span>
                 <motion.h2
                   layoutId="contact-heading"
                   className="text-3xl md:text-4xl font-bold tracking-tight leading-tight"
                 >
-                  Let's work<br />together.
+                  Let’s work together.
                 </motion.h2>
               </div>
             </BlurFade>
@@ -217,12 +226,12 @@ function StaticContact({
           {/* ── Right column ── */}
           <BlurFade delay={BLUR_FADE_DELAY * 4} className="flex flex-col gap-4">
             {/* Availability pill */}
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 w-fit">
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-success/10 border border-success/25 w-fit">
               <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+                <span className="animate-ping absolute inline-flex size-full rounded-full bg-success opacity-75 motion-reduce:animate-none" />
+                <span className="relative inline-flex size-2 rounded-full bg-success" />
               </span>
-              <span className="text-xs font-medium text-emerald-600 dark:text-emerald-400 tracking-wide">
+              <span className="text-xs font-medium tracking-wide text-success">
                 Available for new projects
               </span>
             </div>
@@ -230,6 +239,7 @@ function StaticContact({
             {/* Email copy row */}
             <button
               onClick={onCopy}
+            aria-label={copied ? "Email address copied" : `Copy email address ${email}`}
               className="group flex items-center justify-between gap-3 px-4 py-3 rounded-xl border border-border bg-muted/40 hover:bg-muted transition-colors text-left"
             >
               <div className="flex items-center gap-3 overflow-hidden">
@@ -237,7 +247,7 @@ function StaticContact({
                   <Mail className="size-4" />
                 </span>
                 <div className="overflow-hidden">
-                  <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
+                  <p className="text-2xs font-mono uppercase tracking-widest text-muted-foreground">
                     Email
                   </p>
                   <p className="text-sm font-medium font-mono truncate text-foreground">
@@ -246,7 +256,7 @@ function StaticContact({
                 </div>
               </div>
               {copied ? (
-                <Check className="size-3.5 text-emerald-500 shrink-0" />
+                <Check className="size-3.5 text-success shrink-0" />
               ) : (
                 <Copy className="size-3.5 text-muted-foreground shrink-0" />
               )}
@@ -264,7 +274,7 @@ function StaticContact({
                   <CalendarDays className="size-4" />
                 </span>
                 <div>
-                  <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
+                  <p className="text-2xs font-mono uppercase tracking-widest text-muted-foreground">
                     Schedule
                   </p>
                   <p className="text-sm font-medium text-foreground">
@@ -295,7 +305,7 @@ function StaticContact({
                   <span className="text-base font-bold font-mono tracking-tight text-foreground">
                     {value}
                   </span>
-                  <span className="text-[10px] text-muted-foreground uppercase tracking-wider">
+                  <span className="text-2xs text-muted-foreground uppercase tracking-wider">
                     {label}
                   </span>
                 </div>
@@ -339,32 +349,33 @@ function DynamicContact({
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20"
+            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-success/10 border border-success/25"
           >
             <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+              <span className="animate-ping absolute inline-flex size-full rounded-full bg-success opacity-75 motion-reduce:animate-none" />
+              <span className="relative inline-flex size-2 rounded-full bg-success" />
             </span>
-            <span className="text-xs font-medium text-emerald-500 tracking-wide">
+            <span className="text-xs font-medium text-success tracking-wide">
               Available for new projects
             </span>
           </motion.div>
 
-          {/* Heading */}
+          {/* Heading. A `layoutId="contact-label"` span lived here with both
+              sr-only and aria-hidden — perceivable to nobody, and it duplicated
+              a layoutId that is live on a visible element in the same tree. */}
           <div className="space-y-3">
-            <motion.span layoutId="contact-label" className="sr-only" aria-hidden />
             <motion.h2
               layoutId="contact-heading"
               className="text-4xl md:text-5xl font-bold tracking-tight leading-tight"
             >
-              Let's build the{" "}
+              Let’s build the{" "}
               <br className="hidden md:block" />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-foreground via-foreground/80 to-foreground/30">
+              <span className="text-transparent bg-clip-text bg-linear-to-r from-foreground via-foreground/80 to-foreground/30">
                 next big thing.
               </span>
             </motion.h2>
             <p className="text-base text-muted-foreground max-w-xs mx-auto md:mx-0 leading-relaxed">
-              Open to freelance, collabs, and full-time roles. Let's turn
+              Open to freelance, collabs, and full-time roles. Let’s turn
               ideas into products.
             </p>
           </div>
@@ -401,7 +412,7 @@ function DynamicContact({
           <div className="rounded-2xl border border-border bg-card overflow-hidden shadow-2xl">
             {/* Card header */}
             <div className="px-5 py-4 border-b border-border60">
-              <p className="text-[10px] font-mono uppercase tracking-widest text-foreground">
+              <p className="text-2xs font-mono uppercase tracking-widest text-foreground">
                     // How to reach me
               </p>
             </div>
@@ -409,6 +420,7 @@ function DynamicContact({
             {/* Email copy row */}
             <button
               onClick={onCopy}
+            aria-label={copied ? "Email address copied" : `Copy email address ${email}`}
               className="group/copy w-full flex items-center justify-between px-5 py-4 border-b border-border/60 hover:bg-card transition-colors"
             >
               <div className="flex items-center gap-3 overflow-hidden">
@@ -416,7 +428,7 @@ function DynamicContact({
                   <Mail className="size-4" />
                 </span>
                 <div className="overflow-hidden text-left">
-                  <p className="text-[10px] font-mono uppercase tracking-widest text-foreground">
+                  <p className="text-2xs font-mono uppercase tracking-widest text-foreground">
                     Email
                   </p>
                   <p className="text-sm font-mono text-muted-foreground truncate max-w-[190px]">
@@ -437,7 +449,7 @@ function DynamicContact({
                   animate={{ scale: copied ? 1 : 0, opacity: copied ? 1 : 0 }}
                   className="absolute"
                 >
-                  <Check className="size-3.5 text-emerald-400" />
+                  <Check className="size-3.5 text-success" />
                 </motion.div>
               </div>
             </button>
@@ -459,7 +471,7 @@ function DynamicContact({
                     <p className="text-sm font-medium text-foreground leading-none">
                       {key === "cal.com" ? "Schedule a call" : key.charAt(0).toUpperCase() + key.slice(1)}
                     </p>
-                    <p className="text-[11px] text-muted-foreground mt-0.5 font-mono">
+                    <p className="text-2xs text-muted-foreground mt-0.5 font-mono">
                       {"@" + social.split("https://")[1].split("/").pop()}
                     </p>
                   </div>

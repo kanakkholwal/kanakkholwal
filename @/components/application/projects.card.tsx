@@ -46,7 +46,7 @@ function StatusBadge({ status }: { status?: string }) {
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-mono font-semibold uppercase tracking-widest border",
+        "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-2xs font-mono font-semibold uppercase tracking-widest border",
         cls,
       )}
     >
@@ -102,7 +102,7 @@ export function ExpandableProjectCards({
                   {/* metrics */}
                   {active.metrics && active.metrics.length > 0 && (
                     <div>
-                      <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground mb-3">
+                      <p className="text-2xs font-mono uppercase tracking-widest text-muted-foreground mb-3">
                         // Impact
                       </p>
                       <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -114,7 +114,7 @@ export function ExpandableProjectCards({
                             <span className="text-xl font-bold font-mono tracking-tight text-foreground">
                               {m.value.toLocaleString()}
                             </span>
-                            <span className="text-[10px] text-muted-foreground mt-0.5 uppercase tracking-wider">
+                            <span className="text-2xs text-muted-foreground mt-0.5 uppercase tracking-wider">
                               {m.label}
                             </span>
                           </div>
@@ -126,7 +126,7 @@ export function ExpandableProjectCards({
 
                   {active.technologies && active.technologies.length > 0 && (
                     <div>
-                      <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground mb-3 flex items-center gap-1.5">
+                      <p className="text-2xs font-mono uppercase tracking-widest text-muted-foreground mb-3 flex items-center gap-1.5">
                         <Tag className="size-3" /> Stack
                       </p>
                       <div className="flex flex-wrap gap-2">
@@ -144,7 +144,7 @@ export function ExpandableProjectCards({
 
                   {active.tags && active.tags.length > 0 && (
                     <div>
-                      <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground mb-3 flex items-center gap-1.5">
+                      <p className="text-2xs font-mono uppercase tracking-widest text-muted-foreground mb-3 flex items-center gap-1.5">
                         <Layers className="size-3" /> Categories
                       </p>
                       <div className="flex flex-wrap gap-2">
@@ -266,7 +266,7 @@ function ExpandableCard({
 
         {/* Expand hint - top right */}
         <div className="absolute top-3 right-3 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-[10px] font-mono text-white/80">
+          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-2xs font-mono text-white/80">
             <ArrowUpRight className="size-3" />
             Details
           </div>
@@ -283,7 +283,7 @@ function ExpandableCard({
               <h3 className="truncate text-sm font-bold leading-snug text-foreground">
                 {card.title}
               </h3>
-              <p className="mt-0.5 flex items-center gap-1 font-mono text-[10px] text-muted-foreground">
+              <p className="mt-0.5 flex items-center gap-1 font-mono text-2xs text-muted-foreground">
                 <Calendar className="size-3 shrink-0" />
                 {card.dates}
               </p>
@@ -293,13 +293,13 @@ function ExpandableCard({
             {card.technologies?.slice(0, 3).map((tech) => (
               <span
                 key={tech}
-                className="inline-flex items-center px-1.5 py-0.5 rounded-[4px] bg-muted text-[10px] text-muted-foreground border border-border/60"
+                className="inline-flex items-center px-1.5 py-0.5 rounded-[4px] bg-muted text-2xs text-muted-foreground border border-border/60"
               >
                 {tech}
               </span>
             ))}
             {card.technologies && card.technologies.length > 3 && (
-              <span className="text-[10px] text-muted-foreground self-center">
+              <span className="text-2xs text-muted-foreground self-center">
                 +{card.technologies.length - 3}
               </span>
             )}
@@ -454,13 +454,13 @@ function ProjectCard({
               {card.tags?.slice(0, 3).map((tag, i) => (
                 <span
                   key={i}
-                  className="inline-flex items-center px-2 py-1 rounded-md bg-zinc-100 dark:bg-zinc-800/50 text-[10px] font-medium text-zinc-500 dark:text-zinc-400 border border-transparent group-hover:border-zinc-200 group-hover:dark:border-white/10 transition-colors"
+                  className="inline-flex items-center px-2 py-1 rounded-md bg-zinc-100 dark:bg-zinc-800/50 text-2xs font-medium text-zinc-500 dark:text-zinc-400 border border-transparent group-hover:border-zinc-200 group-hover:dark:border-white/10 transition-colors"
                 >
                   {tag}
                 </span>
               ))}
               {card.tags && card.tags.length > 3 && (
-                <span className="text-[10px] py-1 text-zinc-400 self-center">
+                <span className="text-2xs py-1 text-zinc-400 self-center">
                   +{card.tags.length - 3}
                 </span>
               )}

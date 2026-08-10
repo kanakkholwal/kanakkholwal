@@ -9,9 +9,10 @@ import { PersonaLens, useStoryLens } from "@/components/story/persona-lens";
 import { StoryCardList } from "@/components/story/story-card-list";
 import { StyleModels, StylingModel } from "@/constants/ui";
 import useStorage from "@/hooks/use-storage";
+import { cn } from "@/lib/utils";
 import { getProjectList } from "@/lib/project.source";
 import { getStory } from "~/data/story";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { StyleSwap } from "@/components/animated/style-swap";
 import { ArrowRight, BarChart2, BoxIcon, FolderOpen, Layers } from "lucide-react";
 import Link from "next/link";
@@ -24,80 +25,83 @@ import { Panel, PanelHeader, PanelTitle, PanelTitleSup } from "./panel";
 const BLUR_FADE_DELAY = 0.04;
 
 
+const CTA_CARD =
+  "group relative flex min-h-45 w-full flex-col overflow-hidden rounded-3xl border border-border/50 bg-muted/20 p-6 text-left transition-[background-color,border-color] duration-200 ease-out hoverable:border-border hoverable:bg-muted/50";
+
 function ProjectsCta() {
+  const reduce = useReducedMotion();
+
   return (
     <BlurFade delay={BLUR_FADE_DELAY * 14}>
-      <div className="w-full max-w-4xl mx-auto mt-12 pt-12 border-t border-border/40">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
-          <ButtonTransitionLink
-            href="/projects"
-            className="group relative flex flex-col h-[180px] w-full p-6 rounded-3xl bg-muted/20 border border-border/50 hover:bg-muted/40 hover:border-border transition-all duration-300 overflow-hidden text-left"
-          >
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            <div className="relative z-10 flex justify-between items-center w-full mb-auto">
-              <div className="flex items-center justify-center size-10 rounded-xl bg-background border border-border/50 shadow-sm text-foreground">
+      <div className="mx-auto mt-12 w-full max-w-4xl border-t border-border/40 pt-12">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-8">
+          {/* Real anchors. These were <button onClick={router.push}> — no href,
+              so no middle-click, no ctrl-click, no "open in new tab", and they
+              announced as buttons rather than links. */}
+          <TransitionLink href="/projects" className={CTA_CARD}>
+            <div className="pointer-events-none absolute inset-0 bg-linear-to-br from-primary/5 via-transparent to-transparent opacity-0 transition-opacity duration-200 ease-out group-hover:opacity-100" />
+            <div className="relative z-10 mb-auto flex w-full items-center justify-between">
+              <span className="flex size-10 items-center justify-center rounded-xl border border-border/50 bg-background text-foreground shadow-sm">
                 <FolderOpen size={18} />
-              </div>
-              <motion.div
-                initial={{ x: 0, opacity: 0.6 }}
-                whileHover={{ x: 5, opacity: 1 }}
-                className="text-muted-foreground pr-1"
-              >
-                <ArrowRight size={18} />
-              </motion.div>
+              </span>
+              {/* whileHover on this child never fired — the pointer is on the
+                  card, not on the 18px arrow. group-hover is the honest way. */}
+              <ArrowRight
+                size={18}
+                className="mr-1 text-muted-foreground opacity-60 transition-[transform,opacity] duration-200 ease-out group-hover:translate-x-1 group-hover:opacity-100"
+              />
             </div>
-            <div className="relative z-10 space-y-1 mt-auto">
-              <h3 className="text-lg font-semibold text-foreground tracking-tight">
-                Project Archive
+            <div className="relative z-10 mt-auto space-y-1">
+              <h3 className="text-lg font-semibold tracking-tight text-foreground">
+                Project archive
               </h3>
-              <p className="text-sm text-muted-foreground/80 font-medium line-clamp-1">
+              <p className="text-sm text-muted-foreground">
                 The complete collection of case studies.
               </p>
             </div>
             <Layers
-              className="absolute -bottom-6 -right-6 text-foreground/5 size-32 rotate-12 group-hover:rotate-0 group-hover:scale-110 transition-all duration-500 ease-out pointer-events-none"
+              aria-hidden="true"
+              className="pointer-events-none absolute -bottom-6 -right-6 size-32 rotate-12 text-foreground/5 transition-transform duration-300 ease-out group-hover:rotate-0"
               strokeWidth={1}
             />
-          </ButtonTransitionLink>
+          </TransitionLink>
 
-          <ButtonTransitionLink
-            href="/stats"
-            className="group relative flex flex-col h-[180px] w-full p-6 rounded-3xl bg-muted/20 border border-border/50 hover:bg-muted/40 hover:border-border transition-all duration-300 overflow-hidden text-left"
-          >
-            <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            <div className="relative z-10 flex justify-between items-center w-full mb-auto">
-              <div className="flex items-center justify-center size-10 rounded-xl bg-background border border-border/50 shadow-sm text-emerald-600 dark:text-emerald-400">
+          <TransitionLink href="/stats" className={CTA_CARD}>
+            <div className="pointer-events-none absolute inset-0 bg-linear-to-br from-success/5 via-transparent to-transparent opacity-0 transition-opacity duration-200 ease-out group-hover:opacity-100" />
+            <div className="relative z-10 mb-auto flex w-full items-center justify-between gap-3">
+              <span className="flex size-10 items-center justify-center rounded-xl border border-border/50 bg-background text-success shadow-sm">
                 <BarChart2 size={18} />
-              </div>
-              <div className="flex items-center gap-2 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20">
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+              </span>
+              <span className="flex items-center gap-2 rounded-full border border-success/25 bg-success/10 px-2.5 py-1">
+                <span className="relative flex size-2">
+                  <span className="absolute inline-flex size-full animate-ping rounded-full bg-success opacity-75 motion-reduce:animate-none" />
+                  <span className="relative inline-flex size-2 rounded-full bg-success" />
                 </span>
-                <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">
+                <span className="text-2xs font-bold uppercase tracking-wider text-success">
                   Live
                 </span>
-              </div>
+              </span>
             </div>
-            <div className="relative z-10 space-y-1 mt-auto">
-              <h3 className="text-lg font-semibold text-foreground tracking-tight">
-                Engineering Metrics
+            <div className="relative z-10 mt-auto space-y-1">
+              <h3 className="text-lg font-semibold tracking-tight text-foreground">
+                Engineering metrics
               </h3>
-              <p className="text-sm text-muted-foreground/80 font-medium line-clamp-1">
-                View coding habits &amp; activity trends.
+              <p className="text-sm text-muted-foreground">
+                Coding habits and activity trends.
               </p>
             </div>
-            <div className="absolute bottom-0 left-0 right-0 h-24 opacity-20 group-hover:opacity-40 transition-opacity duration-500 pointer-events-none">
-              <svg className="w-full h-full" viewBox="0 0 100 40" preserveAspectRatio="none">
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 opacity-20 transition-opacity duration-200 ease-out group-hover:opacity-40">
+              <svg className="size-full" viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true">
                 <motion.path
                   d="M0,40 Q25,35 35,20 T70,25 T100,5"
                   fill="none"
                   stroke="currentColor"
                   strokeWidth="2"
                   className="text-foreground"
-                  initial={{ pathLength: 0 }}
+                  initial={reduce ? false : { pathLength: 0 }}
                   whileInView={{ pathLength: 1 }}
-                  transition={{ duration: 2, ease: "easeInOut" }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.9, ease: [0.23, 1, 0.32, 1] }}
                 />
                 <path
                   d="M0,40 Q25,35 35,20 T70,25 T100,5 L100,40 L0,40 Z"
@@ -105,7 +109,7 @@ function ProjectsCta() {
                 />
               </svg>
             </div>
-          </ButtonTransitionLink>
+          </TransitionLink>
         </div>
       </div>
     </BlurFade>
@@ -138,10 +142,10 @@ function StoryProjects() {
       <StoryReveal delay={0.2} className="mt-8">
         <TransitionLink
           href="/journey"
-          className="inline-flex items-center gap-1.5 text-sm font-medium text-foreground transition-all hover:gap-2.5"
+          className="group inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-foreground"
         >
           Read the full story
-          <ArrowRight className="size-4" />
+          <ArrowRight className="size-4 transition-transform duration-150 ease-out group-hover:translate-x-1" />
         </TransitionLink>
       </StoryReveal>
     </StoryChapter>
@@ -201,7 +205,7 @@ function MinimalProjects({ projects }: { projects: ReturnType<typeof getProjectL
               </div>
             </div>
           </div>
-          <div className="overflow-hidden">
+          <div>
             <div className="space-y-4 border-t border-edge p-4">
               <p className="text-sm text-muted-foreground line-clamp-3">
                 {project.description}
@@ -233,17 +237,17 @@ function StaticProjects({ projects }: { projects: ReturnType<typeof getProjectLi
         <div className="space-y-2">
           <motion.span
             layoutId="projects-label"
-            className="inline-block text-xs font-mono font-medium tracking-widest uppercase text-muted-foreground"
+            className="inline-block font-mono text-xs font-medium uppercase tracking-widest text-muted-foreground"
           >
-            // Portfolio
+            Portfolio
           </motion.span>
           <motion.h2
             layoutId="projects-heading"
-            className="text-3xl md:text-4xl font-bold tracking-tight"
+            className="text-3xl font-bold tracking-tight md:text-4xl"
           >
             Projects
           </motion.h2>
-          <p className="text-muted-foreground text-sm md:text-base max-w-xl">
+          <p className="max-w-xl text-base text-muted-foreground">
             From full-stack applications to open-source libraries.
           </p>
         </div>
@@ -254,28 +258,33 @@ function StaticProjects({ projects }: { projects: ReturnType<typeof getProjectLi
           <BlurFade key={project.id} delay={BLUR_FADE_DELAY * (i + 3)}>
             <Link
               href={`/projects/${project.id}`}
-              className="group flex gap-4 py-5 border-b border-border/50 last:border-0 -mx-4 px-4 rounded-lg hover:bg-muted/20 transition-colors"
+              className="group -mx-4 flex gap-4 rounded-lg border-b border-border/50 px-4 py-5 transition-colors duration-150 ease-out last:border-0 hoverable:bg-accent/60"
             >
-              {/* Status dot */}
-              <div className="shrink-0 pt-1.5">
+              {/* Status was colour-only — a green or grey dot with nothing to
+                  read. The dot now carries a text label for everyone. */}
+              <div className="shrink-0 pt-2">
                 <span
-                  className={`block size-2 rounded-full mt-1 ${project.status === "active"
-                    ? "bg-emerald-500"
-                    : "bg-border"
-                    }`}
+                  aria-hidden="true"
+                  className={cn(
+                    "block size-2 rounded-full",
+                    project.status === "active" ? "bg-success" : "bg-input",
+                  )}
                 />
               </div>
 
-              <div className="flex-1 min-w-0 space-y-1.5">
-                <div className="flex items-start justify-between gap-2">
-                  <h3 className="text-sm font-semibold text-foreground group-hover:text-foreground/80 transition-colors leading-snug">
+              <div className="min-w-0 flex-1 space-y-1.5">
+                <div className="flex items-start justify-between gap-3">
+                  <h3 className="text-base font-semibold leading-snug text-foreground">
                     {project.title}
+                    <span className="sr-only">
+                      {project.status === "active" ? " — actively maintained" : " — archived"}
+                    </span>
                   </h3>
-                  <span className="shrink-0 font-mono text-[11px] text-muted-foreground/50 tabular-nums">
+                  <span className="shrink-0 font-mono text-2xs tabular-nums text-subtle-foreground">
                     {project.dates}
                   </span>
                 </div>
-                <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">
+                <p className="line-clamp-2 text-sm leading-relaxed text-muted-foreground">
                   {project.description}
                 </p>
                 {project.technologies.length > 0 && (
@@ -283,13 +292,13 @@ function StaticProjects({ projects }: { projects: ReturnType<typeof getProjectLi
                     {project.technologies.slice(0, 4).map((tech) => (
                       <span
                         key={tech}
-                        className="inline-flex px-1.5 py-0.5 rounded-sm bg-muted/60 text-[10px] font-mono text-muted-foreground"
+                        className="inline-flex rounded-sm bg-muted px-1.5 py-0.5 font-mono text-2xs text-muted-foreground"
                       >
                         {tech}
                       </span>
                     ))}
                     {project.technologies.length > 4 && (
-                      <span className="text-[10px] text-muted-foreground/50 self-center">
+                      <span className="self-center text-2xs text-subtle-foreground">
                         +{project.technologies.length - 4}
                       </span>
                     )}
@@ -310,31 +319,31 @@ function DynamicProjects({ projects }: { projects: ReturnType<typeof getProjectL
   return (
     <section
       id="projects"
-      className="w-full py-32 px-6 md:px-12 max-w-app mx-auto space-y-16"
+      className="w-full space-y-16 px-6 py-24 md:px-12"
     >
       <BlurFade delay={BLUR_FADE_DELAY * 11}>
-        <div className="flex flex-col items-center text-center mb-16 space-y-4 relative z-10">
+        <div className="relative z-10 mb-16 flex flex-col items-center space-y-4 text-center">
           <motion.span
             layoutId="projects-label"
-            className="text-sm font-mono text-muted-foreground uppercase tracking-widest"
+            className="font-mono text-xs uppercase tracking-widest text-muted-foreground"
           >
-            {`// Portfolio`}
+            Portfolio
           </motion.span>
           <motion.h2
             layoutId="projects-heading"
-            className="text-4xl md:text-6xl font-bold tracking-tighter leading-none"
+            className="text-balance text-4xl font-bold md:text-6xl"
           >
-            <span className="font-instrument-serif italic font-normal text-muted-foreground/70 mr-3">
+            {/* `font-instrument-serif` is not a generated utility — the serif
+                treatment never rendered. The theme exposes it as `font-serif`. */}
+            <span className="mr-3 font-serif font-normal italic text-muted-foreground">
               Real world
             </span>
             Projects
           </motion.h2>
-          <p className="max-w-xl text-muted-foreground text-lg">
+          <p className="max-w-xl text-lg text-muted-foreground">
             From full-stack applications to open-source libraries.
-
           </p>
         </div>
-
       </BlurFade>
 
       <ExpandableProjectCards cards={projects} />

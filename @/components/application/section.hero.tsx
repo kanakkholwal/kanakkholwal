@@ -1,5 +1,4 @@
 "use client";
-import { GlowFillButton } from "@/components/animated/button.fill";
 import { StyleSwap } from "@/components/animated/style-swap";
 import { StoryOpening, StoryReveal } from "@/components/application/story.frame";
 import { HeroOrbit } from "@/components/application/hero.orbit.client";
@@ -10,9 +9,9 @@ import {
   type HeroOrbitPayload,
 } from "@/components/application/hero.orbit.shared";
 import { Icon, IconType } from "@/components/icons";
-import { ButtonLink, TransitionLink } from "@/components/utils/link";
+import { ButtonLink } from "@/components/utils/link";
 import { StyleModels, StylingModel } from "@/constants/ui";
-import { Variants, motion } from "framer-motion";
+import { Variants, motion, useReducedMotion } from "framer-motion";
 import { ArrowRight, MapPin } from "lucide-react";
 import { appConfig, resume_link } from "root/project.config";
 
@@ -26,9 +25,7 @@ import { Logo } from "@/components/logo";
 import { GreaterSeparator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
-import { HyperText } from "../animated/text.hyper";
 import RotatingText from "../animated/text.rotate";
-import { ShimmeringText } from "../animated/text.shimmer";
 
 
 export default function Section({ orbitData }: { orbitData?: HeroOrbitPayload }) {
@@ -109,12 +106,14 @@ function StoryHero({ orbitData }: { orbitData?: HeroOrbitPayload } = {}) {
           <Icon name="download" />
           Resume
         </ButtonLink>
+        {/* The arrow moves, not the gap — animating `gap` forces layout on
+            every frame to shift an icon 4px. */}
         <a
           href="#about"
-          className="inline-flex items-center gap-1.5 text-sm font-medium text-foreground transition-all hover:gap-2.5"
+          className="group inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-foreground"
         >
           Start reading
-          <ArrowRight className="size-4" />
+          <ArrowRight className="size-4 transition-transform duration-150 ease-out group-hover:translate-x-1" />
         </a>
       </motion.div>
 
@@ -122,7 +121,7 @@ function StoryHero({ orbitData }: { orbitData?: HeroOrbitPayload } = {}) {
         layoutId="hero-socials"
         className="mt-8 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-border/30 pt-6"
       >
-        <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground/60">
+        <span className="font-mono text-2xs uppercase tracking-widest text-subtle-foreground">
           Find me
         </span>
         {Object.entries(appConfig.social).map(([key, link]) => (
@@ -131,10 +130,10 @@ function StoryHero({ orbitData }: { orbitData?: HeroOrbitPayload } = {}) {
             href={link}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
+            className="inline-flex min-h-11 items-center gap-1.5 text-xs font-medium capitalize text-muted-foreground transition-colors duration-150 ease-out hoverable:text-foreground"
           >
-            <Icon name={key as IconType} className="size-3.5" />
-            <span className="capitalize">{key}</span>
+            <Icon name={key as IconType} className="size-4" />
+            <span>{key}</span>
           </a>
         ))}
       </motion.div>
@@ -144,26 +143,37 @@ function StoryHero({ orbitData }: { orbitData?: HeroOrbitPayload } = {}) {
   );
 }
 
-function DynamicHero({ orbitData }: { orbitData?: HeroOrbitPayload } = {}) {
-  const fadeUp: Variants = {
-    hidden: { opacity: 0, y: 32, filter: "blur(8px)" },
-    show: {
-      opacity: 1,
-      y: 0,
-      filter: "blur(0px)",
-      transition: { type: "spring", stiffness: 240, damping: 24 } as never,
-    },
-  };
+// Hoisted: these were rebuilt on every render, which defeats variant identity.
+// No `filter: blur()` — it is paint-bound and ran across the full-width hero
+// during hydration.
+const FADE_UP: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { type: "spring", bounce: 0, duration: 0.42 },
+  },
+};
 
-  const stagger: Variants = {
-    hidden: {},
-    show: { transition: { staggerChildren: 0.1, delayChildren: 0.05 } },
-  };
+const STAGGER: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.06, delayChildren: 0.02 } },
+};
+
+const REDUCED: Variants = {
+  hidden: { opacity: 0 },
+  show: { opacity: 1, transition: { duration: 0.2 } },
+};
+
+function DynamicHero({ orbitData }: { orbitData?: HeroOrbitPayload } = {}) {
+  const reduce = useReducedMotion();
+  const fadeUp = reduce ? REDUCED : FADE_UP;
+  const stagger = reduce ? REDUCED : STAGGER;
 
   return (
     <section
       id="hero"
-      className="relative w-full min-h-[95dvh] flex flex-col overflow-hidden"
+      className="relative flex min-h-[95dvh] w-full flex-col"
     >
       {/* ── Background: subtle dot grid only (no glows / vignette) ── */}
       <div className="pointer-events-none absolute inset-0 z-0">
@@ -178,96 +188,101 @@ function DynamicHero({ orbitData }: { orbitData?: HeroOrbitPayload } = {}) {
         className="relative z-10 flex items-center justify-between px-6 md:px-14 pt-6 pb-2"
       >
         <div className="flex items-center gap-2.5">
-          <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75" />
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+          <span className="relative flex size-2">
+            <span className="absolute inline-flex size-full animate-ping rounded-full bg-success opacity-75 motion-reduce:animate-none" />
+            <span className="relative inline-flex size-2 rounded-full bg-success" />
           </span>
-          <span className="text-xs font-mono tracking-widest text-muted-foreground uppercase">
+          <span className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
             Available for work
           </span>
         </div>
-        <span className="text-xs font-mono text-muted-foreground/50 hidden sm:block">
+        {/* Was muted-foreground/50 — roughly 2.3:1. The subtle token is the
+            third tier and still clears 4.5:1. */}
+        <span className="hidden font-mono text-xs text-subtle-foreground sm:block">
           {appConfig.location}
         </span>
       </motion.div>
 
-      {/* ── Main content ── */}
-      <div className="relative z-10 flex-1 grid lg:grid-cols-[1fr_420px] gap-8 lg:gap-6 items-center px-6 md:px-14 py-4">
+      {/* ── Main content ──
+          `minmax(0,1fr)`, not `1fr`. A bare `1fr` is `minmax(auto,1fr)`, so the
+          track refuses to shrink below its min-content width — and the h1 at
+          clamp(2.6rem,6.5vw,5rem) plus the CTA row set a large one. That is what
+          pushed the grid past its container and out through the page. */}
+      <div className="relative z-10 grid flex-1 items-center gap-8 px-6 py-4 md:grid-cols-[minmax(0,1fr)_minmax(0,380px)] md:gap-10 md:px-14">
         {/* Left — Text column */}
         <motion.div
           variants={stagger}
           initial="hidden"
           animate="show"
-          className="flex flex-col gap-5 max-w-2xl"
+          className="flex min-w-0 max-w-2xl flex-col gap-5"
         >
           {/* Eyebrow */}
           <motion.div variants={fadeUp} className="flex items-center gap-3">
             <div className="h-px w-8 bg-primary/60" />
-            <span className="text-xs font-semibold tracking-[0.2em] text-primary uppercase">
+            <span className="text-2xs font-semibold uppercase tracking-[0.18em] text-primary">
               {appConfig.role}
             </span>
           </motion.div>
 
-          {/* Headline — name scramble + rotating roles */}
+          {/* Headline — rotating roles */}
           <motion.div variants={fadeUp} className="space-y-2">
+            {/* Plain text. HyperText scrambled the name into random glyphs for
+                900ms on view and again on every hover — unselectable, and the
+                mutating DOM text thrashed screen readers. */}
             <motion.h1
               layoutId="hero-name"
-              className="text-[clamp(2.6rem,6.5vw,5rem)] font-black tracking-tighter leading-[0.9] text-foreground"
+              className="text-balance text-[clamp(2.6rem,6.5vw,5rem)] font-black leading-[0.9] tracking-tighter text-foreground"
             >
-              <HyperText
-                className="inline"
-                duration={900}
-                startOnView
-                animateOnHover
-              >
-                {appConfig.displayName}
-              </HyperText>
+              {appConfig.displayName}
             </motion.h1>
             <motion.div
               layoutId="hero-role"
-              className="flex items-center gap-3 text-[clamp(1rem,2.5vw,1.4rem)] font-semibold text-muted-foreground"
+              className="flex flex-wrap items-center gap-3 text-[clamp(1rem,2.5vw,1.4rem)] font-semibold text-muted-foreground"
             >
               <span>I</span>
-              <div className="overflow-hidden rounded-lg bg-primary/10 border border-primary/20 px-3 py-1 min-w-45">
+              {/* Sits on the card so text-primary reads at 4.05:1 rather than
+                  the 3.42:1 a 10% primary wash gave. Width is a min, not a
+                  fixed 45 — a longer role used to clip. */}
+              <div className="min-w-44 overflow-hidden rounded-lg border border-primary/25 bg-card px-3 py-1">
                 <RotatingText
                   texts={appConfig.applicableRoles}
                   mainClassName="text-primary font-bold"
                   rotationInterval={2800}
-                  transition={{ type: "spring", damping: 20, stiffness: 200 }}
+                  transition={{ type: "spring", bounce: 0, duration: 0.4 }}
                 />
               </div>
             </motion.div>
           </motion.div>
 
-          {/* Shimmering description */}
+          {/* Description. Was an infinite shimmer wave running under body copy,
+              dipping below 4.5:1 at the trough of every cycle. */}
           <motion.p
             variants={fadeUp}
-            className="text-sm md:text-base leading-relaxed max-w-lg"
+            className="max-w-lg text-base leading-relaxed text-muted-foreground"
           >
-            <ShimmeringText
-              text={appConfig.description}
-              duration={2.5}
-              wave
-              color="var(--muted-foreground)"
-              shimmeringColor="var(--foreground)"
-            />
+            {appConfig.description}
           </motion.p>
 
-          {/* CTA row */}
+          {/* CTA row — one primary, one secondary. Both used to be neutral
+              pills of identical weight. */}
           <motion.div layoutId="hero-cta" variants={fadeUp} className="flex flex-wrap gap-3">
-            <GlowFillButton
+            <ButtonLink
+              href="/projects"
+              size="lg"
+              rounded="full"
+              variant="default"
               icon={ArrowRight}
-              className="h-11 px-6 rounded-full font-medium text-foreground bg-muted border border-border/50 backdrop-blur-sm my-0 relative overflow-hidden"
+              iconPlacement="right"
+              effect="expandIcon"
             >
-              <TransitionLink href="/projects">View Projects</TransitionLink>
-            </GlowFillButton>
+              View projects
+            </ButtonLink>
             <ButtonLink
               href={resume_link}
               target="_blank"
-              size="default"
+              size="lg"
               rounded="full"
               variant="outline"
-              className="h-11 px-6"
             >
               <Icon name="download" />
               Resume
@@ -290,16 +305,22 @@ function DynamicHero({ orbitData }: { orbitData?: HeroOrbitPayload } = {}) {
             ).map((s) => (
               <div
                 key={s.label}
-                className="flex items-baseline gap-1.5 px-3 py-1.5 rounded-full border border-border/60 bg-card/40 backdrop-blur-sm"
+                className="flex items-baseline gap-1.5 rounded-full border border-border/60 bg-card/40 px-3 py-1.5 backdrop-blur-sm"
               >
-                <span className="text-sm font-black tracking-tight tabular-nums">{s.value}</span>
+                {/* Was text-sm against a text-xs label — 2px of hierarchy
+                    between a number and its caption. */}
+                <span className="text-lg font-bold tabular-nums tracking-tight text-foreground">
+                  {s.value}
+                </span>
                 <span className="text-xs text-muted-foreground">{s.label}</span>
               </div>
             ))}
           </motion.div>
         </motion.div>
 
-        <div className="hidden lg:flex items-center justify-center">
+        {/* md, not lg. Gating the hero's only visual at 1024px left the whole
+            768–1023px range with a half-empty 95dvh screen. */}
+        <div className="hidden min-w-0 items-center justify-center md:flex">
           {orbitData ? (
             <HeroOrbit
               stats={orbitData.stats}
@@ -315,29 +336,35 @@ function DynamicHero({ orbitData }: { orbitData?: HeroOrbitPayload } = {}) {
         layoutId="hero-socials"
         className="relative z-10 flex items-center gap-4 px-6 md:px-14 pb-6 pt-4 border-t border-border/30"
       >
-        <span className="text-[10px] font-mono tracking-widest text-muted-foreground/50 uppercase shrink-0">
+        <span className="shrink-0 font-mono text-2xs uppercase tracking-widest text-subtle-foreground">
           Find me
         </span>
-        <div className="flex items-center gap-1 flex-wrap">
+        <div className="flex flex-wrap items-center gap-1">
           {Object.entries(appConfig.social).map(([key, link]) => (
             <a
               key={key}
               href={link}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-accent/60 transition-all duration-200 border border-transparent hover:border-border/50"
+              // min-h-11/min-w-11 = 44px. These were ~30px, icon-only on
+              // mobile, at the very bottom edge of a 95dvh section.
+              className="inline-flex min-h-11 min-w-11 items-center justify-center gap-1.5 rounded-full border border-transparent px-3 text-xs font-medium capitalize text-muted-foreground transition-colors duration-150 ease-out hoverable:border-border/50 hoverable:bg-accent hoverable:text-foreground"
             >
-              <Icon name={key as IconType} className="size-3.5 shrink-0" />
-              <span className="capitalize hidden sm:inline">{key}</span>
+              <Icon name={key as IconType} className="size-4 shrink-0" />
+              <span className="hidden sm:inline">{key}</span>
             </a>
           ))}
         </div>
-        <div className="ml-auto flex items-center gap-2 text-muted-foreground/30">
-          <span className="text-[10px] font-mono uppercase tracking-widest hidden md:block">Scroll</span>
+        <div className="ml-auto flex items-center gap-2 text-subtle-foreground">
+          <span className="hidden font-mono text-2xs uppercase tracking-widest md:block">
+            Scroll
+          </span>
+          {/* Infinite, so it stops under reduced motion. Was ungated, and the
+              /30 tint measured ~1.4:1 — implied rather than visible. */}
           <motion.div
-            animate={{ y: [0, 6, 0] }}
+            animate={reduce ? undefined : { y: [0, 6, 0] }}
             transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
-            className="w-px h-8 bg-muted-foreground/30"
+            className="h-8 w-px bg-subtle-foreground"
           />
         </div>
       </motion.div>
@@ -351,12 +378,16 @@ function DynamicHero({ orbitData }: { orbitData?: HeroOrbitPayload } = {}) {
 function MinimalHero({ orbitData }: { orbitData?: HeroOrbitPayload } = {}) {
   return (
     <>
+      {/* Was `bg-black/0.75` (0.75% — the modifier is 0–100) and
+          `[--pattern-foreground:…]/5`, where the /5 cannot apply alpha to a
+          custom property, so the dots rendered at full opacity. */}
       <div
         className={cn(
-          "aspect-2/1 border-x border-edge select-none sm:aspect-3/1",
-          "flex items-center justify-center text-black dark:text-white",
+          "aspect-2/1 select-none border-x border-edge sm:aspect-3/1",
+          "flex items-center justify-center text-foreground",
           "screen-line-before screen-line-after before:-top-px after:-bottom-px",
-          "bg-black/0.75 bg-[radial-gradient(var(--pattern-foreground)_1px,transparent_0)] bg-size-[10px_10px] bg-center [--pattern-foreground:var(--color-zinc-950)]/5 dark:bg-white/0.75 dark:[--pattern-foreground:var(--color-white)]/5"
+          "bg-center bg-size-[10px_10px] bg-[radial-gradient(var(--pattern-foreground)_1px,transparent_0)]",
+          "[--pattern-foreground:color-mix(in_oklab,var(--foreground)_12%,transparent)]",
         )}
       >
         <Magnet magnetStrength={6}>
@@ -366,14 +397,19 @@ function MinimalHero({ orbitData }: { orbitData?: HeroOrbitPayload } = {}) {
 
       <div className="relative flex border-x border-edge px-3">
         <div className="shrink-0 border-r border-edge">
-          <div className="mx-0.5 my-0.75">
-            <motion.img
-              layoutId="hero-avatar"
-              className="size-30 rounded-full ring-1 ring-border ring-offset-2 ring-offset-background select-none sm:size-40"
-              alt={`${appConfig.displayName}'s avatar`}
-              src={appConfig.avatar}
-              fetchPriority="high"
-            />
+          <div className="m-1">
+            {/* next/image with explicit dimensions, matching the story hero.
+                A raw <img> with no width/height shifted the layout on load. */}
+            <motion.div layoutId="hero-avatar" className="relative size-28 sm:size-40">
+              <Image
+                src={appConfig.avatar}
+                alt={`${appConfig.displayName}'s avatar`}
+                width={160}
+                height={160}
+                priority
+                className="size-full select-none rounded-full object-cover ring-1 ring-input ring-offset-2 ring-offset-background"
+              />
+            </motion.div>
           </div>
         </div>
 
@@ -389,18 +425,21 @@ function MinimalHero({ orbitData }: { orbitData?: HeroOrbitPayload } = {}) {
             <div className="flex items-center gap-2 pl-4">
               <motion.h1
                 layoutId="hero-name"
-                className="-translate-y-px text-3xl font-semibold tracking-tight"
+                className="text-3xl font-semibold tracking-tight"
               >
                 {appConfig.displayName}
               </motion.h1>
+              {/* aria-label needs a role to be announced on a non-interactive
+                  element. */}
               <Icon
                 name="verified:color"
-                className="size-4.5 text-sky-500 select-none"
+                role="img"
                 aria-label="Verified"
+                className="size-4 select-none text-primary"
               />
             </div>
 
-            <div className="h-12.5 border-t border-edge py-1 pl-4 sm:h-9">
+            <div className="min-h-12 border-t border-edge py-1 pl-4 sm:min-h-9">
               <motion.div layoutId="hero-role">
                 <TextFlip
                   className="font-mono text-sm text-balance text-muted-foreground"
@@ -551,7 +590,7 @@ function StaticHero({ orbitData }: { orbitData?: HeroOrbitPayload } = {}) {
           layoutId="hero-socials"
           className="flex flex-col items-start gap-2 pt-3 border-t border-border/30"
         >
-          <span className="text-[10px] font-mono tracking-widest text-muted-foreground/50 uppercase">
+          <span className="text-2xs font-mono tracking-widest text-muted-foreground/50 uppercase">
             Find me
           </span>
           <div className="flex items-center gap-1 flex-wrap">

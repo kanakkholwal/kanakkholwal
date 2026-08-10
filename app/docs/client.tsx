@@ -60,7 +60,7 @@ function MinimalDocs({ posts, latestPostDate }: DocsPageClientProps) {
                 {/* Header */}
                 <BlurFade delay={BLUR_FADE_DELAY}>
                     <div className="mb-16 space-y-4">
-                        <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
+                        <p className="text-2xs font-mono uppercase tracking-widest text-muted-foreground">
               // research &amp; insights
                         </p>
                         <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-metallic">
@@ -105,7 +105,7 @@ function MinimalDocs({ posts, latestPostDate }: DocsPageClientProps) {
                                                     {post.data.description}
                                                 </p>
                                             )}
-                                            <div className="flex items-center gap-3 text-[10px] font-mono text-muted-foreground/50 uppercase tracking-widest pt-1">
+                                            <div className="flex items-center gap-3 text-2xs font-mono text-muted-foreground/50 uppercase tracking-widest pt-1">
                                                 {post.data.lastModified && (
                                                     <time>
                                                         {new Date(
@@ -227,7 +227,7 @@ function StaticDocs({ posts, latestPostDate }: DocsPageClientProps) {
                                             {post.data.tags?.slice(0, 2).map((tag) => (
                                                 <span
                                                     key={tag}
-                                                    className="text-[10px] uppercase tracking-widest font-semibold text-muted-foreground/80 group-hover:text-foreground transition-colors"
+                                                    className="text-2xs uppercase tracking-widest font-semibold text-muted-foreground/80 group-hover:text-foreground transition-colors"
                                                 >
                                                     {tag}
                                                 </span>
@@ -354,10 +354,10 @@ function DynamicDocs({ posts, latestPostDate }: DocsPageClientProps) {
                         <span className="text-4xl md:text-5xl font-bold font-mono text-foreground/10 leading-none select-none">
                             {String(posts.length).padStart(2, "0")}
                         </span>
-                        <span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
+                        <span className="text-2xs font-mono uppercase tracking-widest text-muted-foreground">
                             Total Entries
                         </span>
-                        <span className="text-[10px] font-mono text-muted-foreground/60">
+                        <span className="text-2xs font-mono text-muted-foreground/60">
                             Last: {latestPostDate}
                         </span>
                     </div>
@@ -374,7 +374,7 @@ function DynamicDocs({ posts, latestPostDate }: DocsPageClientProps) {
                 >
                     <div className="flex items-center gap-2">
                         <span className="h-px w-6 bg-border" />
-                        <span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
+                        <span className="text-2xs font-mono uppercase tracking-widest text-muted-foreground">
                             All Entries
                         </span>
                     </div>
@@ -407,7 +407,7 @@ function DynamicDocs({ posts, latestPostDate }: DocsPageClientProps) {
 
                                     <div className="flex flex-col space-y-3 flex-1">
                                         {/* Meta row */}
-                                        <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest text-muted-foreground/50">
+                                        <div className="flex items-center gap-2 text-2xs font-mono uppercase tracking-widest text-muted-foreground/50">
                                             {post.data.lastModified && (
                                                 <time>
                                                     {new Date(post.data.lastModified).toLocaleDateString(
@@ -441,7 +441,7 @@ function DynamicDocs({ posts, latestPostDate }: DocsPageClientProps) {
                                             {post.data.tags?.slice(0, 2).map((tag) => (
                                                 <span
                                                     key={tag}
-                                                    className="text-[9px] uppercase tracking-widest font-semibold px-2 py-0.5 rounded-full border border-border/50 text-muted-foreground group-hover:border-primary/30 group-hover:text-foreground transition-colors"
+                                                    className="text-2xs uppercase tracking-widest font-semibold px-2 py-0.5 rounded-full border border-border/50 text-muted-foreground group-hover:border-primary/30 group-hover:text-foreground transition-colors"
                                                 >
                                                     {tag}
                                                 </span>

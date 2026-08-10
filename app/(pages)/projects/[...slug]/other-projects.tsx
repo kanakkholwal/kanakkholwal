@@ -49,7 +49,7 @@ function MinimalOtherProjects({ projects }: { projects: ProjectData[] }) {
   return (
     <section className="w-full max-w-3xl mx-auto px-6 py-16 border-t border-dashed border-border">
       <BlurFade delay={BLUR_FADE_DELAY}>
-        <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground mb-8">
+        <p className="text-2xs font-mono uppercase tracking-widest text-muted-foreground mb-8">
           // more projects
         </p>
       </BlurFade>
@@ -62,14 +62,14 @@ function MinimalOtherProjects({ projects }: { projects: ProjectData[] }) {
               className="group flex items-baseline justify-between gap-6 py-4 border-b border-border/40 hover:border-border transition-colors"
             >
               <div className="flex items-baseline gap-4 min-w-0">
-                <span className="text-[10px] font-mono text-muted-foreground/40 w-6 shrink-0">
+                <span className="text-2xs font-mono text-muted-foreground/40 w-6 shrink-0">
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <div className="min-w-0">
                   <span className="font-medium text-sm text-foreground group-hover:text-primary transition-colors truncate block">
                     {p.title}
                   </span>
-                  <span className="text-[10px] font-mono text-muted-foreground/60">
+                  <span className="text-2xs font-mono text-muted-foreground/60">
                     {p.dates}
                     {p.tags?.[0] ? ` · ${p.tags[0]}` : ""}
                   </span>
@@ -130,7 +130,7 @@ function StaticOtherProjects({ projects }: { projects: ProjectData[] }) {
                     <h3 className="font-semibold text-sm text-foreground group-hover:text-primary transition-colors truncate">
                       {p.title}
                     </h3>
-                    <p className="text-[11px] font-mono text-muted-foreground mt-0.5">
+                    <p className="text-2xs font-mono text-muted-foreground mt-0.5">
                       {p.dates}
                       {p.tags?.[0] ? ` · ${p.tags[0]}` : ""}
                     </p>
@@ -201,7 +201,7 @@ function DynamicOtherProjects({ projects }: { projects: ProjectData[] }) {
           className="flex items-end justify-between mb-12"
         >
           <div>
-            <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground mb-2">
+            <p className="text-2xs font-mono uppercase tracking-widest text-muted-foreground mb-2">
               // more projects
             </p>
             <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">
@@ -254,7 +254,7 @@ function DynamicOtherProjects({ projects }: { projects: ProjectData[] }) {
                   {/* Status badge */}
                   {p.status && (
                     <div className="absolute top-3 left-3 z-10">
-                      <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold uppercase tracking-widest border bg-black/50 backdrop-blur-sm text-white/80 border-white/10">
+                      <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-2xs font-mono font-semibold uppercase tracking-widest border bg-black/50 backdrop-blur-sm text-white/80 border-white/10">
                         {p.status}
                       </span>
                     </div>
@@ -262,7 +262,7 @@ function DynamicOtherProjects({ projects }: { projects: ProjectData[] }) {
 
                   {/* Hover arrow */}
                   <div className="absolute top-3 right-3 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                    <div className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-[10px] font-mono text-white/80">
+                    <div className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-2xs font-mono text-white/80">
                       <ArrowUpRight className="size-3" />
                       Open
                     </div>
@@ -280,20 +280,20 @@ function DynamicOtherProjects({ projects }: { projects: ProjectData[] }) {
                         {p.title}
                       </h3>
                     )}
-                    <p className="mt-0.5 text-[10px] font-mono text-muted-foreground">
+                    <p className="mt-0.5 text-2xs font-mono text-muted-foreground">
                       {p.dates}
                     </p>
                     <div className="flex gap-1 mt-1">
                       {p.technologies?.slice(0, 3).map((t) => (
                         <span
                           key={t}
-                          className="inline-flex items-center px-1.5 py-0.5 rounded-[3px] bg-muted text-[9px] text-muted-foreground border border-border/50"
+                          className="inline-flex items-center px-1.5 py-0.5 rounded-[3px] bg-muted text-2xs text-muted-foreground border border-border/50"
                         >
                           {t}
                         </span>
                       ))}
                       {p.technologies && p.technologies.length > 3 && (
-                        <span className="text-[9px] text-muted-foreground self-center">
+                        <span className="text-2xs text-muted-foreground self-center">
                           +{p.technologies.length - 3}
                         </span>
                       )}

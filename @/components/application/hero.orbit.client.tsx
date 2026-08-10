@@ -62,7 +62,7 @@ export function HeroOrbit({ stats, activity, fallback = false }: HeroOrbitProps)
       initial={{ opacity: 0, scale: 0.9, y: 16 }}
       animate={{ opacity: 1, scale: 1, y: 0 }}
       transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.3 }}
-      className="select-none"
+      className="w-full max-w-85 select-none"
       onMouseMove={onMouseMove}
       onMouseLeave={() => {
         x.set(0);
@@ -70,25 +70,26 @@ export function HeroOrbit({ stats, activity, fallback = false }: HeroOrbitProps)
       }}
       style={{ rotateX, rotateY, transformStyle: "preserve-3d", perspective: 900 }}
     >
-      {/* Card shell */}
-      <div className="relative w-[340px] rounded-2xl border border-border/60 bg-card/80 backdrop-blur-xl shadow-2xl overflow-hidden">
+      {/* Fluid, capped. A fixed w-[340px] overflowed its grid column whenever
+          the column shrank below that. */}
+      <div className="relative w-full overflow-hidden rounded-2xl border border-border/60 bg-card/80 shadow-2xl backdrop-blur-xl">
 
         {/* Top bar */}
         <div className="flex items-center justify-between px-4 py-3 border-b border-border/40">
           <div className="flex items-center gap-1.5">
-            <span className="size-2.5 rounded-full bg-red-500/80" />
-            <span className="size-2.5 rounded-full bg-yellow-500/80" />
-            <span className="size-2.5 rounded-full bg-emerald-500/80" />
+            <span className="size-2.5 rounded-full bg-destructive/80" />
+            <span className="size-2.5 rounded-full bg-warning/80" />
+            <span className="size-2.5 rounded-full bg-success/80" />
           </div>
-          <span className="text-[10px] font-mono text-muted-foreground tracking-widest">
+          <span className="text-2xs font-mono text-muted-foreground tracking-widest">
             @{appConfig.usernames?.github ?? "kanakkholwal"}
           </span>
-          <div className="flex items-center gap-1 text-emerald-500">
+          <div className="flex items-center gap-1 text-success">
             <span className="relative flex size-1.5">
-              <span className="animate-ping absolute inline-flex size-full rounded-full bg-emerald-500 opacity-75" />
-              <span className="relative inline-flex size-1.5 rounded-full bg-emerald-500" />
+              <span className="animate-ping absolute inline-flex size-full rounded-full bg-success opacity-75 motion-reduce:animate-none" />
+              <span className="relative inline-flex size-1.5 rounded-full bg-success" />
             </span>
-            <span className="text-[10px] font-mono">Shipping</span>
+            <span className="text-2xs font-mono">Shipping</span>
           </div>
         </div>
 
@@ -105,7 +106,7 @@ export function HeroOrbit({ stats, activity, fallback = false }: HeroOrbitProps)
                 fetchPriority="high"
               />
             </div>
-            <span className="absolute bottom-0 right-0 size-3 rounded-full bg-emerald-500 ring-2 ring-card" />
+            <span className="absolute bottom-0 right-0 size-3 rounded-full bg-success ring-2 ring-card" />
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-1.5">
@@ -113,7 +114,7 @@ export function HeroOrbit({ stats, activity, fallback = false }: HeroOrbitProps)
               <Icon name="verified:color" className="size-3.5 text-sky-500 shrink-0" />
             </div>
             <p className="text-xs text-muted-foreground truncate">{appConfig.role}</p>
-            <p className="text-[10px] text-muted-foreground/60 mt-0.5 font-mono truncate">
+            <p className="text-2xs text-muted-foreground/60 mt-0.5 font-mono truncate">
               {appConfig.location}
             </p>
           </div>
@@ -126,7 +127,7 @@ export function HeroOrbit({ stats, activity, fallback = false }: HeroOrbitProps)
               <span className="text-base font-black tracking-tight tabular-nums">
                 <CountingNumber to={s.to} suffix={s.suffix} duration={1.8} startOnView once />
               </span>
-              <span className="text-[9px] text-muted-foreground uppercase tracking-wider">{s.label}</span>
+              <span className="text-2xs text-muted-foreground uppercase tracking-wider">{s.label}</span>
             </div>
           ))}
         </div>
@@ -134,11 +135,11 @@ export function HeroOrbit({ stats, activity, fallback = false }: HeroOrbitProps)
         {/* Activity feed */}
         <div className="px-4 py-3">
           <div className="flex items-center justify-between mb-2">
-            <p className="text-[9px] font-mono text-muted-foreground/50 uppercase tracking-widest">
+            <p className="text-2xs font-mono text-muted-foreground/50 uppercase tracking-widest">
               Recent activity
             </p>
             {fallback && (
-              <span className="text-[9px] font-mono text-muted-foreground/40 uppercase tracking-widest">
+              <span className="text-2xs font-mono text-muted-foreground/40 uppercase tracking-widest">
                 cached
               </span>
             )}
@@ -159,7 +160,7 @@ export function HeroOrbit({ stats, activity, fallback = false }: HeroOrbitProps)
               </motion.li>
             ))}
             {activity.length === 0 && (
-              <li className="text-[11px] text-muted-foreground/60 italic py-1">
+              <li className="text-2xs text-muted-foreground/60 italic py-1">
                 No recent activity to show.
               </li>
             )}
@@ -177,7 +178,7 @@ export function HeroOrbit({ stats, activity, fallback = false }: HeroOrbitProps)
               className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
             >
               <Icon name={key as IconType} className="size-3.5" />
-              <span className="capitalize font-medium text-[11px]">{key}</span>
+              <span className="capitalize font-medium text-2xs">{key}</span>
             </a>
           ))}
           <a
@@ -187,7 +188,7 @@ export function HeroOrbit({ stats, activity, fallback = false }: HeroOrbitProps)
             className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
           >
             <Icon name="cal.com" className="size-3.5" />
-            <span className="font-medium text-[11px]">Book a call</span>
+            <span className="font-medium text-2xs">Book a call</span>
           </a>
         </div>
       </div>

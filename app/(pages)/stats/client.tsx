@@ -82,7 +82,7 @@ function MinimalStats(props: StatsPageClientProps) {
       {sections.map((s, i) => (
         <BlurFade key={s.label} delay={BLUR_FADE_DELAY * (i + 2)}>
           <section>
-            <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground mb-4 pb-2 border-b border-dashed border-border">
+            <p className="text-2xs font-mono uppercase tracking-widest text-muted-foreground mb-4 pb-2 border-b border-dashed border-border">
               {s.label}
             </p>
             {s.node}
@@ -248,7 +248,7 @@ function StoryStats(props: StatsPageClientProps) {
 /* ─── Shared sub-components ──────────────────────────── */
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
-    <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground mb-5 flex items-center gap-2">
+    <p className="text-2xs font-mono uppercase tracking-widest text-muted-foreground mb-5 flex items-center gap-2">
       <span className="h-px w-4 bg-border inline-block" />
       {children}
     </p>
@@ -273,7 +273,7 @@ function DynamicSectionHeader({
         <h2 className="text-xl md:text-2xl font-bold tracking-tight text-foreground leading-none">
           {title}
         </h2>
-        <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground mt-1">
+        <p className="text-2xs font-mono uppercase tracking-widest text-muted-foreground mt-1">
           {subtitle}
         </p>
       </div>

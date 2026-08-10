@@ -83,7 +83,7 @@ export default async function CategoryPage(props: { category: string }) {
         </header>
 
         <div className="space-y-2">
-          <div className="grid grid-cols-[1fr_120px] px-4 py-2 border-b border-border text-xs font-mono text-muted-foreground uppercase tracking-wider">
+          <div className="grid grid-cols-[minmax(0,1fr)_120px] px-4 py-2 border-b border-border text-xs font-mono text-muted-foreground uppercase tracking-wider">
             <span>Document Name</span>
             <span className="text-right">Est. Read</span>
           </div>
@@ -92,7 +92,7 @@ export default async function CategoryPage(props: { category: string }) {
             <Link
               key={page.url}
               href={page.url}
-              className="group grid grid-cols-[1fr_120px] items-center px-4 py-4 rounded-lg hover:bg-primary/5 transition-colors border border-transparent hover:border-border/50"
+              className="group grid grid-cols-[minmax(0,1fr)_120px] items-center px-4 py-4 rounded-lg hover:bg-primary/5 transition-colors border border-transparent hover:border-border/50"
             >
               <div className="flex flex-col gap-1 min-w-0 pr-4">
                 <div className="flex items-center gap-3">

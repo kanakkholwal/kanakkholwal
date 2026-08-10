@@ -37,12 +37,12 @@ export function MetricTile({
       )}
     >
       <div className="flex items-start justify-between gap-2">
-        <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+        <span className="font-mono text-2xs uppercase tracking-widest text-muted-foreground">
           {label}
         </span>
         <span
           className={cn(
-            "inline-flex items-center gap-0.5 rounded-full px-1.5 py-0.5 text-[10px] font-medium tabular-nums",
+            "inline-flex items-center gap-0.5 rounded-full px-1.5 py-0.5 text-2xs font-medium tabular-nums",
             up ? "bg-emerald-500/10 text-emerald-500" : "bg-rose-500/10 text-rose-500",
           )}
         >

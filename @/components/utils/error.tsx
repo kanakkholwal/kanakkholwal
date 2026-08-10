@@ -40,7 +40,7 @@ export default function ErrorBanner({ error, title, description, reset }: Props)
         {/* Technical Digest (Subtle & Functional) */}
         {error?.digest && (
           <div className="group relative mx-auto flex w-fit max-w-full items-center gap-2 rounded-full border border-border/50 bg-muted/40 px-3 py-1.5 transition-colors hover:bg-muted/60 hover:border-border">
-            <span className="shrink-0 text-[10px] font-bold uppercase tracking-wider text-muted-foreground/70">
+            <span className="shrink-0 text-2xs font-bold uppercase tracking-wider text-muted-foreground/70">
               ID
             </span>
             <code className="truncate text-xs font-mono text-foreground">

@@ -339,7 +339,7 @@ function WorkCard({ work }: { work: WorkExperienceType }) {
         <div className="relative z-10 mt-1 rounded-xl border border-border/60 bg-background shadow-sm group-hover:border-primary/30 group-hover:shadow-[0_0_14px_2px_color-mix(in_oklab,var(--primary)_15%,transparent)] transition-all duration-500">
           <Avatar className="size-10 rounded-xl bg-muted/40">
             <AvatarImage src={work.logoUrl} alt={work.company} className="object-contain p-1 rounded-full" />
-            <AvatarFallback className="rounded-xl text-[11px] font-bold text-muted-foreground">
+            <AvatarFallback className="rounded-xl text-2xs font-bold text-muted-foreground">
               {work.company[0]}
             </AvatarFallback>
           </Avatar>
@@ -368,7 +368,7 @@ function WorkCard({ work }: { work: WorkExperienceType }) {
             <span className="text-muted-foreground/30 text-xs select-none">·</span>
             <span className="text-xs text-muted-foreground/60 font-mono truncate">{work.locationType}</span>
           </div>
-          <time className="shrink-0 font-mono text-[11px] tabular-nums text-muted-foreground/50" dateTime={work.startDate}>
+          <time className="shrink-0 font-mono text-2xs tabular-nums text-muted-foreground/50" dateTime={work.startDate}>
             {work.startDate} to {work.endDate ?? "Present"}
           </time>
         </div>
@@ -377,7 +377,7 @@ function WorkCard({ work }: { work: WorkExperienceType }) {
         <h3 className="text-xl md:text-3xl font-bold tracking-tight leading-snug text-foreground group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-foreground group-hover:to-muted-foreground transition-all duration-500">
           {work.title}
           {work.employmentType && (
-            <span className="ml-3 align-middle font-mono text-[10px] font-normal text-muted-foreground/50 uppercase tracking-widest not-italic">
+            <span className="ml-3 align-middle font-mono text-2xs font-normal text-muted-foreground/50 uppercase tracking-widest not-italic">
               {work.employmentType}
             </span>
           )}
@@ -401,7 +401,7 @@ function WorkCard({ work }: { work: WorkExperienceType }) {
               <Badge
                 key={badge}
                 variant="secondary"
-                className="px-2 py-0 h-5 text-[10px] font-mono font-normal rounded-sm bg-muted/60 text-muted-foreground border-transparent"
+                className="px-2 py-0 h-5 text-2xs font-mono font-normal rounded-sm bg-muted/60 text-muted-foreground border-transparent"
               >
                 {badge}
               </Badge>
@@ -419,7 +419,7 @@ function WorkCardMeta({ work, align = "left" }: { work: WorkExperienceType; alig
       <div className={cn("flex items-center gap-3", align === "right" && "flex-row-reverse")}>
         <Avatar className="size-10 rounded-xl border border-border/60 bg-muted/40 shadow-sm">
           <AvatarImage src={work.logoUrl} alt={work.company} className="object-contain p-1 rounded-full" />
-          <AvatarFallback className="rounded-xl text-[11px] font-bold text-muted-foreground">
+          <AvatarFallback className="rounded-xl text-2xs font-bold text-muted-foreground">
             {work.company[0]}
           </AvatarFallback>
         </Avatar>
@@ -440,7 +440,7 @@ function WorkCardMeta({ work, align = "left" }: { work: WorkExperienceType; alig
           ) : (
             <span className="text-sm font-semibold text-foreground/90">{work.company}</span>
           )}
-          <p className="text-[11px] text-muted-foreground/60 font-mono">{work.locationType}</p>
+          <p className="text-2xs text-muted-foreground/60 font-mono">{work.locationType}</p>
         </div>
       </div>
     </div>

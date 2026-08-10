@@ -41,7 +41,7 @@ export async function NPMStats() {
           <PiPackageDuotone className="size-6" />
         </div>
         <div className="flex flex-col">
-          <span className="text-[10px] uppercase font-mono text-muted-foreground tracking-widest">
+          <span className="text-2xs uppercase font-mono text-muted-foreground tracking-widest">
             Total_Aggregated_Downloads
           </span>
           <div className="text-3xl lg:text-4xl font-bold font-sans tracking-tight flex items-baseline gap-1">

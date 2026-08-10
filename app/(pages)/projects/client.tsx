@@ -81,7 +81,7 @@ function MinimalProjects({
               </div>
               <div className="flex items-center gap-3 shrink-0">
                 {project.status && (
-                  <span className="hidden sm:inline text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded border border-border text-muted-foreground">
+                  <span className="hidden sm:inline text-2xs font-mono uppercase tracking-wider px-2 py-0.5 rounded border border-border text-muted-foreground">
                     {project.status}
                   </span>
                 )}

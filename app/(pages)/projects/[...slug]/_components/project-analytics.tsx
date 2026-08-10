@@ -67,7 +67,7 @@ function ProjectAnalyticsPanel({ result }: { result: AnalyticsResult }) {
       )}
 
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+        <p className="font-mono text-2xs uppercase tracking-widest text-muted-foreground">
           {snapshot.label} · last {snapshot.range.days} days
         </p>
         <RangeTabs value={rangeKey} onChange={setRangeKey} />
@@ -77,7 +77,7 @@ function ProjectAnalyticsPanel({ result }: { result: AnalyticsResult }) {
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
           {stats.map((s) => (
             <div key={s.label} className="rounded-xl border border-border bg-card/50 p-4">
-              <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+              <p className="font-mono text-2xs uppercase tracking-widest text-muted-foreground">
                 {s.label}
               </p>
               <p className="mt-1.5 text-xl font-semibold tabular-nums text-foreground">
@@ -88,7 +88,7 @@ function ProjectAnalyticsPanel({ result }: { result: AnalyticsResult }) {
         </div>
 
         <div className="rounded-xl border border-border bg-card/50 p-5" style={{ color: "var(--chart-1)" }}>
-          <p className="mb-3 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+          <p className="mb-3 font-mono text-2xs uppercase tracking-widest text-muted-foreground">
             Visitors over time
           </p>
           <AreaSpark data={users} labels={labels} height={200} interactive formatValue={full} />

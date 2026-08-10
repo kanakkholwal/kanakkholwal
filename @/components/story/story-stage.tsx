@@ -60,7 +60,7 @@ function SceneView({ scene }: { scene: StoryScene }) {
   switch (scene.kind) {
     case "headline":
       return (
-        <p className="text-balance text-2xl font-medium leading-snug tracking-tight text-foreground md:text-[2rem]">
+        <p className="text-balance text-2xl font-medium leading-snug tracking-tight text-foreground md:text-3xl">
           {scene.body}
         </p>
       );

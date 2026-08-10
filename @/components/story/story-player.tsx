@@ -235,7 +235,7 @@ function PlayerBar({
             </IconButton>
 
             <div className="flex items-center gap-2 px-2">
-              <span className="font-mono text-[10px] tabular-nums text-muted-foreground">
+              <span className="font-mono text-2xs tabular-nums text-muted-foreground">
                 {String(progress.index + 1).padStart(2, "0")}/{String(progress.total).padStart(2, "0")}
               </span>
               <div className="h-1 w-24 overflow-hidden rounded-full bg-border">

@@ -56,7 +56,7 @@ export default async function StatsPage(props: StatsPageProps) {
 
       <div className="flex divide-x divide-border border border-border bg-background/50 backdrop-blur-sm rounded-lg overflow-hidden">
         <div className="px-4 py-2 flex flex-col justify-center">
-          <span className="text-[10px] uppercase font-mono text-muted-foreground">
+          <span className="text-2xs uppercase font-mono text-muted-foreground">
             Sources
           </span>
           <span className="font-medium text-sm whitespace-nowrap">GitHub / NPM</span>

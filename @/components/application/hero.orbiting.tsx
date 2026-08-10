@@ -77,7 +77,7 @@ export function OrbitingIdentity() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-zinc-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-zinc-200"></span>
               </span>
-              <span className="text-[10px] font-medium tracking-tight text-zinc-400 uppercase">
+              <span className="text-2xs font-medium tracking-tight text-zinc-400 uppercase">
                 Available
               </span>
             </div>
@@ -121,7 +121,7 @@ export function OrbitingIdentity() {
                 <TechIcon key={i} icon={skill} />
               ))}
               <div className="flex-1 text-right">
-                <span className="text-[10px] text-zinc-600 font-mono">
+                <span className="text-2xs text-zinc-600 font-mono">
                   +More
                 </span>
               </div>

@@ -91,7 +91,7 @@ function ErrorBanner({ message }: { message: string }) {
 
 function StatusPill({ ok, source }: { ok: boolean; source: string }) {
   return (
-    <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background/60 px-2.5 py-1 font-mono text-[9px] uppercase tracking-widest text-muted-foreground backdrop-blur-md">
+    <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background/60 px-2.5 py-1 font-mono text-2xs uppercase tracking-widest text-muted-foreground backdrop-blur-md">
       <span className="relative flex size-1.5">
         {ok && (
           <span className="absolute inline-flex size-full animate-ping rounded-full bg-emerald-400 opacity-75" />
@@ -182,7 +182,7 @@ function DynamicAnalytics({ snapshot, view, ok, source, rangeKey, setRangeKey }:
         >
           <div className="mb-6">
             <h2 className="text-lg font-semibold tracking-tight text-foreground">Visitors over time</h2>
-            <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+            <p className="font-mono text-2xs uppercase tracking-widest text-muted-foreground">
               Daily unique visitors · last {snapshot.range.days} days
             </p>
           </div>
@@ -234,7 +234,7 @@ function MinimalAnalytics({ snapshot, view, ok, source, rangeKey, setRangeKey }:
           <div className="grid grid-cols-2 gap-x-8 gap-y-6 border-y border-border py-8 md:grid-cols-4">
             {view.metrics.map((m) => (
               <div key={m.label} className="space-y-1">
-                <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                <p className="font-mono text-2xs uppercase tracking-widest text-muted-foreground">
                   {m.label}
                 </p>
                 <p className="text-2xl font-semibold tabular-nums text-foreground">
@@ -252,7 +252,7 @@ function MinimalAnalytics({ snapshot, view, ok, source, rangeKey, setRangeKey }:
 
         <BlurFade delay={DELAY * 3}>
           <div className="space-y-4">
-            <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+            <p className="font-mono text-2xs uppercase tracking-widest text-muted-foreground">
               // visitors
             </p>
             <div style={{ color: "var(--chart-1)" }}>
@@ -289,7 +289,7 @@ function StaticAnalytics({ snapshot, view, ok, source, rangeKey, setRangeKey }: 
           <div className="flex flex-col items-start gap-3 md:items-end">
             <RangeTabs value={rangeKey} onChange={setRangeKey} />
             <div className="rounded-lg border border-border px-4 py-2">
-              <span className="block font-mono text-[10px] uppercase text-muted-foreground">Source</span>
+              <span className="block font-mono text-2xs uppercase text-muted-foreground">Source</span>
               <span className="text-sm font-medium text-foreground">
                 {source === "ga" ? "Google Analytics" : source === "posthog" ? "PostHog" : "Analytics"}
               </span>
@@ -302,7 +302,7 @@ function StaticAnalytics({ snapshot, view, ok, source, rangeKey, setRangeKey }: 
         <div className="grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-border bg-border lg:grid-cols-4">
           {view.metrics.map((m) => (
             <div key={m.label} className="bg-background p-5">
-              <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+              <p className="font-mono text-2xs uppercase tracking-widest text-muted-foreground">
                 {m.label}
               </p>
               <p className="mt-2 text-2xl font-semibold tabular-nums text-foreground">
@@ -313,7 +313,7 @@ function StaticAnalytics({ snapshot, view, ok, source, rangeKey, setRangeKey }: 
         </div>
 
         <div className="mt-6 rounded-xl border border-border p-6">
-          <p className="mb-4 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+          <p className="mb-4 font-mono text-2xs uppercase tracking-widest text-muted-foreground">
             Visitors · last {snapshot.range.days} days
           </p>
           <div style={{ color: "var(--chart-1)" }}>
@@ -370,7 +370,7 @@ function StoryAnalytics({ snapshot, view, rangeKey, setRangeKey }: ViewProps) {
           <div className="grid grid-cols-2 gap-6 border-y border-border py-8 md:grid-cols-4">
             {view.metrics.map((m) => (
               <div key={m.label} className="space-y-1">
-                <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                <p className="font-mono text-2xs uppercase tracking-widest text-muted-foreground">
                   {m.label}
                 </p>
                 <p className="text-2xl font-semibold tabular-nums text-foreground">

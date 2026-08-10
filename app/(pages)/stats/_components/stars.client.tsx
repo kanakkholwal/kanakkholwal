@@ -61,7 +61,7 @@ export function StarsGraph({ data, stargazersTab }: StarsGraphProps) {
             </div>
 
             <div className="flex flex-col">
-              <span className="text-[10px] font-mono uppercase text-muted-foreground tracking-widest leading-none mb-1">
+              <span className="text-2xs font-mono uppercase text-muted-foreground tracking-widest leading-none mb-1">
                 Repository
               </span>
               <Select defaultValue={activeRepo} onValueChange={setActiveRepo}>
@@ -88,7 +88,7 @@ export function StarsGraph({ data, stargazersTab }: StarsGraphProps) {
 
           <div className="flex items-center gap-4 self-end sm:self-auto">
             <div className="inline-flex flex-col items-end gap-1 mr-2">
-              <span className="text-[10px] font-mono uppercase text-muted-foreground tracking-widest leading-none mb-1">
+              <span className="text-2xs font-mono uppercase text-muted-foreground tracking-widest leading-none mb-1">
                 Total_Stars
               </span>
               <span className="font-mono font-bold text-lg leading-none">
@@ -104,13 +104,13 @@ export function StarsGraph({ data, stargazersTab }: StarsGraphProps) {
               <TabsList className="h-9 p-1 gap-1">
                 <TabsTrigger
                   value="earned"
-                  className="h-7 px-3 text-[10px] font-mono uppercase tracking-wider data-[state=active]:bg-background data-[state=active]:shadow-sm data-[state=active]:text-amber-600"
+                  className="h-7 px-3 text-2xs font-mono uppercase tracking-wider data-[state=active]:bg-background data-[state=active]:shadow-sm data-[state=active]:text-amber-600"
                 >
                   <PiChartBarDuotone className="mr-1.5 text-sm" /> Graph
                 </TabsTrigger>
                 <TabsTrigger
                   value="gazers"
-                  className="h-7 px-3 text-[10px] font-mono uppercase tracking-wider data-[state=active]:bg-background data-[state=active]:shadow-sm data-[state=active]:text-amber-600"
+                  className="h-7 px-3 text-2xs font-mono uppercase tracking-wider data-[state=active]:bg-background data-[state=active]:shadow-sm data-[state=active]:text-amber-600"
                 >
                   <PiListDuotone className="mr-1.5 text-sm" /> List
                 </TabsTrigger>

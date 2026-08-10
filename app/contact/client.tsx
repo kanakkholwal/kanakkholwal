@@ -55,7 +55,7 @@ function MinimalContact({ displayName, email }: ContactPageClientProps) {
       <div className="w-full max-w-2xl space-y-12">
         <BlurFade delay={BLUR_FADE_DELAY}>
           <header className="space-y-3">
-            <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
+            <p className="text-2xs font-mono uppercase tracking-widest text-muted-foreground">
               // contact
             </p>
             <h1 className="text-2xl font-bold tracking-tight">Get in touch</h1>
@@ -74,7 +74,7 @@ function MinimalContact({ displayName, email }: ContactPageClientProps) {
 
         <BlurFade delay={BLUR_FADE_DELAY * 2}>
           <div className="space-y-3">
-            <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
+            <p className="text-2xs font-mono uppercase tracking-widest text-muted-foreground">
               // book a call
             </p>
             <BookACallForm />
@@ -216,7 +216,7 @@ function DynamicContact({ displayName, email }: ContactPageClientProps) {
           className="flex items-center gap-3"
         >
           <Calendar className="size-4 text-primary shrink-0" />
-          <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
+          <p className="text-2xs font-mono uppercase tracking-widest text-muted-foreground">
             Book a call
           </p>
         </motion.div>

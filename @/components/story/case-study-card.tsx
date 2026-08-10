@@ -57,7 +57,7 @@ export function CaseStudyCard({
         </div>
 
         {facets.headline && (
-          <p className="max-w-xl text-[15px] leading-relaxed text-foreground/85">
+          <p className="max-w-xl text-base leading-relaxed text-foreground/85">
             {facets.headline}
           </p>
         )}
@@ -165,7 +165,7 @@ function Prose({ heading, body }: { heading: string; body: string }) {
   return (
     <div className="space-y-1.5">
       <p className="text-sm font-medium text-muted-foreground">{heading}</p>
-      <p className="max-w-2xl text-[15px] leading-relaxed text-foreground/85">{body}</p>
+      <p className="max-w-2xl text-base leading-relaxed text-foreground/85">{body}</p>
     </div>
   );
 }

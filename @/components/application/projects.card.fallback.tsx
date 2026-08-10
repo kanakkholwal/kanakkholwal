@@ -80,7 +80,7 @@ export function ProjectFallback({
 
       {/* Optional meta (e.g. dates) */}
       {meta && (
-        <p className="relative z-10 mt-3 font-mono text-[10px] uppercase tracking-widest text-zinc-400 dark:text-zinc-500">
+        <p className="relative z-10 mt-3 font-mono text-2xs uppercase tracking-widest text-zinc-400 dark:text-zinc-500">
           {meta}
         </p>
       )}

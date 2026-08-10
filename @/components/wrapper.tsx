@@ -1,15 +1,14 @@
 "use client";
 
 import { Header } from "@/components/header";
-import { Logo } from "@/components/logo";
 import { StyleModels, StylingModel } from "@/constants/ui";
 import useStorage from "@/hooks/use-storage";
 import { cn } from "@/lib/utils";
-import { AnimatePresence, LayoutGroup, motion, Variants } from "framer-motion";
+import { LayoutGroup, useReducedMotion } from "framer-motion";
 import { ReactLenis } from "lenis/react";
 import { useTheme } from "next-themes";
 import dynamic from "next/dynamic";
-import { Suspense, useEffect, useRef, useState } from "react";
+import { Suspense, useRef } from "react";
 import { FlickeringGrid } from "./animated/bg.flickering";
 import ConditionalRender from "./utils/conditional-render";
 
@@ -22,27 +21,7 @@ const FooterSection = dynamic(
   () => import("./footer").then((m) => ({ default: m.FooterSection })),
 );
 
-// Staggered animation for content elements
-const CONTAINER_VARIANTS: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.3,
-    },
-  },
-};
-
-const ITEM_VARIANTS: Variants = {
-  hidden: { opacity: 0, y: 20, filter: "blur(5px)" },
-  visible: {
-    opacity: 1,
-    y: 0,
-    filter: "blur(0px)",
-    transition: { type: "spring", stiffness: 100, damping: 20 },
-  },
-};
+const MINIMAL_HOME_LAYOUT = "mx-auto md:max-w-3xl *:[[id]]:scroll-mt-22 space-y-4";
 
 export default function PageWrapper({
   children,
@@ -57,64 +36,42 @@ export default function PageWrapper({
     "styling.model",
     StyleModels[0].id,
   );
-  const [isLoaded, setIsLoaded] = useState(false);
   const { resolvedTheme } = useTheme();
   const [animationEnabled] = useStorage("animations.enabled", false);
   const [animationMode] = useStorage("animations.mode", "stars");
+  const reduce = useReducedMotion();
 
   const containerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const timer = setTimeout(() => setIsLoaded(true), 1200);
-    return () => clearTimeout(timer);
-  }, []);
+  const isMinimalHome = selectedStyle === "minimal" && isHome;
 
   return (
-    <ReactLenis root options={{ lerp: 0.1, duration: 1.5, smoothWheel: true }}>
+    // Lenis hijacks native scroll, so it is off entirely under reduced motion —
+    // otherwise there is no way for a user to get their own scrolling back.
+    <ReactLenis
+      root
+      options={{ lerp: 0.12, smoothWheel: !reduce, syncTouch: false }}
+    >
       <LayoutGroup>
-        <div
-          ref={containerRef}
-          className={cn(
-            "relative min-h-dvh w-full overflow-x-clip",
-            !isLoaded && "h-dvh overflow-y-hidden",
-          )}
-        >
-          <div className="fixed top-0 left-0 right-0 z-50">
-            <Header transition={isLoaded} />
+        <div ref={containerRef} className="relative min-h-dvh w-full">
+          <div className="fixed top-0 left-0 right-0 z-40">
+            <Header />
           </div>
 
-          <AnimatePresence>
-            <ConditionalRender condition={!isLoaded}>
-              <motion.div
-                className="fixed inset-0 z-[60] flex items-center justify-center bg-background"
-                exit={{ opacity: 0, pointerEvents: "none" }}
-                transition={{ duration: 0.5, ease: "easeInOut" }}
-              >
-                <motion.div
-                  layoutId="splash"
-                  className="relative z-20"
-                  transition={{ type: "spring", stiffness: 80, damping: 15 }}
-                >
-                  <Logo size="xl" draw isLoader />
-                </motion.div>
-              </motion.div>
-
-            </ConditionalRender>
-          </AnimatePresence>
-
-          <motion.main
+          {/* No splash, no gate. The markup is server-rendered and readable at
+              first paint; the old 1.2s timer was tied to nothing and locked
+              scroll while it ran. */}
+          <main
             className={cn(
               "relative z-10 min-h-dvh w-full",
-              (selectedStyle === "minimal" && isHome) ? "mx-auto md:max-w-3xl *:[[id]]:scroll-mt-22 space-y-4" : "overflow-x-clip pb-20",
+              isMinimalHome ? MINIMAL_HOME_LAYOUT : "pb-20",
               className,
             )}
-            initial="hidden"
-            animate={isLoaded ? "visible" : "hidden"}
-            variants={CONTAINER_VARIANTS}
           >
             {children}
-          </motion.main>
-          <ConditionalRender condition={animationEnabled}>
+          </main>
+
+          <ConditionalRender condition={animationEnabled && !reduce}>
             <div className="fixed inset-0 -z-10 pointer-events-none">
               <ConditionalRender condition={animationMode === "stars"}>
                 <StarsBackground
@@ -133,22 +90,15 @@ export default function PageWrapper({
                   flickerChance={0.05}
                 />
               </ConditionalRender>
-              <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
+              <div className="absolute inset-0 bg-linear-to-t from-background via-transparent to-transparent" />
             </div>
           </ConditionalRender>
 
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={isLoaded ? { opacity: 1 } : { opacity: 0 }}
-            transition={{ delay: 0.8, duration: 0.5 }}
-            className={
-              cn((selectedStyle === "minimal" && isHome) ? "mx-auto md:max-w-3xl *:[[id]]:scroll-mt-22 space-y-4" : "overflow-x-clip")
-            }
-          >
-            <Suspense fallback={<div className="min-h-48" />}>
+          <div className={cn(isMinimalHome && "mx-auto md:max-w-3xl")}>
+            <Suspense fallback={null}>
               <FooterSection />
             </Suspense>
-          </motion.div>
+          </div>
         </div>
       </LayoutGroup>
     </ReactLenis>

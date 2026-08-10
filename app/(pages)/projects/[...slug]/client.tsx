@@ -130,7 +130,7 @@ function MinimalProjectPage({ project, analytics, children }: ProjectPageProps) 
                   className="text-2xl font-bold font-mono text-foreground"
                   suffix="+"
                 />
-                <span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
+                <span className="text-2xs font-mono uppercase tracking-widest text-muted-foreground">
                   {m.label}
                 </span>
               </div>
@@ -144,7 +144,7 @@ function MinimalProjectPage({ project, analytics, children }: ProjectPageProps) 
           {project.technologies.map((t) => (
             <span
               key={t}
-              className="px-2 py-0.5 rounded text-[10px] font-mono bg-muted text-muted-foreground border border-border"
+              className="px-2 py-0.5 rounded text-2xs font-mono bg-muted text-muted-foreground border border-border"
             >
               {t}
             </span>
@@ -419,7 +419,7 @@ function DynamicProjectPage({ project, analytics, children }: ProjectPageProps) 
             {project.metrics.map((m, i) => (
               <div key={i} className="px-6 first:pl-0 last:pr-0 flex flex-col gap-1">
                 <CountingNumber to={m.value} className="text-3xl font-bold font-mono tracking-tight text-foreground" suffix="+" />
-                <span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">{m.label}</span>
+                <span className="text-2xs font-mono uppercase tracking-widest text-muted-foreground">{m.label}</span>
               </div>
             ))}
           </div>
@@ -458,7 +458,7 @@ function DynamicProjectPage({ project, analytics, children }: ProjectPageProps) 
                 transition={{ duration: 0.5, delay: 0.1 }}
                 className="rounded-2xl border border-border/60 bg-card/50 backdrop-blur-md p-6 shadow-xl"
               >
-                <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground mb-4 flex items-center gap-2">
+                <p className="text-2xs font-mono uppercase tracking-widest text-muted-foreground mb-4 flex items-center gap-2">
                   <Code2 className="size-3" /> Stack
                 </p>
                 <div className="flex flex-wrap gap-2">
@@ -477,7 +477,7 @@ function DynamicProjectPage({ project, analytics, children }: ProjectPageProps) 
                 transition={{ duration: 0.5, delay: 0.2 }}
                 className="rounded-2xl border border-border/60 bg-card/50 backdrop-blur-md p-6 shadow-xl"
               >
-                <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground mb-4 flex items-center gap-2">
+                <p className="text-2xs font-mono uppercase tracking-widest text-muted-foreground mb-4 flex items-center gap-2">
                   <Layers className="size-3" /> Context
                 </p>
                 <div className="space-y-3 text-sm">
@@ -495,7 +495,7 @@ function DynamicProjectPage({ project, analytics, children }: ProjectPageProps) 
                   transition={{ duration: 0.5, delay: 0.3 }}
                   className="rounded-2xl border border-border/60 bg-card/50 backdrop-blur-md p-6 shadow-xl"
                 >
-                  <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground mb-4 flex items-center gap-2">
+                  <p className="text-2xs font-mono uppercase tracking-widest text-muted-foreground mb-4 flex items-center gap-2">
                     <Rocket className="size-3" /> Links
                   </p>
                   <div className="flex flex-col gap-2">
@@ -585,7 +585,7 @@ function StoryProjectPage({ project, analytics, children }: ProjectPageProps) {
                 suffix="+"
                 className="text-2xl font-bold tracking-tight text-foreground"
               />
-              <p className="mt-0.5 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+              <p className="mt-0.5 font-mono text-2xs uppercase tracking-widest text-muted-foreground">
                 {m.label}
               </p>
             </div>
@@ -629,11 +629,11 @@ const StatusPill = ({ status, minimal }: { status: string; minimal?: boolean }) 
   const isPulse = key === "shipped" || key === "active" || key === "in progress";
 
   if (minimal) {
-    return <span className="font-mono text-[10px] uppercase tracking-widest">[{status}]</span>;
+    return <span className="font-mono text-2xs uppercase tracking-widest">[{status}]</span>;
   }
 
   return (
-    <div className={cn("inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider ring-1 ring-inset", activeStyle)}>
+    <div className={cn("inline-flex items-center gap-2 px-3 py-1 rounded-full text-2xs font-bold uppercase tracking-wider ring-1 ring-inset", activeStyle)}>
       <span className="relative flex h-2 w-2">
         {isPulse && <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-current opacity-75" />}
         <span className="relative inline-flex rounded-full h-2 w-2 bg-current" />
@@ -646,7 +646,7 @@ const StatusPill = ({ status, minimal }: { status: string; minimal?: boolean }) 
 function SidebarCard({ title, icon, children }: { title: string; icon: React.ReactNode; children: React.ReactNode }) {
   return (
     <div className="rounded-xl border border-border/60 p-5">
-      <h3 className="mb-4 flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+      <h3 className="mb-4 flex items-center gap-1.5 font-mono text-2xs uppercase tracking-widest text-muted-foreground">
         {icon} {title}
       </h3>
       {children}
@@ -657,7 +657,7 @@ function SidebarCard({ title, icon, children }: { title: string; icon: React.Rea
 function MetaRow({ label, value, last }: { label: string; value: string; last?: boolean }) {
   return (
     <div className={cn("flex items-center justify-between gap-4 py-2", !last && "border-b border-border/40")}>
-      <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">{label}</span>
+      <span className="font-mono text-2xs uppercase tracking-widest text-muted-foreground">{label}</span>
       <span className="text-sm font-medium capitalize text-foreground">{value}</span>
     </div>
   );

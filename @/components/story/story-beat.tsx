@@ -70,7 +70,7 @@ export function StoryBeat({ beat, index }: { beat: Beat; index: number }) {
             {beat.heading}
           </span>
         </div>
-        <p className="text-2xl leading-relaxed text-foreground md:text-[1.7rem] md:leading-[1.4]">
+        <p className="text-2xl leading-relaxed text-foreground md:text-2xl md:leading-[1.4]">
           {beat.body}
         </p>
       </div>

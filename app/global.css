@@ -7,182 +7,173 @@
 
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
+/* Hover styling belongs behind this, not behind bare `hover:`. Touch devices
+   fire :hover on tap and leave it stuck until the next tap elsewhere. */
+@custom-variant hoverable {
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      @slot;
+    }
+  }
+}
 
+/* Every colour pair below is measured. Text tokens clear 4.5:1 on the surfaces
+   they are used on; --input, --ring and the chart series clear 3:1. Don't
+   re-tune one side of a pair without re-measuring the other. */
 :root,
 [data-theme="light"] {
-  --background: hsl(0, 0%, 98%);
-  --foreground: hsl(0deg 0% 9.8%);
-  --card: hsl(0, 0%, 100%);
-  --card-foreground: hsl(0deg 0% 9.8%);
+  --background: hsl(0 0% 98%);
+  --foreground: hsl(0 0% 9.8%);
+  --card: hsl(0 0% 100%);
+  --card-foreground: hsl(0 0% 9.8%);
   --popover: hsl(0 0% 100%);
-  --popover-foreground: hsl(0deg 0% 9.8%);
-  --primary: hsl(200.21deg 100% 39.22%);
-  --primary-foreground: hsl(0deg 0% 92.16%);
+  --popover-foreground: hsl(0 0% 9.8%);
 
-  --secondary: hsla(240 4.8% 95.9%);
-  --secondary-foreground: hsla(240 5.9% 10%);
+  /* 35% L, not 39.22% — white on it is 4.95:1 and it is 4.74:1 as link text.
+     At the old value both were under 4.5. */
+  --primary: hsl(200.21 100% 35%);
+  --primary-foreground: hsl(0 0% 100%);
 
-  --tertiary: #20adee;
-  --tertiary-foreground: hsl(0deg 0% 92.16%);
+  --secondary: hsl(240 4.8% 95.9%);
+  --secondary-foreground: hsl(240 5.9% 10%);
 
-  --muted: hsl(0, 0%, 92%);
-  --muted-foreground: hsl(220 8.9% 46.1%);
+  --tertiary: hsl(200.21 100% 35%);
+  --tertiary-foreground: hsl(0 0% 100%);
 
-  --accent: hsl(344.79deg 33.25% 96.34%);
-  --accent-foreground: hsl(220.9 39.3% 11%);
-  --destructive: hsl(0 84.2% 60.2%);
-  --destructive-foreground: hsl(0deg 0% 92.16%);
-  --max-app-width: clamp(1440px, 80vw, 2480px);
+  --muted: hsl(0 0% 94%);
+  --muted-foreground: hsl(215 12% 40%);
+  /* Third text tier. Exists so nobody reaches for `text-muted-foreground/50`,
+     which lands anywhere between 1.4:1 and 3:1 depending on the surface. */
+  --subtle-foreground: hsl(215 9% 46%);
 
-  /* Subtle shadow for Light Mode */
-  --spotlight-color: rgba(0, 0, 0, 0.05);
-  /* proposed */
-  /* --destructive: oklch(0.577 0.245 27.325);
-    --destructive-foreground: oklch(0.985 0 0);
-    --success: oklch(0.646 0.222 142.495);
-    --success-foreground: oklch(0.985 0 0);
-    --warning: oklch(0.828 0.189 84.429);
-    --warning-foreground: oklch(0.145 0 0);
-    --info: oklch(0.6 0.118 184.704);
-    --info-foreground: oklch(0.985 0 0); */
+  --accent: hsl(240 5% 94%);
+  --accent-foreground: hsl(240 6% 10%);
 
-  --border: hsl(220 13% 91%);
-  --input: oklch(.922 0 0);
+  --destructive: hsl(354 70% 44%);
+  --destructive-foreground: hsl(0 0% 100%);
+  --success: hsl(158 78% 27%);
+  --success-foreground: hsl(0 0% 100%);
+  --warning: hsl(36 100% 30%);
+  --warning-foreground: hsl(0 0% 100%);
+  --info: hsl(200.21 100% 35%);
+  --info-foreground: hsl(0 0% 100%);
 
-  --ring: var(--primary, hsl(262.1 83.3% 57.8%));
+  --max-app-width: clamp(1024px, 92vw, 1600px);
+  --spotlight-color: rgb(0 0 0 / 0.05);
+
+  /* Two jobs, two tokens. --border draws decorative dividers (exempt from
+     1.4.11); --input draws control boundaries and must clear 3:1. */
+  --border: hsl(220 13% 89%);
+  --input: hsl(215 8% 57%);
+
+  --ring: var(--primary);
   --radius: 0.75rem;
   --edge: color-mix(in oklab, var(--border) 64%, var(--background));
 
-  --sidebar: oklch(0.985 0 0);
-
-  --sidebar-background: hsl(0 0% 98%);
-  --sidebar-foreground: hsl(240 5.3% 26.1%);
-  --sidebar-primary: hsl(240 5.9% 10%);
-  --sidebar-primary-foreground: hsl(0 0% 98%);
-  --sidebar-accent: hsl(240 4.8% 95.9%);
-  --sidebar-accent-foreground: hsl(240 5.9% 10%);
-  --sidebar-border: hsl(220 13% 91%);
-  --sidebar-ring: hsl(217.2 91.2% 59.8%);
-
-  --text-primary: hsl(0deg 0% 96.08%);
-  --text-secondary: hsl(0deg 0% 9.8%);
-  --text-tertiary: hsl(0deg 0% 9.8%);
-  --bg-primary: hsl(0deg 0% 96.08%);
-  --bg-secondary: hsl(0deg 0% 9.8%);
-  --bg-tertiary: hsl(0deg 0% 9.8%);
-  --bg-quaternary: hsl(0deg 0% 9.8%);
-  --bg-button: hsl(0deg 0% 9.8%);
-  --border-primary: hsla(0, 0%, 100%, 0.12);
-  --border-secondary: hsla(0, 0%, 100%, 0.08);
-  --button-shadow: 0px -1px 0px 0px hsla(0, 0%, 100%, 0.04), 0px 0px 0px 1px hsla(0, 0%, 100%, 0.12), 0px 0px 1px 0px rgba(0, 0, 0, 0.04), 0px 2px 2px 0px rgba(0, 0, 0, 0.04), 0px 4px 2px 0px rgba(0, 0, 0, 0.04), 0px 6px 3px 0px rgba(0, 0, 0, 0.04);
-
-  /* Charts: Adjusted for harmony with the violet theme */
-  --chart-1: hsl(262 80% 50%);
-  --chart-2: hsl(199 89% 48%);
-  --chart-3: hsl(340 75% 55%);
-  --chart-4: hsl(160 84% 39%);
-  --chart-5: hsl(43 90% 55%);
-  --chart-6: hsl(27 87% 67%);
-  --chart-7: hsl(188.74deg 94.5% 42.75%);
-  --chart-8: hsl(33.3 5.5% 32.4%);
-  --chart-9: hsl(84.8 85.2% 34.5%);
-  --chart-10: hsl(191.6 91.4% 36.5%);
-  --chart-11: hsl(161.4 93.5% 30.4%);
-  --chart-12: hsl(174.7 83.9% 31.6%);
-  --chart-13: hsl(262.1 83.3% 57.8%);
-  --chart-14: hsl(333.3 71.4% 50.6%);
-  --chart-15: hsl(346.8 77.2% 49.8%);
-
-}
-
-.dark,
-[data-theme="dark"] {
-  --background: hsl(0deg 0% 9.02%);
-  --foreground: hsl(0deg 0% 92.16%);
-  --card: hsl(0deg 0% 9.8%);
-  --card-foreground: hsl(0deg 0% 92.16%);
-  --popover: hsl(0deg 0% 9.8%);
-  --popover-foreground: hsl(0deg 0% 92.16%);
-
-  --primary: hsl(200.21deg 100% 39.22%);
-  --primary-foreground: hsl(0deg 0% 92.16%);
-
-  --warning: hsl(37deg, 87%, 41%);
-  --muted: hsl(0deg 0.01% 12.16%);
-  --muted-foreground: hsl(217.9 10.6% 64.9%);
-
-  --accent: hsl(240 3.7% 15.9%);
-  --accent-foreground: hsl(0, 0%, 61%);
-  --destructive: hsl(0 62.8% 30.6%);
-  --destructive-foreground: hsl(0deg 0% 92.16%);
-  --secondary: hsla(240 3.7% 15.9%);
-  --secondary-foreground: hsla(0 0% 98%);
-
-  /* Subtle glow for Dark Mode */
-  --spotlight-color: rgba(255, 255, 255, 0.08);
-
-  /* proposed */
-  /* --destructive: oklch(0.704 0.191 22.216);
-    --destructive-foreground: oklch(0.985 0 0);
-    --success: oklch(0.488 0.243 142.495);
-    --success-foreground: oklch(0.985 0 0);
-    --warning: oklch(0.627 0.265 84.429);
-    --warning-foreground: oklch(0.145 0 0);
-    --info: oklch(0.696 0.17 184.704);
-    --info-foreground: oklch(0.985 0 0); */
-
-
-
-  --border: hsl(0, 0%, 14%);
-  /* --input: hsl(0, 0%, 14%); */
-  --input: oklch(1 0 0/15%);
-  --ring: var(--primary, hsl(250deg 100% 80%));
-
-  /* dark:chart colors */
-  /* Charts: Bright Pastels for dark mode */
-  --chart-1: hsl(263 70% 65%);
-  --chart-2: hsl(199 80% 60%);
-  --chart-3: hsl(340 80% 65%);
-  --chart-4: hsl(160 70% 50%);
-  --chart-5: hsl(43 90% 65%);
-  --chart-6: hsl(27 87% 67%);
-  --chart-7: hsl(188.74deg 94.5% 42.75%);
-  --chart-8: hsl(210 20% 98%);
-  --chart-9: hsl(84.8 85.2% 34.5%);
-  --chart-10: hsl(191.6 91.4% 36.5%);
-  --chart-11: hsl(161.4 93.5% 30.4%);
-  --chart-12: hsl(174.7 83.9% 31.6%);
-  --chart-13: hsl(262.1 83.3% 57.8%);
-  --chart-14: hsl(333.3 71.4% 50.6%);
-  --chart-15: hsl(346.8 77.2% 49.8%);
-
-  --sidebar: oklch(0.205 0 0);
+  --sidebar: var(--card);
   --sidebar-background: var(--card);
   --sidebar-foreground: var(--card-foreground);
   --sidebar-primary: var(--primary);
   --sidebar-primary-foreground: var(--primary-foreground);
-  --sidebar-accent: var(--muted);
-  --sidebar-accent-foreground: var(--muted-foreground);
+  --sidebar-accent: var(--accent);
+  --sidebar-accent-foreground: var(--accent-foreground);
   --sidebar-border: var(--border);
   --sidebar-ring: var(--ring);
 
-  /* inspiration */
-  --color-fd-background: hsl(0, 0%, 7.06%);
-  --color-fd-foreground: hsl(0, 0%, 92.16%);
-  --color-fd-muted: hsl(0, 0.01%, 12.16%);
-  --color-fd-muted-foreground: hsl(0, 0%, 61%);
-  --color-fd-popover: hsl(0, 0%, 9.8%);
-  --color-fd-popover-foreground: hsl(0, 0%, 92.16%);
-  --color-fd-card: hsl(0, 0%, 9.8%);
-  --color-fd-card-foreground: hsl(0, 0%, 92.16%);
-  --color-fd-border: hsl(0, 0%, 14%);
-  --color-fd-primary: hsl(0, 0%, 92.16%);
-  --color-fd-primary-foreground: hsl(0, 0%, 17.6%);
-  --color-fd-secondary: hsl(0, 0%, 21.2%);
-  --color-fd-secondary-foreground: hsl(0, 0%, 92.16%);
-  --color-fd-accent: hsl(0, 0%, 27.5%);
-  --color-fd-accent-foreground: hsl(0, 0%, 90.2%);
-  --color-fd-ring: hsl(0, 0%, 55%);
+  /* Every series clears 3:1 on the card, and every adjacent pair separates
+     under protanopia, deuteranopia and tritanopia. Lightness alternates on
+     purpose — hue distance alone is not colour-blind distance, which is how
+     the old set ended up with chart-11/12 identical at 0.047 dE. */
+  --chart-1: hsl(200.21 100% 35%);
+  --chart-2: hsl(35 80% 40%);
+  --chart-3: hsl(340 80% 28%);
+  --chart-4: hsl(255 80% 48%);
+  --chart-5: hsl(190 68% 38%);
+  --chart-6: hsl(20 88% 32%);
+  --chart-7: hsl(275 72% 36%);
+  --chart-8: hsl(225 65% 56%);
+}
+
+.dark,
+[data-theme="dark"] {
+  /* Elevation ramp. The old set spanned 0.9% lightness across background,
+     card and muted, so every surface read as the same surface. */
+  --background: hsl(0 0% 4.3%);
+  --foreground: hsl(0 0% 93%);
+  --card: hsl(0 0% 8.6%);
+  --card-foreground: hsl(0 0% 93%);
+  --popover: hsl(0 0% 11%);
+  --popover-foreground: hsl(0 0% 93%);
+
+  /* Light enough to be readable text on the dark ground (8.2:1); the label on
+     top flips to near-black rather than the near-white it used to be. */
+  --primary: hsl(200.21 90% 58%);
+  --primary-foreground: hsl(203 55% 6%);
+
+  --secondary: hsl(240 4% 16%);
+  --secondary-foreground: hsl(0 0% 98%);
+
+  --tertiary: hsl(200.21 90% 58%);
+  --tertiary-foreground: hsl(203 55% 6%);
+
+  --muted: hsl(0 0% 13.7%);
+  --muted-foreground: hsl(240 5% 66%);
+  --subtle-foreground: hsl(240 4% 56%);
+
+  --accent: hsl(240 4% 16%);
+  --accent-foreground: hsl(0 0% 93%);
+
+  --destructive: hsl(354 82% 70%);
+  --destructive-foreground: hsl(354 60% 8%);
+  --success: hsl(157 65% 58%);
+  --success-foreground: hsl(157 60% 7%);
+  --warning: hsl(41 87% 55%);
+  --warning-foreground: hsl(41 70% 7%);
+  --info: hsl(200.21 90% 58%);
+  --info-foreground: hsl(203 55% 6%);
+
+  --spotlight-color: rgb(255 255 255 / 0.08);
+
+  --border: hsl(0 0% 15%);
+  --input: hsl(0 0% 42%);
+  --ring: var(--primary);
+
+  --chart-1: hsl(200.21 90% 58%);
+  --chart-2: hsl(55 85% 58%);
+  --chart-3: hsl(340 88% 62%);
+  --chart-4: hsl(275 85% 66%);
+  --chart-5: hsl(190 80% 76%);
+  --chart-6: hsl(35 78% 60%);
+  --chart-7: hsl(225 72% 64%);
+  --chart-8: hsl(150 62% 58%);
+
+  --sidebar: var(--card);
+  --sidebar-background: var(--card);
+  --sidebar-foreground: var(--card-foreground);
+  --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: var(--primary-foreground);
+  --sidebar-accent: var(--accent);
+  --sidebar-accent-foreground: var(--accent-foreground);
+  --sidebar-border: var(--border);
+  --sidebar-ring: var(--ring);
+
+  /* fumadocs surfaces, tracked to the ramp above */
+  --color-fd-background: var(--background);
+  --color-fd-foreground: var(--foreground);
+  --color-fd-muted: var(--muted);
+  --color-fd-muted-foreground: var(--muted-foreground);
+  --color-fd-popover: var(--popover);
+  --color-fd-popover-foreground: var(--popover-foreground);
+  --color-fd-card: var(--card);
+  --color-fd-card-foreground: var(--card-foreground);
+  --color-fd-border: var(--border);
+  --color-fd-primary: var(--foreground);
+  --color-fd-primary-foreground: var(--background);
+  --color-fd-secondary: var(--secondary);
+  --color-fd-secondary-foreground: var(--secondary-foreground);
+  --color-fd-accent: var(--accent);
+  --color-fd-accent-foreground: var(--accent-foreground);
+  --color-fd-ring: var(--ring);
 }
 
 
@@ -192,6 +183,52 @@
   --font-mono: var(--font-geist-mono, 'Space Mono', 'Fira Code', 'Courier New', 'Courier', 'monospace');
   --font-serif: var(--font-instrument-serif);
   --font-logo: var(--font-logo, 'Quicksand', 'Helvetica', 'Arial', sans-serif);
+
+  /* Type scale. Tracking is a function of size — negative as display type
+     grows, ~0 at body, positive at caption — so `tracking-*` utilities are for
+     genuine exceptions, not for every label. Nothing below 12px exists. */
+  --text-2xs: 0.75rem;
+  --text-2xs--line-height: 1.4;
+  --text-2xs--letter-spacing: 0.02em;
+  --text-xs: 0.8125rem;
+  --text-xs--line-height: 1.45;
+  --text-xs--letter-spacing: 0.01em;
+  --text-sm: 0.875rem;
+  --text-sm--line-height: 1.55;
+  --text-sm--letter-spacing: 0em;
+  --text-base: 1rem;
+  --text-base--line-height: 1.65;
+  --text-base--letter-spacing: 0em;
+  --text-lg: 1.125rem;
+  --text-lg--line-height: 1.55;
+  --text-lg--letter-spacing: -0.005em;
+  --text-xl: 1.375rem;
+  --text-xl--line-height: 1.4;
+  --text-xl--letter-spacing: -0.012em;
+  --text-2xl: 1.75rem;
+  --text-2xl--line-height: 1.25;
+  --text-2xl--letter-spacing: -0.018em;
+  --text-3xl: 2.25rem;
+  --text-3xl--line-height: 1.15;
+  --text-3xl--letter-spacing: -0.024em;
+  --text-4xl: 3rem;
+  --text-4xl--line-height: 1.06;
+  --text-4xl--letter-spacing: -0.03em;
+  --text-5xl: 3.75rem;
+  --text-5xl--line-height: 1.02;
+  --text-5xl--letter-spacing: -0.034em;
+  --text-6xl: 4.5rem;
+  --text-6xl--line-height: 1;
+  --text-6xl--letter-spacing: -0.038em;
+  --text-7xl: 5.5rem;
+  --text-7xl--line-height: 0.98;
+  --text-7xl--letter-spacing: -0.042em;
+
+  /* Motion. `ease-out` for enters, `ease-in-out` for on-screen movement.
+     The built-in CSS curves are too weak to read as intentional. */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -213,7 +250,17 @@
   --color-muted-foreground: var(--muted-foreground);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
+  --color-subtle-foreground: var(--subtle-foreground);
   --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+  --color-tertiary: var(--tertiary);
+  --color-tertiary-foreground: var(--tertiary-foreground);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
@@ -222,6 +269,9 @@
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
+  --color-chart-6: var(--chart-6);
+  --color-chart-7: var(--chart-7);
+  --color-chart-8: var(--chart-8);
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
@@ -237,9 +287,6 @@
      a colour wash here. */
   --color-accent-muted: color-mix(in oklab, var(--muted) 60%, var(--background));
   --width-app: var(--max-app-width);
-
-
-  --shadow-button: 0px -1px 0px 0px hsla(0, 0%, 100%, 0.04), 0px 0px 0px 1px hsla(0, 0%, 100%, 0.12), 0px 0px 1px 0px rgba(0, 0, 0, 0.04), 0px 2px 2px 0px rgba(0, 0, 0, 0.04), 0px 4px 2px 0px rgba(0, 0, 0, 0.04), 0px 6px 3px 0px rgba(0, 0, 0, 0.04);
 
   --animate-accordion-down: accordion-down 0.2s ease-out;
   --animate-accordion-up: accordion-up 0.2s ease-out;
@@ -359,9 +406,17 @@
     }
   }
 
-  --animate-rainbow: rainbow var(--speed, 2s) infinite linear;
-
   --animate-meteor: meteor 5s linear infinite;
+
+  @keyframes loading-sweep {
+    0% {
+      transform: translateX(-100%);
+    }
+
+    100% {
+      transform: translateX(300%);
+    }
+  }
 
   @keyframes meteor {
     0% {
@@ -404,52 +459,62 @@
 
 
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border;
   }
 
   body {
-    @apply bg-background text-foreground selection:bg-primary/10 selection:text-primary;
+    @apply bg-background text-foreground selection:bg-primary/20 selection:text-foreground;
   }
 
+  /* 14px wide with a 3px inset leaves 8px of grabbable thumb. A solid colour,
+     not a gradient — background-image doesn't interpolate, so the old
+     `transition: background` on a gradient never animated. */
   html::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 14px;
+    height: 14px;
   }
 
   html::-webkit-scrollbar-track {
-    background: var(--muted);
-    border-radius: 0.5rem;
+    background: transparent;
   }
 
   html::-webkit-scrollbar-thumb {
-    background: linear-gradient(135deg,
-        color-mix(in oklab, var(--primary) 60%, transparent),
-        color-mix(in oklab, var(--secondary) 80%, transparent));
-    border-radius: 0.5rem;
-    border: 2px solid var(--background);
-    transition: background 0.2s ease-in-out;
+    background-color: color-mix(in oklab, var(--foreground) 22%, transparent);
+    border-radius: 999px;
+    border: 3px solid transparent;
+    background-clip: content-box;
+    transition: background-color 150ms var(--ease-out);
   }
 
   html::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(135deg,
-        color-mix(in oklab, var(--primary) 80%, transparent),
-        var(--secondary));
+    background-color: color-mix(in oklab, var(--foreground) 38%, transparent);
   }
 
   html::-webkit-scrollbar-thumb:active {
-    background: linear-gradient(135deg,
-        var(--primary),
-        var(--secondary));
+    background-color: color-mix(in oklab, var(--foreground) 52%, transparent);
   }
 
   html::-webkit-scrollbar-corner {
-    background: var(--background);
+    background: transparent;
   }
 
-  /* Firefox scrollbar support */
   html {
     scrollbar-width: thin;
-    scrollbar-color: color-mix(in oklab, var(--primary) 60%, transparent) var(--muted);
+    scrollbar-color: color-mix(in oklab, var(--foreground) 22%, transparent) transparent;
+    /* Reserves the scrollbar track permanently, so hiding it during a scroll
+       lock changes nothing about the layout. */
+    scrollbar-gutter: stable;
+  }
+
+  /* Radix locks scroll through react-remove-scroll-bar, which pads the body to
+     replace the scrollbar it just hid. The gutter above already reserves that
+     space, so the padding double-counts — and because the body is centred with
+     `margin-inline: auto` under border-box, it shifts the whole page sideways
+     every time a select or dialog opens. */
+  body[data-scroll-locked] {
+    padding-right: 0 !important;
+    margin-right: auto !important;
+    overflow-y: hidden !important;
   }
 
   button:not(:disabled),
@@ -466,10 +531,12 @@
     outline: none;
   }
 
+  /* No `border-radius` here — setting it would square off every rounded-full
+     control the moment it takes focus. `outline` already follows the element's
+     own radius. */
   :focus-visible {
     outline: 2px solid var(--ring);
     outline-offset: 2px;
-    border-radius: var(--radius-sm);
   }
 
   button:disabled,
@@ -503,19 +570,16 @@
 
 body {
   font-weight: 400;
-  font-size: 16px;
+  font-size: 1rem;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
-  overflow-x: clip;
   position: relative;
   font-family: var(--font-sans, 'GeistSans', 'Inter', 'Poppins', 'Helvetica', 'Arial', sans-serif);
-  /* Fluid max width that:
-       - starts from 1024px (for tablets/small desktops)
-       - scales with viewport
-       - grows reasonably beyond 1440px without a hard limit */
 
-  max-width: var(--max-app-width, clamp(1024px, 80vw, 2480px));
-
+  /* `margin-inline: auto` is what makes the clamp visible. Without it the page
+     pinned to the left edge on anything wider than the max. */
+  max-width: var(--max-app-width);
+  margin-inline: auto;
 }
 
 ::view-transition-group(root) {
@@ -524,26 +588,33 @@ body {
 
 ::view-transition-image-pair(root) {
   isolation: isolate;
-  will-change: transform, opacity, scale;
   z-index: 1;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 200ms;
+  animation-timing-function: var(--ease-out);
 }
 
 ::view-transition-new(root) {
   z-index: 2;
-  animation: none !important;
 }
 
 ::view-transition-old(root) {
   z-index: 1;
-  animation: none !important;
 }
 
+/* Derived from --foreground so the glow reads in both themes. Hard-coded white
+   was invisible on a light ground. */
 .text-shadow-glow {
-  text-shadow: rgba(255, 255, 255, 0.05) 0px 4px 8px, rgba(255, 255, 255, 0.25) 0px 8px 30px;
+  text-shadow: 0 4px 8px color-mix(in oklab, var(--foreground) 6%, transparent),
+    0 8px 30px color-mix(in oklab, var(--foreground) 22%, transparent);
 }
 
 .box-shadow-glow {
-  box-shadow: rgba(255, 255, 255, 0.05) 0px 4px 8px, rgba(255, 255, 255, 0.25) 0px 8px 30px;
+  box-shadow: 0 4px 8px color-mix(in oklab, var(--foreground) 6%, transparent),
+    0 8px 30px color-mix(in oklab, var(--foreground) 22%, transparent);
 }
 
 
@@ -563,20 +634,17 @@ body {
 
   .popup {
     opacity: 0;
-    transition: all 0.5s ease-in-out;
-    animation: pop 0.5s ease-in-out forwards;
+    animation: pop 220ms var(--ease-out) forwards;
   }
 
   @keyframes pop {
     0% {
       opacity: 0;
-      -webkit-transform: translateY(20px);
-      transform: translateY(20px);
+      transform: translateY(8px);
     }
 
     100% {
       opacity: 1;
-      -webkit-transform: translateY(0);
       transform: translateY(0);
     }
   }
@@ -615,7 +683,7 @@ body {
 
 .text-colorful {
   -webkit-text-fill-color: transparent;
-  background: linear-gradient(288deg, var(--color-primary), var(--color-pink-600));
+  background: linear-gradient(288deg, var(--color-primary), var(--color-chart-2));
   -webkit-background-clip: text;
   background-clip: text;
 }
@@ -625,19 +693,65 @@ body {
     color: transparent;
     background: linear-gradient(180deg,
         var(--color-foreground) 0%,
-        var(--color-slate-400) 100%);
+        var(--color-muted-foreground) 100%);
     -webkit-background-clip: text;
     background-clip: text;
-    /* Optional: Add a subtle drop shadow to make it pop */
-    filter: drop-shadow(0px 2px 10px var(--color-slate-900) * 0.2);
   }
-
-
 }
 
+/* Was `rgb(var(--gray-100) / .5)` — --gray-100 is not defined anywhere, so
+   inline code rendered with padding and no background. */
 :not(pre)>code {
   overflow-wrap: break-word;
-  border-radius: var(--rounded-md, .375rem);
-  background-color: rgb(var(--gray-100) / .5);
-  padding: .125rem .5rem;
+  border-radius: var(--radius-sm);
+  background-color: var(--muted);
+  border: 1px solid var(--border);
+  padding: .1em .35em;
+  font-size: 0.9em;
+}
+
+/* Reduced motion means gentler, not absent. Opacity and colour survive because
+   they carry meaning; movement, looping and parallax do not. Components that
+   need more than this branch on useReducedMotion() in JS. */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Opacity-only transitions still read as intentional at a short duration and
+     never move anything, so they stay. */
+  [data-motion-safe-fade] {
+    transition-property: opacity !important;
+    transition-duration: 150ms !important;
+  }
+
+  .animate-gradient-x,
+  .pattern_feed {
+    animation: none !important;
+    background-position: 0 0 !important;
+  }
+}
+
+/* Vestibular safety without stripping the effect for everyone else. */
+@media (prefers-reduced-transparency: reduce) {
+
+  [class*="backdrop-blur"] {
+    backdrop-filter: none !important;
+    background-color: var(--background) !important;
+  }
+}
+
+/* Without backdrop-filter, a 70% translucent navbar is unreadable over live
+   content. Fall back to the solid surface. */
+@supports not (backdrop-filter: blur(1px)) {
+
+  [class*="backdrop-blur"] {
+    background-color: var(--background);
+  }
 }

@@ -851,7 +851,7 @@ function WeeklyChart({ data }: { data: ContributionActivity[] }) {
                 className="border-border/50 bg-background/80 backdrop-blur-lg shadow-xl"
                 formatter={(value, name, item) => (
                   <div className="flex flex-col gap-1 min-w-[120px]">
-                    <span className="text-[10px] uppercase text-muted-foreground font-mono">
+                    <span className="text-2xs uppercase text-muted-foreground font-mono">
                       Week of {item.payload.label}
                     </span>
                     <div className="flex items-center gap-2">

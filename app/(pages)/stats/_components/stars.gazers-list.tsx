@@ -36,7 +36,7 @@ export default function StargazersList({ data }: StargazersListProps) {
       {stars.bins.map((bin, index) => (
         <section key={bin.date} className="relative">
           {/* Sticky Date Header */}
-          <div className="sticky top-0 z-10 flex items-center gap-2 border-y border-border/50 bg-muted/80 backdrop-blur-md px-4 py-2 text-[10px] font-mono font-medium uppercase tracking-widest text-muted-foreground">
+          <div className="sticky top-0 z-10 flex items-center gap-2 border-y border-border/50 bg-muted/80 backdrop-blur-md px-4 py-2 text-2xs font-mono font-medium uppercase tracking-widest text-muted-foreground">
             <PiCalendarBlankDuotone className="text-sm" />
             {formatDate(bin.date, "", {
               weekday: "short",
@@ -135,7 +135,7 @@ function Stargazer({
       {/* Followers Metric */}
       <div
         className={cn(
-          "flex items-center gap-1.5 px-2 py-1 rounded border text-[10px] font-mono font-medium",
+          "flex items-center gap-1.5 px-2 py-1 rounded border text-2xs font-mono font-medium",
           followers > 500
             ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-600"
             : followers > 100

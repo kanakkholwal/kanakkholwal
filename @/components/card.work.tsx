@@ -31,7 +31,7 @@ export function WorkExperienceCard({ work }: WorkExperienceCardProps) {
             width={40}
             className="object-contain p-1 rounded-full"
           />
-          <AvatarFallback className="rounded-md text-[11px] font-bold text-muted-foreground">
+          <AvatarFallback className="rounded-md text-2xs font-bold text-muted-foreground">
             {work.company[0]}
           </AvatarFallback>
         </Avatar>
@@ -63,7 +63,7 @@ export function WorkExperienceCard({ work }: WorkExperienceCardProps) {
             </span>
           </div>
           <time
-            className="shrink-0 font-mono text-[11px] text-muted-foreground/60 tabular-nums"
+            className="shrink-0 font-mono text-2xs text-muted-foreground/60 tabular-nums"
             dateTime={work.startDate}
           >
             {work.startDate} to {work.endDate ?? "Present"}
@@ -74,7 +74,7 @@ export function WorkExperienceCard({ work }: WorkExperienceCardProps) {
         <h3 className="text-base font-semibold leading-snug text-foreground tracking-tight">
           {work.title}
           {work.employmentType && (
-            <span className="ml-2 font-mono text-[10px] font-normal text-muted-foreground/60 uppercase tracking-widest align-middle">
+            <span className="ml-2 font-mono text-2xs font-normal text-muted-foreground/60 uppercase tracking-widest align-middle">
               {work.employmentType}
             </span>
           )}
@@ -100,7 +100,7 @@ export function WorkExperienceCard({ work }: WorkExperienceCardProps) {
               <Badge
                 key={badge}
                 variant="secondary"
-                className="px-2 py-0 h-5 text-[10px] font-mono font-normal rounded-sm bg-muted/60 text-muted-foreground border-transparent"
+                className="px-2 py-0 h-5 text-2xs font-mono font-normal rounded-sm bg-muted/60 text-muted-foreground border-transparent"
               >
                 {badge}
               </Badge>

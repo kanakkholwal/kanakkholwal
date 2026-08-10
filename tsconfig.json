@@ -36,6 +36,10 @@
       ],
     },
     "baseUrl": ".",
+    // `baseUrl` is deprecated in TS 6 and errors without this. The `paths`
+    // above are already relative to the config, so the migration is to drop
+    // baseUrl entirely — this unblocks the build until that happens.
+    "ignoreDeprecations": "6.0",
     "target": "ES2023"
   },
   "include": [
@@ -45,7 +49,11 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts"
   ],
+  // Test files import `bun:test`, which has no types under the Next build's
+  // typecheck. Run them with `bun test`, not through the app build.
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "**/*.test.ts",
+    "**/*.test.tsx"
   ]
 }

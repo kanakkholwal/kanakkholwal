@@ -154,7 +154,7 @@ export function BentoGrid({ items = itemsSample }: BentoGridProps) {
               </CardHeader>
 
               <CardContent className="relative space-y-2 p-4 pt-0">
-                <h3 className="text-foreground text-[15px] font-medium tracking-tight">
+                <h3 className="text-foreground text-base font-medium tracking-tight">
                   {item.title}
                   {item.meta && (
                     <span className="text-muted-foreground ml-2 text-xs font-normal">
