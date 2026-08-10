@@ -219,7 +219,7 @@ function DynamicSkills() {
           layoutId="skills-heading"
           className="text-4xl md:text-6xl font-bold tracking-tighter text-foreground"
         >
-          <span className="font-instrument-serif italic font-normal text-muted-foreground/80 mr-3">
+          <span className="font-serif italic font-normal text-muted-foreground/80 mr-3">
             My Technical
           </span>
           <span>Arsenal</span>

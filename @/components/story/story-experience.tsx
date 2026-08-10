@@ -83,17 +83,17 @@ function VariantSwitcher({
               onFocus={() => load[item.id]()}
               className={cn(
                 "relative rounded-full px-3.5 py-1.5 text-xs font-medium transition-colors",
-                active ? "text-primary-foreground" : "text-muted-foreground hover:text-foreground",
+                active ? "text-primary-foreground" : "text-muted-foreground hoverable:text-foreground",
               )}
             >
               {active && (
                 <motion.span
                   layoutId="variant-pill"
                   transition={{ type: "spring", stiffness: 400, damping: 32 }}
-                  className="absolute inset-0 -z-10 rounded-full bg-primary"
+                  className="absolute inset-0 rounded-full bg-primary"
                 />
               )}
-              {item.label}
+              <span className="relative">{item.label}</span>
             </button>
           );
         })}

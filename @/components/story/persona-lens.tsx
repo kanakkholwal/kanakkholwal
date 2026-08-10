@@ -45,18 +45,25 @@ export function PersonaLens({
               aria-checked={active}
               onClick={() => onChange(lens.id)}
               className={cn(
-                "relative rounded-full px-4 py-1.5 text-sm font-medium transition-colors bg-transparent",
-                active ? "text-foreground" : "text-muted-foreground hover:text-foreground",
+                "relative min-h-9 rounded-full bg-transparent px-4 text-sm font-medium transition-colors duration-150 ease-out",
+                // The label sits on the filled pill, so it takes the pill's
+                // foreground. `text-foreground` measured 3.56:1 light and
+                // 2.01:1 dark — the selected tab was the least readable one.
+                active
+                  ? "text-primary-foreground"
+                  : "text-muted-foreground hoverable:text-foreground",
               )}
             >
-              {active && (
+              {active ? (
                 <motion.span
                   layoutId="lens-pill"
-                  transition={{ type: "spring", stiffness: 400, damping: 32 }}
-                  className="absolute inset-0 -z-10 rounded-full bg-primary"
+                  transition={{ type: "spring", bounce: 0, duration: 0.24 }}
+                  className="absolute inset-0 rounded-full bg-primary"
                 />
-              )}
-              {lens.label}
+              ) : null}
+              {/* Positioned so it paints above the pill. The pill used `-z-10`,
+                  which put it behind the container's own background instead. */}
+              <span className="relative">{lens.label}</span>
             </button>
           );
         })}

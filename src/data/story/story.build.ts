@@ -7,17 +7,6 @@ import type { StoryBeat, StoryChapter } from "./story.types";
 // anything listed without narration is auto-derived from its frontmatter.
 const FEATURED_PROJECTS = ["college-ecosystem", "orbit", "recast"];
 
-// Theme-token accents, cycled per chapter for visual separation.
-const ACCENTS = [
-  "var(--primary)",
-  "var(--chart-2)",
-  "var(--chart-3)",
-  "var(--chart-4)",
-  "var(--chart-13)",
-];
-
-const accentFor = (index: number) => ACCENTS[index % ACCENTS.length];
-
 function formatCount(n: number): string {
   if (n >= 1_000_000) return `${+(n / 1_000_000).toFixed(1)}M`;
   if (n >= 1_000) return `${+(n / 1_000).toFixed(1)}K`;
@@ -105,8 +94,5 @@ export function getStoryChapters(): StoryChapter[] {
     .filter((p): p is ProjectType => Boolean(p))
     .map(projectToChapter);
 
-  return [...work, ...projects].map((chapter, index) => ({
-    ...chapter,
-    accent: accentFor(index),
-  }));
+  return [...work, ...projects];
 }

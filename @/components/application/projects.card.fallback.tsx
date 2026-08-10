@@ -1,29 +1,12 @@
 "use client";
 
-import type { CSSProperties } from "react";
-import { useMemo } from "react";
-
-// A stable accent per project, so each placeholder feels branded and distinct
-// without the garish solid-color block the old fallback used.
-const ACCENTS = [
-  "#3b82f6", // blue
-  "#10b981", // emerald
-  "#f59e0b", // amber
-  "#8b5cf6", // violet
-  "#ec4899", // pink
-];
-
-function accentFor(str: string) {
-  let hash = 0;
-  for (let i = 0; i < str.length; i++) {
-    hash = str.charCodeAt(i) + ((hash << 5) - hash);
-  }
-  return ACCENTS[Math.abs(hash) % ACCENTS.length];
-}
-
 /**
  * Branded placeholder shown when a project has no image/video. Reads like an OG
  * card: a monogram + wordmark lockup with the project's tagline underneath.
+ *
+ * One brand colour, not a per-title hash. The old version picked from five
+ * hard-coded hexes that were theme-blind and unmeasured — every new project
+ * silently drew a colour nobody had checked against either background.
  */
 export function ProjectFallback({
   title,
@@ -36,51 +19,41 @@ export function ProjectFallback({
    * surrounding card doesn't already show this info. */
   meta?: string;
 }) {
-  const accent = useMemo(() => accentFor(title), [title]);
   const initial = title.trim().charAt(0).toUpperCase() || "•";
 
   return (
-    <div
-      className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden bg-zinc-50 px-8 text-center dark:bg-zinc-900"
-      style={{ "--accent": accent } as CSSProperties}
-    >
+    <div className="relative flex size-full flex-col items-center justify-center overflow-hidden bg-muted px-8 text-center">
       {/* Dotted grid */}
       <div
+        aria-hidden="true"
         className="absolute inset-0"
         style={{
           backgroundImage:
-            "radial-gradient(rgb(130 130 140 / 0.22) 1px, transparent 1px)",
+            "radial-gradient(color-mix(in oklab, var(--foreground) 18%, transparent) 1px, transparent 1px)",
           backgroundSize: "22px 22px",
         }}
       />
 
       {/* Logo lockup: monogram + wordmark */}
       <div className="relative z-10 flex items-center justify-center gap-3">
-        <div
-          className="flex size-11 shrink-0 items-center justify-center rounded-xl border text-lg font-bold"
-          style={{
-            borderColor: "color-mix(in oklab, var(--accent) 35%, transparent)",
-            background: "color-mix(in oklab, var(--accent) 12%, transparent)",
-            color: "var(--accent)",
-          }}
-        >
+        <div className="flex size-11 shrink-0 items-center justify-center rounded-xl border border-primary/35 bg-primary/12 text-lg font-bold text-primary">
           {initial}
         </div>
-        <span className="text-2xl font-semibold leading-tight tracking-tight text-zinc-900 dark:text-zinc-50">
+        <span className="text-2xl font-semibold leading-tight tracking-tight text-foreground">
           {title}
         </span>
       </div>
 
       {/* Tagline */}
       {description && (
-        <p className="relative z-10 mt-4 line-clamp-2 max-w-[85%] font-mono text-xs leading-relaxed text-zinc-500 dark:text-zinc-400">
+        <p className="relative z-10 mt-4 line-clamp-2 max-w-[85%] font-mono text-xs leading-relaxed text-muted-foreground">
           {description}
         </p>
       )}
 
       {/* Optional meta (e.g. dates) */}
       {meta && (
-        <p className="relative z-10 mt-3 font-mono text-2xs uppercase tracking-widest text-zinc-400 dark:text-zinc-500">
+        <p className="relative z-10 mt-3 font-mono text-2xs uppercase tracking-widest text-subtle-foreground">
           {meta}
         </p>
       )}

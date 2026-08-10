@@ -27,7 +27,7 @@ export function StoryCinematic({ chapters }: { chapters: Chapter[] }) {
           >
             <p className="font-mono text-xs text-muted-foreground">The Journey</p>
             <h1 className="max-w-3xl text-5xl font-black leading-none tracking-tighter text-foreground md:text-7xl">
-              <span className="mr-3 font-instrument-serif font-normal italic text-muted-foreground/80">
+              <span className="mr-3 font-serif font-normal italic text-muted-foreground/80">
                 Scroll
               </span>
               through the story.

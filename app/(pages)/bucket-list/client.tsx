@@ -188,7 +188,7 @@ function StaticBucketList({ items, total, completed, percentage }: BucketListCli
             <h1 className="text-5xl md:text-7xl font-bold tracking-tighter text-foreground leading-[1.1]">
               Collecting
               <br />
-              <span className="font-instrument-serif italic font-normal text-muted-foreground mr-3">
+              <span className="font-serif italic font-normal text-muted-foreground mr-3">
                 Moments
               </span>
               <span className="text-colorful-titanium">Not Things.</span>
@@ -261,7 +261,7 @@ function DynamicBucketList({ items, total, completed, percentage }: BucketListCl
               </p>
               <h1 className="text-5xl md:text-7xl font-black tracking-tighter text-foreground leading-none">
                 Collecting{" "}
-                <span className="font-instrument-serif italic font-normal text-muted-foreground">
+                <span className="font-serif italic font-normal text-muted-foreground">
                   Moments
                 </span>
                 <br />

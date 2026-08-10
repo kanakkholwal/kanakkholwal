@@ -95,9 +95,9 @@ function StaticContact({ displayName, email }: ContactPageClientProps) {
             <p className="mb-3 font-mono text-xs font-normal tracking-widest text-black/80 uppercase md:text-sm dark:text-white/70">
               Contact
             </p>
-            <span className="font-instrument-serif">
+            <span className="font-serif">
               <span>Get in touch</span>{" "}
-              <span className="text-colorful animate-gradient font-instrument-serif pe-2 tracking-tight italic" />
+              <span className="text-colorful animate-gradient font-serif pe-2 tracking-tight italic" />
             </span>
           </h2>
         </BlurFade>

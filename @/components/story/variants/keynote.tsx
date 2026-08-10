@@ -38,7 +38,6 @@ export function StoryKeynote({ chapters }: { chapters: StoryChapter[] }) {
 
   return (
     <main
-      style={{ "--accent": chapter.accent ?? "var(--primary)" } as React.CSSProperties}
       className="relative flex h-[100svh] w-full flex-col overflow-hidden"
     >
       <div className="flex items-center justify-between px-6 pt-24 font-mono text-xs text-muted-foreground md:px-12">
@@ -75,7 +74,7 @@ export function StoryKeynote({ chapters }: { chapters: StoryChapter[] }) {
               onClick={() => goTo(i)}
               className={cn(
                 "h-1.5 rounded-full transition-all",
-                i === index ? "w-6 bg-(--accent)" : "w-1.5 bg-border hover:bg-muted-foreground/40",
+                i === index ? "w-6 bg-primary" : "w-1.5 bg-border hover:bg-muted-foreground/40",
               )}
             />
           ))}
@@ -99,11 +98,11 @@ function Slide({ chapter, no }: { chapter: StoryChapter; no: number }) {
   return (
     <div>
       <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
-        <span className="font-mono text-lg text-(--accent)">{pad(no)}</span>
+        <span className="font-mono text-lg text-primary">{pad(no)}</span>
         <h2 className="text-2xl font-bold tracking-tight text-foreground md:text-3xl">
           {chapter.title}
         </h2>
-        <span className="font-instrument-serif text-lg italic text-muted-foreground/80">
+        <span className="font-serif text-lg italic text-muted-foreground/80">
           {chapter.org}
         </span>
         <span className="font-mono text-xs text-muted-foreground">{chapter.period}</span>
@@ -158,7 +157,7 @@ function NavButton({
       disabled={disabled}
       className={cn(
         "flex size-10 items-center justify-center rounded-full border border-border/60 text-foreground transition-colors",
-        "hover:border-(--accent)/40 disabled:opacity-30 disabled:hover:border-border/60",
+        "hoverable:border-primary/40 disabled:opacity-30 disabled:hover:border-border/60",
       )}
     >
       {children}

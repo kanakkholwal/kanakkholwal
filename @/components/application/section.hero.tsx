@@ -71,7 +71,7 @@ function StoryHero({ orbitData }: { orbitData?: HeroOrbitPayload } = {}) {
         <div className="min-w-0">
           <motion.h1
             layoutId="hero-name"
-            className="text-2xl font-bold tracking-tight text-foreground"
+            className="text-3xl font-bold tracking-tight text-foreground"
           >
             {appConfig.displayName}
           </motion.h1>

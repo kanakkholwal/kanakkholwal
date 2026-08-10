@@ -22,8 +22,6 @@ export type StoryChapter = {
   org: string;
   period: string;
   href?: string;
-  /** Any CSS color; drives this chapter's accent. Defaults to the theme primary. */
-  accent?: string;
   /**
    * True when this is the role you currently hold. Derived from the resume
    * frontmatter (`isCurrentEmployer` / `isOngoing` / open `endDate`) at build

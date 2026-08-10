@@ -47,7 +47,7 @@ export function StoryStage({
             key={i}
             className={cn(
               "h-px flex-1 transition-colors duration-500",
-              i <= active ? "bg-(--accent)" : "bg-border",
+              i <= active ? "bg-primary" : "bg-border",
             )}
           />
         ))}
@@ -79,7 +79,7 @@ function SceneView({ scene }: { scene: StoryScene }) {
 
     case "note":
       return (
-        <p className="border-l-2 border-(--accent)/60 pl-5 text-xl leading-relaxed text-foreground/90 md:text-2xl">
+        <p className="border-l-2 border-primary/60 pl-5 text-xl leading-relaxed text-foreground/90 md:text-2xl">
           {scene.body}
         </p>
       );

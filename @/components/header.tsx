@@ -52,11 +52,40 @@ const NAV_SPRING = { type: "spring", bounce: 0, duration: 0.32 } as const;
 /** One duration for the menu/close icon swap. It was 150/200/200ms. */
 const ICON_SWAP = { duration: 0.14, ease: [0.23, 1, 0.32, 1] } as const;
 
+/**
+ * True only once the visitor has actually switched style.
+ *
+ * `styling.model` lives in localStorage, so the first render is always the
+ * default and the stored value arrives after hydration. That arrival is not an
+ * interaction — but it changes the AnimatePresence key, so every page load in a
+ * non-default mode played a full navbar exit + enter, with the shared layoutIds
+ * dragging the logo and socials across the screen at the same time. Nothing
+ * moved because the user did anything.
+ */
+function useIsUserSwitch(style: string) {
+  const settled = useRef<string | null>(null);
+  const [userSwitched, setUserSwitched] = useState(false);
+
+  useEffect(() => {
+    if (settled.current === null) {
+      settled.current = style;
+      return;
+    }
+    if (settled.current !== style) {
+      settled.current = style;
+      setUserSwitched(true);
+    }
+  }, [style]);
+
+  return userSwitched;
+}
+
 export function Header() {
   const [selectedStyle] = useStorage<StylingModel>(
     "styling.model",
     StyleModels[0].id,
   );
+  const animateSwap = useIsUserSwitch(selectedStyle);
   const isMinimal = selectedStyle === "minimal";
 
   return (
@@ -74,21 +103,21 @@ export function Header() {
           a counterpart to travel to. */}
       <AnimatePresence mode="popLayout" initial={false}>
         {isMinimal ? (
-          <MinimalNavbar key="minimal" />
+          <MinimalNavbar key="minimal" animate={animateSwap} />
         ) : selectedStyle === "dynamic" ? (
-          <DynamicIslandNavbar key="dynamic" />
+          <DynamicIslandNavbar key="dynamic" animate={animateSwap} />
         ) : (
           // Static + Story (and any future mode) share the floating capsule so
           // the style selector is always reachable — Story has no navbar of its
           // own, and without this there's no way to switch back out of it.
-          <StaticNavbar key="static" />
+          <StaticNavbar key="static" animate={animateSwap} />
         )}
       </AnimatePresence>
     </header>
   );
 }
 
-function DynamicIslandNavbar() {
+function DynamicIslandNavbar({ animate = true }: { animate?: boolean }) {
   const [isOpen, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<"links" | "design">("links");
   const isCurrent = useIsCurrent();
@@ -111,9 +140,9 @@ function DynamicIslandNavbar() {
   return (
     <motion.div
       className="fixed bottom-0 left-0 right-0 z-40 flex justify-center pb-6 px-4 pointer-events-none"
-      initial={{ opacity: 0, y: 24 }}
+      initial={animate ? { opacity: 0, y: 24 } : false}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: 24 }}
+      exit={animate ? { opacity: 0, y: 24 } : undefined}
       transition={NAV_SPRING}
     >
       {/* `layout` alone sizes this. The old version also animated width/height
@@ -187,7 +216,7 @@ function DynamicIslandNavbar() {
                     {activeTab === tab ? (
                       <motion.span
                         layoutId="dynamic-tab-bg"
-                        className="absolute inset-0 -z-10 rounded-lg border border-border/50 bg-background shadow-sm"
+                        className="absolute inset-0 rounded-lg border border-border/50 bg-background shadow-sm"
                         // Was bounce 0.2 over 600ms. A tab indicator is a
                         // utility move, not a flick — no overshoot, 220ms.
                         transition={{ type: "spring", bounce: 0, duration: 0.22 }}
@@ -292,16 +321,18 @@ function MenuIcon({ isOpen }: { isOpen: boolean }) {
     </AnimatePresence>
   );
 }
-function StaticNavbar() {
+function StaticNavbar({ animate = true }: { animate?: boolean }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
   const isCurrent = useIsCurrent();
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: -16 }}
+      // `initial={false}` = start settled. The navbar is chrome; it should be
+      // present when the page is, not fly in after hydration resolves storage.
+      initial={animate ? { opacity: 0, y: -16 } : false}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -16 }}
+      exit={animate ? { opacity: 0, y: -16 } : undefined}
       transition={NAV_SPRING}
       className="pointer-events-auto relative flex flex-col items-center w-full max-w-4xl"
     >
@@ -345,7 +376,7 @@ function StaticNavbar() {
                 {hoveredItem === item.href ? (
                   <motion.span
                     layoutId="static-nav-pill"
-                    className="absolute inset-0 -z-10 rounded-full bg-muted/70"
+                    className="absolute inset-0 rounded-full bg-muted/70"
                     transition={{ type: "spring", bounce: 0, duration: 0.24 }}
                   />
                 ) : null}
@@ -421,16 +452,16 @@ function StaticNavbar() {
   );
 }
 
-function MinimalNavbar() {
+function MinimalNavbar({ animate = true }: { animate?: boolean }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const isCurrent = useIsCurrent();
 
   return (
     <motion.div
       className="pointer-events-auto w-full mx-auto"
-      initial={{ opacity: 0, y: -8 }}
+      initial={animate ? { opacity: 0, y: -8 } : false}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -8 }}
+      exit={animate ? { opacity: 0, y: -8 } : undefined}
       transition={NAV_SPRING}
     >
       {/* The rule runs full-bleed; the row inside sits on the page measure. The

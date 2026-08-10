@@ -58,14 +58,14 @@ export function StoryBeat({ beat, index }: { beat: Beat; index: number }) {
         <span
           className={cn(
             "size-2 rounded-full ring-4 ring-background transition-colors duration-300",
-            isActive ? "bg-(--accent)" : "bg-border",
+            isActive ? "bg-primary" : "bg-border",
           )}
         />
       </span>
 
       <div className="w-full max-w-lg space-y-4 pl-10">
         <div className="flex items-center gap-3">
-          <span className="font-mono text-sm text-(--accent)">{pad(index + 1)}</span>
+          <span className="font-mono text-sm text-primary">{pad(index + 1)}</span>
           <span className="text-sm font-medium text-muted-foreground">
             {beat.heading}
           </span>

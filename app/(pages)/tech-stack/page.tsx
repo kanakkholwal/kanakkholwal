@@ -5,9 +5,9 @@ export default function TechStackPage() {
         <p className="mb-3 font-mono text-xs font-normal tracking-widest text-black/80 uppercase md:text-sm dark:text-white/70">
           Coming Soon!
         </p>
-        <span className="font-instrument-serif">
+        <span className="font-serif">
           <span className="md:text-6xl">The </span>{" "}
-          <span className="text-colorful animate-gradient-x font-instrument-serif pe-2 tracking-tight italic">
+          <span className="text-colorful animate-gradient-x font-serif pe-2 tracking-tight italic">
             TechStack
           </span>
         </span>

@@ -20,7 +20,7 @@ export function Serif({
   className?: string;
 }) {
   return (
-    <span className={cn("font-instrument-serif font-normal italic", className)}>
+    <span className={cn("font-serif font-normal italic", className)}>
       {children}
     </span>
   );
@@ -92,7 +92,7 @@ export function StoryChapter({
           <p className="mb-4 font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
             Ch.{pad(index)} <span className="text-muted-foreground/40">·</span> {kicker}
           </p>
-          <h2 className="text-2xl font-bold leading-tight tracking-tight text-foreground md:text-3xl">
+          <h2 className="text-balance text-xl font-bold leading-tight text-foreground md:text-2xl">
             {title}
           </h2>
         </StoryReveal>

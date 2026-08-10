@@ -240,7 +240,7 @@ function DynamicAbout() {
                 layoutId="about-heading"
                 className="text-4xl md:text-6xl font-bold tracking-tighter leading-none"
               >
-                <span className="font-instrument-serif italic font-normal text-muted-foreground/70 mr-3">
+                <span className="font-serif italic font-normal text-muted-foreground/70 mr-3">
                   My
                 </span>
                 Approach
@@ -332,7 +332,7 @@ function DynamicAbout() {
           >
             <Quote size={32} />
           </motion.div>
-          <span className="font-instrument-serif italic text-xl text-muted-foreground">
+          <span className="font-serif italic text-xl text-muted-foreground">
             Always building.
           </span>
         </motion.div>

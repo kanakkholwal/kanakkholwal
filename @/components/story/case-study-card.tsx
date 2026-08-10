@@ -2,7 +2,7 @@
 
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ArrowUpRight, ChevronDown } from "lucide-react";
-import { useState } from "react";
+import { useId, useState } from "react";
 import { cn } from "@/lib/utils";
 import type { StoryChapter } from "~/data/story/story.types";
 import { EASE, pad } from "./motion";
@@ -21,28 +21,33 @@ export function CaseStudyCard({
 }) {
   const [open, setOpen] = useState(false);
   const reduce = useReducedMotion();
+  const panelId = useId();
   const facets = chapterFacets(chapter);
 
   return (
     <motion.article
       layout={!reduce}
-      style={{ "--accent": chapter.accent ?? "var(--primary)" } as React.CSSProperties}
-      className="overflow-hidden rounded-2xl border border-border/50 bg-card/30 transition-colors hover:border-(--accent)/30"
+      className="overflow-hidden rounded-2xl border border-border/50 bg-card/30 transition-colors duration-150 ease-out hoverable:border-primary/40"
     >
+      {/* Without an explicit label the accessible name is everything inside the
+          button — number, title, org, period, headline, stats and stack, read
+          as one paragraph-long button. */}
       <button
         type="button"
         aria-expanded={open}
+        aria-controls={panelId}
+        aria-label={`${chapter.title}${chapter.org ? `, ${chapter.org}` : ""} — ${open ? "hide" : "show"} details`}
         onClick={() => setOpen((v) => !v)}
         className="flex w-full flex-col gap-4 p-6 text-left md:p-7"
       >
         <div className="flex items-start justify-between gap-4">
           <div className="space-y-1.5">
             <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-              <span className="font-mono text-sm text-(--accent)">{pad(index + 1)}</span>
+              <span className="font-mono text-sm text-primary">{pad(index + 1)}</span>
               <h3 className="text-xl font-bold tracking-tight text-foreground md:text-2xl">
                 {chapter.title}
               </h3>
-              <span className="font-instrument-serif text-base italic text-muted-foreground/80">
+              <span className="font-serif text-base italic text-muted-foreground/80">
                 {chapter.org}
               </span>
             </div>
@@ -80,8 +85,9 @@ export function CaseStudyCard({
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: reduce ? 0 : 0.35, ease: EASE }}
+            transition={{ duration: reduce ? 0 : 0.28, ease: EASE }}
             className="overflow-hidden"
+            id={panelId}
           >
             <div className="border-t border-border/50 px-6 py-6 md:px-7">
               <motion.div
@@ -98,7 +104,7 @@ export function CaseStudyCard({
                   href={chapter.href}
                   target="_blank"
                   rel="noreferrer"
-                  className="mt-6 inline-flex items-center gap-1.5 text-sm font-medium text-(--accent) hover:underline"
+                  className="mt-6 inline-flex items-center gap-1.5 min-h-11 text-sm font-medium text-primary hover:underline"
                 >
                   Visit {chapter.title}
                   <ArrowUpRight className="size-4" />

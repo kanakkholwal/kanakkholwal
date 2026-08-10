@@ -27,7 +27,6 @@ export function StoryChapter({ chapter, index }: { chapter: Chapter; index: numb
   return (
     <section
       ref={ref}
-      style={{ "--accent": chapter.accent ?? "var(--primary)" } as React.CSSProperties}
       className="relative mx-auto w-full max-w-6xl px-6"
     >
       <StoryProgressProvider
@@ -67,7 +66,7 @@ function ChapterHeader({
   return (
     <div className="space-y-3">
       <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-        <span className="font-mono text-sm text-(--accent)">{pad(index + 1)}</span>
+        <span className="font-mono text-sm text-primary">{pad(index + 1)}</span>
         <Title
           href={chapter.href ?? "#"}
           {...(chapter.href ? { target: "_blank" } : {})}
@@ -75,7 +74,7 @@ function ChapterHeader({
         >
           {chapter.title}
         </Title>
-        <span className="font-instrument-serif text-lg italic text-muted-foreground/80">
+        <span className="font-serif text-lg italic text-muted-foreground/80">
           {chapter.org}
         </span>
       </div>
@@ -85,7 +84,7 @@ function ChapterHeader({
       <div className="h-px w-full overflow-hidden bg-border/60">
         <motion.div
           style={{ scaleX: progress }}
-          className="h-full origin-left bg-(--accent)"
+          className="h-full origin-left bg-primary"
         />
       </div>
     </div>

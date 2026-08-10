@@ -45,7 +45,7 @@ export default async function StatsPage(props: StatsPageProps) {
           <span className="text-border">/</span>
           Live Data
         </div>
-        <h1 className="text-4xl md:text-6xl font-medium tracking-tight font-instrument-serif text-foreground">
+        <h1 className="text-4xl md:text-6xl font-medium tracking-tight font-serif text-foreground">
           Project <span className="italic text-muted-foreground">Metrics</span>
         </h1>
         <p className="max-w-xl text-muted-foreground text-sm leading-relaxed">

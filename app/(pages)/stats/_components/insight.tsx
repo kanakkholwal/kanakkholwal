@@ -45,7 +45,7 @@ export async function InsightStats({ project }: { project: ProjectConfig }) {
               <PiAppWindowDuotone className="text-xl @lg/insight:text-2xl" />
             </div>
             <div className="space-y-1 min-w-0">
-              <h3 className="font-instrument-serif text-xl @lg/insight:text-2xl font-medium leading-none text-foreground tracking-tight truncate">
+              <h3 className="font-serif text-xl @lg/insight:text-2xl font-medium leading-none text-foreground tracking-tight truncate">
                 {project.title}
               </h3>
               <p className="font-mono text-2xs text-muted-foreground uppercase tracking-widest truncate opacity-70">

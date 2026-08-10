@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "audit:design": "node scripts/audit-design-tokens.mjs",
     "format": "bun x prettier --write \"**/*.{ts,tsx,js,jsx,md}\"",
     "analyze": "set ANALYZE=true && next build"
   },

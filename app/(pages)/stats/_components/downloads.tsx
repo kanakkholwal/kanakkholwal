@@ -46,7 +46,7 @@ export async function NPMStats() {
           </span>
           <div className="text-3xl lg:text-4xl font-bold font-sans tracking-tight flex items-baseline gap-1">
             {formatStatNumber(all.allTime)}
-            <span className="text-sm font-normal text-muted-foreground font-instrument-serif italic">
+            <span className="text-sm font-normal text-muted-foreground font-serif italic">
               all time
             </span>
           </div>

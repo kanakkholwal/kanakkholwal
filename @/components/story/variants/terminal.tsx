@@ -45,7 +45,6 @@ function ChapterBlock({ chapter }: { chapter: StoryChapter }) {
   const f = chapterFacets(chapter);
   return (
     <motion.div
-      style={{ "--accent": chapter.accent ?? "var(--primary)" } as React.CSSProperties}
       initial={{ opacity: 0, y: 12 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
@@ -55,7 +54,7 @@ function ChapterBlock({ chapter }: { chapter: StoryChapter }) {
       <p>
         <span className="text-primary">$</span>{" "}
         <span className="text-foreground">open</span>{" "}
-        <span className="text-(--accent)">{slug(chapter)}</span>{" "}
+        <span className="text-primary">{slug(chapter)}</span>{" "}
         <span className="text-muted-foreground">--as &quot;{chapter.org}&quot;</span>
       </p>
 
@@ -66,7 +65,7 @@ function ChapterBlock({ chapter }: { chapter: StoryChapter }) {
       <div className="space-y-1.5 pt-1">
         {f.beats.map((beat) => (
           <div key={beat.id} className="grid grid-cols-1 gap-x-4 sm:grid-cols-[9rem_1fr]">
-            <span className="text-(--accent)/80">{beat.heading}</span>
+            <span className="text-primary/80">{beat.heading}</span>
             <span className="text-foreground/80">{beat.body}</span>
           </div>
         ))}

@@ -65,7 +65,7 @@ export function StarsGraph({ data, stargazersTab }: StarsGraphProps) {
                 Repository
               </span>
               <Select defaultValue={activeRepo} onValueChange={setActiveRepo}>
-                <SelectTrigger className="h-auto p-0 px-2 border-none bg-transparent shadow-none text-lg font-instrument-serif font-medium hover:bg-card focus:ring-0 gap-2 data-[placeholder]:text-foreground">
+                <SelectTrigger className="h-auto p-0 px-2 border-none bg-transparent shadow-none text-lg font-serif font-medium hover:bg-card focus:ring-0 gap-2 data-[placeholder]:text-foreground">
                   <SelectValue placeholder="Select a repository" />
                 </SelectTrigger>
                 <SelectContent>

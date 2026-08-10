@@ -124,7 +124,7 @@ function DynamicJourney() {
               The Archives
             </p>
             <h1 className="text-5xl md:text-7xl font-black tracking-tighter text-foreground leading-none">
-              <span className="font-instrument-serif italic font-normal text-muted-foreground/80 mr-3">
+              <span className="font-serif italic font-normal text-muted-foreground/80 mr-3">
                 Changelog
               </span>
               <br className="md:hidden" />

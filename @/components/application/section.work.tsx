@@ -134,7 +134,7 @@ function DynamicWork({ experiences }: { experiences: WorkExperienceType[] }) {
               layoutId="work-heading"
               className="text-4xl md:text-6xl font-bold tracking-tighter leading-none"
             >
-              <span className="font-instrument-serif italic font-normal text-muted-foreground/70 mr-3">
+              <span className="font-serif italic font-normal text-muted-foreground/70 mr-3">
                 Professional
               </span>
               Journey

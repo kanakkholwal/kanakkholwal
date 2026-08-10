@@ -147,7 +147,7 @@ function DynamicAnalytics({ snapshot, view, ok, source, rangeKey, setRangeKey }:
         <div className="mx-auto flex max-w-app flex-col gap-5 md:flex-row md:items-end md:justify-between">
           <div className="space-y-3">
             <StatusPill ok={ok} source={source.toUpperCase()} />
-            <h1 className="font-instrument-serif text-4xl font-medium tracking-tight text-foreground md:text-6xl">
+            <h1 className="font-serif text-4xl font-medium tracking-tight text-foreground md:text-6xl">
               Site <span className="italic text-muted-foreground">Analytics</span>
             </h1>
             <p className="max-w-xl text-sm leading-relaxed text-muted-foreground">

@@ -39,7 +39,7 @@ export function StoryJourney() {
       <header className="mb-12 max-w-2xl space-y-4">
         <p className="font-mono text-xs text-muted-foreground">The story</p>
         <h1 className="text-4xl font-black tracking-tighter text-foreground md:text-5xl">
-          <span className="font-instrument-serif font-normal italic text-muted-foreground/80">
+          <span className="font-serif font-normal italic text-muted-foreground/80">
             Read it
           </span>{" "}
           your way.

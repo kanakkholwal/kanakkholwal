@@ -333,7 +333,7 @@ function DynamicProjects({ projects }: { projects: ReturnType<typeof getProjectL
             layoutId="projects-heading"
             className="text-balance text-4xl font-bold md:text-6xl"
           >
-            {/* `font-instrument-serif` is not a generated utility — the serif
+            {/* `font-serif` is not a generated utility — the serif
                 treatment never rendered. The theme exposes it as `font-serif`. */}
             <span className="mr-3 font-serif font-normal italic text-muted-foreground">
               Real world
