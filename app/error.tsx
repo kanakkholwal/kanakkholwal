@@ -1,5 +1,4 @@
 "use client";
-
 import ErrorPageClient from "@/components/utils/error-page.client";
 import { useEffect } from "react";
 
@@ -9,6 +8,7 @@ interface ErrorProps {
 }
 
 export default function ErrorPage({ error, reset }: ErrorProps) {
+  
   useEffect(() => {
     console.error("[ErrorBoundary]", error);
   }, [error]);
