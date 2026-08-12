@@ -118,7 +118,7 @@ function DynamicJourney() {
           <div className="space-y-4">
             <p className="text-xs font-mono uppercase tracking-widest text-muted-foreground flex items-center gap-2">
               <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary/60 opacity-75" />
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary/60 opacity-75 motion-reduce:animate-none" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
               </span>
               The Archives

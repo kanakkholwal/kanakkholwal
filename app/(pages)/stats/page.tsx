@@ -38,8 +38,8 @@ export default async function StatsPage(props: StatsPageProps) {
       <div className="space-y-2">
         <div className="flex items-center gap-2 text-xs font-mono font-medium uppercase tracking-widest text-muted-foreground">
           <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-75 motion-reduce:animate-none" />
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-success" />
           </span>
           System Analytics
           <span className="text-border">/</span>

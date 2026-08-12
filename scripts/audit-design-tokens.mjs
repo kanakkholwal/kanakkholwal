@@ -273,7 +273,18 @@ function sourceGates() {
   // parser, so the rendered DOM is not the one in the source.
   const nestedP = offenders(/<p[^>]*>\s*(?:\{\s*)?<Markdown/);
 
+  // `var(--chart-${i + 1})` silently walks past the last defined token: with
+  // eight tokens and nine series, the ninth got `var(--chart-9)` and rendered
+  // with no stroke colour. Index into the palette helper instead.
+  const chartInterp = offenders(/var\(--chart-\$\{/);
+
+  // WCAG 2.2.2: motion that runs past five seconds needs a stop. `animate-ping`
+  // is infinite by definition, and it was ungated in ten places.
+  const ungatedPing = offenders(/className="[^"]*animate-ping(?:(?!motion-reduce:animate-none)[^"])*"/);
+
   return [
+    [ungatedPing.length === 0, `no infinite ping without a reduced-motion stop${ungatedPing.length ? ` (${ungatedPing[0]}…)` : ""}`],
+    [chartInterp.length === 0, `chart tokens are not string-interpolated by index${chartInterp.length ? ` (${chartInterp[0]}…)` : ""}`],
     [fadedText.length === 0, `no gradient text fading below legibility${fadedText.length ? ` (${fadedText[0]}…)` : ""}`],
     [nestedP.length === 0, `no <Markdown> inside a <p>${nestedP.length ? ` (${nestedP[0]}…)` : ""}`],
     [flatTilt.length === 0, `perspective tilts use transformPerspective${flatTilt.length ? ` (${flatTilt[0]}…)` : ""}`],

@@ -635,7 +635,7 @@ const StatusPill = ({ status, minimal }: { status: string; minimal?: boolean }) 
   return (
     <div className={cn("inline-flex items-center gap-2 px-3 py-1 rounded-full text-2xs font-bold uppercase tracking-wider ring-1 ring-inset", activeStyle)}>
       <span className="relative flex h-2 w-2">
-        {isPulse && <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-current opacity-75" />}
+        {isPulse && <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-current opacity-75 motion-reduce:animate-none" />}
         <span className="relative inline-flex rounded-full h-2 w-2 bg-current" />
       </span>
       {status}

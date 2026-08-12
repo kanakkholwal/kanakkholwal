@@ -319,8 +319,8 @@ function DynamicError({ error, reset }: ErrorPageClientProps) {
               className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-red-500/20 bg-red-500/8 text-xs font-mono text-red-500"
             >
               <span className="relative flex size-1.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75" />
-                <span className="relative inline-flex rounded-full size-1.5 bg-red-500" />
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-destructive opacity-75 motion-reduce:animate-none" />
+                <span className="relative inline-flex rounded-full size-1.5 bg-destructive" />
               </span>
               Runtime Error
               {error.digest && (

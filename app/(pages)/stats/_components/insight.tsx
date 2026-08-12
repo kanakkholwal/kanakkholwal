@@ -1,5 +1,6 @@
 import { GenericAreaChart } from "@/components/extended/chart.area";
 import { changeCase } from "~/utils/string";
+import { cn } from "@/lib/utils";
 import { formatStatNumber } from "../lib/format";
 import { cumulateStats, getProjectInsight } from "../lib/insight";
 
@@ -11,6 +12,7 @@ import {
   PiCalendarBlankDuotone,
   PiCursorClickDuotone,
   PiEyeDuotone,
+  PiTrendDownDuotone,
   PiTrendUpDuotone,
   PiUsersDuotone,
 } from "react-icons/pi";
@@ -35,13 +37,17 @@ export async function InsightStats({ project }: { project: ProjectConfig }) {
 
   // Calculate Sessions per User (Engagement Proxy)
   const sessionsPerUser = users > 0 ? (sessions / users).toFixed(1) : "0.0";
+  // The badge next to it read a hard-coded "+2.4%" — a fabricated figure
+  // presented as a measurement, on a page whose whole job is measurement, while
+  // the API was already returning a real growth percentage.
+  const sessionTrend = insightData.data.sessions.growthPercent;
 
   return (
     <div className="w-full mt-8 first:mt-0 rounded-xl border border-border bg-card backdrop-blur-sm overflow-hidden hover:border-border/80 transition-colors duration-300 @container/insight">
       <header className="grid @lg/insight:grid-cols-12 border-b border-border w-full">
-        <div className="col-span-6 p-5 @lg/insight:p-6 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-border bg-muted/5">
+        <div className="col-span-6 p-5 @lg/insight:p-6 flex flex-col justify-between border-b @lg/insight:border-b-0 @lg/insight:border-r border-border bg-muted/5">
           <div className="flex items-start gap-4">
-            <div className="flex h-10 w-10 @lg/insight:h-11 @lg/insight:w-11 shrink-0 items-center justify-center rounded-lg border border-border/60 bg-background text-indigo-500 shadow-sm">
+            <div className="flex h-10 w-10 @lg/insight:h-11 @lg/insight:w-11 shrink-0 items-center justify-center rounded-lg border border-border/60 bg-background text-primary shadow-sm">
               <PiAppWindowDuotone className="text-xl @lg/insight:text-2xl" />
             </div>
             <div className="space-y-1 min-w-0">
@@ -76,7 +82,7 @@ export async function InsightStats({ project }: { project: ProjectConfig }) {
           <div className="grid grid-cols-1 @lg/insight:grid-cols-3 gap-6 @lg/insight:gap-8">
             <div className="flex flex-row @lg/insight:flex-col justify-between @lg/insight:justify-start items-center @lg/insight:items-start gap-2">
               <span className="flex items-center gap-1.5 text-2xs font-mono font-medium uppercase text-muted-foreground tracking-widest">
-                <PiEyeDuotone className="text-sm" /> Views
+                <PiEyeDuotone className="text-sm" aria-hidden="true" /> Visitors
               </span>
               <span className="text-2xl @lg/insight:text-3xl font-bold tracking-tight text-foreground font-sans">
                 {formatStatNumber(visitors)}
@@ -85,7 +91,7 @@ export async function InsightStats({ project }: { project: ProjectConfig }) {
 
             <div className="flex flex-row @lg/insight:flex-col justify-between @lg/insight:justify-start items-center @lg/insight:items-start gap-2 border-t @lg/insight:border-t-0 pt-4 @lg/insight:pt-0 border-dashed border-border/50">
               <span className="flex items-center gap-1.5 text-2xs font-mono font-medium uppercase text-muted-foreground tracking-widest">
-                <PiUsersDuotone className="text-sm text-emerald-500" /> Users
+                <PiUsersDuotone className="text-sm text-success" aria-hidden="true" /> Users
               </span>
               <span className="text-2xl @lg/insight:text-3xl font-bold tracking-tight text-foreground font-sans">
                 {formatStatNumber(users)}
@@ -94,16 +100,34 @@ export async function InsightStats({ project }: { project: ProjectConfig }) {
 
             <div className="flex flex-row @lg/insight:flex-col justify-between @lg/insight:justify-start items-center @lg/insight:items-start gap-2 border-t @lg/insight:border-t-0 pt-4 @lg/insight:pt-0 border-dashed border-border/50">
               <span className="flex items-center gap-1.5 text-2xs font-mono font-medium uppercase text-muted-foreground tracking-widest">
-                <PiCursorClickDuotone className="text-sm text-amber-500" /> S/U
-                Ratio
+                <PiCursorClickDuotone
+                  className="text-sm text-warning"
+                  aria-hidden="true"
+                />{" "}
+                <span className="whitespace-nowrap">Sessions / user</span>
               </span>
               <div className="flex items-center gap-3">
                 <span className="text-2xl @lg/insight:text-3xl font-bold tracking-tight text-foreground font-sans">
                   {sessionsPerUser}
                 </span>
-                <span className="text-2xs text-emerald-500 font-medium flex items-center bg-emerald-500/10 px-1.5 py-0.5 rounded-full">
-                  <PiTrendUpDuotone className="mr-0.5" /> +2.4%
-                </span>
+                {Number.isFinite(sessionTrend) && sessionTrend !== 0 && (
+                  <span
+                    className={cn(
+                      "flex shrink-0 items-center rounded-full px-1.5 py-0.5 text-2xs font-medium tabular-nums",
+                      sessionTrend > 0
+                        ? "bg-success/10 text-success"
+                        : "bg-destructive/10 text-destructive",
+                    )}
+                  >
+                    {sessionTrend > 0 ? (
+                      <PiTrendUpDuotone className="mr-0.5" aria-hidden="true" />
+                    ) : (
+                      <PiTrendDownDuotone className="mr-0.5" aria-hidden="true" />
+                    )}
+                    {sessionTrend > 0 ? "+" : "−"}
+                    {Math.abs(sessionTrend).toFixed(1)}%
+                  </span>
+                )}
               </div>
             </div>
           </div>
@@ -115,8 +139,8 @@ export async function InsightStats({ project }: { project: ProjectConfig }) {
         {/* Floating Status Badge inside chart - Hidden on super small screens to save space */}
         <div className="absolute top-4 right-4 z-10 hidden @lg/insight:flex items-center gap-2 rounded-full border border-border/40 bg-background/60 px-2.5 py-1 backdrop-blur-md shadow-sm">
           <span className="relative flex h-1.5 w-1.5">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-success opacity-75 motion-reduce:animate-none" />
+            <span className="relative inline-flex size-1.5 rounded-full bg-success" />
           </span>
           <span className="text-2xs font-mono font-medium uppercase tracking-widest text-muted-foreground/80">
             Live_Traffic

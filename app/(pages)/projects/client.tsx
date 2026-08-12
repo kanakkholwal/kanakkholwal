@@ -257,7 +257,7 @@ function DynamicProjects({
           >
             <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/5 border border-border/50 text-xs font-mono text-muted-foreground uppercase tracking-widest backdrop-blur-md">
               <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary/80 opacity-75" />
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary/80 opacity-75 motion-reduce:animate-none" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
               </span>
               Ship / Iterate / Scale

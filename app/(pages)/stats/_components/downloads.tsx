@@ -11,11 +11,12 @@ import {
   MultiDatum,
   NpmPackageStatsData,
 } from "../lib/npm";
-import { DownloadsGraph } from "./downloads.client";
+import { DownloadsGraph, type TotalDatum } from "./downloads.client";
+import { PackageBreakdown } from "./package-breakdown";
+import { chartColor } from "../lib/palette";
 import { GraphSkeleton } from "./graph.skeleton";
 import { WidgetSkeleton } from "./widget.skeleton";
 
-import { Fragment } from "react";
 import { PiPackageDuotone } from "react-icons/pi";
 import { statsConfig } from "../config";
 
@@ -60,7 +61,10 @@ export async function NPMStats() {
             key={pkg}
             className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-background border border-border shadow-sm"
           >
-            <span className="w-1.5 h-1.5 rounded-full bg-indigo-500" />
+            <span
+              className="size-1.5 shrink-0 rounded-full"
+              style={{ background: chartColor(index) }}
+            />
             <span className="text-xs font-medium text-foreground">{pkg}</span>
             <span className="h-3 w-px bg-border mx-1" />
             <span className="text-xs font-mono text-muted-foreground">
@@ -76,20 +80,6 @@ export async function NPMStats() {
 export const NPMStatsSkeleton = () => (
   <div className="bg-muted h-9 w-64 animate-pulse rounded-md lg:h-12" />
 );
-function sumPastPeriodCallback(
-  d: MultiDatum,
-  index: number,
-  array: MultiDatum[],
-) {
-  let sum = 0;
-  for (const key in d) {
-    if (key !== "date") {
-      sum += d[key] as number;
-    }
-  }
-  return sum;
-}
-
 export async function NPMDownloads() {
   const npmStats = await Promise.all(
     statsConfig.npmPackages.map((pkg) => fetchNpmPackage(pkg)),
@@ -102,14 +92,12 @@ export async function NPMDownloads() {
     {} as Record<string, NpmPackageStatsData>,
   );
   const [all, allWithoutKeys] = [combineStats(data), combineStats(data, false)];
-  const allLast30Days = all.last30Days.reduce(
-    (sum, d) => sum + sumPastPeriodCallback(d, 0, all.last30Days),
-    0,
-  );
-  const allLast90Days = all.last90Days.reduce(
-    (sum, d) => sum + sumPastPeriodCallback(d, 0, all.last90Days),
-    0,
-  );
+
+  const last90 = withTotal(all.last90Days as MultiDatum[]);
+  const last30 = withTotal(all.last30Days as MultiDatum[]);
+  const allLast90Days = last90.reduce((sum, d) => sum + d.total, 0);
+  const allLast30Days = last30.reduce((sum, d) => sum + d.total, 0);
+
   const lastDate = all.last30Days.at(-1)?.date;
   const lastDateWeekday = getIsoWeekday(lastDate ?? "");
   // Fortunately the epoch did not land on a Sunday (it was a Thursday).
@@ -118,8 +106,8 @@ export async function NPMDownloads() {
   return (
     <>
       <DownloadsGraph
-        data={all.last90Days}
-        partialLast={!isLastDateSunday}
+        data={last90}
+        packages={statsConfig.npmPackages}
         trend={
           <TrendBadge
             label={` downloads this week vs ${isLastDateSunday ? "last week" : `the first ${lastDateWeekday} days of last week`}`}
@@ -134,45 +122,11 @@ export async function NPMDownloads() {
             newValue={Number(allWithoutKeys.last90Days.at(-1)?.downloads ?? 0)}
           />
         }
-        title={
-          <>
-            <Download size={20} /> Last 90 days
-            <dl className="mr-1 ml-auto flex gap-2">
-              <dt className="sr-only">combined</dt>
-              <dd>{formatStatNumber(allLast90Days)}</dd>
-              <span className="font-light text-zinc-500" aria-hidden>
-                |
-              </span>
-              {statsConfig.npmPackages.map((pkg, index) => {
-                return (
-                  <Fragment key={pkg}>
-                    {index > 0 && (
-                      <span className="font-light text-zinc-500" aria-hidden>
-                        |
-                      </span>
-                    )}
-                    <dt className="sr-only">{pkg}</dt>
-                    <dd
-                      className="text-zinc-500/50"
-                      title={`Last 90 days, ${pkg}`}
-                    >
-                      {formatStatNumber(
-                        npmStats[index].last90Days.reduce(
-                          (sum, { downloads }) => sum + (downloads as number),
-                          0,
-                        ),
-                      )}
-                    </dd>
-                  </Fragment>
-                );
-              })}
-            </dl>
-          </>
-        }
+        title={<PeriodTitle label="Last 90 days" total={allLast90Days} />}
       />
       <DownloadsGraph
-        data={all.last30Days}
-        partialLast={false}
+        data={last30}
+        packages={statsConfig.npmPackages}
         trend={
           <TrendBadge
             label=" downloads compared to 7 days ago"
@@ -180,42 +134,37 @@ export async function NPMDownloads() {
             newValue={Number(allWithoutKeys.last30Days.at(-1)?.downloads ?? 0)}
           />
         }
-        title={
-          <>
-            <Download size={20} /> Last 30 days
-            <dl className="mr-1 ml-auto flex gap-2">
-              <dt className="sr-only">combined</dt>
-              <dd>{formatStatNumber(allLast30Days)}</dd>
-              <span className="font-light text-zinc-500" aria-hidden>
-                |
-              </span>
-              {statsConfig.npmPackages.map((pkg, index) => {
-                return (
-                  <Fragment key={pkg}>
-                    {index > 0 && (
-                      <span className="font-light text-zinc-500" aria-hidden>
-                        |
-                      </span>
-                    )}
-                    <dt className="sr-only">{pkg}</dt>
-                    <dd
-                      className="text-zinc-500/50"
-                      title={`Last 30 days, ${pkg}`}
-                    >
-                      {formatStatNumber(
-                        npmStats[index].last30Days.reduce(
-                          (sum, { downloads }) => sum + (downloads as number),
-                          0,
-                        ),
-                      )}
-                    </dd>
-                  </Fragment>
-                );
-              })}
-            </dl>
-          </>
-        }
+        title={<PeriodTitle label="Last 30 days" total={allLast30Days} />}
       />
+      <PackageBreakdown packages={statsConfig.npmPackages} stats={npmStats} />
+    </>
+  );
+}
+
+function withTotal(rows: MultiDatum[]): TotalDatum[] {
+  return rows.map((row) => {
+    let total = 0;
+    for (const key in row) {
+      if (key !== "date") total += Number(row[key]) || 0;
+    }
+    return { ...row, total };
+  });
+}
+
+/**
+ * The header used to print the aggregate followed by one bare number per
+ * package, pipe-separated, with the only labels in `sr-only` `<dt>`s — so
+ * sighted readers got `2k | 60 | 474 | 571 | 70 | 249 | 289 | 181 | 73 | 76`
+ * and no way to tell which package any of them belonged to. Those numbers are
+ * labelled in the breakdown grid now.
+ */
+function PeriodTitle({ label, total }: { label: string; total: number }) {
+  return (
+    <>
+      <Download size={20} aria-hidden="true" /> {label}
+      <span className="ml-auto font-bold tabular-nums">
+        {formatStatNumber(total)}
+      </span>
     </>
   );
 }
@@ -276,19 +225,27 @@ export function TrendBadge({ oldValue, newValue, label }: TrendBadgeProps) {
       variant="outline"
       className={cn(
         "flex items-center gap-1.25 rounded-md border-none pl-1.5",
-        diff > 0 && "bg-green-500/10 text-green-500",
-        diff < 0 && "bg-red-500/10 text-red-500",
-        diff === 0 && "bg-zinc-500/10 text-zinc-500",
+        diff > 0 && "bg-success/10 text-success",
+        diff < 0 && "bg-destructive/10 text-destructive",
+        diff === 0 && "bg-muted text-muted-foreground",
       )}
       title={`${sign}${Math.abs(diff)} ${label}`}
     >
-      {diff > 0 && <TrendingUp size={12} />}
-      {diff < 0 && <TrendingDown size={12} />}
-      {diff === 0 && <Minus size={12} />}
-      {diff > 0 ? "+" : "-"}
-      {formatStatNumber(Math.abs(diff)) || "No change"}
-      {oldValue !== 0 && (
-        <span className="font-normal">({pct.toFixed(1)}%)</span>
+      {diff > 0 && <TrendingUp size={12} aria-hidden="true" />}
+      {diff < 0 && <TrendingDown size={12} aria-hidden="true" />}
+      {diff === 0 && <Minus size={12} aria-hidden="true" />}
+      {/* The sign was printed unconditionally, so a flat week rendered as
+          "-No change". */}
+      {diff === 0 ? (
+        "No change"
+      ) : (
+        <>
+          {sign}
+          {formatStatNumber(Math.abs(diff))}
+          {oldValue !== 0 && (
+            <span className="font-normal">({pct.toFixed(1)}%)</span>
+          )}
+        </>
       )}
     </Badge>
   );

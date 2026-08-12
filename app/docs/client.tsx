@@ -158,7 +158,7 @@ function StaticDocs({ posts, latestPostDate }: DocsPageClientProps) {
 
                         <div className="w-full border-y border-border py-3 flex flex-wrap gap-x-8 gap-y-2 text-xs font-mono text-muted-foreground uppercase tracking-wider">
                             <span className="flex items-center gap-2">
-                                <span className="size-2 rounded-full bg-emerald-500 animate-pulse" />
+                                <span className="size-2 rounded-full bg-success animate-pulse" />
                                 System Status: Online
                             </span>
                             <span>Total Entries: {posts.length}</span>
@@ -333,8 +333,8 @@ function DynamicDocs({ posts, latestPostDate }: DocsPageClientProps) {
                     <div className="space-y-3">
                         <p className="text-xs font-mono uppercase tracking-widest text-muted-foreground flex items-center gap-2">
                             <span className="relative flex h-2 w-2">
-                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-75 motion-reduce:animate-none" />
+                                <span className="relative inline-flex rounded-full h-2 w-2 bg-success" />
                             </span>
                             Research &amp; Insights
                         </p>

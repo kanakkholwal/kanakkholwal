@@ -1,124 +1,98 @@
 "use client";
 
 import {
+  ChartConfig,
   ChartContainer,
-  ChartLegend,
-  ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import type { ReactNode } from "react";
-import {
-  CartesianGrid,
-  Customized,
-  Line,
-  LineChart,
-  XAxis,
-  YAxis,
-} from "recharts";
-import { statsConfig } from "../config";
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import { formatDate, formatStatNumber } from "../lib/format";
-import type { Datum, MultiDatum } from "../lib/npm";
-import { useDynamicDasharray } from "./partial-line-chart";
+import type { MultiDatum } from "../lib/npm";
+import { chartColor } from "../lib/palette";
 import { Widget, WidgetProps } from "./widget";
 
+/** Rows carry every package plus a precomputed `total`. */
+export type TotalDatum = MultiDatum & { total: number };
+
 type DownloadsGraphProps = WidgetProps & {
-  data: (Datum | MultiDatum)[];
-  partialLast: boolean;
+  data: TotalDatum[];
+  packages: readonly string[];
   trend: ReactNode;
 };
 
+// One series, not one per package. Nine lines over 13 weekly points was a
+// spaghetti plot: no reading of it answered a question, the legend needed a
+// second row that landed on top of the trend badge, and `var(--chart-${i + 1})`
+// ran past --chart-8 so the ninth package had no colour at all. The total is
+// what the chart is for; per-package numbers live in the breakdown below and in
+// this tooltip, where every value carries its own label.
 export function DownloadsGraph({
   data,
-  partialLast,
+  packages,
   trend,
   ...props
 }: DownloadsGraphProps) {
-  const [DasharrayCalculator, lineDashArrays] = useDynamicDasharray({
-    splitIndex: data.length - 2,
-  });
+  const config: ChartConfig = {
+    total: { label: "All packages", color: "var(--chart-1)" },
+    ...Object.fromEntries(
+      packages.map((pkg, i) => [pkg, { label: pkg, color: chartColor(i) }]),
+    ),
+  };
 
   return (
     <Widget {...props}>
-      <ChartContainer
-        className="relative h-86 w-full pr-1"
-        config={{
-          ...statsConfig.npmPackages.reduce(
-            (acc, pkg) => {
-              acc[pkg] = { label: pkg };
-              return acc;
-            },
-            {} as Record<string, { label: string }>,
-          ),
-        }}
-        domChildren={<div className="absolute top-1.25 left-1">{trend}</div>}
-      >
-        <LineChart
-          // accessibilityLayer // note: Causes a bug with Recharts 2.15.4 where a click on the chart moves the cursor to the first data point.
-          // Bug is fixed in Recharts v3 (but v3 breaks the <Customized> component for the partial line dashes)
-          data={data}
-          margin={{ top: 5, right: 0, bottom: 5, left: 5 }}
-        >
+      <div className="mb-3 flex justify-end">{trend}</div>
+      <ChartContainer className="h-72 w-full pr-1" config={config}>
+        <AreaChart data={data} margin={{ top: 5, right: 0, bottom: 5, left: 5 }}>
+          <defs>
+            <linearGradient id="downloads-fill" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="var(--color-total)" stopOpacity={0.28} />
+              <stop offset="100%" stopColor="var(--color-total)" stopOpacity={0} />
+            </linearGradient>
+          </defs>
+          <CartesianGrid vertical={false} />
           <YAxis
-            width={40}
-            fillOpacity={0.75}
+            width={44}
             axisLine={false}
             tickLine={false}
             tickFormatter={(value) => formatStatNumber(value)}
-            allowDataOverflow
           />
-          <ChartLegend
-            align="right"
-            verticalAlign="top"
-            content={<ChartLegendContent />}
-          />
-          <CartesianGrid vertical={false} />
           <XAxis
-            padding={{ left: 20, right: 20 }}
+            padding={{ left: 12, right: 12 }}
             dataKey="date"
             axisLine={false}
             tickLine={false}
             minTickGap={40}
             tickMargin={10}
-            fillOpacity={0.75}
-            tickFormatter={(value) =>
+            tickFormatter={(value: string) =>
               value.startsWith("'")
                 ? value
                 : formatDate(value, "", { day: "2-digit", month: "short" })
             }
           />
           <ChartTooltip
+            isAnimationActive={false}
             content={
               <ChartTooltipContent
                 valueFormatter={(value) => formatStatNumber(value as number)}
               />
             }
-            isAnimationActive={false}
-            position={{ y: 20 }}
           />
-          {statsConfig.npmPackages.map((pkg, i) => {
-            return (
-              <Line
-                key={pkg}
-                dataKey={pkg}
-                isAnimationActive={false}
-                type="monotone"
-                stroke={`var(--chart-${i + 1})`}
-                // className={`stroke-${color}-500 dark:stroke-${color}-400`}
-                dot={false}
-                strokeWidth={2}
-                strokeDasharray={
-                  partialLast
-                    ? lineDashArrays.find((line) => line.name === pkg)
-                        ?.strokeDasharray || "0 0"
-                    : "0 0"
-                }
-              />
-            );
-          })}
-
-          <Customized component={DasharrayCalculator} />
-        </LineChart>
+          <Area
+            dataKey="total"
+            type="monotone"
+            isAnimationActive={false}
+            stroke="var(--color-total)"
+            strokeWidth={2}
+            fill="url(#downloads-fill)"
+            dot={false}
+            // Every package is present in the row, so the tooltip lists the
+            // breakdown even though only the total is drawn.
+            activeDot={{ r: 4 }}
+          />
+        </AreaChart>
       </ChartContainer>
     </Widget>
   );

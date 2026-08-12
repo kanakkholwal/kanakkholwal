@@ -156,7 +156,12 @@ export function cumulateStats(
     .sort((a, b) => a - b)
     .map((timestamp) => ({
       timestamp: new Date(timestamp),
-      users: userMap.get(timestamp) || 0,
-      sessions: sessionMap.get(timestamp) || 0,
+      // `?? null`, not `|| 0`. The two sources are merged on a union of their
+      // timestamps, so any bucket present in one and absent from the other used
+      // to become a hard zero — a fabricated reading that plots as a real dip
+      // and is indistinguishable from a genuine quiet hour. `0` also swallowed
+      // legitimate zero counts into the same branch.
+      users: userMap.get(timestamp) ?? null,
+      sessions: sessionMap.get(timestamp) ?? null,
     }));
 }

@@ -94,12 +94,12 @@ function StatusPill({ ok, source }: { ok: boolean; source: string }) {
     <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background/60 px-2.5 py-1 font-mono text-2xs uppercase tracking-widest text-muted-foreground backdrop-blur-md">
       <span className="relative flex size-1.5">
         {ok && (
-          <span className="absolute inline-flex size-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+          <span className="absolute inline-flex size-full animate-ping rounded-full bg-success opacity-75 motion-reduce:animate-none" />
         )}
         <span
           className={cn(
             "relative inline-flex size-1.5 rounded-full",
-            ok ? "bg-emerald-500" : "bg-muted-foreground/50",
+            ok ? "bg-success" : "bg-muted-foreground/50",
           )}
         />
       </span>

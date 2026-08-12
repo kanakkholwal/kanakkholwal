@@ -1,5 +1,7 @@
 "use client";
 
+import { chartColor } from "@/lib/chart-palette";
+
 import {
   CardContent,
   CardDescription,
@@ -117,7 +119,7 @@ export function GenericAreaChart({
     series.forEach((s, index) => {
       config[s.dataKey] = {
         label: s.label,
-        color: s.color || `var(--chart-${index + 1})`,
+        color: s.color || chartColor(index),
       };
     });
     return config;
@@ -154,11 +156,14 @@ export function GenericAreaChart({
     return value.toLocaleString();
   };
 
-  // Transform data for recharts (convert Date to string for dataKey)
+  // Epoch ms, not an ISO string. A string dataKey makes recharts treat the axis
+  // as categorical, so every point is spaced evenly no matter how far apart in
+  // time it actually is — a 20-day gap rendered the same width as a 2-day one,
+  // which is the axis drawing a shape the data does not have.
   const chartData = React.useMemo(() => {
     return data.map((item) => ({
       ...item,
-      date: item.timestamp.toISOString(),
+      date: item.timestamp.getTime(),
     }));
   }, [data]);
 
@@ -271,12 +276,12 @@ export function GenericAreaChart({
                 >
                   <stop
                     offset="5%"
-                    stopColor={s.color || `var(--chart-${index + 1})`}
+                    stopColor={s.color || chartColor(index)}
                     stopOpacity={gradientOpacity.start}
                   />
                   <stop
                     offset="95%"
-                    stopColor={s.color || `var(--chart-${index + 1})`}
+                    stopColor={s.color || chartColor(index)}
                     stopOpacity={gradientOpacity.end}
                   />
                 </linearGradient>
@@ -292,11 +297,16 @@ export function GenericAreaChart({
             {showXAxis && (
               <XAxis
                 dataKey="date"
+                type="number"
+                scale="time"
+                domain={["dataMin", "dataMax"]}
                 tickLine={false}
                 axisLine={false}
                 tickMargin={8}
                 minTickGap={32}
-                tickFormatter={xAxisFormatter || defaultXAxisFormatter}
+                tickFormatter={(value: number) =>
+                  (xAxisFormatter || defaultXAxisFormatter)(new Date(value))
+                }
               />
             )}
 
@@ -337,9 +347,12 @@ export function GenericAreaChart({
                 dataKey={s.dataKey}
                 type={curveType}
                 fill={`url(#fill${s.dataKey})`}
-                stroke={s.color || `var(--chart-${index + 1})`}
+                stroke={s.color || chartColor(index)}
                 strokeWidth={2}
                 stackId={stacked ? "a" : undefined}
+                // A missing bucket is not a zero. Nulls leave the gap visible
+                // instead of drawing a line down to the axis and back.
+                connectNulls={false}
               />
             ))}
 
