@@ -117,7 +117,7 @@ KoinX builds crypto tax software, the tool people across different countries use
 **:zap: Recent Activity:**
 
 <!--START_SECTION:activity-->
-1. 🗣 Commented on [#42](https://github.com/xai-org/x-algorithm/issues/42#issuecomment-5292784624) in [xai-org/x-algorithm](https://github.com/xai-org/x-algorithm)
+1. 🎉 Merged PR [#30](https://github.com/kanakkholwal/glyphtex/pull/30) in [kanakkholwal/glyphtex](https://github.com/kanakkholwal/glyphtex)
 <!--END_SECTION:activity-->
 
 
