@@ -56,6 +56,7 @@
 - I build from zero. Whether it's frontend, backend, full-stack applications, or AI-powered experiences, I work across the entire development lifecycle. From UI/UX to deployment to user feedback, I care less about technology debates and more about delivering results that people love using.
 - Domain knowledge of Full-stack AI apps development, scalable systems design, and **devops/cloud computing**.
 
+<!--
 ## Experience
 
 ### ViralLens - _Bengaluru, India_
@@ -95,7 +96,7 @@ KoinX builds crypto tax software, the tool people across different countries use
 - Built new components for the **internal UI component library** so the interface stayed consistent across our apps.
 - Our marketing site was expanding to multiple languages and countries, but it hydrated everything on the client and pulled all content from a single JSON file, so it kept getting slower. I moved rendering to build time and server-side in **Next.js**, and made the content imports **tree-shakable** so a page only loads what it needs.
 - With no extra libraries, just lazy loading, dynamic imports, and runtime code splitting, I took the site's **PageSpeed performance score from around 60 to 88** and improved **Core Web Vitals** across the board.
-
+-->
 ## Skills
 
 **Languages** :  JavaScript, TypeScript, Go, Python, Rust, Php, C++
