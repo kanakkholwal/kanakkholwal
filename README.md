@@ -118,7 +118,7 @@ KoinX builds crypto tax software, the tool people across different countries use
 **:zap: Recent Activity:**
 
 <!--START_SECTION:activity-->
-1. 💪 Opened PR [#127](https://github.com/kanakkholwal/recast/pull/127) in [kanakkholwal/recast](https://github.com/kanakkholwal/recast)
+1. ℹ️ Labeled PR [#127](https://github.com/kanakkholwal/recast/pull/127) in [kanakkholwal/recast](https://github.com/kanakkholwal/recast)
 <!--END_SECTION:activity-->
 
 
