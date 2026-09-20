@@ -29,11 +29,11 @@
 
 ## Current work
 - [**Recast**](https://github.com/kanakkholwal/recast) - Agentic video recorder and editor
-- [**Docvia**](https://github.com/kanakkholwal/docvia) - framework agnostic documentation compiler
-- [**GlyphX**](https://github.com/kanakkholwal/glyphx) - A fast, powerfull LaTeX editor that Overleaf should have been
-- [**College Ecosystem**](https://github.com/kanakkholwal/college-ecosystem) - Next.js/TS platform; 1M+ visits; realtime polls, rankings, communities.
+- [**Docvia**](https://github.com/kanakkholwal/docvia) - Documentation tooling for React, Svelte and for the web
+- [**GlyphTexX**](https://github.com/kanakkholwal/glyphx) - A fast, powerfull browser LaTeX editor that Overleaf should have been
+- [**College Ecosystem**](https://github.com/kanakkholwal/college-ecosystem) - a college platform; 1.8M+ visits; realtime polls, rankings, communities.
 - [**Orbit**](https://github.com/kanakkholwal/orbit) - browser-first pdf utility application
-
+- [**Baby UI**](https://github.com/kanakkholwal/baby-ui) - Animated, UI component library for React and Svelte.
 - [**Mailing system**](https://github.com/kanakkholwal/mail-system) - A modern, type-safe & portable email service built with Typescript, React Email, and Nodemailer.
 
 - [**Markdown Editor**](https://github.com/kanakkholwal/nexo-mdx) - plugin-based Markdown Editor with React + TS + shadcn UI / Tailwind css ; rendering speed +35%; 300+ weekly downloads.
