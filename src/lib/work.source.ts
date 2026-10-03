@@ -12,6 +12,13 @@ export const source = loader({
   plugins: [lucideIconsPlugin()],
 });
 
+// Frontmatter dates read "Mar 2024"; Date parses that as the first of the month.
+const started = (w: WorkExperienceType) => new Date(`1 ${w.startDate}`).getTime() || 0;
+
+/** Newest role first, so a current job leads the list. */
 export function getWorkExperienceList(): WorkExperienceType[] {
-  return source.getPages().map(toMeta);
+  return source
+    .getPages()
+    .map(toMeta)
+    .toSorted((a, b) => started(b) - started(a));
 }

@@ -1,0 +1,50 @@
+---
+id: "glyphtex"
+title: "GlyphTeX"
+href: "https://glyphtex.nexonauts.com"
+dates: "Jun 2026 - Present"
+active: true
+order: 3
+status: "In Progress"
+description: "A LaTeX editor that compiles on your own machine. The engine runs as WebAssembly in the browser, so your papers never leave your computer."
+technologies:
+  - "SvelteKit"
+  - "Svelte 5"
+  - "TypeScript"
+  - "WebAssembly"
+  - "Tectonic"
+  - "Tauri"
+  - "isomorphic-git"
+  - "Cloudflare"
+tags:
+  - "LaTeX"
+  - "Editor"
+  - "WASM"
+  - "Local-first"
+  - "Open Source"
+links:
+  - label: "Source"
+    url: "https://github.com/kanakkholwal/glyphtex"
+    icon: "github"
+  - label: "Website"
+    url: "https://glyphtex.nexonauts.com"
+    icon: "globe"
+---
+
+GlyphTeX is the LaTeX editor I wanted Overleaf to be. You write papers, proofs and theses in real LaTeX, and the whole thing runs on your computer: no account, no upload, no build queue.
+
+Overleaf made LaTeX one click away, and that mattered. The cost is that your project lives on someone else's server. Long chapters lag because every keystroke makes a round trip, a heavy build on the free plan times out instead of giving you a PDF, and history or Git sits behind a pricing page. None of that is about writing LaTeX. It's about running a cloud.
+
+## How it works
+
+- **The compiler runs in the tab.** GlyphTeX ships its own engine, Tectonic, compiled to WebAssembly. There's no multi-gigabyte TeX install and nothing on a server to time out, and the preview keeps up while you type.
+- **Source and PDF side by side.** Double-click a spot in the PDF to jump to the line that produced it, and jump back the other way.
+- **Errors you can act on.** A failed build lists errors with clickable line numbers, and the last good PDF stays on screen instead of going blank.
+- **Projects are folders.** A project is a normal directory of `.tex` and `.bib` files, stored in the browser. Overleaf projects come over as a zip.
+- **Git without a subscription.** The desktop shell (Tauri) has a built-in Git client for staging, diffs, history, clone, push and pull.
+
+## Where it is
+
+The browser workspace is where the work happens now and it's free to use. The desktop app exists but is paused: its builds are behind the current editor, and it gets picked back up once the browser editor settles. Next on the roadmap is bring-your-own AI key for rephrasing, drafting equations and decoding compiler errors.
+
+The docs site runs on [Docvia](/projects/docvia), my documentation engine.

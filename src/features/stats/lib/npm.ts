@@ -1,11 +1,10 @@
+import "@tanstack/react-start/server-only";
 import dayjs from "dayjs";
 import isoWeek from "dayjs/plugin/isoWeek";
-import minMax from "dayjs/plugin/minMax";
 import { z } from "zod";
-import { memo } from "~/lib/cache";
+import { edgeMemo } from "~/lib/cache";
 
 dayjs.extend(isoWeek);
-dayjs.extend(minMax);
 
 export type Datum = {
   date: string;
@@ -40,95 +39,121 @@ const rangeResponseSchema = z.object({
   ),
 });
 
-async function getLastNDays(pkg: string, n: number): Promise<Datum[]> {
-  const start = dayjs().subtract(n, "day").format("YYYY-MM-DD");
-  const end = dayjs().subtract(1, "day").endOf("day").format("YYYY-MM-DD");
-  const url = `https://api.npmjs.org/downloads/range/${start}:${end}/${pkg}`;
-  try {
-    const { downloads } = rangeResponseSchema.parse(await get(url));
-    const data = downloads.map((d) => ({
-      date: d.day,
-      downloads: d.downloads,
-    }));
-    if (data.at(-1)?.downloads === 0) {
-      data.pop(); // Remove last day if it's zero (stats not available yet)
-    }
-    return data;
-  } catch (cause) {
-    const error = new Error(`error: getLastNDays(${pkg}, ${n}) - url: ${url}`, {
-      cause,
-    });
-    console.error(error);
-    return [];
-  }
+const API = "https://api.npmjs.org/downloads/range";
+// npm's limits: a bulk range spans at most 365 days, holds at most 128 names, and refuses scoped ones.
+const SPAN_DAYS = 365;
+const BULK_MAX = 128;
+const NPM_EPOCH = "2015-01-10";
+
+type Series = { ok: boolean; days: Datum[] };
+
+const toDatum = (rows: { day: string; downloads: number }[]): Datum[] =>
+  rows.map((d) => ({ date: d.day, downloads: d.downloads }));
+
+const sum = (days: Datum[]) => days.reduce((total, d) => total + d.downloads, 0);
+
+/** `count` spans of SPAN_DAYS ending yesterday, newest first: [[start, end], ...]. */
+function spans(count: number) {
+  return Array.from({ length: count }, (_, i) => {
+    const end = dayjs().subtract(1 + i * SPAN_DAYS, "day");
+    const start = end.subtract(SPAN_DAYS - 1, "day");
+    return [start.format("YYYY-MM-DD"), end.format("YYYY-MM-DD")] as const;
+  }).filter(([, end]) => end >= NPM_EPOCH);
 }
 
-const packageResponseSchema = z.object({
-  time: z.object({
-    created: z.string(),
-  }),
-});
-
-async function getPackageCreationDate(pkg: string): Promise<dayjs.Dayjs> {
-  const npmStatsEpoch = dayjs("2015-01-10");
-  const url = `https://registry.npmjs.org/${pkg}`;
-  try {
-    const { time } = packageResponseSchema.parse(await get(url));
-    return dayjs.max(npmStatsEpoch, dayjs(time.created));
-  } catch (cause) {
-    const error = new Error(`error: getPackageCreationDate(${pkg}) - url: ${url}, falling back to npm stats epoch`, {
-      cause,
-    });
-    console.error(error);
-    return npmStatsEpoch;
-  }
-}
-
-async function getAllTime(pkg: string): Promise<number> {
-  let downloads: number = 0;
-  let start = dayjs(await getPackageCreationDate(pkg));
-  let end = start.add(18, "month");
-  const now = dayjs();
-  while (start.isBefore(now)) {
-    const url = `https://api.npmjs.org/downloads/range/${start.format(
-      "YYYY-MM-DD",
-    )}:${end.format("YYYY-MM-DD")}/${pkg}`;
-    try {
-      const res = rangeResponseSchema.parse(await get(url));
-      downloads += res.downloads.reduce((sum, d) => sum + d.downloads, 0);
-      start = end;
-      end = start.add(18, "month");
-    } catch (cause) {
-      const error = new Error(`error: getAllTime(${pkg}) - url: ${url}`, {
-        cause,
-      });
-      console.error(error);
-      break;
-    }
-  }
-  return downloads;
-}
-
-export const fetchNpmPackage = memo(async (pkg: string): Promise<NpmPackageStatsData> => {
-  // Ensure we cover 90 days + a full first week
-  const startOfFirstWeek = dayjs().subtract(90, "day").startOf("isoWeek");
-  const ninetyOrSoDays = dayjs().diff(startOfFirstWeek, "day");
-  const [allTime, last30Days, last90Days] = await Promise.all([
-    getAllTime(pkg),
-    getLastNDays(pkg, 30),
-    getLastNDays(pkg, ninetyOrSoDays),
-  ]);
-  return {
-    withKeys: false,
-    allTime,
-    last30Days,
-    last90Days: groupByWeek(last90Days),
-  };
-}, 86_400);
-
-async function get(url: string): Promise<unknown> {
+async function getJson(url: string): Promise<unknown> {
   const res = await fetch(url);
+  if (!res.ok) throw new Error(`npm ${res.status} ${url}`);
   return res.json();
+}
+
+/** One request for many unscoped packages over one span. */
+async function bulkRange(pkgs: string[], [start, end]: readonly [string, string]): Promise<Map<string, Series>> {
+  const out = new Map<string, Series>();
+  for (let i = 0; i < pkgs.length; i += BULK_MAX) {
+    const batch = pkgs.slice(i, i + BULK_MAX);
+    try {
+      // A single name answers in the single-package shape, so bulk needs at least two.
+      const json =
+        batch.length === 1
+          ? { [batch[0]]: await getJson(`${API}/${start}:${end}/${batch[0]}`) }
+          : ((await getJson(`${API}/${start}:${end}/${batch.join(",")}`)) as Record<string, unknown>);
+      for (const pkg of batch) {
+        const parsed = rangeResponseSchema.safeParse(json[pkg]);
+        out.set(pkg, { ok: parsed.success, days: parsed.success ? toDatum(parsed.data.downloads) : [] });
+      }
+    } catch (err) {
+      console.error("[npm] bulk range failed", err);
+      for (const pkg of batch) out.set(pkg, { ok: false, days: [] });
+    }
+  }
+  return out;
+}
+
+async function singleRange(pkg: string, [start, end]: readonly [string, string]): Promise<Series> {
+  try {
+    const { downloads } = rangeResponseSchema.parse(await getJson(`${API}/${start}:${end}/${pkg}`));
+    return { ok: true, days: toDatum(downloads) };
+  } catch (err) {
+    console.error(`[npm] range ${pkg} failed`, err);
+    return { ok: false, days: [] };
+  }
+}
+
+// A package that already had downloads at the start of a span existed before it, so look one span further.
+const reachesBack = (days: Datum[]) => days.slice(0, 14).some((d) => d.downloads > 0);
+
+/**
+ * Stats for every package with as few requests as npm allows: one bulk call per year of history
+ * for unscoped names, and one call per scoped name (plus older years only for old packages).
+ */
+async function fetchAll(pkgs: string[]): Promise<{ complete: boolean; stats: NpmPackageStatsData[] }> {
+  const [latest, ...older] = spans(30);
+  const unscoped = pkgs.filter((p) => !p.startsWith("@"));
+  const scoped = pkgs.filter((p) => p.startsWith("@"));
+
+  const recent = new Map<string, Series>([
+    ...(await bulkRange(unscoped, latest)),
+    ...(await Promise.all(scoped.map(async (p) => [p, await singleRange(p, latest)] as const))),
+  ]);
+  const allTime = new Map(pkgs.map((p) => [p, sum(recent.get(p)?.days ?? [])]));
+
+  let pending = pkgs.filter((p) => reachesBack(recent.get(p)?.days ?? []));
+  for (const span of older) {
+    if (!pending.length) break;
+    const page = new Map<string, Series>([
+      ...(await bulkRange(
+        pending.filter((p) => !p.startsWith("@")),
+        span,
+      )),
+      ...(await Promise.all(
+        pending.filter((p) => p.startsWith("@")).map(async (p) => [p, await singleRange(p, span)] as const),
+      )),
+    ]);
+    for (const p of pending) allTime.set(p, (allTime.get(p) ?? 0) + sum(page.get(p)?.days ?? []));
+    pending = pending.filter((p) => reachesBack(page.get(p)?.days ?? []));
+  }
+
+  const firstWeek = dayjs().subtract(90, "day").startOf("isoWeek").format("YYYY-MM-DD");
+  const stats = pkgs.map((p): NpmPackageStatsData => {
+    const days = [...(recent.get(p)?.days ?? [])];
+    // Today's count isn't published until tomorrow; a trailing zero is "not yet", not "none".
+    if (days.at(-1)?.downloads === 0) days.pop();
+    return {
+      withKeys: false,
+      allTime: allTime.get(p) ?? 0,
+      last30Days: days.slice(-30),
+      last90Days: groupByWeek(days.filter((d) => d.date >= firstWeek)),
+    };
+  });
+  return { complete: [...recent.values()].every((s) => s.ok), stats };
+}
+
+const cachedAll = edgeMemo("npm-stats", fetchAll, 86_400, (r) => r.complete);
+
+/** One entry per package, same order as `pkgs`. */
+export async function fetchNpmStats(pkgs: string[]): Promise<NpmPackageStatsData[]> {
+  return (await cachedAll(pkgs)).stats;
 }
 
 function groupByWeek(data: Datum[]): Datum[] {

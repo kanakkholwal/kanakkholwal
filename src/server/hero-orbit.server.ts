@@ -1,3 +1,4 @@
+import "@tanstack/react-start/server-only";
 import { parseISO } from "date-fns";
 import { appConfig } from "root/project.config";
 import { getProjectList } from "@/lib/project.source";

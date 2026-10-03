@@ -1,10 +1,13 @@
+import "@tanstack/react-start/server-only";
 import { appConfig } from "root/project.config";
-import { memo } from "~/lib/cache";
+import { edgeMemo } from "~/lib/cache";
 import { getServerEnv } from "~/server/env.server";
 import { fetchGaResult, type ServiceAccount } from "./ga";
+import { fetchPosthogResult } from "./posthog";
 import {
   type AnalyticsResult,
   type AnalyticsSnapshot,
+  type AnalyticsSource,
   type AnalyticsTotals,
   type Growth,
   RANGES,
@@ -32,9 +35,9 @@ const zeroTotals = (): AnalyticsTotals => ({
   bounceRate: 0,
 });
 
-function zeroSnapshot(days: number, label: string): AnalyticsSnapshot {
+function zeroSnapshot(days: number, label: string, source: AnalyticsSource): AnalyticsSnapshot {
   return {
-    source: "ga",
+    source,
     live: false,
     label,
     propertyId: null,
@@ -50,12 +53,12 @@ function zeroSnapshot(days: number, label: string): AnalyticsSnapshot {
   };
 }
 
-function zeroResult(label: string, error: string): AnalyticsResult {
-  const ranges = Object.fromEntries(RANGES.map((r) => [r.key, zeroSnapshot(r.days, label)])) as Record<
+function zeroResult(label: string, error: string, source: AnalyticsSource = "ga"): AnalyticsResult {
+  const ranges = Object.fromEntries(RANGES.map((r) => [r.key, zeroSnapshot(r.days, label, source)])) as Record<
     RangeKey,
     AnalyticsSnapshot
   >;
-  return { ok: false, error, label, source: "ga", ranges, generatedAt: "" };
+  return { ok: false, error, label, source, ranges, generatedAt: "" };
 }
 
 async function buildSiteData(): Promise<AnalyticsResult> {
@@ -73,9 +76,22 @@ async function buildSiteData(): Promise<AnalyticsResult> {
 }
 
 async function buildProjectData(id: string): Promise<AnalyticsResult | null> {
-  const sa = serviceAccount();
   const entry = appConfig.analytics.projects.find((p) => p.id === id);
-  if (entry?.source !== "ga") return null;
+  if (!entry) return null;
+
+  if (entry.source === "posthog") {
+    const apiKey = getServerEnv().POSTHOG_PERSONAL_API_KEY;
+    // Not connected yet: hide the section rather than show a block of zeros.
+    if (!apiKey || !entry.projectId) return null;
+    try {
+      return await fetchPosthogResult({ apiKey, projectId: entry.projectId, region: entry.host, label: entry.label });
+    } catch (e) {
+      console.error(`[analytics] project ${id} PostHog fetch failed:`, e);
+      return zeroResult(entry.label, "Couldn't load analytics right now.", "posthog");
+    }
+  }
+
+  const sa = serviceAccount();
   if (!sa || !entry.propertyId) return null;
   try {
     return await fetchGaResult({ sa, propertyId: entry.propertyId, label: entry.label });
@@ -85,7 +101,8 @@ async function buildProjectData(id: string): Promise<AnalyticsResult | null> {
   }
 }
 
-const fetchSiteData = memo(buildSiteData, REVALIDATE);
+// Failed fetches return ok=false and stay out of the shared cache, so the next request retries.
+const fetchSiteData = edgeMemo("analytics-site", buildSiteData, REVALIDATE, (r) => r.ok);
 
 // Label applied after caching so multiple domains share one cached GA fetch.
 export async function getSiteResult(label: string): Promise<AnalyticsResult> {
@@ -97,7 +114,7 @@ export async function getSiteResult(label: string): Promise<AnalyticsResult> {
   return { ...data, label, ranges };
 }
 
-export const getProjectResult = memo(buildProjectData, REVALIDATE);
+export const getProjectResult = edgeMemo("analytics-project", buildProjectData, REVALIDATE, (r) => r?.ok === true);
 
 export function computeGrowth(current: number, previous: number): Growth {
   if (!previous) return { delta: current, percent: current ? 100 : 0, trend: current > 0 ? 1 : 0 };

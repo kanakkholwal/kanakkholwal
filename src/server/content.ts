@@ -4,6 +4,7 @@ import { getProjectList, source as projectSource } from "@/lib/project.source";
 import { source as docsSource, getReadTime, toDocMeta } from "@/lib/source";
 import { getWorkExperienceList } from "@/lib/work.source";
 import { getProjectResult } from "~/lib/analytics/service";
+import { cacheResponse } from "./http-cache";
 
 const slugsValidator = (slugs: unknown) => {
   if (!Array.isArray(slugs) || !slugs.every((s) => typeof s === "string")) {
@@ -22,6 +23,7 @@ export const getContentIndex = createServerFn({ method: "GET" }).handler(async (
 export const getProjectPage = createServerFn({ method: "GET" })
   .validator((slug: string) => slug)
   .handler(async ({ data: slug }) => {
+    cacheResponse(300);
     const page = projectSource.getPage([slug]);
     if (!page) throw notFound();
     const project = getProjectList().find((p) => p.path === page.path);

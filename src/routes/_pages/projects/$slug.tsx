@@ -18,7 +18,7 @@ export const Route = createFileRoute("/_pages/projects/$slug")({
           title: `${loaderData.project.title} | Projects`,
           description: loaderData.project.description,
           path: `/projects/${loaderData.project.id}`,
-          image: `/api/og?gen_type=project&slug=${loaderData.project.id}`,
+          image: `/projects/og?slug=${loaderData.project.id}`,
           type: "article",
         })
       : {},

@@ -6,6 +6,7 @@ const serverEnvSchema = z.object({
   PROJECTS_CE_TOKEN: z.string().min(1).optional(),
   GA_SERVICE_ACCOUNT_KEY: z.string().min(1).optional(),
   GA_SITE_PROPERTY_ID: z.string().min(1).optional(),
+  POSTHOG_PERSONAL_API_KEY: z.string().min(1).optional(),
 });
 
 export type ServerEnv = z.infer<typeof serverEnvSchema>;
@@ -22,5 +23,6 @@ export function getServerEnv(): ServerEnv {
     PROJECTS_CE_TOKEN: blankToUndefined(process.env.PROJECTS_CE_TOKEN),
     GA_SERVICE_ACCOUNT_KEY: blankToUndefined(process.env.GA_SERVICE_ACCOUNT_KEY),
     GA_SITE_PROPERTY_ID: blankToUndefined(process.env.GA_SITE_PROPERTY_ID),
+    POSTHOG_PERSONAL_API_KEY: blankToUndefined(process.env.POSTHOG_PERSONAL_API_KEY),
   });
 }

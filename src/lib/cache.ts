@@ -13,3 +13,37 @@ export function memo<A extends unknown[], R>(fn: (...args: A) => Promise<R>, ttl
     return value;
   };
 }
+
+type EdgeCaches = CacheStorage & { default?: Cache };
+
+/** The Worker's data-centre cache; undefined outside Workers (and a no-op on workers.dev). */
+function edgeCache(): Cache | undefined {
+  return typeof caches === "undefined" ? undefined : (caches as EdgeCaches).default;
+}
+
+/**
+ * `memo` backed by the Cache API, so one result serves every isolate in a data centre and a cold
+ * isolate costs one cache read instead of the whole fan-out. `keep` vetoes caching partial results.
+ */
+export function edgeMemo<A extends unknown[], R>(
+  name: string,
+  fn: (...args: A) => Promise<R>,
+  ttlSeconds = 3600,
+  keep: (value: R) => boolean = () => true,
+) {
+  return memo(async (...args: A): Promise<R> => {
+    const cache = edgeCache();
+    const key = new Request(`https://edge-memo.internal/${name}/${encodeURIComponent(JSON.stringify(args))}`);
+    const hit = await cache?.match(key).catch(() => undefined);
+    if (hit) return (await hit.json()) as R;
+
+    const value = await fn(...args);
+    if (cache && keep(value)) {
+      const body = new Response(JSON.stringify(value), {
+        headers: { "content-type": "application/json", "cache-control": `public, max-age=${ttlSeconds}` },
+      });
+      await cache.put(key, body).catch(() => {});
+    }
+    return value;
+  }, ttlSeconds);
+}

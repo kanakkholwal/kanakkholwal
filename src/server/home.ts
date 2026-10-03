@@ -4,26 +4,16 @@ import { appConfig } from "root/project.config";
 import { getGithubStats } from "~/api/github";
 import { getMediumPosts } from "~/api/medium";
 import { getSiteResult } from "~/lib/analytics/service";
-import { memo } from "~/lib/cache";
+import { edgeMemo, memo } from "~/lib/cache";
 import { type HeroOrbitPayload, loadHeroOrbitData } from "./hero-orbit.server";
-
-export const getHeroOrbit = createServerFn({ method: "GET" }).handler(() => loadHeroOrbitData());
-
-/** `null` when GitHub is down or the token is missing; the section then hides. */
-export const getGithubSectionData = createServerFn({ method: "GET" }).handler(async () => {
-  try {
-    return await getGithubStats(appConfig.usernames.github);
-  } catch (err) {
-    console.error("[github-section]", err);
-    return null;
-  }
-});
+import { cacheResponse } from "./http-cache";
 
 const cachedMediumPosts = memo(async () =>
   (await getMediumPosts()).map((p) => ({ ...p, pubDate: p.pubDate.toISOString() })),
 );
 
 export const getBlogPosts = createServerFn({ method: "GET" }).handler(async () => {
+  cacheResponse(3600);
   try {
     return await cachedMediumPosts();
   } catch (err) {
@@ -33,6 +23,7 @@ export const getBlogPosts = createServerFn({ method: "GET" }).handler(async () =
 });
 
 export const getSiteAnalytics = createServerFn({ method: "GET" }).handler(async () => {
+  cacheResponse(300);
   const host = getRequestHeader("host")?.replace(/^www\./, "") || appConfig.siteUrl;
   return getSiteResult(host);
 });
@@ -47,7 +38,14 @@ export type HomeData = {
 };
 
 /** Everything the home page needs, shaped on the server so the client renders it as is. */
-export const getHomeData = createServerFn({ method: "GET" }).handler(async (): Promise<HomeData> => {
+export const getHomeData = createServerFn({ method: "GET" }).handler(() => {
+  cacheResponse(300);
+  return cachedHomeData();
+});
+
+const cachedHomeData = edgeMemo("home", buildHomeData, 900, (d) => d.github !== null);
+
+async function buildHomeData(): Promise<HomeData> {
   const [orbit, github] = await Promise.all([
     loadHeroOrbitData(),
     getGithubStats(appConfig.usernames.github).catch((err) => {
@@ -72,4 +70,4 @@ export const getHomeData = createServerFn({ method: "GET" }).handler(async (): P
     activity: orbit.activity.slice(0, 4),
     stats: orbit.stats,
   };
-});
+}

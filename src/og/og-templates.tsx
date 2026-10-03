@@ -9,6 +9,10 @@ const ACCENT = "#2a78d6";
 
 type IconName = keyof typeof ICONS;
 
+// Two lines at 32px fit about 110 characters; past that the footer would collide.
+const clampText = (text: string, max: number) =>
+  text.length > max ? `${text.slice(0, max).replace(/\s+\S*$/, "")}…` : text;
+
 /** Icon as a data URI: the renderer paints `<img>` reliably, inline SVG markup less so. */
 function iconSrc(name: IconName, color = "#3f3f46") {
   const icon = ICONS[name];
@@ -41,7 +45,7 @@ function SoftCard({
   const muted = dark ? "#a1a1aa" : MUTED;
   return (
     <div
-      tw="flex flex-col relative w-full h-full px-[120px] pt-[110px]"
+      tw="flex flex-col relative w-full h-full px-[120px] pt-[92px]"
       style={{ backgroundColor: dark ? "#141415" : "#fafafa", fontFamily: "Geist" }}
     >
       <div
@@ -63,21 +67,21 @@ function SoftCard({
       </div>
 
       <div
-        tw="flex flex-wrap items-baseline mt-[64px] max-w-[960px]"
+        tw="flex flex-wrap items-baseline mt-[52px] max-w-[960px]"
         style={{ fontSize: nameSize, letterSpacing: "-0.035em", lineHeight: 1.08 }}
       >
         <span style={{ color: ink, fontWeight: 600 }}>{name}</span>
         {suffix ? <span style={{ color: muted, fontWeight: 400 }}>{suffix}</span> : null}
       </div>
       {description ? (
-        <div tw="flex mt-[28px] max-w-[940px]" style={{ fontSize: 36, lineHeight: 1.35, color: muted }}>
-          {description}
+        <div tw="flex mt-[24px] max-w-[960px]" style={{ fontSize: 32, lineHeight: 1.4, color: muted }}>
+          {clampText(description, 110)}
         </div>
       ) : null}
 
       {footer ? (
         <div
-          tw="flex absolute left-[120px] bottom-[64px]"
+          tw="flex absolute left-[120px] bottom-[52px]"
           style={{ fontFamily: "Geist Mono", fontSize: 22, color: dark ? "#71717a" : FAINT }}
         >
           {footer}
@@ -112,7 +116,38 @@ export function ProfileOgTemplate({ avatar }: { avatar?: string }) {
   );
 }
 
+const PAGE_ICON: Record<string, IconName> = {
+  projects: "rocket",
+  stats: "code",
+  analytics: "chart",
+  docs: "pen",
+  blog: "notebook",
+  contact: "mail",
+  journey: "route",
+  "bucket-list": "checklist",
+  links: "link",
+  attribution: "heart",
+  legal: "document",
+  "tech-stack": "layers",
+};
+
+/** Card for any page without its own template; the icon follows the first path segment. */
+export function PageOgTemplate({ title, description, path }: { title: string; description?: string; path: string }) {
+  const section = path.split("/").filter(Boolean)[0] ?? "";
+  return (
+    <SoftCard
+      tile={<IconTile name={PAGE_ICON[section] ?? "globe"} />}
+      name={title}
+      nameSize={title.length > 28 ? 64 : 84}
+      description={description}
+      footer={`${appConfig.siteUrl}${path === "/" ? "" : path}`}
+    />
+  );
+}
+
 const PROJECT_ICON: Record<string, IconName> = {
+  "baby-ui": "layers",
+  glyphtex: "notebook",
   recast: "play",
   orbit: "document",
   docvia: "book",

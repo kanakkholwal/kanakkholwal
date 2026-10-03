@@ -1,3 +1,4 @@
+import "@tanstack/react-start/server-only";
 import { appConfig } from "root/project.config";
 import { parseStringPromise } from "xml2js";
 import { calculateReadingTime } from "~/utils/string";

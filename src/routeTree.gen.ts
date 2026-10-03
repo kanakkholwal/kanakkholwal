@@ -27,6 +27,7 @@ import { Route as PagesTechStackRouteImport } from './routes/_pages/tech-stack'
 import { Route as PlainContactRouteImport } from './routes/_plain/contact'
 import { Route as ApiOgRouteImport } from './routes/api/og'
 import { Route as ApiSearchRouteImport } from './routes/api/search'
+import { Route as OgPageRouteImport } from './routes/og/page'
 import { Route as ProjectsOgRouteImport } from './routes/projects/og'
 import { Route as PagesProjectsIndexRouteImport } from './routes/_pages/projects/index'
 import { Route as PagesProjectsSlugRouteImport } from './routes/_pages/projects/$slug'
@@ -124,6 +125,11 @@ const ApiSearchRoute = ApiSearchRouteImport.update({
   path: '/api/search',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OgPageRoute = OgPageRouteImport.update({
+  id: '/og/page',
+  path: '/og/page',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProjectsOgRoute = ProjectsOgRouteImport.update({
   id: '/projects/og',
   path: '/projects/og',
@@ -182,6 +188,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof PlainContactRoute
   '/api/og': typeof ApiOgRoute
   '/api/search': typeof ApiSearchRoute
+  '/og/page': typeof OgPageRoute
   '/projects/og': typeof ProjectsOgRoute
   '/projects/$slug': typeof PagesProjectsSlugRoute
   '/docs/$': typeof PlainDocsSplatRoute
@@ -208,6 +215,7 @@ export interface FileRoutesByTo {
   '/contact': typeof PlainContactRoute
   '/api/og': typeof ApiOgRoute
   '/api/search': typeof ApiSearchRoute
+  '/og/page': typeof OgPageRoute
   '/projects/og': typeof ProjectsOgRoute
   '/projects/$slug': typeof PagesProjectsSlugRoute
   '/docs/$': typeof PlainDocsSplatRoute
@@ -237,6 +245,7 @@ export interface FileRoutesById {
   '/_plain/contact': typeof PlainContactRoute
   '/api/og': typeof ApiOgRoute
   '/api/search': typeof ApiSearchRoute
+  '/og/page': typeof OgPageRoute
   '/projects/og': typeof ProjectsOgRoute
   '/_pages/projects/$slug': typeof PagesProjectsSlugRoute
   '/_plain/docs/$': typeof PlainDocsSplatRoute
@@ -265,6 +274,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/api/og'
     | '/api/search'
+    | '/og/page'
     | '/projects/og'
     | '/projects/$slug'
     | '/docs/$'
@@ -291,6 +301,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/api/og'
     | '/api/search'
+    | '/og/page'
     | '/projects/og'
     | '/projects/$slug'
     | '/docs/$'
@@ -319,6 +330,7 @@ export interface FileRouteTypes {
     | '/_plain/contact'
     | '/api/og'
     | '/api/search'
+    | '/og/page'
     | '/projects/og'
     | '/_pages/projects/$slug'
     | '/_plain/docs/$'
@@ -339,6 +351,7 @@ export interface RootRouteChildren {
   TwitterImageRoute: typeof TwitterImageRoute
   ApiOgRoute: typeof ApiOgRoute
   ApiSearchRoute: typeof ApiSearchRoute
+  OgPageRoute: typeof OgPageRoute
   ProjectsOgRoute: typeof ProjectsOgRoute
   OgDocsSplatRoute: typeof OgDocsSplatRoute
 }
@@ -471,6 +484,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiSearchRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/og/page': {
+      id: '/og/page'
+      path: '/og/page'
+      fullPath: '/og/page'
+      preLoaderRoute: typeof OgPageRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/projects/og': {
       id: '/projects/og'
       path: '/projects/og'
@@ -586,6 +606,7 @@ const rootRouteChildren: RootRouteChildren = {
   TwitterImageRoute: TwitterImageRoute,
   ApiOgRoute: ApiOgRoute,
   ApiSearchRoute: ApiSearchRoute,
+  OgPageRoute: OgPageRoute,
   ProjectsOgRoute: ProjectsOgRoute,
   OgDocsSplatRoute: OgDocsSplatRoute,
 }

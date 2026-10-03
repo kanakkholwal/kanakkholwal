@@ -173,7 +173,7 @@ const appConfig = {
       description: "Personal Portfolio of Kanak Kholwal - Product Engineer.",
       sameAs: ["https://www.linkedin.com/in/kanak-kholwal/", "https://github.com/kanakkholwal"],
       jobTitle: "Product Engineer",
-      worksFor: { "@type": "Organization", name: "Self-Employed" },
+      worksFor: { "@type": "Organization", name: "Zoven AI", url: "https://www.zoven.ai" },
     } as WithContext<ProfilePageSchema>,
   },
   social: {
@@ -209,7 +209,17 @@ const appConfig = {
     projects: [
       { id: "college-ecosystem", source: "ga" as const, label: "nith.eu.org", propertyId: "381127908" },
       { id: "orbit", source: "ga" as const, label: "orbit.nexonauts.com", propertyId: "525140272" },
-      { id: "recast", source: "posthog" as const, label: "recast", projectId: "" },
+      // Numeric GA4 property id, not the G-X1BF4S5L5L measurement id.
+      { id: "glyphtex", source: "ga" as const, label: "glyphtex.nexonauts.com", propertyId: "541593736" },
+      // PostHog project ids are public (they appear in the app URL); the read key is a server secret.
+      { id: "recast", source: "posthog" as const, label: "recast.li", projectId: "447855", host: "us" as const },
+      {
+        id: "baby-ui",
+        source: "posthog" as const,
+        label: "baby-ui.nexonauts.com",
+        projectId: "628504",
+        host: "us" as const,
+      },
     ],
   },
   statsConfig: {
@@ -223,6 +233,25 @@ const appConfig = {
       "mailer-easy",
       "nexo-html2jsx",
       "nexo-deck-swiper",
+      // Docvia: the CLI package plus every package in the @docvia org.
+      "docvia",
+      "@docvia/cli",
+      "@docvia/core",
+      "@docvia/compiler",
+      "@docvia/ir",
+      "@docvia/schema",
+      "@docvia/source",
+      "@docvia/search",
+      "@docvia/runtime",
+      "@docvia/ssr",
+      "@docvia/plugins",
+      "@docvia/plugin-next",
+      "@docvia/plugin-vite",
+      "@docvia/plugin-openapi",
+      "@docvia/plugin-shiki",
+      "@docvia/renderer-core",
+      "@docvia/renderer-react",
+      "@docvia/renderer-svelte",
     ],
     repositories: [
       {
@@ -234,6 +263,16 @@ const appConfig = {
         name: "college-ecosystem",
         repo: "kanakkholwal/college-ecosystem",
         repoBeatsUri: "https://repobeats.axiom.co/api/embed/5c24e4ec8193c618a748a6339fb9eae49ad645ee.svg",
+      },
+      {
+        name: "glyphtex",
+        repo: "kanakkholwal/glyphtex",
+        repoBeatsUri: "",
+      },
+      {
+        name: "baby-ui",
+        repo: "kanakkholwal/baby-ui",
+        repoBeatsUri: "",
       },
       {
         name: "recast",

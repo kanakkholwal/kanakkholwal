@@ -1,3 +1,4 @@
+import "@tanstack/react-start/server-only";
 import {
   type AnalyticsBreakdownItem,
   type AnalyticsResult,
@@ -59,102 +60,125 @@ async function getAccessToken(sa: ServiceAccount): Promise<string> {
   return ((await res.json()) as { access_token: string }).access_token;
 }
 
-type GaRow = { dimensionValues: { value: string }[]; metricValues: { value: string }[] };
+type GaRow = { dimensionValues?: { value: string }[]; metricValues?: { value: string }[] };
+type GaReport = { rows?: GaRow[] };
+type ReportRequest = Record<string, unknown>;
 
-async function runReport(token: string, propertyId: string, body: Record<string, unknown>) {
-  const res = await fetch(`${GA_BASE}/properties/${propertyId}:runReport`, {
-    method: "POST",
-    headers: { authorization: `Bearer ${token}`, "content-type": "application/json" },
-    body: JSON.stringify(body),
-  });
-  if (!res.ok) throw new Error(`GA runReport ${res.status}: ${await res.text()}`);
-  return (await res.json()) as { rows?: GaRow[] };
+// GA4 accepts at most five reports per batchRunReports call.
+const BATCH = 5;
+
+async function batchReports(token: string, propertyId: string, requests: ReportRequest[]): Promise<GaReport[]> {
+  const chunks = Array.from({ length: Math.ceil(requests.length / BATCH) }, (_, i) =>
+    requests.slice(i * BATCH, (i + 1) * BATCH),
+  );
+  const results = await Promise.all(
+    chunks.map(async (chunk) => {
+      const res = await fetch(`${GA_BASE}/properties/${propertyId}:batchRunReports`, {
+        method: "POST",
+        headers: { authorization: `Bearer ${token}`, "content-type": "application/json" },
+        body: JSON.stringify({ requests: chunk }),
+      });
+      if (!res.ok) throw new Error(`GA batchRunReports ${res.status}: ${await res.text()}`);
+      return ((await res.json()) as { reports?: GaReport[] }).reports ?? [];
+    }),
+  );
+  return results.flat();
 }
 
-async function snapshotForRange(
-  token: string,
-  propertyId: string,
-  label: string,
-  days: number,
-): Promise<AnalyticsSnapshot> {
-  const ts = await runReport(token, propertyId, {
-    dateRanges: [{ startDate: `${days}daysAgo`, endDate: "yesterday" }],
-    dimensions: [{ name: "date" }],
-    metrics: [{ name: "activeUsers" }, { name: "screenPageViews" }, { name: "sessions" }],
-    orderBys: [{ dimension: { dimensionName: "date" } }],
-  });
-  const series = (ts.rows || []).map((r) => {
-    const d = r.dimensionValues[0].value;
-    return {
-      date: `${d.slice(0, 4)}-${d.slice(4, 6)}-${d.slice(6, 8)}`,
-      users: +r.metricValues[0].value,
-      pageViews: +r.metricValues[1].value,
-      sessions: +r.metricValues[2].value,
-    };
-  });
+const TOTAL_METRICS = ["activeUsers", "screenPageViews", "sessions", "averageSessionDuration", "bounceRate"].map(
+  (name) => ({ name }),
+);
 
-  const totalsFor = async (range: { startDate: string; endDate: string }) => {
-    const rep = await runReport(token, propertyId, {
-      dateRanges: [range],
-      metrics: [
-        { name: "activeUsers" },
-        { name: "screenPageViews" },
-        { name: "sessions" },
-        { name: "averageSessionDuration" },
-        { name: "bounceRate" },
-      ],
-    });
-    const m = rep.rows?.[0]?.metricValues || [];
-    return {
-      users: +(m[0]?.value ?? 0),
-      pageViews: +(m[1]?.value ?? 0),
-      sessions: +(m[2]?.value ?? 0),
-      avgEngagementSeconds: Math.round(+(m[3]?.value ?? 0)),
-      bounceRate: +(+(m[4]?.value ?? 0)).toFixed(3),
-    };
-  };
+const DIMENSIONS = [
+  { key: "topPages", name: "pagePath", size: 5 },
+  { key: "topCountries", name: "country", size: 5 },
+  { key: "topReferrers", name: "sessionDefaultChannelGroup", size: 5 },
+  { key: "devices", name: "deviceCategory", size: 3 },
+] as const;
 
-  const dim = async (name: string, size = 5): Promise<AnalyticsBreakdownItem[]> => {
-    const rep = await runReport(token, propertyId, {
-      dateRanges: [{ startDate: `${days}daysAgo`, endDate: "yesterday" }],
-      dimensions: [{ name }],
-      metrics: [{ name: "activeUsers" }],
-      orderBys: [{ metric: { metricName: "activeUsers" }, desc: true }],
-      limit: size,
-    });
-    return (rep.rows || []).map((r) => ({
-      label: r.dimensionValues[0].value || "(unknown)",
-      value: +r.metricValues[0].value,
-    }));
-  };
+const ymd = (d: string) => `${d.slice(0, 4)}-${d.slice(4, 6)}-${d.slice(6, 8)}`;
+const daysAgo = (n: number) => new Date(Date.now() - n * 86_400_000).toISOString().slice(0, 10);
 
-  const [totals, previousTotals, topPages, topCountries, topReferrers, devices] = await Promise.all([
-    totalsFor({ startDate: `${days}daysAgo`, endDate: "yesterday" }),
-    totalsFor({ startDate: `${days * 2}daysAgo`, endDate: `${days + 1}daysAgo` }),
-    dim("pagePath"),
-    dim("country"),
-    dim("sessionDefaultChannelGroup"),
-    dim("deviceCategory", 3),
-  ]);
-
+function toTotals(row: GaRow | undefined): AnalyticsSnapshot["totals"] {
+  const m = row?.metricValues ?? [];
   return {
-    source: "ga",
-    live: true,
-    label,
-    propertyId,
-    range: { start: series[0]?.date ?? "", end: series.at(-1)?.date ?? "", days },
-    totals,
-    previousTotals,
-    series,
-    topPages,
-    topCountries,
-    topReferrers,
-    devices,
-    generatedAt: new Date().toISOString(),
+    users: +(m[0]?.value ?? 0),
+    pageViews: +(m[1]?.value ?? 0),
+    sessions: +(m[2]?.value ?? 0),
+    avgEngagementSeconds: Math.round(+(m[3]?.value ?? 0)),
+    bounceRate: +(+(m[4]?.value ?? 0)).toFixed(3),
   };
 }
 
-// Fetches every selectable range with a single minted token.
+/** Every range's numbers in three batched calls: one daily series, a totals report and four top lists per range. */
+async function fetchSnapshots(token: string, propertyId: string, label: string): Promise<AnalyticsSnapshot[]> {
+  const longest = Math.max(...RANGES.map((r) => r.days));
+  const requests: ReportRequest[] = [
+    {
+      dateRanges: [{ startDate: `${longest}daysAgo`, endDate: "yesterday" }],
+      dimensions: [{ name: "date" }],
+      metrics: [{ name: "activeUsers" }, { name: "screenPageViews" }, { name: "sessions" }],
+      orderBys: [{ dimension: { dimensionName: "date" } }],
+      keepEmptyRows: true,
+    },
+    ...RANGES.map((r) => ({
+      // Two named ranges in one report: GA answers with a row per range.
+      dateRanges: [
+        { startDate: `${r.days}daysAgo`, endDate: "yesterday", name: "current" },
+        { startDate: `${r.days * 2}daysAgo`, endDate: `${r.days + 1}daysAgo`, name: "previous" },
+      ],
+      metrics: TOTAL_METRICS,
+    })),
+    ...RANGES.flatMap((r) =>
+      DIMENSIONS.map((d) => ({
+        dateRanges: [{ startDate: `${r.days}daysAgo`, endDate: "yesterday" }],
+        dimensions: [{ name: d.name }],
+        metrics: [{ name: "activeUsers" }],
+        orderBys: [{ metric: { metricName: "activeUsers" }, desc: true }],
+        limit: d.size,
+      })),
+    ),
+  ];
+  const [daily, ...rest] = await batchReports(token, propertyId, requests);
+  const totalsReports = rest.slice(0, RANGES.length);
+  const dimReports = rest.slice(RANGES.length);
+
+  const series = (daily?.rows ?? []).map((row) => ({
+    date: ymd(row.dimensionValues?.[0]?.value ?? ""),
+    users: +(row.metricValues?.[0]?.value ?? 0),
+    pageViews: +(row.metricValues?.[1]?.value ?? 0),
+    sessions: +(row.metricValues?.[2]?.value ?? 0),
+  }));
+
+  return RANGES.map((r, ri) => {
+    const totalsRows = totalsReports[ri]?.rows ?? [];
+    const byRange = (name: string) => totalsRows.find((row) => row.dimensionValues?.[0]?.value === name);
+    const lists = Object.fromEntries(
+      DIMENSIONS.map((d, di) => [
+        d.key,
+        (dimReports[ri * DIMENSIONS.length + di]?.rows ?? []).map((row) => ({
+          label: row.dimensionValues?.[0]?.value || "(unknown)",
+          value: +(row.metricValues?.[0]?.value ?? 0),
+        })),
+      ]),
+    ) as Record<(typeof DIMENSIONS)[number]["key"], AnalyticsBreakdownItem[]>;
+    const points = series.filter((p) => p.date >= daysAgo(r.days));
+    return {
+      source: "ga",
+      live: true,
+      label,
+      propertyId,
+      range: { start: points[0]?.date ?? "", end: points.at(-1)?.date ?? "", days: r.days },
+      totals: toTotals(byRange("current")),
+      previousTotals: toTotals(byRange("previous")),
+      series: points,
+      ...lists,
+      generatedAt: new Date().toISOString(),
+    };
+  });
+}
+
+/** Every selectable range from one minted token and three batched report calls. */
 export async function fetchGaResult({
   sa,
   propertyId,
@@ -165,15 +189,7 @@ export async function fetchGaResult({
   label: string;
 }): Promise<AnalyticsResult> {
   const token = await getAccessToken(sa);
-  const snapshots = await Promise.all(RANGES.map((r) => snapshotForRange(token, propertyId, label, r.days)));
+  const snapshots = await fetchSnapshots(token, propertyId, label);
   const ranges = Object.fromEntries(RANGES.map((r, i) => [r.key, snapshots[i]])) as Record<RangeKey, AnalyticsSnapshot>;
-
-  return {
-    ok: true,
-    error: null,
-    label,
-    source: "ga",
-    ranges,
-    generatedAt: new Date().toISOString(),
-  };
+  return { ok: true, error: null, label, source: "ga", ranges, generatedAt: new Date().toISOString() };
 }

@@ -21,7 +21,7 @@ export function Activity({ days }: { days: { date: string; count: number }[] }) 
       footer={
         <div className="flex flex-col gap-3">
           <p className="text-sm text-muted-foreground">
-            Open to product and design engineering roles.{" "}
+            Software engineer at Zoven AI. Happy to talk about side projects and collaborations.{" "}
             <ArrowLink href={resume_link} className="text-foreground">
               Resume
             </ArrowLink>

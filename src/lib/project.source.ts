@@ -26,5 +26,5 @@ export function getProjectList(): ProjectType[] {
 }
 
 export function getPageImage(id: string) {
-  return `/api/og?gen_type=project&slug=${id}`;
+  return `/projects/og?slug=${id}`;
 }

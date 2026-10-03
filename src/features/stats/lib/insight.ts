@@ -1,3 +1,4 @@
+import "@tanstack/react-start/server-only";
 import { memo } from "~/lib/cache";
 import type { ProjectConfig } from "../config";
 
