@@ -21,6 +21,13 @@ const linkIcon = (url: string, icon?: IconType): IconType =>
 
 const rise = (i: number) => ({ "--i": i }) as CSSProperties;
 
+// Case-study sections read as quiet labels over muted prose, with room between them.
+const CASE_STUDY = cn(
+  "prose max-w-none prose-p:leading-7 prose-li:my-1.5 prose-img:rounded-xl",
+  "prose-headings:font-medium prose-headings:text-foreground prose-headings:tracking-tight",
+  "prose-h2:mt-12 prose-h2:mb-3 prose-h2:text-lg first:prose-h2:mt-0 prose-h3:text-base",
+);
+
 export default function ProjectPageClient({
   project,
   analytics,
@@ -92,17 +99,21 @@ export default function ProjectPageClient({
                 </ButtonLink>
               ))}
             </div>
-            <span className="font-mono text-muted-foreground/80 text-xs">{project.technologies.join(" / ")}</span>
           </div>
         </div>
 
         {project.metrics?.length ? <Metrics metrics={project.metrics} /> : null}
 
-        <div
-          className="rise prose max-w-[40rem] prose-headings:font-medium prose-headings:tracking-tight prose-p:leading-7 prose-img:rounded-xl"
-          style={rise(3)}
-        >
-          {children}
+        <div className="rise flex max-w-[40rem] flex-col gap-12" style={rise(3)}>
+          <div className={CASE_STUDY}>{children}</div>
+          {project.technologies.length ? (
+            <section aria-labelledby="tech-stack">
+              <h2 id="tech-stack" className="mb-3 font-medium text-foreground text-lg tracking-tight">
+                Tech stack
+              </h2>
+              <p className="font-mono text-muted-foreground text-sm leading-7">{project.technologies.join(" / ")}</p>
+            </section>
+          ) : null}
         </div>
       </article>
 

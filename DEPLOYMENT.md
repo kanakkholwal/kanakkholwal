@@ -22,12 +22,18 @@ bunx wrangler deploy --secrets-file .env.production   # first deploy: uploads th
 bun run deploy                                       # later deploys; rotate with `wrangler secret put <NAME>`
 ```
 
+Required Worker secrets: `GITHUB_TOKEN`, `PROJECTS_CE_TOKEN`, `GA_SERVICE_ACCOUNT_KEY`, `POSTHOG_PERSONAL_API_KEY` (see `wrangler.jsonc`).
+
 CI (`.github/workflows/cd-deploy.yml`) needs `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` repo secrets. PRs upload a preview version; `workflow_dispatch` on `main` deploys.
 
 Point the custom domain (`kanakkholwal.eu.org`) at the Worker under Workers & Pages → Settings → Domains & Routes.
 
 ## Notes
 
-- Worker upload is ~3.0 MB gzipped (recharts SSR and the takumi OG-image wasm are the bulk). Fits Workers Paid (10 MB); right at the Free plan's 3 MB cap.
-- Data caching is per-isolate memory (`src/lib/cache.ts`), replacing Next's `unstable_cache`. There is no ISR; pages render on request.
-- Images use Unpic (`@/components/image`). Set `VITE_CF_IMAGE_DOMAIN` at build time once Image Transformations are enabled on the zone to get resized `srcset`s.
+- Worker upload is about 2.7 MB gzipped (`wrangler deploy --dry-run`), mostly the takumi OG-image wasm and fumadocs. That fits Workers Paid (10 MB) and sits just under the Free plan's 3 MB cap.
+- Data is cached in two layers (`src/lib/cache.ts`): `memo` per isolate, and `edgeMemo` on the Cache API so every isolate in a data centre shares one result. The Cache API is a no-op on `*.workers.dev`, so the shared layer only works on the custom domain. Failed or partial results are never shared and retry after a minute.
+- Server functions send `Cache-Control` so browsers reuse responses (`src/server/http-cache.ts`); page HTML is never cached.
+- Upstream calls stay under the subrequest limit by batching: one bulk npm request for unscoped packages, one GraphQL query for every repo's stars, GA `batchRunReports`, and four HogQL queries per PostHog project.
+- PostHog needs `POSTHOG_PERSONAL_API_KEY` (scope Query: Read) as a Worker secret; project ids are public and live in `project.config.ts`.
+- OG images are cached for a day under their URL. After changing a card template, bump `OG_VERSION` in `src/og/version.ts` so browsers and social platforms fetch the new one.
+- Images use Unpic (`src/components/image.tsx`). Set `VITE_CF_IMAGE_DOMAIN` at build time once Image Transformations are enabled on the zone to get resized `srcset`s.

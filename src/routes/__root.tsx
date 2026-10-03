@@ -8,6 +8,7 @@ import type { ReactNode } from "react";
 import { appConfig } from "root/project.config";
 import { ACCENT_BOOT_SCRIPT, DEFAULT_ACCENT } from "@/components/site/accent";
 import { CommandMenuProvider } from "@/components/site/command-menu";
+import { INTRO_BOOT_SCRIPT, Intro } from "@/components/site/intro";
 import { SiteShell } from "@/components/site/shell";
 import { Toaster } from "@/components/ui/toast";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -88,7 +89,7 @@ function RootDocument({ children }: { children: ReactNode }) {
     <html lang="en" data-accent={DEFAULT_ACCENT} suppressHydrationWarning>
       <head>
         {/* biome-ignore lint/security/noDangerouslySetInnerHtml: a fixed inline script, no user input. */}
-        <script dangerouslySetInnerHTML={{ __html: ACCENT_BOOT_SCRIPT }} />
+        <script dangerouslySetInnerHTML={{ __html: ACCENT_BOOT_SCRIPT + INTRO_BOOT_SCRIPT }} />
         <HeadContent />
       </head>
       <body className="min-h-dvh">
@@ -97,6 +98,7 @@ function RootDocument({ children }: { children: ReactNode }) {
             <RootProvider theme={{ enabled: false }} search={{ enabled: false }}>
               <NuqsAdapter>
                 <CommandMenuProvider>
+                  <Intro />
                   <SiteShell>{children}</SiteShell>
                 </CommandMenuProvider>
               </NuqsAdapter>

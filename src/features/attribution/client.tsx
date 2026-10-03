@@ -1,6 +1,7 @@
 import { appConfig } from "root/project.config";
 import { RowLink, RowList } from "@/components/extras/rows";
 import { Page, PageHeader, Section } from "@/components/site/page";
+import { TextLink } from "@/components/site/link";
 
 const BUILT_WITH = [
   { name: "Baby UI", role: "Components and motion", href: "https://github.com/kanakkholwal/baby-ui" },
@@ -36,7 +37,11 @@ export default function AttributionPageClient() {
               key={credit.person}
               className="flex flex-col gap-0.5 border-border border-b border-dashed py-3 first:border-t sm:flex-row sm:items-baseline sm:justify-between sm:gap-4"
             >
-              <span className="font-medium text-foreground">{credit.person}</span>
+              {credit.url ? (
+                <TextLink href={credit.url}>{credit.person}</TextLink>
+              ) : (
+                <span className="font-medium text-foreground">{credit.person}</span>
+              )}
               <span className="text-muted-foreground text-sm">{credit.attribute.trim()}</span>
             </li>
           ))}

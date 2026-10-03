@@ -360,6 +360,106 @@ html[data-theme-reveal="accent"]::view-transition-new(root) {
   }
 }
 
+/* --- First-visit intro --- */
+/* A pure-CSS timeline from first paint (durations come from intro.tsx as custom properties), so it
+   runs before hydration and finishes even without JavaScript. Returning visitors get `intro-done`. */
+#intro {
+  clip-path: inset(0 0 0 0);
+  animation:
+    intro-lift var(--intro-lift) var(--ease-in-out) var(--intro-lift-at) forwards,
+    intro-hide 1ms linear var(--intro-end) forwards;
+}
+
+#intro[data-skipped] {
+  animation:
+    intro-lift var(--intro-lift) var(--ease-in-out) forwards,
+    intro-hide 1ms linear var(--intro-lift) forwards;
+}
+
+.intro-word {
+  opacity: 0;
+  animation: intro-word var(--intro-word) linear calc(var(--intro-i) * var(--intro-word)) both;
+}
+
+.intro-greet {
+  animation: intro-out var(--duration-fast) var(--ease-out) var(--intro-greet-end) forwards;
+}
+
+.intro-name {
+  opacity: 0;
+  animation: intro-name var(--duration-slow) var(--ease-out) var(--intro-greet-end) forwards;
+}
+
+html.intro-done #intro {
+  display: none;
+}
+
+/* Page entrances wait for the curtain, so they play as it lifts. */
+html:not(.intro-done) .rise {
+  animation-delay: calc(var(--intro-delay, 2.08s) + var(--i, 0) * var(--stagger-step));
+}
+
+@keyframes intro-word {
+  0% {
+    opacity: 0;
+    filter: blur(4px);
+    translate: 0 0.25em;
+  }
+  25%,
+  80% {
+    opacity: 1;
+    filter: blur(0);
+    translate: 0 0;
+  }
+  100% {
+    opacity: 0;
+    filter: blur(4px);
+    translate: 0 -0.25em;
+  }
+}
+
+@keyframes intro-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes intro-name {
+  from {
+    opacity: 0;
+    filter: blur(4px);
+    translate: 0 8px;
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    translate: 0 0;
+  }
+}
+
+@keyframes intro-lift {
+  to {
+    clip-path: inset(0 0 100% 0);
+  }
+}
+
+@keyframes intro-hide {
+  to {
+    visibility: hidden;
+    pointer-events: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #intro {
+    display: none;
+  }
+
+  html:not(.intro-done) .rise {
+    animation-delay: 0s;
+  }
+}
+
 /* --- Navigation progress --- */
 .nav-sweep {
   animation: nav-sweep 1.1s var(--ease-in-out) infinite;

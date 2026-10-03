@@ -1,6 +1,6 @@
 import { useNavigate } from "@tanstack/react-router";
 import { useTheme } from "next-themes";
-import { createContext, type ReactNode, useContext, useEffect, useMemo, useState } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 import { resume_link } from "root/project.config";
 import { Icon, type IconType } from "@/components/icons";
 import {
@@ -23,12 +23,17 @@ import { useProjects } from "@/lib/content";
 import { ACCENTS, setAccent, useAccent } from "./accent";
 import { EMAIL, isGroup, NAV, SOCIALS } from "./nav";
 
-const Ctx = createContext<{ open: boolean; setOpen: (open: boolean) => void } | null>(null);
+// A window event, not React context: any part of the tree can open the palette, even one
+// rendered outside the provider (error boundaries, a module swapped by hot reload).
+const OPEN_EVENT = "command-menu:open";
 
+export function openCommandMenu() {
+  window.dispatchEvent(new Event(OPEN_EVENT));
+}
+
+/** `setOpen(true)` opens the palette from anywhere; kept as a hook so call sites read naturally. */
 export function useCommandMenu() {
-  const ctx = useContext(Ctx);
-  if (!ctx) throw new Error("useCommandMenu must be used inside <CommandMenuProvider>");
-  return ctx;
+  return { setOpen: (open: boolean) => open && openCommandMenu() };
 }
 
 export function CommandMenuProvider({ children }: { children: ReactNode }) {
@@ -41,16 +46,20 @@ export function CommandMenuProvider({ children }: { children: ReactNode }) {
         setOpen((o) => !o);
       }
     };
+    const onOpen = () => setOpen(true);
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    window.addEventListener(OPEN_EVENT, onOpen);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      window.removeEventListener(OPEN_EVENT, onOpen);
+    };
   }, []);
 
-  const value = useMemo(() => ({ open, setOpen }), [open]);
   return (
-    <Ctx.Provider value={value}>
+    <>
       {children}
       <CommandMenu open={open} setOpen={setOpen} />
-    </Ctx.Provider>
+    </>
   );
 }
 

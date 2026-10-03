@@ -18,13 +18,15 @@ links:
     icon: "github"
 ---
 
-### What it is
+## Overview
 
-I needed to pull clean, structured content out of web pages for an AI project, and I did not want to drag in a heavy scraping framework to do it. So I built a small microservice instead: give it a page, it reads the content, strips the noise like navbars, ads, and boilerplate, and hands back clean markdown in a modular, schema-driven shape.
+A small microservice for AI projects: give it a page, it reads the content, strips the noise like navbars, ads, and boilerplate, and hands back clean markdown in a modular, schema-driven shape. That markdown drops straight into an AI or RAG pipeline.
 
-That markdown drops straight into an AI or RAG pipeline, where clean input matters more than raw volume. Fewer wasted tokens, and less junk for the model to wade through.
+## The problem
 
-### Features
+I needed to pull clean, structured content out of web pages for an AI project, and I did not want to drag in a heavy scraping framework to do it. In a RAG pipeline clean input matters more than raw volume: fewer wasted tokens, and less junk for the model to wade through.
+
+## Wins
 
 - **Schema-driven extraction:** Pull exactly the fields you want from a page, in a predictable structure.
 - **Noise removal:** Strips the non-content elements so what is left is the actual text, not the chrome around it.

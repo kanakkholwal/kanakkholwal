@@ -1,13 +1,13 @@
 name: Deploy to Cloudflare Workers
 
 on:
-  # push:
-  #   branches:
-  #     - main
-  #   paths-ignore:
-  #     - '.github/**'
-  #     - 'README.md'
-  #     - 'LICENSE'
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '.github/**'
+      - 'README.md'
+      - 'LICENSE'
   pull_request:
     branches:
       - main
@@ -19,7 +19,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           # lastModified on MDX content is read from git history.
           fetch-depth: 0

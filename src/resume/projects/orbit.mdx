@@ -34,37 +34,25 @@ links:
     icon: "globe"
 ---
 
-I built Orbit because I did not trust the web for something as simple as merging a PDF. Most online PDF tools upload your file to their server first, and when a document is sensitive that is a real problem: you have no idea whether it is stored, trained on, or leaked. So I built the opposite, a PDF toolkit that does everything on your own device and never uploads a thing.
+## Overview
 
-The constraints were simple from day one: lightweight, private, and offline. Heavy operations like compression run on WebAssembly, so they are fast without a server. It works in the browser, installs as a PWA on mobile with offline caching, and ships as a Tauri desktop app for anyone who would rather have it as a real app. Nothing here is groundbreaking. It is convenience done properly: a clean UI, sane defaults, and your files staying yours.
+Orbit is a PDF toolkit that does everything on your own device and never uploads a thing. It works in the browser, installs as a PWA on mobile with offline caching, and ships as a Tauri desktop app for anyone who would rather have it as a real app.
 
-## ✨ Why Orbit?
+## The problem
 
-* **🔒 Private by default**: Everything runs locally in your browser's sandbox. No uploads, no server, no telemetry on your documents.
-* **⚡ Fast**: The heavy lifting runs on a WebAssembly engine, so processing feels desktop-class.
-* **📱 Works offline**: Fully functional with no connection. Install it as a PWA on mobile, or grab the Tauri desktop build.
-* **♾️ No limits**: No daily quotas, no file size caps, and no subscriptions. Batch as much as your machine can handle.
+I built Orbit because I did not trust the web for something as simple as merging a PDF. Most online PDF tools upload your file to their server first, and when a document is sensitive that is a real problem: you have no idea whether it is stored, trained on, or leaked.
 
-## 🛠️ Essential Tools
+## Wins
 
-| Tool | Description |
-| :--- | :--- |
-| **Merge PDF** | Combine multiple files into one. Drag and drop to reorder. |
-| **Split PDF** | Extract pages, split ranges, or divide files into multiple documents. |
-| **Compress PDF** | Reduce file sizes while maintaining professional quality. |
-| **Image to PDF** | Instant conversion for JPG, PNG, and HEIC formats. |
+- **Private by default.** Everything runs locally in your browser's sandbox. No uploads, no server, no telemetry on your documents.
+- **Fast.** The heavy lifting runs on a WebAssembly engine, so processing feels desktop-class.
+- **Works offline.** Fully functional with no connection. Install it as a PWA on mobile, or grab the Tauri desktop build.
+- **No limits.** No daily quotas, no file size caps, and no subscriptions. Batch as much as your machine can handle.
 
-## 🚀 Tech Stack
+It covers the everyday jobs: merge (drag and drop to reorder), split (extract pages, split ranges, or divide into multiple documents), compress while keeping quality, and convert JPG, PNG and HEIC images to PDF.
 
-Orbit is built with:
+Nothing here is groundbreaking. It is convenience done properly: a clean UI, sane defaults, and your files staying yours.
 
-- **Frontend**: [Svelte 5](https://svelte.dev/) (Runes), [SvelteKit](https://kit.svelte.dev/)
-- **Styling**: [Tailwind CSS 4.0](https://tailwindcss.com/)
-- **PDF Core**: [`pdf-lib`](https://pdf-lib.js.org/), [`pdfjs-dist`](https://mozilla.github.io/pdf.js/)
-- **WASM Engine**: [`@neslinesli93/qpdf-wasm`](https://github.com/neslinesli93/qpdf-wasm)
-- **Icons**: [Lucide Svelte](https://lucide.dev/)
-- **Linting**: [Biome](https://biomejs.dev/)
+## How it's built
 
-## 🤝 Contributing
-
-Orbit is open source. If you have an idea for a tool or a feature, feel free to open an issue or a pull request on [GitHub](https://github.com/kanakkholwal/orbit).
+The constraints were simple from day one: lightweight, private, and offline. Page work runs on [`pdf-lib`](https://pdf-lib.js.org/) and [`pdfjs-dist`](https://mozilla.github.io/pdf.js/), and heavy operations like compression run on [`qpdf-wasm`](https://github.com/neslinesli93/qpdf-wasm), so they are fast without a server.

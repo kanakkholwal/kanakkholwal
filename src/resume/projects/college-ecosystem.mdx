@@ -23,44 +23,40 @@ metrics:
 image: "https://2hy7y2bvb4.ufs.sh/f/zWIvIoJSZF4Q8fkvTJrLAESoTyORbnBq8xC7wQu4rKdJhHvY"
 ---
 
-
-# College Ecosystem
-
-> An open-source platform for NIT Hamirpur that I built solo. It started as a way to check results and became the thing most of the campus quietly runs on.
-
-[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/kanakkholwal/college-ecosystem)
-
 import { Mermaid } from '@/components/mdx/mermaid';
 
-## How it started
+## Overview
+
+An open-source platform for NIT Hamirpur that I built solo. It started as a way to check results and became the thing most of the campus quietly runs on.
+
+It runs at [app.nith.eu.org](https://app.nith.eu.org) and [nith.eu.org](https://nith.eu.org).
+
+## The problem
 
 When I was still learning React and Node, a senior had built a small tool that did one thing: list every student's result and rank them. He graduated, the tool left with him, so I decided to rebuild it. I taught myself web scraping along the way, and since I did not know databases yet, the first version stored everything in a JSON file behind a Create React App frontend that handled the sorting and ranking.
 
 I shared it with my batch and the response was better than I expected, so I kept going.
 
-## What it became
+## Wins
 
-College Ecosystem is now a full campus platform: results and rankings, classroom availability, an academic calendar, course material for every subject, a hostel allotment system, and a campus out-pass flow where a student requests a pass, a warden approves it, and the student gets a QR or barcode that the gate guard scans on the way out. There is even a document parser that turns a spreadsheet, image, or PDF into the structured JSON the platform needs.
+**A full campus platform.** Results and rankings, classroom availability, an academic calendar, course material for every subject, a hostel allotment system, and a campus out-pass flow where a student requests a pass, a warden approves it, and the student gets a QR or barcode that the gate guard scans on the way out. There is even a document parser that turns a spreadsheet, image, or PDF into the structured JSON the platform needs.
 
-It runs at [app.nith.eu.org](https://app.nith.eu.org) and [nith.eu.org](https://nith.eu.org), backed by a Node server, a Go microservice, and a dedicated mail service, all in one Turborepo monorepo.
+**Most of campus life in one place.** A lot, for a solo project:
 
-## The hard part: the results pipeline
+- **Academics:** results and rankings, a syllabus browser, the academic calendar, timetables, and live classroom availability.
+- **Community:** a Reddit-style discussion board, an anonymous Whisper Room, polls, and college-wide announcements, plus an AI chatbot that answers college-specific questions on Gemini and Mistral.
+- **Student tools:** an attendance tracker, the digital out-pass flow with a gate QR, hostel room allotment, and public student profiles.
+- **Dashboards and roles:** separate dashboards for admins, faculty, class reps, wardens, and gate guards, all behind role-based access control across eight roles.
 
-Results are the reason people keep coming back, and pulling them is the tricky bit. The college runs a small in-house server that cannot take much load, so scraping everything at once was never an option. The scraper started on Puppeteer, driving a real browser to fill and submit the result form, but I later replaced that with direct POST requests, which are far lighter.
+**Used without being official.** It is not officially adopted by the college, but nearly every student uses it anyway. In about four months it passed 740 signed-up users and over a million impressions. Results rank well on Google, so it pulls 40,000 to 50,000 search impressions a month and a few thousand clicks, which meant heavy caching and careful tuning to stay fast through traffic spikes.
+
+## How it's built
+
+**The hard part: the results pipeline.** Results are the reason people keep coming back, and pulling them is the tricky bit. The college runs a small in-house server that cannot take much load, so scraping everything at once was never an option. The scraper started on Puppeteer, driving a real browser to fill and submit the result form, but I later replaced that with direct POST requests, which are far lighter.
 
 To stay under the server's limits I batch the roll numbers, space the batches with timeouts so nothing gets rate limited, and run the whole thing through Redis queues. As results come in they stream two ways at once: into the database, and back to the dashboard so you can watch the progress live. One button refreshes the whole college's results without knocking the source server over.
 
-## Where it stands
-
-It is not officially adopted by the college, but nearly every student uses it anyway. In about four months it passed 740 signed-up users and over a million impressions. Results rank well on Google, so it pulls 40,000 to 50,000 search impressions a month and a few thousand clicks, which meant heavy caching and careful tuning to stay fast through traffic spikes.
-
-I built and maintain all of it solo, and it is completely open source. I first deployed the Express server with Docker to GCP on Artifact Registry and Cloud Run, but the cost climbed, so I moved it to Vercel and optimized everything to stay inside the free tier. A Go backend and a TanStack Router rewrite are half-finished experiments I might come back to.
-
----
-
-## Under the hood
-
-It runs as five independent apps in one monorepo:
+**Five apps, one monorepo.** A Node server, a Go microservice, and a dedicated mail service sit alongside the two frontends in one Turborepo monorepo:
 
 | App | What it does | Stack |
 |---|---|---|
@@ -128,14 +124,12 @@ graph TB
     GHA -.-> Turbo
 `}/>
 
----
+Under the hood it is a PWA with offline support, real-time updates over Socket.IO, a multi-database setup (MongoDB, Postgres, Redis), Excel import and export, and dynamic SEO.
 
-## What's inside
+**Hosting on a budget.** I first deployed the Express server with Docker to GCP on Artifact Registry and Cloud Run, but the cost climbed, so I moved it to Vercel and optimized everything to stay inside the free tier.
 
-A lot, for a solo project. It covers most of campus life in one place:
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/kanakkholwal/college-ecosystem)
 
-- **Academics:** results and rankings, a syllabus browser, the academic calendar, timetables, and live classroom availability.
-- **Community:** a Reddit-style discussion board, an anonymous Whisper Room, polls, and college-wide announcements, plus an AI chatbot that answers college-specific questions on Gemini and Mistral.
-- **Student tools:** an attendance tracker, the digital out-pass flow with a gate QR, hostel room allotment, and public student profiles.
-- **Dashboards and roles:** separate dashboards for admins, faculty, class reps, wardens, and gate guards, all behind role-based access control across eight roles.
-- **Under the hood:** a PWA with offline support, real-time updates over Socket.IO, a multi-database setup (MongoDB, Postgres, Redis), Excel import and export, and dynamic SEO.
+## What's next
+
+I built and maintain all of it solo, and it is completely open source. A Go backend and a TanStack Router rewrite are half-finished experiments I might come back to.

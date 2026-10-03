@@ -57,6 +57,7 @@ const appConfig = {
     journey: [
       "The first version of this website was created in 2022. I was just getting started with web technologies and built that one with vanilla js, after that I used some templates and code snippets from here and there, those version are still open source back then. The old version is actually open-sourced.",
       "Recently, in 2025, it was time for an evolution. I completely redesigned the site to better showcase my current front-end development capabilities, focusing on a clean aesthetic and refined animations.",
+      "In October 2026 I rebuilt it again on Baby UI, my own component library, with one design instead of four.",
       "I would like to express my thanks to all of websites that inspired me to build this website (non-exhaustive):",
     ],
     list: [
@@ -68,7 +69,17 @@ const appConfig = {
         person: "Aayush Bharti",
         attribute: " bucket list page",
       },
-    ],
+      {
+        person: "Aniket Pawar",
+        attribute: "home layout, intro screen and case-study format",
+        url: "https://www.aniketpawar.com",
+      },
+      {
+        person: "Designeer",
+        attribute: "sidebar shell and catalogue details",
+        url: "https://www.designeer.xyz",
+      },
+    ] as { person: string; attribute: string; url?: string }[],
   },
   bucketList: [
     {

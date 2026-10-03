@@ -1,6 +1,7 @@
 import type { ComponentProps, ReactNode } from "react";
 import { Icon } from "@/components/icons";
 import Link from "@/components/link";
+import { Marker } from "@/components/text/marker";
 import { type ButtonSize, type ButtonVariant, button } from "@/components/ui/button/variants";
 import { cn } from "@/lib/cn";
 
@@ -64,18 +65,37 @@ export function ArrowLink({
   );
 }
 
-/** Underlined inline link for running text. */
-export function TextLink({ href, className, ...props }: Omit<ComponentProps<typeof Link>, "href"> & { href: string }) {
+// Marker can't wrap across lines, so only short labels get the drawn underline.
+const MARKER_MAX = 28;
+
+/** Inline link for running text: short labels get a hand-drawn accent underline that draws in on view. */
+export function TextLink({
+  href,
+  className,
+  children,
+  ...props
+}: Omit<ComponentProps<typeof Link>, "href"> & { href: string }) {
   const external = isExternal(href) && !href.startsWith("mailto:");
+  const drawn = typeof children === "string" && children.length <= MARKER_MAX;
   return (
     <Link
       href={href}
       className={cn(
-        "font-medium text-foreground underline decoration-border-strong underline-offset-[3px] transition-[text-decoration-color] hoverable:decoration-accent-ink",
+        "font-medium text-foreground transition-colors hoverable:text-accent-ink",
+        !drawn &&
+          "underline decoration-border-strong underline-offset-[3px] transition-[color,text-decoration-color] hoverable:decoration-accent-ink",
         className,
       )}
       {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
       {...props}
-    />
+    >
+      {drawn ? (
+        <Marker variant="underline" tone="primary" durationMs={650}>
+          {children}
+        </Marker>
+      ) : (
+        children
+      )}
+    </Link>
   );
 }

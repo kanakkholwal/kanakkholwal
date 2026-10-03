@@ -22,36 +22,30 @@ links:
     icon: "globe"
 ---
 
-I was using Fumadocs and loving it, until I tried to move one of my projects to Svelte and hit a wall: the markdown processing and rendering were tied to React. That felt wrong. Your docs should not be married to a framework, so I started building one that is not.
+## Overview
 
-DocVia is a framework-agnostic documentation engine. It parses your markdown to an AST, lifts that into a framework-neutral intermediate representation, and then renders it with whatever you use, React or Svelte today and more later. You are not locked into a build step either: render statically at build time, or on the server at runtime, whichever fits the project. The data drives everything, and the framework just draws it.
-
-## Core Features
-
-- 🚀 **Static or server-side:** Render docs at build time for a static site, or on the server at runtime. You are not forced into either.
-- ⚡ **Fast builds:** Parallel compilation and incremental rebuilds using content hashing.
-- 🔍 **Full-Text Search:** Integrated section-level search powered by [Orama](https://oramasearch.com/).
-- 🎨 **Shiki Highlighting:** Beautiful, accurate syntax highlighting with theme support.
-- 🛠️ **Pluggable Architecture:** Extend the pipeline with custom hooks (remark, IR transform, render).
-- 📦 **Monorepo Design:** Clean separation of concerns between IR, Core, Compiler, and Renderers.
-
-## Project Structure
-
-docvia is built as a PNPM monorepo:
-
-| Package | Purpose |
-|---------|---------|
-| `@docvia/cli` | Command-line interface (`init`, `build`, `dev`). |
-| `@docvia/compiler` | Parallel build orchestrator and asset pipeline. |
-| `@docvia/ir` | Intermediate Representation types and DFS transformer. |
-| `@docvia/core` | Micromark-based markdown parser with unified plugin runner. |
-| `@docvia/renderer-svelte` | Svelte-specific IR → JS renderer with Vite support. |
-| `@docvia/plugins` | Hook execution engine and configuration loader. |
-| `@docvia/search` | Section-level Orama indexing and client search helper. |
-| `@docvia/schema` | Frontmatter validation and line-scanner parser. |
-
-## Where it stands
-
-The core is nearly there and I am dogfooding it on my own projects, where it works well and the CLI is genuinely pleasant to use. What it needs next is real users testing it on their own docs. Search runs on Orama for fast, near-semantic results across sections.
+DocVia is a framework-agnostic documentation engine. It parses your markdown once and renders it with whatever you use, React or Svelte today and more later.
 
 It is for anyone shipping docs: developers, library authors, and teams who do not want their documentation locked to a single framework.
+
+## The problem
+
+I was using Fumadocs and loving it, until I tried to move one of my projects to Svelte and hit a wall: the markdown processing and rendering were tied to React. That felt wrong. Your docs should not be married to a framework, so I started building one that is not.
+
+## Wins
+
+- **Static or server-side:** Render docs at build time for a static site, or on the server at runtime. You are not forced into either.
+- **Fast builds:** Parallel compilation and incremental rebuilds using content hashing.
+- **Full-text search:** Integrated section-level search powered by [Orama](https://oramasearch.com/), for fast, near-semantic results across sections.
+- **Shiki highlighting:** Beautiful, accurate syntax highlighting with theme support.
+- **Pluggable architecture:** Extend the pipeline with custom hooks (remark, IR transform, render).
+
+## How it's built
+
+Markdown is parsed to an AST, lifted into a framework-neutral intermediate representation, and only then handed to a renderer. The data drives everything, and the framework just draws it.
+
+It is a pnpm monorepo split along that pipeline. `@docvia/core` is a micromark-based parser with a unified plugin runner, `@docvia/ir` holds the intermediate representation types and a DFS transformer, `@docvia/compiler` orchestrates parallel builds and assets, and renderers like `@docvia/renderer-svelte` turn the IR into JS with Vite support. Plugin hooks, Orama search indexing, frontmatter validation and the CLI (`init`, `build`, `dev`) each live in their own package.
+
+## What's next
+
+The core is nearly there and I am dogfooding it on my own projects, where it works well and the CLI is genuinely pleasant to use. What it needs next is real users testing it on their own docs.

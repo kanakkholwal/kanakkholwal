@@ -21,36 +21,29 @@ links:
     icon: "globe"
 ---
 
-Recast started because I wanted a good build-in-public video for Orbit. Windows' native recorder gave me flat, plain footage, and the tools that did better were either paywalled, heavy, or Mac only (Screen Studio, Cap, Loom). I'm on Windows, so I built my own.
+## Overview
 
 Recast is an open-source screen recorder with editing built in. It records your screen and your cursor, smooths the cursor motion, and adds automatic zoom, so a raw capture comes out looking deliberate. The desktop app is completely free and open source, with no tracking beyond optional error traces.
 
-## ✨ What makes it good
+It is meant as a Loom replacement for solo developers, creators, and small teams, right up to enterprises sharing a quick feature or pull-request walkthrough.
+
+## The problem
+
+Recast started because I wanted a good build-in-public video for Orbit. Windows' native recorder gave me flat, plain footage, and the tools that did better were either paywalled, heavy, or Mac only (Screen Studio, Cap, Loom). I'm on Windows, so I built my own.
+
+## Wins
 
 - **Cinematic by default.** It records real cursor movement and smooths it, then auto-zooms and tracks the action, so an ordinary screen capture comes out polished without manual keyframing.
 - **A live preview that is actually smooth.** The editor started on a plain video element and it just was not good enough, so I moved to the **WebCodecs API** for frame-level control over playback and scrubbing. That was the turning point for the whole editing experience.
-- **Native capture, Rust under the hood.** Getting clean capture and FFmpeg encoding to behave across operating systems is fiddly, so the heavy pipeline runs in **Rust** behind a **Tauri** app.
 - **Share it your way.** Upload straight to Google Drive, use the Loom-style Recast Cloud with password controls and workspaces, or bring your own storage (S3, Cloudflare R2, Azure, or Google Cloud Storage) and keep everything in-house.
+- **I use it myself.** It records the demos I post on Twitter and LinkedIn.
 
-## Where it is
+## How it's built
 
-The desktop app is done and stable on Windows, with early testing on macOS and Linux. I use it myself for the demos I post on Twitter and LinkedIn. Next up is a set of AI features: transcriptions and auto captions. It is meant as a Loom replacement for solo developers, creators, and small teams, right up to enterprises sharing a quick feature or pull-request walkthrough.
+Getting clean capture and FFmpeg encoding to behave across operating systems is fiddly, so the heavy pipeline runs in **Rust** behind a **Tauri** app.
 
-## 🏗 Architecture (Monorepo)
+It is a pnpm and Turborepo monorepo: the desktop app (Tauri and Rust backend, SvelteKit and Svelte 5 editor), the SvelteKit marketing site, an internal headless Svelte UI library, and a shared Tailwind CSS v4 design package.
 
-Recast is structured as a **pnpm** workspace utilizing **Turborepo** for fast, cached builds.
+## What's next
 
-| Package               | Path              | Description                                                                               |
-| --------------------- | ----------------- | ----------------------------------------------------------------------------------------- |
-| **🏔 Recast Desktop** | `apps/desktop`    | The core product: A Tauri + Rust backend and a SvelteKit + Svelte 5 frontend editor pane. |
-| **🌐 Recast Web**     | `apps/web`        | The marketing landing page and distribution site, built on SvelteKit.                     |
-| **🧩 UI Library**     | `packages/ui`     | Headless, accessible internal Svelte UI component library.                                |
-| **🎨 Design Tokens**  | `packages/design` | Centralized Tailwind CSS v4 design scope and typographic assets.                          |
-
-## 🚀 Tech Stack
-- **Desktop App**: [Tauri](https://tauri.app/) + [Rust](https://www.rust-lang.org/)
-- **Frontend**: [SvelteKit](https://kit.svelte.dev/) + [Svelte 5](https://svelte.dev/)
-- **Video Encoding**: [FFmpeg](https://ffmpeg.org/)
-- **Styling**: [Tailwind CSS 4.0](https://tailwindcss.com/)
-- **Icons**: [Lucide Svelte](https://lucide.dev/)
-- **Linting**: [Biome](https://biomejs.dev/)
+The desktop app is done and stable on Windows, with early testing on macOS and Linux. Next up is a set of AI features: transcriptions and auto captions.
