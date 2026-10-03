@@ -22,6 +22,14 @@
   --font-mono: "Geist Mono Variable", ui-monospace, SFMono-Regular, monospace;
   --font-pixel: "Geist Pixel Variable", "Geist Mono Variable", ui-monospace, monospace;
   --page-width: 42rem;
+  /* Full-width rows and cards: the row squish (0.98) reads as a jump at this size. */
+  --press-scale-surface: 0.995;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --press-scale-surface: 1;
+  }
 }
 
 :root,
@@ -168,6 +176,94 @@
   }
 }
 
+/* --- Accent presets --- */
+/* baby-ui's brand ramps (swap the accent only; neutrals never move). Measured on this site's
+   surfaces: fills >= 4.5:1 for their label; amber light needs its darker ink for text and rings. */
+
+html[data-accent="neutral"] {
+  --accent: oklch(15% 0 0);
+  --accent-fg: oklch(99% 0 0);
+  --accent-ink: oklch(15% 0 0);
+}
+
+html.dark[data-accent="neutral"] {
+  --accent: oklch(96% 0 0);
+  --accent-fg: #151515;
+  --accent-ink: oklch(96% 0 0);
+}
+
+html[data-accent="blue"] {
+  --accent: oklch(55% 0.18 255);
+  --accent-fg: oklch(99% 0 0);
+  --accent-ink: oklch(55% 0.18 255);
+}
+
+html.dark[data-accent="blue"] {
+  --accent: oklch(70% 0.15 255);
+  --accent-fg: #151515;
+  --accent-ink: oklch(70% 0.15 255);
+}
+
+html[data-accent="violet"] {
+  --accent: oklch(55% 0.2 290);
+  --accent-fg: oklch(99% 0 0);
+  --accent-ink: oklch(55% 0.2 290);
+}
+
+html.dark[data-accent="violet"] {
+  --accent: oklch(72% 0.16 290);
+  --accent-fg: oklch(15% 0 0);
+  --accent-ink: oklch(72% 0.16 290);
+}
+
+html[data-accent="green"] {
+  --accent: oklch(53% 0.14 150);
+  --accent-fg: oklch(99% 0 0);
+  --accent-ink: oklch(53% 0.14 150);
+}
+
+html.dark[data-accent="green"] {
+  --accent: oklch(72% 0.15 150);
+  --accent-fg: oklch(15% 0 0);
+  --accent-ink: oklch(72% 0.15 150);
+}
+
+html[data-accent="amber"] {
+  --accent: oklch(74% 0.15 70);
+  --accent-fg: oklch(20% 0.02 70);
+  --accent-ink: oklch(55% 0.118 70);
+}
+
+html.dark[data-accent="amber"] {
+  --accent: oklch(80% 0.15 75);
+  --accent-fg: oklch(18% 0.02 75);
+  --accent-ink: oklch(80% 0.15 75);
+}
+
+html[data-accent="rose"] {
+  --accent: oklch(57% 0.2 12);
+  --accent-fg: oklch(99% 0 0);
+  --accent-ink: oklch(57% 0.2 12);
+}
+
+html.dark[data-accent="rose"] {
+  --accent: oklch(70% 0.17 12);
+  --accent-fg: oklch(15% 0 0);
+  --accent-ink: oklch(70% 0.17 12);
+}
+
+html[data-accent="teal"] {
+  --accent: oklch(53% 0.092 185);
+  --accent-fg: oklch(99% 0 0);
+  --accent-ink: oklch(53% 0.092 185);
+}
+
+html.dark[data-accent="teal"] {
+  --accent: oklch(72% 0.13 185);
+  --accent-fg: oklch(15% 0 0);
+  --accent-ink: oklch(72% 0.13 185);
+}
+
 /* --- Pixel display face --- */
 /* ELSH is Geist Pixel's element-shape axis (0 square ... 100 line). Hover morphs it. */
 @property --elsh {
@@ -247,6 +343,15 @@ html:not([data-theme-reveal]) [style*="--vt-name"] {
   .pixel {
     transition: none;
   }
+}
+
+/* Switching accent crossfades the whole page as one snapshot. */
+html[data-theme-reveal="accent"]::view-transition-old(root) {
+  animation: none;
+}
+
+html[data-theme-reveal="accent"]::view-transition-new(root) {
+  animation: fade-only var(--duration-slow) var(--ease-out);
 }
 
 @keyframes fade-only {

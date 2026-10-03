@@ -213,6 +213,7 @@ const appConfig = {
       { id: "glyphtex", source: "ga" as const, label: "glyphtex.nexonauts.com", propertyId: "541593736" },
       // PostHog project ids are public (they appear in the app URL); the read key is a server secret.
       { id: "recast", source: "posthog" as const, label: "recast.li", projectId: "447855", host: "us" as const },
+      { id: "docvia", source: "posthog" as const, label: "docvia.dev", projectId: "644195", host: "us" as const },
       {
         id: "baby-ui",
         source: "posthog" as const,

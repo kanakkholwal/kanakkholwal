@@ -13,10 +13,9 @@ import { Section } from "@/components/site/page";
 import { RollingDigits } from "@/components/text/rolling-digits";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group/toggle-group";
 import { cn } from "@/lib/cn";
-import { type AnalyticsResult, RANGES, type RangeKey } from "~/lib/analytics/types";
+import { type AnalyticsResult, pointDate, pointLabel, RANGES, type RangeKey } from "~/lib/analytics/types";
 
 const compact = new Intl.NumberFormat("en-US", { notation: "compact", maximumFractionDigits: 1 });
-const day = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", timeZone: "UTC" });
 const duration = (s: number) => (s < 60 ? `${Math.round(s)}s` : `${Math.floor(s / 60)}m ${Math.round(s % 60)}s`);
 const config: ChartConfig = { users: { label: "Visitors", color: "var(--chart-1)" } };
 
@@ -34,7 +33,8 @@ export function ProjectAnalytics({
   if (!result?.ok) return null;
 
   const snapshot = result.ranges[range];
-  const rows = snapshot.series.filter((p) => p.date).map((p) => ({ date: new Date(p.date), users: p.users }));
+  const hourly = snapshot.range.hourly;
+  const rows = snapshot.series.filter((p) => p.date).map((p) => ({ date: pointDate(p.date), users: p.users }));
   const cells = [
     { label: "Visitors", value: snapshot.totals.users },
     { label: "Sessions", value: snapshot.totals.sessions },
@@ -87,7 +87,7 @@ export function ProjectAnalytics({
         <div className="border-border border-t p-4">
           <ChartContainer
             config={config}
-            title={`Visitors, last ${snapshot.range.days} days`}
+            title={hourly ? "Visitors, last 24 hours" : `Visitors, last ${snapshot.range.days} days`}
             locale="en-GB"
             aspect="auto"
             className="h-56"
@@ -95,13 +95,13 @@ export function ProjectAnalytics({
             <AreaChart data={rows} xKey="date">
               <CartesianGrid />
               <YAxis tickFormatter={(v) => compact.format(v)} />
-              <XAxis tickFormatter={(d) => day.format(d)} />
+              <XAxis tickFormatter={(d) => pointLabel(d, hourly)} />
               <Area dataKey="users" curve="monotone" fillOpacity={0.24} />
               <ChartTooltip
                 content={
                   <ChartTooltipContent
                     formatter={(v) => compact.format(v)}
-                    labelFormatter={(_, d) => (d.date instanceof Date ? day.format(d.date) : "")}
+                    labelFormatter={(_, d) => (d.date instanceof Date ? pointLabel(d.date, hourly) : "")}
                   />
                 }
               />

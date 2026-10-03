@@ -57,32 +57,64 @@ async function series(q: Query, event: string, days: number): Promise<Map<string
 const inRange = (col: string, from: number, to: number) =>
   `toDate(${col}) >= today() - ${from} AND toDate(${col}) < today() - ${to}`;
 
+const inHours = (col: string, from: number, to: number) =>
+  `${col} >= toStartOfHour(now()) - INTERVAL ${from} HOUR AND ${col} < toStartOfHour(now()) - INTERVAL ${to} HOUR`;
+
+type Window = (col: string) => string;
+
+/** [current, previous] for a range: whole days ending yesterday, or the last complete hours. */
+function windowsFor(r: (typeof RANGES)[number]): [Window, Window] {
+  const h = r.hours;
+  if (h) return [(c) => inHours(c, h, 0), (c) => inHours(c, h * 2, h)];
+  return [(c) => inRange(c, r.days, 0), (c) => inRange(c, r.days * 2, r.days)];
+}
+
+// HogQL formats in the project's timezone, so these keys match what PostHog itself shows.
+const HOUR_FORMAT = "'%Y-%m-%dT%H:00'";
+
+/** The last 24 complete hours, keyed like `2026-10-04T13:00`, with empty hours filled in. */
+async function hourlySeries(q: Query, event: string): Promise<AnalyticsPoint[]> {
+  const rows = await q(`
+    SELECT formatDateTime(toStartOfHour(timestamp), ${HOUR_FORMAT}) AS hour,
+           uniq(distinct_id), count(), uniq(properties.$session_id),
+           any(formatDateTime(toStartOfHour(now()), ${HOUR_FORMAT}))
+    FROM events
+    WHERE event = ${quote(event)} AND ${inHours("timestamp", 24, 0)}
+    GROUP BY hour ORDER BY hour`);
+  const byHour = new Map(rows.map((r) => [String(r[0]), r]));
+  // Without events there's no anchor from PostHog; UTC is the honest fallback.
+  const anchor = rows[0]?.[4] ? String(rows[0][4]) : new Date().toISOString().slice(0, 13).concat(":00");
+  const start = new Date(`${anchor}:00Z`).getTime();
+  return Array.from({ length: 24 }, (_, i) => {
+    const date = new Date(start - (24 - i) * 3_600_000).toISOString().slice(0, 16);
+    const r = byHour.get(date);
+    return { date, users: num(r?.[1]), pageViews: num(r?.[2]), sessions: num(r?.[3]) };
+  });
+}
+
 /** Current and previous totals for every range: one events query, one sessions query. */
 async function totals(q: Query, event: string): Promise<[AnalyticsTotals, AnalyticsTotals][]> {
-  const longest = Math.max(...RANGES.map((r) => r.days)) * 2;
-  const windows = RANGES.flatMap((r) => [
-    [r.days, 0],
-    [r.days * 2, r.days],
-  ]);
+  const longest = Math.max(...RANGES.map((r) => r.days)) * 2 + 1;
+  const windows = RANGES.flatMap(windowsFor);
   const [ev = []] = await q(`
     SELECT ${windows
-      .map(([from, to]) => {
-        const w = inRange("timestamp", from, to);
+      .map((win) => {
+        const w = win("timestamp");
         return `uniqIf(distinct_id, ${w}), countIf(${w}), uniqIf(properties.$session_id, ${w})`;
       })
       .join(", ")}
     FROM events
-    WHERE event = ${quote(event)} AND toDate(timestamp) >= today() - ${longest} AND toDate(timestamp) < today()`);
+    WHERE event = ${quote(event)} AND toDate(timestamp) >= today() - ${longest}`);
   // Session length and bounce live in the sessions table; a project without it keeps zeros.
   const [se = []] = await q(`
     SELECT ${windows
-      .map(([from, to]) => {
-        const w = inRange("$start_timestamp", from, to);
+      .map((win) => {
+        const w = win("$start_timestamp");
         return `avgIf($session_duration, ${w}), avgIf(toFloat($is_bounce), ${w})`;
       })
       .join(", ")}
     FROM sessions
-    WHERE toDate($start_timestamp) >= today() - ${longest} AND toDate($start_timestamp) < today()`).catch(() => []);
+    WHERE toDate($start_timestamp) >= today() - ${longest}`).catch(() => []);
 
   const make = (w: number): AnalyticsTotals => ({
     users: num(ev[w * 3]),
@@ -108,9 +140,9 @@ async function breakdowns(q: Query, event: string): Promise<Lists[]> {
   const parts = RANGES.flatMap((r) =>
     BREAKDOWNS.map(
       (b) => `SELECT * FROM (
-        SELECT '${b.kind}:${r.days}' AS kind, toString(${b.expr}) AS label, uniq(distinct_id) AS value
+        SELECT '${b.kind}:${r.key}' AS kind, toString(${b.expr}) AS label, uniq(distinct_id) AS value
         FROM events
-        WHERE event = ${quote(event)} AND ${inRange("timestamp", r.days, 0)}
+        WHERE event = ${quote(event)} AND ${windowsFor(r)[0]("timestamp")}
         GROUP BY label ORDER BY value DESC LIMIT ${b.size})`,
     ),
   );
@@ -118,7 +150,7 @@ async function breakdowns(q: Query, event: string): Promise<Lists[]> {
   return RANGES.map((r) => {
     const pick = (kind: string): AnalyticsBreakdownItem[] =>
       rows
-        .filter((row) => row[0] === `${kind}:${r.days}`)
+        .filter((row) => row[0] === `${kind}:${r.key}`)
         .map((row) => {
           const label = row[1] ? String(row[1]) : "(unknown)";
           return { label: label === "$direct" ? "Direct" : label, value: num(row[2]) };
@@ -148,24 +180,27 @@ export async function fetchPosthogResult({
 }): Promise<AnalyticsResult> {
   const q = client(apiKey, projectId, region);
   const longest = Math.max(...RANGES.map((r) => r.days));
-  const [daily, allTotals, allLists] = await Promise.all([
+  const [daily, hours, allTotals, allLists] = await Promise.all([
     series(q, event, longest),
+    hourlySeries(q, event),
     totals(q, event),
     breakdowns(q, event),
   ]);
 
   const snapshots = RANGES.map((r, i): AnalyticsSnapshot => {
-    const points = Array.from({ length: r.days }, (_, d) => {
-      const date = day(r.days - d);
-      return daily.get(date) ?? { date, users: 0, pageViews: 0, sessions: 0 };
-    });
+    const points = r.hours
+      ? hours
+      : Array.from({ length: r.days }, (_, d) => {
+          const date = day(r.days - d);
+          return daily.get(date) ?? { date, users: 0, pageViews: 0, sessions: 0 };
+        });
     const [current, previous] = allTotals[i];
     return {
       source: "posthog",
       live: true,
       label,
       propertyId: projectId,
-      range: { start: points[0]?.date ?? "", end: points.at(-1)?.date ?? "", days: r.days },
+      range: { start: points[0]?.date ?? "", end: points.at(-1)?.date ?? "", days: r.days, hourly: Boolean(r.hours) },
       totals: current,
       previousTotals: previous,
       series: points,

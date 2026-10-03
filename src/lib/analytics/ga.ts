@@ -61,7 +61,7 @@ async function getAccessToken(sa: ServiceAccount): Promise<string> {
 }
 
 type GaRow = { dimensionValues?: { value: string }[]; metricValues?: { value: string }[] };
-type GaReport = { rows?: GaRow[] };
+type GaReport = { rows?: GaRow[]; metadata?: { timeZone?: string } };
 type ReportRequest = Record<string, unknown>;
 
 // GA4 accepts at most five reports per batchRunReports call.
@@ -110,9 +110,51 @@ function toTotals(row: GaRow | undefined): AnalyticsSnapshot["totals"] {
   };
 }
 
-/** Every range's numbers in three batched calls: one daily series, a totals report and four top lists per range. */
+const dimensionRequests = (dateRanges: unknown[], dimensionFilter?: unknown) =>
+  DIMENSIONS.map((d) => ({
+    dateRanges,
+    dimensions: [{ name: d.name }],
+    metrics: [{ name: "activeUsers" }],
+    orderBys: [{ metric: { metricName: "activeUsers" }, desc: true }],
+    limit: d.size,
+    ...(dimensionFilter ? { dimensionFilter } : {}),
+  }));
+
+function toLists(reports: GaReport[]) {
+  return Object.fromEntries(
+    DIMENSIONS.map((d, i) => [
+      d.key,
+      (reports[i]?.rows ?? []).map((row) => ({
+        label: row.dimensionValues?.[0]?.value || "(unknown)",
+        value: +(row.metricValues?.[0]?.value ?? 0),
+      })),
+    ]),
+  ) as Record<(typeof DIMENSIONS)[number]["key"], AnalyticsBreakdownItem[]>;
+}
+
+/** "2026100413" in `timeZone`, for the hour `hoursAgo` before now. */
+function dateHour(timeZone: string, hoursAgo: number) {
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    hourCycle: "h23",
+  }).formatToParts(new Date(Date.now() - hoursAgo * 3_600_000));
+  const get = (type: string) => parts.find((p) => p.type === type)?.value ?? "";
+  return `${get("year")}${get("month")}${get("day")}${get("hour")}`;
+}
+
+const hourKey = (dh: string) => `${dh.slice(0, 4)}-${dh.slice(4, 6)}-${dh.slice(6, 8)}T${dh.slice(8, 10)}:00`;
+
+/**
+ * Every range in a handful of batched calls. Day ranges are whole days ending yesterday. The 24h range
+ * needs the property's timezone (read from the first batch) to pick the last 24 hourly buckets.
+ */
 async function fetchSnapshots(token: string, propertyId: string, label: string): Promise<AnalyticsSnapshot[]> {
-  const longest = Math.max(...RANGES.map((r) => r.days));
+  const dayRanges = RANGES.filter((r) => !r.hours);
+  const longest = Math.max(...dayRanges.map((r) => r.days));
   const requests: ReportRequest[] = [
     {
       dateRanges: [{ startDate: `${longest}daysAgo`, endDate: "yesterday" }],
@@ -121,7 +163,14 @@ async function fetchSnapshots(token: string, propertyId: string, label: string):
       orderBys: [{ dimension: { dimensionName: "date" } }],
       keepEmptyRows: true,
     },
-    ...RANGES.map((r) => ({
+    {
+      dateRanges: [{ startDate: "2daysAgo", endDate: "today" }],
+      dimensions: [{ name: "dateHour" }],
+      metrics: [{ name: "activeUsers" }, { name: "screenPageViews" }, { name: "sessions" }],
+      orderBys: [{ dimension: { dimensionName: "dateHour" } }],
+      keepEmptyRows: true,
+    },
+    ...dayRanges.map((r) => ({
       // Two named ranges in one report: GA answers with a row per range.
       dateRanges: [
         { startDate: `${r.days}daysAgo`, endDate: "yesterday", name: "current" },
@@ -129,19 +178,23 @@ async function fetchSnapshots(token: string, propertyId: string, label: string):
       ],
       metrics: TOTAL_METRICS,
     })),
-    ...RANGES.flatMap((r) =>
-      DIMENSIONS.map((d) => ({
-        dateRanges: [{ startDate: `${r.days}daysAgo`, endDate: "yesterday" }],
-        dimensions: [{ name: d.name }],
-        metrics: [{ name: "activeUsers" }],
-        orderBys: [{ metric: { metricName: "activeUsers" }, desc: true }],
-        limit: d.size,
-      })),
-    ),
+    ...dayRanges.flatMap((r) => dimensionRequests([{ startDate: `${r.days}daysAgo`, endDate: "yesterday" }])),
   ];
-  const [daily, ...rest] = await batchReports(token, propertyId, requests);
-  const totalsReports = rest.slice(0, RANGES.length);
-  const dimReports = rest.slice(RANGES.length);
+  const [daily, hourly, ...rest] = await batchReports(token, propertyId, requests);
+  const totalsReports = rest.slice(0, dayRanges.length);
+  const dimReports = rest.slice(dayRanges.length);
+
+  // Last 24 complete hours and the 24 before them, as GA's own dateHour keys.
+  const tz = hourly?.metadata?.timeZone ?? "UTC";
+  const current = Array.from({ length: 24 }, (_, i) => dateHour(tz, 24 - i));
+  const previous = Array.from({ length: 24 }, (_, i) => dateHour(tz, 48 - i));
+  const inHours = (values: string[]) => ({ filter: { fieldName: "dateHour", inListFilter: { values } } });
+  const span48 = [{ startDate: "3daysAgo", endDate: "today" }];
+  const [now24, prev24, ...dims24] = await batchReports(token, propertyId, [
+    { dateRanges: span48, metrics: TOTAL_METRICS, dimensionFilter: inHours(current) },
+    { dateRanges: span48, metrics: TOTAL_METRICS, dimensionFilter: inHours(previous) },
+    ...dimensionRequests(span48, inHours(current)),
+  ]);
 
   const series = (daily?.rows ?? []).map((row) => ({
     date: ymd(row.dimensionValues?.[0]?.value ?? ""),
@@ -149,19 +202,31 @@ async function fetchSnapshots(token: string, propertyId: string, label: string):
     pageViews: +(row.metricValues?.[1]?.value ?? 0),
     sessions: +(row.metricValues?.[2]?.value ?? 0),
   }));
+  const hourRows = new Map((hourly?.rows ?? []).map((row) => [row.dimensionValues?.[0]?.value ?? "", row]));
+  const hours = current.map((dh) => {
+    const m = hourRows.get(dh)?.metricValues ?? [];
+    return { date: hourKey(dh), users: +(m[0]?.value ?? 0), pageViews: +(m[1]?.value ?? 0), sessions: +(m[2]?.value ?? 0) };
+  });
 
-  return RANGES.map((r, ri) => {
-    const totalsRows = totalsReports[ri]?.rows ?? [];
+  const generatedAt = new Date().toISOString();
+  return RANGES.map((r): AnalyticsSnapshot => {
+    if (r.hours) {
+      return {
+        source: "ga",
+        live: true,
+        label,
+        propertyId,
+        range: { start: hours[0].date, end: hours.at(-1)?.date ?? "", days: r.days, hourly: true },
+        totals: toTotals(now24?.rows?.[0]),
+        previousTotals: toTotals(prev24?.rows?.[0]),
+        series: hours,
+        ...toLists(dims24),
+        generatedAt,
+      };
+    }
+    const di = dayRanges.indexOf(r);
+    const totalsRows = totalsReports[di]?.rows ?? [];
     const byRange = (name: string) => totalsRows.find((row) => row.dimensionValues?.[0]?.value === name);
-    const lists = Object.fromEntries(
-      DIMENSIONS.map((d, di) => [
-        d.key,
-        (dimReports[ri * DIMENSIONS.length + di]?.rows ?? []).map((row) => ({
-          label: row.dimensionValues?.[0]?.value || "(unknown)",
-          value: +(row.metricValues?.[0]?.value ?? 0),
-        })),
-      ]),
-    ) as Record<(typeof DIMENSIONS)[number]["key"], AnalyticsBreakdownItem[]>;
     const points = series.filter((p) => p.date >= daysAgo(r.days));
     return {
       source: "ga",
@@ -172,8 +237,8 @@ async function fetchSnapshots(token: string, propertyId: string, label: string):
       totals: toTotals(byRange("current")),
       previousTotals: toTotals(byRange("previous")),
       series: points,
-      ...lists,
-      generatedAt: new Date().toISOString(),
+      ...toLists(dimReports.slice(di * DIMENSIONS.length, (di + 1) * DIMENSIONS.length)),
+      generatedAt,
     };
   });
 }

@@ -35,16 +35,17 @@ const zeroTotals = (): AnalyticsTotals => ({
   bounceRate: 0,
 });
 
-function zeroSnapshot(days: number, label: string, source: AnalyticsSource): AnalyticsSnapshot {
+function zeroSnapshot(range: (typeof RANGES)[number], label: string, source: AnalyticsSource): AnalyticsSnapshot {
+  const days = range.days;
   return {
     source,
     live: false,
     label,
     propertyId: null,
-    range: { start: "", end: "", days },
+    range: { start: "", end: "", days, hourly: Boolean(range.hours) },
     totals: zeroTotals(),
     previousTotals: zeroTotals(),
-    series: Array.from({ length: days }, () => ({ date: "", users: 0, pageViews: 0, sessions: 0 })),
+    series: Array.from({ length: range.hours ?? days }, () => ({ date: "", users: 0, pageViews: 0, sessions: 0 })),
     topPages: [],
     topCountries: [],
     topReferrers: [],
@@ -54,7 +55,7 @@ function zeroSnapshot(days: number, label: string, source: AnalyticsSource): Ana
 }
 
 function zeroResult(label: string, error: string, source: AnalyticsSource = "ga"): AnalyticsResult {
-  const ranges = Object.fromEntries(RANGES.map((r) => [r.key, zeroSnapshot(r.days, label, source)])) as Record<
+  const ranges = Object.fromEntries(RANGES.map((r) => [r.key, zeroSnapshot(r, label, source)])) as Record<
     RangeKey,
     AnalyticsSnapshot
   >;

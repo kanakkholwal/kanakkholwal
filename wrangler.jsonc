@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "kanakkholwal",
+  "name": "portfolio",
   "compatibility_date": "2026-09-24",
   "compatibility_flags": ["nodejs_compat"],
   "main": "@tanstack/react-start/server-entry",
@@ -9,11 +9,11 @@
   },
   // Optional; empty falls back to project.config.ts. A value in the .env files overrides it locally.
   "vars": {
-    "GA_SITE_PROPERTY_ID": ""
+    "GA_SITE_PROPERTY_ID": "G-95KQZNMSSE"
   },
   // Locally these come from the .env files TanStack Start loads; declaring them here passes them into the Worker.
   // Production: `wrangler secret put <NAME>` or `wrangler deploy --secrets-file .env.production`; deploy fails if unset.
   "secrets": {
-    "required": ["GITHUB_TOKEN", "PROJECTS_CE_TOKEN", "GA_SERVICE_ACCOUNT_KEY"]
+    "required": ["GITHUB_TOKEN", "PROJECTS_CE_TOKEN", "GA_SERVICE_ACCOUNT_KEY", "POSTHOG_PERSONAL_API_KEY"]
   }
 }

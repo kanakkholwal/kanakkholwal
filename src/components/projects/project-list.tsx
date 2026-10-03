@@ -59,7 +59,7 @@ export function ProjectList({ projects, className }: { projects: ProjectType[]; 
                 "transition-[opacity,background-color,scale] duration-(--duration-base) ease-(--ease-out)",
                 "pointer-fine:group-hover/list:opacity-45 pointer-fine:hover:opacity-100! hover:bg-foreground/[0.03]",
                 "group-has-focus-visible/list:opacity-45 focus-visible:opacity-100! focus-visible:ring-2 focus-visible:ring-ring",
-                "active:scale-(--press-scale-row)",
+                "active:scale-(--press-scale-surface)",
               )}
             >
               <span className="flex items-baseline justify-between gap-4">

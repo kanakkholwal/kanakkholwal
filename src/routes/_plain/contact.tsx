@@ -7,7 +7,7 @@ export const Route = createFileRoute("/_plain/contact")({
   head: () =>
     seo({
       title: "Contact",
-      description: `Get in touch with ${appConfig.displayName} about a project, a role or an idea. Send a message or book a call.`,
+      description: `Get in touch with ${appConfig.displayName} about a project or an idea. Email or book a call.`,
       path: "/contact",
       keywords: ["contact", "get in touch", "book a call", "freelance", appConfig.displayName, "product engineer"],
     }),

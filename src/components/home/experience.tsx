@@ -34,7 +34,7 @@ function ExperienceRow({ job }: { job: WorkExperienceType }) {
           className={cn(
             "flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left outline-none",
             "transition-[background-color,scale] duration-(--duration-base) ease-(--ease-out)",
-            "hoverable:bg-foreground/[0.03] focus-visible:ring-2 focus-visible:ring-ring active:scale-(--press-scale-row)",
+            "hoverable:bg-foreground/[0.03] focus-visible:ring-2 focus-visible:ring-ring active:scale-(--press-scale-surface)",
           )}
         >
           <Avatar shape="square" className="size-9 rounded-lg bg-background ring-1 ring-border dark:bg-muted">
