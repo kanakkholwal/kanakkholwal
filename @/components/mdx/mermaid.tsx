@@ -1,5 +1,3 @@
-"use client";
-
 import { useTheme } from "next-themes";
 import { use, useEffect, useId, useState } from "react";
 import { ErrorBoundary } from "../utils/error-boundary";
@@ -12,11 +10,17 @@ export function Mermaid({ chart }: { chart: string }) {
   }, []);
 
   if (!mounted) return;
-  return <ErrorBoundary>
-    <MermaidContent chart={chart} />;
-  </ErrorBoundary>
+  return (
+    <ErrorBoundary>
+      <MermaidContent chart={chart} />
+    </ErrorBoundary>
+  );
 
 }
+
+// Constant-folded in the SSR build so mermaid (and cytoscape, katex) stay out of the Worker bundle.
+const loadMermaid = () =>
+  import.meta.env.SSR ? Promise.reject(new Error("mermaid is client-only")) : import("mermaid");
 
 const cache = new Map<string, Promise<unknown>>();
 
@@ -36,7 +40,7 @@ function MermaidContent({ chart }: { chart: string }) {
   const id = useId();
   const { resolvedTheme } = useTheme();
   const { default: mermaid } = use(
-    cachePromise("mermaid", () => import("mermaid")),
+    cachePromise("mermaid", loadMermaid),
   );
 
   mermaid.initialize({

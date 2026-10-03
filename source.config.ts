@@ -1,4 +1,4 @@
-import { iconZodSchema } from "@/components/icons";
+import { iconZodSchema } from "./@/components/icons";
 import {
   remarkImage,
   remarkMdxMermaid,

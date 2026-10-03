@@ -1,5 +1,3 @@
-"use client";
-
 import { motion, useReducedMotion, useTransform } from "framer-motion";
 import { useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";

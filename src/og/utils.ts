@@ -1,8 +1,7 @@
 export async function getRemoteImageAsBase64(url: string) {
   try {
-    // 1. Fetch the image with Next.js caching enabled
+    // 1. Fetch the image
     const res = await fetch(url, {
-      cache: "force-cache", // Cache this so we don't hit the CDN every time
       headers: {
         // Some CDNs (like GitHub) require a User-Agent
         "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)",

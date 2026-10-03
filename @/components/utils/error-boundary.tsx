@@ -1,5 +1,3 @@
-"use client";
-
 import ErrorBanner from "@/components/utils/error";
 import React, { Component, ErrorInfo, ReactNode, Suspense } from "react";
 

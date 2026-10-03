@@ -1,5 +1,3 @@
-"use client";
-
 import type { MotionValue } from "framer-motion";
 import { createContext, useContext } from "react";
 

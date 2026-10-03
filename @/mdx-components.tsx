@@ -1,6 +1,6 @@
 import { Mermaid } from "@/components/mdx/mermaid";
 import { CodeBlock, Pre } from "fumadocs-ui/components/codeblock";
-import { GithubInfo } from "fumadocs-ui/components/github-info";
+import { GithubInfo } from "@/components/mdx/github-info";
 import * as TabsComponents from "fumadocs-ui/components/tabs";
 import defaultMdxComponents from "fumadocs-ui/mdx";
 import type { MDXComponents } from "mdx/types";

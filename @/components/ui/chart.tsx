@@ -1,6 +1,5 @@
 // From https://evilcharts.com/
 
-"use client";
 
 import * as React from "react";
 import * as RechartsPrimitive from "recharts";

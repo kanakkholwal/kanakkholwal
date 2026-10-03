@@ -1,9 +1,7 @@
-"use client";
-
-import { getProjectList } from "@/lib/project.source";
+import { useProjects } from "@/lib/content";
 import { ArrowUpRight } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
+import Image from "@/components/image";
+import Link from "@/components/link";
 import { useMemo } from "react";
 import { journey_data } from "~/data/journey";
 import ChangelogContent from "./page.timeline";
@@ -15,12 +13,11 @@ export function TimelineProjectGrid({
   yearFilter: string[];
 }) {
 
-  const filteredProjects = useMemo(() => getProjectList().filter((project) => {
+  const projects = useProjects();
+  const filteredProjects = useMemo(() => projects.filter((project) => {
     if (!project.image) return false;
     return yearFilter.some((year) => project.dates.includes(year));
-  }).map(({ body, ...rest }) => ({
-    ...rest,
-  })), []);
+  }), [projects, yearFilter]);
 
 
   if (filteredProjects.length === 0) return null;
@@ -37,8 +34,8 @@ export function TimelineProjectGrid({
           <Image
             src={project.image!}
             alt={project.title}
-            fill
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
+            layout="fullWidth"
+            className="absolute inset-0 size-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
           {/* Overlay */}
           <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">

@@ -1,5 +1,3 @@
-"use client";
-
 import { motion, type HTMLMotionProps } from "framer-motion";
 import * as React from "react";
 

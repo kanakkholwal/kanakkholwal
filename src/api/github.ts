@@ -1,5 +1,5 @@
-import { cache } from "react";
-import { unstable_cache } from "next/cache";
+import { getServerEnv } from "~/server/env.server";
+import { memo } from "~/lib/cache";
 import { formatDistanceToNowStrict } from "date-fns";
 
 export type HeroOrbitActivityKind =
@@ -63,7 +63,6 @@ export type Contributions = {
 };
 
 // You need a GitHub token with public_repo access
-const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 export type ActivityOverview = {
   repositoriesContributedTo: Array<ContributedRepository>;
   totalRepositoriesContributedTo: number;
@@ -106,7 +105,7 @@ export type ContributedRepository = {
   updatedAt: string;
 };
 
-export const getContributedOrganizations = cache(
+export const getContributedOrganizations = memo(
   async (username: string): Promise<ContributedOrganization[]> => {
     const query = `
       query($login: String!) {
@@ -135,13 +134,14 @@ export const getContributedOrganizations = cache(
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${GITHUB_TOKEN}`,
+        Authorization: `Bearer ${getServerEnv().GITHUB_TOKEN}`,
+        // GitHub rejects requests without a User-Agent, and Workers fetch sends none.
+        "User-Agent": "kanakkholwal.eu.org",
       },
       body: JSON.stringify({
         query,
         variables: { login: username },
       }),
-      next: { revalidate: 3600 },
     });
 
     if (!response.ok) {
@@ -221,7 +221,7 @@ export type DetailedActivity = {
  *
  * @throws {Error} If the network request fails or the GraphQL API returns an error.
  */
-export const getDetailedActivity = cache(
+export const getDetailedActivity = memo(
   async (username: string): Promise<DetailedActivity> => {
     const query = `
       query($login: String!) {
@@ -270,7 +270,8 @@ export const getDetailedActivity = cache(
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${GITHUB_TOKEN}`,
+        Authorization: `Bearer ${getServerEnv().GITHUB_TOKEN}`,
+        "User-Agent": "kanakkholwal.eu.org",
       },
       body: JSON.stringify({
         query,
@@ -278,7 +279,6 @@ export const getDetailedActivity = cache(
           login: username,
         },
       }),
-      next: { revalidate: 3600 },
     });
 
     if (!response.ok) {
@@ -381,14 +381,14 @@ export const getDetailedActivity = cache(
  * @throws {Error} If GITHUB_TOKEN is not defined, or if either underlying fetch fails.
  */
 
-export const getGithubStats = cache(
+export const getGithubStats = memo(
   async (
     username: string,
   ): Promise<{
     stats: Contributions;
     activity: DetailedActivity;
   }> => {
-    if (!GITHUB_TOKEN) {
+    if (!getServerEnv().GITHUB_TOKEN) {
       throw new Error("GitHub token is not defined");
     }
 
@@ -456,50 +456,50 @@ export type WeeklyContribution = {
  * - count: total contributions in that week,
  * - averageLevel: aggregated weekly level (useful for coloring or intensity).
  *
- * This function is synchronous and memoized via `cache`.
+ * This function is synchronous and pure.
  *
  * @param dailyContributions - Array of ContributionActivity (daily entries) to aggregate.
  * @returns An array of WeeklyContribution objects ordered by week start (iteration order of the map).
  */
 
-export const getWeeklyContributions = cache(
-  (dailyContributions: ContributionActivity[]): WeeklyContribution[] => {
-    const weeklyMap = new Map<string, WeeklyContribution>();
+export const getWeeklyContributions = (
+  dailyContributions: ContributionActivity[],
+): WeeklyContribution[] => {
+  const weeklyMap = new Map<string, WeeklyContribution>();
 
-    // Sort daily contributions by date first to ensure order
-    const sorted = [...dailyContributions].sort(
-      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
-    );
+  // Sort daily contributions by date first to ensure order
+  const sorted = [...dailyContributions].sort(
+    (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
+  );
 
-    for (const day of sorted) {
-      const dateObj = new Date(day.date);
-      // Get the day of the week (0 = Sunday, 1 = Monday, etc.)
-      const dayOfWeek = dateObj.getDay();
+  for (const day of sorted) {
+    const dateObj = new Date(day.date);
+    // Get the day of the week (0 = Sunday, 1 = Monday, etc.)
+    const dayOfWeek = dateObj.getDay();
 
-      // Calculate the start of the week (Sunday)
-      // We subtract the day of the week from the date to get the previous Sunday
-      const startOfWeek = new Date(dateObj);
-      startOfWeek.setDate(dateObj.getDate() - dayOfWeek);
-      const weekKey = startOfWeek.toISOString().split("T")[0];
+    // Calculate the start of the week (Sunday)
+    // We subtract the day of the week from the date to get the previous Sunday
+    const startOfWeek = new Date(dateObj);
+    startOfWeek.setDate(dateObj.getDate() - dayOfWeek);
+    const weekKey = startOfWeek.toISOString().split("T")[0];
 
-      const existing = weeklyMap.get(weekKey);
+    const existing = weeklyMap.get(weekKey);
 
-      if (existing) {
-        existing.count += day.count;
-        // Weighted average for level roughly
-        existing.averageLevel = Math.max(existing.averageLevel, day.level);
-      } else {
-        weeklyMap.set(weekKey, {
-          weekStart: weekKey,
-          count: day.count,
-          averageLevel: day.level,
-        });
-      }
+    if (existing) {
+      existing.count += day.count;
+      // Weighted average for level roughly
+      existing.averageLevel = Math.max(existing.averageLevel, day.level);
+    } else {
+      weeklyMap.set(weekKey, {
+        weekStart: weekKey,
+        count: day.count,
+        averageLevel: day.level,
+      });
     }
+  }
 
-    return Array.from(weeklyMap.values());
-  },
-);
+  return Array.from(weeklyMap.values());
+};
 
 /**
  * Fetches contributions from a public contributions API and supplements with GitHub GraphQL stats.
@@ -522,7 +522,7 @@ export const getWeeklyContributions = cache(
  *
  * @throws {Error} If any network request fails, responses are non-JSON, or the GraphQL API returns an error.
  */
-export const getCachedContributions = cache(
+export const getCachedContributions = memo(
   async (username: string): Promise<Contributions> => {
     // 1️⃣ Contributions API
     const contributionsUrl = `https://github-contributions-api.jogruber.de/v4/${username}`;
@@ -551,7 +551,8 @@ export const getCachedContributions = cache(
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${GITHUB_TOKEN}`,
+          Authorization: `Bearer ${getServerEnv().GITHUB_TOKEN}`,
+          "User-Agent": "kanakkholwal.eu.org",
         },
         body: JSON.stringify({
           query: githubQuery,
@@ -758,7 +759,8 @@ function pushRelease(
   repos: RawRepoNode[],
   bucket: HeroOrbitActivityItem[],
 ): void {
-  let best: { repo: string; tag: string; url: string; date: Date } | null = null;
+  let best: { repo: string; tag: string; url: string; date: Date } | null =
+    null;
   for (const r of repos) {
     for (const rel of r.releases.nodes) {
       if (!rel.publishedAt) continue;
@@ -878,7 +880,9 @@ function extractRepoSlug(item: HeroOrbitActivityItem): string {
  *  - 1 merge + 2 reviews in different repos
  *      → shown individually as separate rows
  */
-function aggregateActivity(items: HeroOrbitActivityItem[]): HeroOrbitActivityItem[] {
+function aggregateActivity(
+  items: HeroOrbitActivityItem[],
+): HeroOrbitActivityItem[] {
   const summary = items.find((item) => item.kind === "stars:bs");
   const timeBound = items.filter((item) => item.kind !== "stars:bs");
 
@@ -965,7 +969,7 @@ function aggregateActivity(items: HeroOrbitActivityItem[]): HeroOrbitActivityIte
  * @throws {Error} If GITHUB_TOKEN is missing or the GraphQL request fails.
  */
 async function fetchHeroOrbitPayload(username: string): Promise<HeroOrbitData> {
-  if (!GITHUB_TOKEN) {
+  if (!getServerEnv().GITHUB_TOKEN) {
     throw new Error("GitHub token is not defined");
   }
 
@@ -975,14 +979,13 @@ async function fetchHeroOrbitPayload(username: string): Promise<HeroOrbitData> {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${GITHUB_TOKEN}`,
+        Authorization: `Bearer ${getServerEnv().GITHUB_TOKEN}`,
+        "User-Agent": "kanakkholwal.eu.org",
       },
       body: JSON.stringify({
         query: HERO_ORBIT_QUERY,
         variables: { login: username },
       }),
-      next: { revalidate: 3600 },
-      cache: "force-cache",
     });
   } catch (err) {
     const wrapped = new Error(
@@ -1086,72 +1089,34 @@ function logHeroOrbitFailure(
   }
 }
 
-// Cross-request cache for SUCCESSFUL payloads only. We deliberately do NOT
-// catch errors inside this wrapper — when the inner function throws,
-// `unstable_cache` does not store the result, so the next call retries.
-// This means a single transient failure never poisons the cache for an
-// hour; only successful payloads get warm-cached.
-const cachedHeroOrbitFetch = unstable_cache(
-  async (username: string): Promise<HeroOrbitData> => {
-    return await fetchHeroOrbitPayload(username);
-  },
-  ["hero-orbit-data"],
-  { revalidate: 3600, tags: ["hero-orbit"] },
-);
+// Only successful payloads are memoized; fetchHeroOrbitPayload throws on every failure mode.
+const cachedHeroOrbitFetch = memo(fetchHeroOrbitPayload, 3600);
 
 /**
- * Fetches a compact payload for the hero orbit panel.
- *
- * Caching strategy:
- *  - {@link unstable_cache} stores **successful** responses only (the inner
- *    fetch throws on every failure mode, so failures are never cached).
- *  - React `cache` dedupes calls within a single render.
- *
- * Behaviour on failure:
- *  - Logs the error with stage context (`fetch` / `cache` / `rate-limit`).
- *  - Returns `null`; the caller is expected to substitute its own
- *    fallback payload. The next render will retry.
- *
- * @param username - GitHub login to fetch the data for.
- * @returns A promise resolving to the payload, or `null` on failure.
+ * Compact payload for the hero orbit panel, or `null` on failure (logged with stage context).
+ * Failures are not cached, so the next request retries.
  */
-export const getHeroOrbitData = cache(
-  async (username: string): Promise<HeroOrbitData | null> => {
-    try {
-      return await cachedHeroOrbitFetch(username);
-    } catch (err) {
-      // Distinguish rate-limit from generic failures so logs are greppable.
-      const status = (err as { status?: number })?.status;
-      const stage: "fetch" | "cache" | "rate-limit" =
-        status === 429 || status === 403 ? "rate-limit" : "fetch";
-      logHeroOrbitFailure(stage, err, {
-        username,
-        status,
-        willRetryNextRender: true,
-      });
-      return null;
-    }
-  },
-);
+export async function getHeroOrbitData(
+  username: string,
+): Promise<HeroOrbitData | null> {
+  try {
+    return await cachedHeroOrbitFetch(username);
+  } catch (err) {
+    const status = (err as { status?: number })?.status;
+    const stage: "fetch" | "cache" | "rate-limit" =
+      status === 429 || status === 403 ? "rate-limit" : "fetch";
+    logHeroOrbitFailure(stage, err, {
+      username,
+      status,
+      willRetryNextRender: true,
+    });
+    return null;
+  }
+}
 
-/**
- * Like {@link getHeroOrbitData} but always returns a non-null payload,
- * substituting {@link EMPTY_HERO_ORBIT} when the upstream call failed.
- * Convenient for callers that don't want to branch on `null`.
- */
-export const getHeroOrbitDataSafe = cache(
-  async (username: string): Promise<HeroOrbitData> => {
-    const result = await getHeroOrbitData(username);
-    return result ?? EMPTY_HERO_ORBIT;
-  },
-);
-
-/**
- * Manually invalidate the cross-request hero-orbit cache. Useful after
- * pushing a release or doing something that should reflect immediately.
- * Can be called from a route handler / server action.
- */
-export async function revalidateHeroOrbit(): Promise<void> {
-  const { revalidateTag } = await import("next/cache");
-  revalidateTag("hero-orbit","page");
+/** {@link getHeroOrbitData} with {@link EMPTY_HERO_ORBIT} substituted on failure. */
+export async function getHeroOrbitDataSafe(
+  username: string,
+): Promise<HeroOrbitData> {
+  return (await getHeroOrbitData(username)) ?? EMPTY_HERO_ORBIT;
 }

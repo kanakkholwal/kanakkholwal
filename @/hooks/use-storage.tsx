@@ -1,5 +1,3 @@
-"use client";
-
 import { useCallback, useRef, useSyncExternalStore } from "react";
 
 type StorageType = "localStorage" | "sessionStorage";

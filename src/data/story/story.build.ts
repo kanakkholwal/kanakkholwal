@@ -1,5 +1,4 @@
-import { getProjectList, type ProjectType } from "@/lib/project.source";
-import { getWorkExperienceList, type WorkExperienceType } from "@/lib/work.source";
+import type { ProjectType, WorkExperienceType } from "@/lib/content.types";
 import { PROJECT_NARRATION, WORK_NARRATION } from "./story.narration";
 import type { StoryBeat, StoryChapter } from "./story.types";
 
@@ -82,14 +81,16 @@ function projectToChapter(project: ProjectType): StoryChapter {
   };
 }
 
-export function getStoryChapters(): StoryChapter[] {
-  const work = getWorkExperienceList()
+export type StorySource = { projects: ProjectType[]; work: WorkExperienceType[] };
+
+export function getStoryChapters(source: StorySource): StoryChapter[] {
+  const work = source.work
     .slice()
     .sort((a, b) => startTime(a.startDate) - startTime(b.startDate))
     .map(workToChapter)
     .filter((c): c is StoryChapter => c !== null);
 
-  const projectsById = new Map(getProjectList().map((p) => [p.id, p]));
+  const projectsById = new Map(source.projects.map((p) => [p.id, p]));
   const projects = FEATURED_PROJECTS.map((id) => projectsById.get(id))
     .filter((p): p is ProjectType => Boolean(p))
     .map(projectToChapter);

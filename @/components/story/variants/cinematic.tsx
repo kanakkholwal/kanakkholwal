@@ -1,5 +1,3 @@
-"use client";
-
 import { motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import { StoryChapter } from "@/components/story/story-chapter";

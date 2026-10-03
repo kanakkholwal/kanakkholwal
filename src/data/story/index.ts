@@ -1,9 +1,8 @@
-// The career-story module. Renderers import from here and nowhere else inside
-// this folder — `getStory()` (or `getStoryChapters()`) is the whole interface.
-// Facts come from the resume MDX, narration from story.narration, and they are
-// merged in story.build; the ordering/slicing rules live in story.view.
-
-import { getStoryChapters } from "./story.build";
+// Renderers import the career story from here only: `useStory()` / `useStoryChapters()`.
+import { useMemo } from "react";
+import { useProjects, useWorkExperiences } from "@/lib/content";
+import { getStoryChapters, type StorySource } from "./story.build";
+import type { StoryChapter } from "./story.types";
 import { buildStory, type Story } from "./story.view";
 
 export type {
@@ -17,6 +16,18 @@ export { isProject } from "./story.view";
 export { getStoryChapters };
 
 /** The career story as a ready-to-render view — chapters plus every slice. */
-export function getStory(): Story {
-  return buildStory(getStoryChapters());
+export function getStory(source: StorySource): Story {
+  return buildStory(getStoryChapters(source));
+}
+
+/** Chapters built from the root-loaded content index. */
+export function useStoryChapters(): StoryChapter[] {
+  const projects = useProjects();
+  const work = useWorkExperiences();
+  return useMemo(() => getStoryChapters({ projects, work }), [projects, work]);
+}
+
+export function useStory(): Story {
+  const chapters = useStoryChapters();
+  return useMemo(() => buildStory(chapters), [chapters]);
 }

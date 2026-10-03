@@ -1,5 +1,3 @@
-"use client";
-
 import { DEPTH } from "@/components/animated/dynamic-motion";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";

@@ -1,5 +1,3 @@
-"use client";
-
 import { DynamicHeading } from "@/components/application/dynamic.heading";
 import { CountingNumber } from "@/components/animated/text.counter";
 import {
@@ -27,7 +25,7 @@ import {
   Star,
   Users,
 } from "lucide-react";
-import Image from "next/image";
+import Image from "@/components/image";
 import { useMemo, useState } from "react";
 import { GoRepoPush } from "react-icons/go";
 import {
@@ -49,7 +47,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { StyleModels, StylingModel } from "@/constants/ui";
 import useStorage from "@/hooks/use-storage";
 import { motion } from "framer-motion";
-import Link from "next/link";
+import Link from "@/components/link";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 import { appConfig } from "root/project.config";
 import GithubContributionGraph, {

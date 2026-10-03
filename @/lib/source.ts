@@ -1,27 +1,28 @@
+import "@tanstack/react-start/server-only";
 import { type InferPageType, loader } from "fumadocs-core/source";
 import { lucideIconsPlugin } from "fumadocs-core/source/lucide-icons";
 import { docs } from "fumadocs-mdx:collections/server";
+import { type DocMeta, toMeta } from "./content.types";
 
-// See https://fumadocs.dev/docs/headless/source-api for more info
 export const source = loader({
   baseUrl: "/docs",
   source: docs.toFumadocsSource(),
   plugins: [lucideIconsPlugin()],
 });
 
-export function getPageImage(page: InferPageType<typeof source>) {
-  const segments = [...page.slugs, "image.png"];
+type DocPage = InferPageType<typeof source>;
 
-  return {
-    segments,
-    url: `/og/docs/${segments.join("/")}`,
-  };
+export function toDocMeta(page: DocPage): DocMeta {
+  return { ...toMeta(page), slugs: page.slugs, url: page.url };
 }
 
-export async function getLLMText(page: InferPageType<typeof source>) {
-  const processed = await page.data.getText("processed");
+export function getPageImage(page: DocPage) {
+  return `/og/docs/${[...page.slugs, "image.png"].join("/")}`;
+}
 
-  return `# ${page.data.title}
-
-${processed}`;
+/** Minutes at 200 wpm over the processed markdown. */
+export async function getReadTime(page: DocPage): Promise<number> {
+  const text = await page.data.getText("processed").catch(() => "");
+  const words = text.split(/\s+/g).filter(Boolean).length || 500;
+  return Math.max(1, Math.ceil(words / 200));
 }

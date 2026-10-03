@@ -1,5 +1,3 @@
-"use client";
-
 import { DynamicHeading } from "@/components/application/dynamic.heading";
 
 import { hingeDown, liftIn } from "@/components/animated/dynamic-motion";

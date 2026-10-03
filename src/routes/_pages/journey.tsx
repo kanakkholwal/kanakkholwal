@@ -1,0 +1,27 @@
+import { createFileRoute } from "@tanstack/react-router";
+import JourneyPageClient from "~/features/journey/client";
+import { seo } from "~/utils/seo";
+
+export const Route = createFileRoute("/_pages/journey")({
+  head: () =>
+    seo({
+      title: "My Developer Journey",
+      description:
+        "Explore Kanak’s journey as a software engineer, from early coding days to mastering full-stack development with Next.js, AWS, Docker, and AI integration. A story of growth, challenges, and innovation.",
+      path: "/journey",
+      keywords: [
+        "developer journey",
+        "software engineer",
+        "full-stack development",
+        "Next.js",
+        "AWS",
+        "Docker",
+        "AI integration",
+        "career growth",
+        "tech challenges",
+        "innovation",
+        "Kanak Kholwal",
+      ],
+    }),
+  component: JourneyPageClient,
+});

@@ -1,5 +1,3 @@
-"use client";
-
 import { Header } from "@/components/header";
 import { StyleModels, StylingModel } from "@/constants/ui";
 import useStorage from "@/hooks/use-storage";
@@ -7,19 +5,16 @@ import { cn } from "@/lib/utils";
 import { LayoutGroup, useReducedMotion } from "framer-motion";
 import { ReactLenis } from "lenis/react";
 import { useTheme } from "next-themes";
-import dynamic from "next/dynamic";
-import { Suspense, useRef } from "react";
+import { lazy, Suspense, useRef } from "react";
+import { clientLazy } from "./utils/client-lazy";
 import { FlickeringGrid } from "./animated/bg.flickering";
 import ConditionalRender from "./utils/conditional-render";
 
 // Lazy-load heavy components
-const StarsBackground = dynamic(
-  () => import("@/components/animated/bg.stars").then((m) => ({ default: m.StarsBackground })),
-  { ssr: false },
+const StarsBackground = clientLazy(() =>
+  import("@/components/animated/bg.stars").then((m) => ({ default: m.StarsBackground })),
 );
-const FooterSection = dynamic(
-  () => import("./footer").then((m) => ({ default: m.FooterSection })),
-);
+const FooterSection = lazy(() => import("./footer").then((m) => ({ default: m.FooterSection })));
 
 const MINIMAL_HOME_LAYOUT = "mx-auto md:max-w-3xl *:[[id]]:scroll-mt-22 space-y-4";
 

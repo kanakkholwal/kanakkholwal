@@ -1,5 +1,3 @@
-"use client";
-
 import BlurFade from "@/components/magicui/blur-fade";
 import { StyleModels, StylingModel } from "@/constants/ui";
 import useStorage from "@/hooks/use-storage";

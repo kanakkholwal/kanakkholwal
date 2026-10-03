@@ -1,5 +1,3 @@
-import { cache } from "react";
-
 type Font = {
   name: string;
   data: ArrayBuffer;
@@ -7,62 +5,41 @@ type Font = {
   weight: 400 | 500 | 600 | 700;
 };
 
-// 1. Module-level variable for In-Memory Caching (Hot Lambdas)
-// This persists as long as the serverless function container is alive.
+const FONT_SOURCES = [
+  {
+    name: "Space Grotesk",
+    weight: 700,
+    url: "https://cdn.jsdelivr.net/npm/@fontsource/space-grotesk@5.0.1/files/space-grotesk-latin-700-normal.woff",
+  },
+  {
+    name: "JetBrains Mono",
+    weight: 500,
+    url: "https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono@5.0.1/files/jetbrains-mono-latin-500-normal.woff",
+  },
+  {
+    name: "Instrument Serif",
+    weight: 400,
+    url: "https://cdn.jsdelivr.net/npm/@fontsource/instrument-serif@5.0.1/files/instrument-serif-latin-400-normal.woff",
+  },
+] as const;
+
+// Per-isolate; a cold isolate refetches from jsDelivr.
 let loadedFonts: Font[] | null = null;
 
-export const getFonts = cache(async (): Promise<Font[]> => {
-  // If fonts are already in memory, return them instantly.
-  if (loadedFonts) {
-    return loadedFonts;
-  }
-
-  const spaceGroteskUrl =
-    "https://cdn.jsdelivr.net/npm/@fontsource/space-grotesk@5.0.1/files/space-grotesk-latin-700-normal.woff";
-  const jetBrainsMonoUrl =
-    "https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono@5.0.1/files/jetbrains-mono-latin-500-normal.woff";
-  const instrumentSerifUrl =
-    "https://cdn.jsdelivr.net/npm/@fontsource/instrument-serif@5.0.1/files/instrument-serif-latin-400-normal.woff";
-
-  const [spaceGroteskBold, jetBrainsMono, instrumentSerif] = await Promise.all([
-    // 2. Use { cache: 'force-cache' } for Persistent Caching (Cold Starts)
-    // This tells Next.js to store the file in the Data Cache after the first download.
-    fetch(spaceGroteskUrl, { cache: "force-cache" }).then((res) => {
-      if (!res.ok) throw new Error("Failed to fetch Space Grotesk");
+export async function getFonts(): Promise<Font[]> {
+  if (loadedFonts) return loadedFonts;
+  const data = await Promise.all(
+    FONT_SOURCES.map(async ({ name, url }) => {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`Failed to fetch ${name}`);
       return res.arrayBuffer();
     }),
-
-    fetch(jetBrainsMonoUrl, { cache: "force-cache" }).then((res) => {
-      if (!res.ok) throw new Error("Failed to fetch JetBrains Mono");
-      return res.arrayBuffer();
-    }),
-
-    fetch(instrumentSerifUrl, { cache: "force-cache" }).then((res) => {
-      if (!res.ok) throw new Error("Failed to fetch Instrument Serif");
-      return res.arrayBuffer();
-    }),
-  ]);
-
-  loadedFonts = [
-    {
-      name: "Space Grotesk",
-      data: spaceGroteskBold,
-      style: "normal",
-      weight: 700,
-    },
-    {
-      name: "JetBrains Mono",
-      data: jetBrainsMono,
-      style: "normal",
-      weight: 500,
-    },
-    {
-      name: "Instrument Serif",
-      data: instrumentSerif,
-      style: "normal",
-      weight: 400,
-    },
-  ];
-
+  );
+  loadedFonts = FONT_SOURCES.map(({ name, weight }, i) => ({
+    name,
+    weight,
+    style: "normal" as const,
+    data: data[i],
+  }));
   return loadedFonts;
-});
+}

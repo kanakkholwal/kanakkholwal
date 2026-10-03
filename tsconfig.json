@@ -1,59 +1,27 @@
 {
   "compilerOptions": {
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["DOM", "DOM.Iterable", "ES2024"],
+    "types": ["vite/client", "node"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
     "noEmit": true,
     "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "bundler",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
+    "forceConsistentCasingInFileNames": true,
     "jsx": "react-jsx",
-    "incremental": true,
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
+    "target": "ES2024",
     "paths": {
-      "@/*": [
-        "./@/*"
-      ],
-      "~/*": [
-        "./src/*"
-      ],
-      "root/*": [
-        "./*"
-      ],
-      "fumadocs-mdx:collections/*": [
-        "./.source/*"
-      ],
-    },
-    "baseUrl": ".",
-    // `baseUrl` is deprecated in TS 6 and errors without this. The `paths`
-    // above are already relative to the config, so the migration is to drop
-    // baseUrl entirely — this unblocks the build until that happens.
-    "ignoreDeprecations": "6.0",
-    "target": "ES2023"
+      "@/*": ["./@/*"],
+      "~/*": ["./src/*"],
+      "root/*": ["./*"],
+      "fumadocs-mdx:collections/*": ["./.source/*"]
+    }
   },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts",
-    ".next/dev/types/**/*.ts"
-  ],
-  // Test files import `bun:test`, which has no types under the Next build's
-  // typecheck. Run them with `bun test`, not through the app build.
-  "exclude": [
-    "node_modules",
-    "**/*.test.ts",
-    "**/*.test.tsx"
-  ]
+  "include": ["**/*.ts", "**/*.tsx"],
+  // Tests import `bun:test`; run them with `bun test`.
+  "exclude": ["node_modules", "dist", ".wrangler", "**/*.test.ts", "**/*.test.tsx"]
 }

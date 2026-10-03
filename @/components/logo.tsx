@@ -1,5 +1,3 @@
-"use client";
-
 import { cn } from "@/lib/utils";
 import { motion, type SVGMotionProps } from "framer-motion";
 import { useEffect, useRef, useState } from "react";

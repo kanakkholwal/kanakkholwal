@@ -1,9 +1,7 @@
-"use client";
-
 import { useEffect, useMemo, useState } from "react";
 
 import { cn } from "@/lib/utils";
-import Image from "next/image";
+import Image from "@/components/image";
 
 type Grid = {
   rows: number;
@@ -110,7 +108,7 @@ export const PixelImage = ({
             src={src}
             alt={`Pixel image piece ${index + 1}`}
             className={cn(
-              "z-1 rounded-[2.5rem] object-cover",
+              "absolute inset-0 size-full z-1 rounded-[2.5rem] object-cover",
               grayscaleAnimation && (showColor ? "grayscale-0" : "grayscale"),
             )}
             style={{
@@ -118,7 +116,7 @@ export const PixelImage = ({
                 ? `filter ${pixelFadeInDuration}ms cubic-bezier(0.4, 0, 0.2, 1)`
                 : "none",
             }}
-            fill
+            layout="fullWidth"
             draggable={false}
           />
         </div>

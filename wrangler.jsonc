@@ -1,0 +1,12 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "kanakkholwal",
+  "compatibility_date": "2026-09-24",
+  "compatibility_flags": ["nodejs_compat"],
+  "main": "@tanstack/react-start/server-entry",
+  "observability": {
+    "enabled": true
+  }
+  // Secrets (GITHUB_TOKEN, PROJECTS_CE_TOKEN, GA_SERVICE_ACCOUNT_KEY, GA_SITE_PROPERTY_ID):
+  // `wrangler secret put <NAME>`. nodejs_compat exposes them on process.env.
+}

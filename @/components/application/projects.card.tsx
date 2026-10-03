@@ -1,4 +1,3 @@
-﻿"use client";
 
 import {
   Drawer,
@@ -10,7 +9,7 @@ import {
 } from "@/components/ui/drawer";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ButtonLink, ButtonTransitionLink, TransitionLink } from "@/components/utils/link";
-import { ProjectType } from "@/lib/project.source";
+import type { ProjectType } from "@/lib/content.types";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import {
@@ -21,7 +20,7 @@ import {
   Play,
   Tag,
 } from "lucide-react";
-import Image from "next/image";
+import Image from "@/components/image";
 import { useRef, useState } from "react";
 import Markdown from "react-markdown";
 
@@ -260,8 +259,8 @@ function ExpandableCard({
           <Image
             src={card.image}
             alt=""
-            fill
-            className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+            layout="fullWidth"
+            className="absolute inset-0 size-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
           />
         ) : (
           <ProjectFallback title={card.title} meta={card.dates} />
@@ -425,9 +424,9 @@ function ProjectCard({
             <Image
               src={card.image}
               alt={card.title}
-              fill
+              layout="fullWidth"
               className={cn(
-                "object-cover transition-transform duration-700 ease-out",
+                "absolute inset-0 size-full", "object-cover transition-transform duration-700 ease-out",
                 isHovered ? "scale-105" : "scale-100",
               )}
             />

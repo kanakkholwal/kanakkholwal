@@ -1,4 +1,3 @@
-﻿"use client";
 
 import BlurFade from "@/components/magicui/blur-fade";
 import { Socials } from "@/components/socials";

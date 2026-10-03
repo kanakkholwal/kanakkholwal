@@ -1,5 +1,3 @@
-"use client";
-
 import { DynamicHeading } from "@/components/application/dynamic.heading";
 import {
   ExpandableProjectCards
@@ -12,12 +10,12 @@ import { StoryCardList } from "@/components/story/story-card-list";
 import { StyleModels, StylingModel } from "@/constants/ui";
 import useStorage from "@/hooks/use-storage";
 import { cn } from "@/lib/utils";
-import { getProjectList } from "@/lib/project.source";
-import { getStory } from "~/data/story";
+import { type ProjectType, useProjects } from "@/lib/content";
+import { useStory } from "~/data/story";
 import { motion, useReducedMotion } from "framer-motion";
 import { StyleSwap } from "@/components/animated/style-swap";
 import { ArrowRight, BarChart2, BoxIcon, FolderGit2, FolderOpen, Layers } from "lucide-react";
-import Link from "next/link";
+import Link from "@/components/link";
 import { useMemo } from "react";
 import { Icon } from "../icons";
 import { Badge } from "../ui/badge";
@@ -127,7 +125,7 @@ function StoryProjects() {
   // The same persona-lens case-study cards used on /journey, curated to the
   // featured projects. The lens is shared, so switching it here or on /journey
   // stays in sync.
-  const chapters = useMemo(() => getStory().projects, []);
+  const chapters = useStory().projects;
 
   return (
     <StoryChapter
@@ -154,7 +152,7 @@ function StoryProjects() {
   );
 }
 
-function MinimalProjects({ projects }: { projects: ReturnType<typeof getProjectList> }) {
+function MinimalProjects({ projects }: { projects: ProjectType[] }) {
   return (
     <Panel id="projects">
       <PanelHeader>
@@ -229,7 +227,7 @@ function MinimalProjects({ projects }: { projects: ReturnType<typeof getProjectL
   );
 }
 
-function StaticProjects({ projects }: { projects: ReturnType<typeof getProjectList> }) {
+function StaticProjects({ projects }: { projects: ProjectType[] }) {
   return (
     <section
       id="projects"
@@ -317,7 +315,7 @@ function StaticProjects({ projects }: { projects: ReturnType<typeof getProjectLi
   );
 }
 
-function DynamicProjects({ projects }: { projects: ReturnType<typeof getProjectList> }) {
+function DynamicProjects({ projects }: { projects: ProjectType[] }) {
   return (
     <section
       id="projects"
@@ -344,7 +342,7 @@ function DynamicProjects({ projects }: { projects: ReturnType<typeof getProjectL
 
 
 export default function ProjectsSection() {
-  const projectsList = useMemo(() => getProjectList(), []);
+  const projectsList = useProjects();
   const [selectedStyle] = useStorage<StylingModel>(
     "styling.model",
     StyleModels[0].id,

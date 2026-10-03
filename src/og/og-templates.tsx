@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 
-import { ProjectType } from "@/lib/project.source";
+import type { ProjectType } from "@/lib/content.types";
 import { appConfig } from "root/project.config";
 
 //  TYPES 

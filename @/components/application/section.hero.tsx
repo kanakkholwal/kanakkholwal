@@ -1,7 +1,6 @@
-"use client";
 import { StyleSwap } from "@/components/animated/style-swap";
 import { StoryOpening, StoryReveal } from "@/components/application/story.frame";
-import { HeroOrbit } from "@/components/application/hero.orbit.client";
+import { HeroOrbit } from "@/components/application/hero.orbit.view";
 import {
   HeroOrbitMinimal,
   HeroOrbitStatic,
@@ -25,7 +24,7 @@ import { Panel } from "@/components/application/panel";
 import { Logo } from "@/components/logo";
 import { GreaterSeparator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
-import Image from "next/image";
+import Image from "@/components/image";
 import RotatingText from "../animated/text.rotate";
 
 

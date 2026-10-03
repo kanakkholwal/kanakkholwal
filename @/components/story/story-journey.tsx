@@ -1,9 +1,7 @@
-"use client";
-
 import { Icon } from "@/components/icons";
-import Link from "next/link";
+import Link from "@/components/link";
 import { useMemo } from "react";
-import { getStory, type StoryChapter } from "~/data/story";
+import { type StoryChapter, useStory } from "~/data/story";
 import { appConfig } from "root/project.config";
 import { type Lens, PersonaLens, useStoryLens } from "./persona-lens";
 import { StoryCardList } from "./story-card-list";
@@ -29,10 +27,8 @@ const SOCIALS = [
 export function StoryJourney() {
   const [lens, setLens] = useStoryLens();
 
-  const { work, projects, building } = useMemo(() => {
-    const { work, projects, current } = getStory();
-    return { work, projects, building: current?.title };
-  }, []);
+  const { work, projects, current } = useStory();
+  const building = current?.title;
 
   return (
     <section className="mx-auto max-w-6xl px-6 py-16 md:py-24">

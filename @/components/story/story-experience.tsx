@@ -1,13 +1,9 @@
-"use client";
-
 import { motion } from "framer-motion";
-import dynamic from "next/dynamic";
-import type { ComponentType } from "react";
-import { useState } from "react";
+import { type ComponentType, lazy, Suspense } from "react";
 import { cn } from "@/lib/utils";
 import useStorage from "@/hooks/use-storage";
 import type { StoryChapter } from "~/data/story/story.types";
-import { getStoryChapters } from "~/data/story/story.build";
+import { useStoryChapters } from "~/data/story";
 
 type VariantId = "cinematic" | "terminal" | "keynote";
 type VariantProps = { chapters: StoryChapter[] };
@@ -29,14 +25,13 @@ const load: Record<VariantId, () => Promise<unknown>> = {
 // Only the active variant's chunk is ever downloaded (bundle-dynamic-imports,
 // bundle-conditional).
 const Variants: Record<VariantId, ComponentType<VariantProps>> = {
-  cinematic: dynamic(() => import("./variants/cinematic").then((m) => m.StoryCinematic)),
-  terminal: dynamic(() => import("./variants/terminal").then((m) => m.StoryTerminal)),
-  keynote: dynamic(() => import("./variants/keynote").then((m) => m.StoryKeynote)),
+  cinematic: lazy(() => import("./variants/cinematic").then((m) => ({ default: m.StoryCinematic }))),
+  terminal: lazy(() => import("./variants/terminal").then((m) => ({ default: m.StoryTerminal }))),
+  keynote: lazy(() => import("./variants/keynote").then((m) => ({ default: m.StoryKeynote }))),
 };
 
 export function StoryExperience() {
-  // Read the source once, not per variant (rerender-lazy-state-init).
-  const [chapters] = useState(getStoryChapters);
+  const chapters = useStoryChapters();
   const [variant, setVariant] = useStorage<VariantId>("story.variant.v1", "cinematic");
 
   const Active = Variants[variant];
@@ -50,7 +45,9 @@ export function StoryExperience() {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.25 }}
       >
-        <Active chapters={chapters} />
+        <Suspense fallback={null}>
+          <Active chapters={chapters} />
+        </Suspense>
       </motion.div>
     </>
   );

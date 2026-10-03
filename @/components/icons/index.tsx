@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { cn } from "../../lib/utils";
 import { FaEdge, FaFirefoxBrowser, FaSafari } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { SiCaldotcom } from "react-icons/si";

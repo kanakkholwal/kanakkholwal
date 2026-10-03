@@ -1,5 +1,5 @@
 import { TimelineProjectGrid } from "@/components/application/journey.static";
-import Link from "next/link";
+import Link from "@/components/link";
 
 export const journey_data = [
   {

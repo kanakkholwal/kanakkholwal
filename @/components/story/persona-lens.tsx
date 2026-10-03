@@ -1,5 +1,3 @@
-"use client";
-
 import { cn } from "@/lib/utils";
 import useStorage from "@/hooks/use-storage";
 import { motion } from "framer-motion";
