@@ -15,7 +15,32 @@
 /dist/
 /.wrangler/
 /.local/
-/.tanstack/
+# --- TanStack & Bundler Specifics ---
+.tanstack/
+.tanstack-start/
+.vinxi/
+.nitro/
+.output/
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
+
+# --- Dependencies & Core Builds ---
+node_modules/
+/dist/
+/build/
+
+# --- Environment Variables ---
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# --- System & IDEs ---
+.DS_Store
+.vscode/
+.idea/
+*.log
 .env
 # production
 /build
