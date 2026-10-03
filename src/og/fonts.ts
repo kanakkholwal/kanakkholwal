@@ -5,21 +5,14 @@ type Font = {
   weight: 400 | 500 | 600 | 700;
 };
 
+const CDN = "https://cdn.jsdelivr.net/npm";
 const FONT_SOURCES = [
+  { name: "Geist", weight: 400, url: `${CDN}/@fontsource/geist@5.2.8/files/geist-latin-400-normal.woff` },
+  { name: "Geist", weight: 600, url: `${CDN}/@fontsource/geist@5.2.8/files/geist-latin-600-normal.woff` },
   {
-    name: "Space Grotesk",
-    weight: 700,
-    url: "https://cdn.jsdelivr.net/npm/@fontsource/space-grotesk@5.0.1/files/space-grotesk-latin-700-normal.woff",
-  },
-  {
-    name: "JetBrains Mono",
-    weight: 500,
-    url: "https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono@5.0.1/files/jetbrains-mono-latin-500-normal.woff",
-  },
-  {
-    name: "Instrument Serif",
+    name: "Geist Mono",
     weight: 400,
-    url: "https://cdn.jsdelivr.net/npm/@fontsource/instrument-serif@5.0.1/files/instrument-serif-latin-400-normal.woff",
+    url: `${CDN}/@fontsource/geist-mono@5.2.7/files/geist-mono-latin-400-normal.woff`,
   },
 ] as const;
 

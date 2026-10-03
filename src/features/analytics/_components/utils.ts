@@ -1,7 +1,6 @@
 import type { Growth } from "~/lib/analytics/types";
 
-export const compact = (n: number) =>
-  n.toLocaleString("en-GB", { notation: "compact", maximumFractionDigits: 1 });
+export const compact = (n: number) => n.toLocaleString("en-GB", { notation: "compact", maximumFractionDigits: 1 });
 
 export const full = (n: number) => Math.round(n).toLocaleString("en-GB");
 

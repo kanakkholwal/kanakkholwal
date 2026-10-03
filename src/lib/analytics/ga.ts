@@ -1,8 +1,8 @@
 import {
-  RANGES,
   type AnalyticsBreakdownItem,
   type AnalyticsResult,
   type AnalyticsSnapshot,
+  RANGES,
   type RangeKey,
 } from "./types";
 
@@ -165,12 +165,8 @@ export async function fetchGaResult({
   label: string;
 }): Promise<AnalyticsResult> {
   const token = await getAccessToken(sa);
-  const snapshots = await Promise.all(
-    RANGES.map((r) => snapshotForRange(token, propertyId, label, r.days)),
-  );
-  const ranges = Object.fromEntries(
-    RANGES.map((r, i) => [r.key, snapshots[i]]),
-  ) as Record<RangeKey, AnalyticsSnapshot>;
+  const snapshots = await Promise.all(RANGES.map((r) => snapshotForRange(token, propertyId, label, r.days)));
+  const ranges = Object.fromEntries(RANGES.map((r, i) => [r.key, snapshots[i]])) as Record<RangeKey, AnalyticsSnapshot>;
 
   return {
     ok: true,

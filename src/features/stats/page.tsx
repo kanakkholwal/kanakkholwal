@@ -1,28 +1,11 @@
 import { Await } from "@tanstack/react-router";
-import { cn } from "@/lib/utils";
-import { Terminal } from "lucide-react";
-import { Suspense } from "react";
-import { PiStackDuotone } from "react-icons/pi";
-import {
-  NPMDownloads,
-  NPMDownloadsSkeleton,
-  NPMStats,
-  NPMStatsSkeleton,
-} from "./_components/downloads";
-import { InsightStats } from "./_components/insight";
-import { StarHistoryGraph, StarHistoryGraphSkeleton } from "./_components/stars";
-import { RepoBeatsActivityGraph } from "./_components/stars.graph";
-import { Versions } from "./_components/versions";
-import { Widget } from "./_components/widget";
-import { WidgetSkeleton } from "./_components/widget.skeleton";
-import StatsPageClient from "./client";
-import { insightConfig, statsConfig } from "./config";
-import type {
-  getInsights,
-  getNpmStats,
-  getStarHistories,
-  getVersionData,
-} from "./stats.functions";
+import { Page, PageHeader, Section } from "@/components/site/page";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Insights } from "./_components/insight";
+import { NpmDownloads, NpmSkeleton } from "./_components/npm";
+import { Stars, StarsSkeleton } from "./_components/stars";
+import { Versions, VersionsSkeleton } from "./_components/versions";
+import type { getInsights, getNpmStats, getStarHistories, getVersionData } from "./stats.functions";
 
 type Resolved<F extends (...args: never[]) => unknown> = Awaited<ReturnType<F>>;
 
@@ -34,118 +17,52 @@ export type StatsPageData = {
 };
 
 export default function StatsPage({ data }: { data: StatsPageData }) {
-  const header = (
-    <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-      <div className="space-y-2">
-        <div className="flex items-center gap-2 text-xs font-mono font-medium uppercase tracking-widest text-muted-foreground">
-          <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-75 motion-reduce:animate-none" />
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-success" />
-          </span>
-          System Analytics
-          <span className="text-border">/</span>
-          Live Data
-        </div>
-        <h1 className="text-4xl md:text-6xl font-medium tracking-tight font-serif text-foreground">
-          Project <span className="italic text-muted-foreground">Metrics</span>
-        </h1>
-        <p className="max-w-xl text-muted-foreground text-sm leading-relaxed">
-          Real-time telemetry across open-source repositories, package
-          registries, and deployment infrastructure.
-        </p>
-      </div>
-
-      <div className="flex divide-x divide-border border border-border bg-background/50 backdrop-blur-sm rounded-lg overflow-hidden">
-        <div className="px-4 py-2 flex flex-col justify-center">
-          <span className="text-2xs uppercase font-mono text-muted-foreground">
-            Sources
-          </span>
-          <span className="font-medium text-sm whitespace-nowrap">GitHub / NPM</span>
-        </div>
-
-      </div>
-    </div>
-  );
-
-  const repoSection = (
-    <div className="space-y-6">
-      <Await promise={data.stars} fallback={<StarHistoryGraphSkeleton />}>
-        {(stars) => <StarHistoryGraph data={stars} />}
-      </Await>
-
-      <Widget
-        className={cn(
-          "h-auto flex-col gap-2 border border-border rounded-xl bg-background/50 shadow-sm",
-          statsConfig.flags.repoBeats ? "flex" : "hidden",
-        )}
-      >
-        {statsConfig.flags.repoBeats && <RepoBeatsActivityGraph />}
-        <div className="flex flex-1 items-center gap-6 p-6 border-t border-border">
-          <Await promise={data.npm} fallback={<NPMStatsSkeleton />}>
-            {(npmStats) => <NPMStats npmStats={npmStats} />}
-          </Await>
-        </div>
-      </Widget>
-    </div>
-  );
-
-  const registrySection = (
-    <div className="space-y-6">
-      <Await promise={data.npm} fallback={<NPMDownloadsSkeleton />}>
-        {(npmStats) => <NPMDownloads npmStats={npmStats} />}
-      </Await>
-
-      {data.versions && (
-        <div className="border border-border rounded-xl bg-background/50 overflow-hidden shadow-sm p-6">
-          <div className="mb-4 flex items-center gap-2 text-sm font-medium text-muted-foreground">
-            <PiStackDuotone className="text-lg" /> Version Adoption
-          </div>
-          <Await
-            promise={data.versions}
-            fallback={
-              <div className="animate-pulse text-xs font-mono text-muted-foreground">
-                Querying Registry...
-              </div>
-            }
-          >
-            {(v) => <Versions records={v.records as never} versions={v.versions} />}
-          </Await>
-        </div>
-      )}
-    </div>
-  );
-
-  const healthSection = (
-    <div className="grid grid-cols-1 gap-4">
-      <Suspense
-        fallback={insightConfig.map((insight) => (
-          <WidgetSkeleton key={insight.id} />
-        ))}
-      >
-        <Await promise={data.insights}>
-          {(insights) =>
-            insights.map(({ project, insight }) =>
-              insight ? (
-                <InsightStats key={project.id} project={project} insightData={insight} />
-              ) : null,
-            )
-          }
-        </Await>
-      </Suspense>
-
-      <div className="mt-4 p-6 rounded-xl border border-dashed border-border flex flex-col items-center justify-center text-center">
-        <Terminal className="text-3xl text-muted-foreground/30 mb-3" />
-        <p className="text-xs font-mono text-muted-foreground">End of Metrics Stream</p>
-      </div>
-    </div>
-  );
-
   return (
-    <StatsPageClient
-      header={header}
-      repoSection={repoSection}
-      registrySection={registrySection}
-      healthSection={healthSection}
-    />
+    <Page className="flex flex-col gap-20">
+      <PageHeader
+        className="mb-0"
+        title="open source."
+        eyebrow="npm / GitHub"
+        description="Downloads and stars for the packages and repos I maintain, pulled live from the registries."
+      />
+
+      <Section id="npm" title="npm." number={1} description="Downloads across every published package" index={1}>
+        <Await promise={data.npm} fallback={<NpmSkeleton />}>
+          {(npm) => <NpmDownloads stats={npm} />}
+        </Await>
+      </Section>
+
+      {data.versions ? (
+        <Section id="versions" title="versions." description="Which releases people actually run" index={2}>
+          <Await promise={data.versions} fallback={<VersionsSkeleton />}>
+            {(v) => <Versions data={v} />}
+          </Await>
+        </Section>
+      ) : null}
+
+      <Section
+        id="stars"
+        title="stars."
+        number={data.versions ? 3 : 2}
+        description="New stars over the last 12 days"
+        index={3}
+      >
+        <Await promise={data.stars} fallback={<StarsSkeleton />}>
+          {(stars) => <Stars data={stars} />}
+        </Await>
+      </Section>
+
+      <Section
+        id="usage"
+        title="in use."
+        number={data.versions ? 4 : 3}
+        description="Live usage from projects built on this work"
+        index={4}
+      >
+        <Await promise={data.insights} fallback={<Skeleton shape="block" className="h-24 rounded-xl" />}>
+          {(items) => <Insights items={items} />}
+        </Await>
+      </Section>
+    </Page>
   );
 }

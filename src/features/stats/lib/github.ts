@@ -1,7 +1,7 @@
-import { getServerEnv } from "~/server/env.server";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import { memo } from "~/lib/cache";
+import { getServerEnv } from "~/server/env.server";
 import "@tanstack/react-start/server-only";
 import { z } from "zod";
 
@@ -34,9 +34,7 @@ const repositoryQuerySchema = z.object({
   }),
 });
 
-export async function fetchRepository(
-  slug = "kanakkholwal/college-ecosystem",
-): Promise<GitHubRepositoryData> {
+export async function fetchRepository(slug = "kanakkholwal/college-ecosystem"): Promise<GitHubRepositoryData> {
   const [owner, repo] = slug.split("/");
   const query = `query {
   repository(owner: "${owner}", name: "${repo}") {
@@ -129,9 +127,7 @@ export const getStarHistory = memo(
 
     // Compute the 12-day window [today .. today-11d] in UTC
     const todayStart = dayjs().utc().startOf("day");
-    const days = Array.from({ length: 12 }, (_, i) =>
-      todayStart.clone().subtract(i, "day").format("YYYY-MM-DD"),
-    );
+    const days = Array.from({ length: 12 }, (_, i) => todayStart.clone().subtract(i, "day").format("YYYY-MM-DD"));
     const windowStart = todayStart.clone().subtract(11, "day"); // already startOf('day')
 
     // Pre-initialize bins for consecutive days (including empty days), most recent first

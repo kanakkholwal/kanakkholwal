@@ -7,19 +7,8 @@ export const Route = createFileRoute("/_pages/links")({
   head: () =>
     seo({
       title: `Links | ${appConfig.displayName}`,
-      description: `Connect with ${appConfig.displayName}. Socials, portfolio, and contact info.`,
+      description: `Everywhere ${appConfig.displayName} is online: email, resume, socials and a way to book a call.`,
       path: "/links",
     }),
-  component: LinksPage,
+  component: LinksPageClient,
 });
-
-function LinksPage() {
-  return (
-    <LinksPageClient
-      displayName={appConfig.displayName}
-      avatar={appConfig.avatar}
-      email={appConfig.emails[0]}
-      url={appConfig.url}
-    />
-  );
-}

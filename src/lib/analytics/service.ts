@@ -1,13 +1,13 @@
-import { getServerEnv } from "~/server/env.server";
-import { memo } from "~/lib/cache";
 import { appConfig } from "root/project.config";
+import { memo } from "~/lib/cache";
+import { getServerEnv } from "~/server/env.server";
 import { fetchGaResult, type ServiceAccount } from "./ga";
 import {
-  RANGES,
   type AnalyticsResult,
   type AnalyticsSnapshot,
   type AnalyticsTotals,
   type Growth,
+  RANGES,
   type RangeKey,
 } from "./types";
 
@@ -51,9 +51,10 @@ function zeroSnapshot(days: number, label: string): AnalyticsSnapshot {
 }
 
 function zeroResult(label: string, error: string): AnalyticsResult {
-  const ranges = Object.fromEntries(
-    RANGES.map((r) => [r.key, zeroSnapshot(r.days, label)]),
-  ) as Record<RangeKey, AnalyticsSnapshot>;
+  const ranges = Object.fromEntries(RANGES.map((r) => [r.key, zeroSnapshot(r.days, label)])) as Record<
+    RangeKey,
+    AnalyticsSnapshot
+  >;
   return { ok: false, error, label, source: "ga", ranges, generatedAt: "" };
 }
 
@@ -74,7 +75,7 @@ async function buildSiteData(): Promise<AnalyticsResult> {
 async function buildProjectData(id: string): Promise<AnalyticsResult | null> {
   const sa = serviceAccount();
   const entry = appConfig.analytics.projects.find((p) => p.id === id);
-  if (!entry || entry.source !== "ga") return null;
+  if (entry?.source !== "ga") return null;
   if (!sa || !entry.propertyId) return null;
   try {
     return await fetchGaResult({ sa, propertyId: entry.propertyId, label: entry.label });
@@ -89,9 +90,10 @@ const fetchSiteData = memo(buildSiteData, REVALIDATE);
 // Label applied after caching so multiple domains share one cached GA fetch.
 export async function getSiteResult(label: string): Promise<AnalyticsResult> {
   const data = await fetchSiteData();
-  const ranges = Object.fromEntries(
-    Object.entries(data.ranges).map(([k, s]) => [k, { ...s, label }]),
-  ) as Record<RangeKey, AnalyticsSnapshot>;
+  const ranges = Object.fromEntries(Object.entries(data.ranges).map(([k, s]) => [k, { ...s, label }])) as Record<
+    RangeKey,
+    AnalyticsSnapshot
+  >;
   return { ...data, label, ranges };
 }
 

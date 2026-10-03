@@ -2,16 +2,10 @@ import { customAlphabet } from "nanoid";
 import { appConfig } from "root/project.config";
 
 export function generateSlug(length = 8): string {
-  return customAlphabet(
-    "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
-    length,
-  )();
+  return customAlphabet("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", length)();
 }
 
-export function changeCase(
-  str: string,
-  type: "upper" | "lower" | "title" | "sentence" | "camel_to_title",
-) {
+export function changeCase(str: string, type: "upper" | "lower" | "title" | "sentence" | "camel_to_title") {
   switch (type) {
     case "upper":
       return str.toUpperCase();
@@ -68,10 +62,7 @@ export function marketwiseLink(link: string, options: UTMParams = {}) {
   return url.toString();
 }
 
-export function calculateReadingTime(
-  text: string,
-  wordsPerMinute = 200,
-): string {
+export function calculateReadingTime(text: string, wordsPerMinute = 200): string {
   if (!text) return "0 min read";
 
   const words = text.trim().split(/\s+/).length;
@@ -101,44 +92,3 @@ export const toRegex = (route: RoutePattern): RegExp => {
 
   return new RegExp(`^\\/${regexStr}\\/?$`, "i");
 };
-// export const toRegex = (route: RoutePattern): RegExp => {
-//   if (route instanceof RegExp) return route;
-
-//   let negate = false;
-//   let pattern = route;
-
-//   // Handle negation prefix
-//   if (typeof pattern === 'string' && pattern.startsWith("!")) {
-//     negate = true;
-//     pattern = pattern.substring(1);
-//   }
-
-//   // Handle empty pattern after negation
-//   if (pattern === "/") return negate ? /^(?!\/?$).*$/i : /^\/?$/i;
-
-//   const parts = pattern
-//     .split("/")
-//     .filter(part => part !== ""); // Remove empty parts
-
-//   if (parts.length === 0) return negate ? /^(?!\/?$).*$/i : /^\/?$/i;
-
-//   const regexStr = parts
-//     .map(part => {
-//       if (part === "*") return ".*";
-//       if (part.startsWith(":")) return "[a-z0-9-_]+";
-//       return part.replace(/[-[\]{}()+?.,\\^$|#\s]/g, "\\$&");
-//     })
-//     .join("\\/");
-
-//   const baseRegex = new RegExp(`^\\/${regexStr}\\/?$`, "i");
-
-//   // Convert to negative match if needed
-//   if (negate) {
-//     const innerPattern = baseRegex.source
-//       .slice(1, -1)     // Remove ^ and $
-//       .replace("\\/", "/"); // Unescape slashes for clean lookahead
-//     return new RegExp(`^(?!/${innerPattern}$).*$`, "i");
-//   }
-
-//   return baseRegex;
-// };

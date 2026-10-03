@@ -1,5 +1,5 @@
-import { getProjectList } from "@/lib/project.source";
 import { createFileRoute } from "@tanstack/react-router";
+import { getProjectList } from "@/lib/project.source";
 import { generateOgImage } from "~/og/generator";
 import { ProjectOgTemplate } from "~/og/og-templates";
 
@@ -15,12 +15,11 @@ export const Route = createFileRoute("/api/og")({
 
         return generateOgImage(
           <ProjectOgTemplate
+            id={project.id}
             title={project.title}
-            description={project.href}
-            dates={project.dates}
-            status={project.status}
-            isDark={params.get("dark") === "true"}
-            metrics={project.metrics}
+            description={project.description}
+            href={project.href}
+            dark={params.get("dark") === "true"}
           />,
         );
       },

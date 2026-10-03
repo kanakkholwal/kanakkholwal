@@ -7,26 +7,9 @@ export const Route = createFileRoute("/_plain/contact")({
   head: () =>
     seo({
       title: "Contact",
-      description: `Get in touch with ${appConfig.displayName}  reach out for collaborations, freelance opportunities, or professional inquiries. Book a call or fill out the contact form to connect directly.`,
+      description: `Get in touch with ${appConfig.displayName} about a project, a role or an idea. Send a message or book a call.`,
       path: "/contact",
-      keywords: [
-        "contact",
-        "get in touch",
-        "collaborate",
-        "freelance",
-        "inquiries",
-        "book a call",
-        "contact form",
-        appConfig.displayName,
-        "developer",
-        "designer",
-        "freelancer",
-        "problem solver",
-      ],
+      keywords: ["contact", "get in touch", "book a call", "freelance", appConfig.displayName, "product engineer"],
     }),
-  component: ContactPage,
+  component: ContactPageClient,
 });
-
-function ContactPage() {
-  return <ContactPageClient displayName={appConfig.displayName} email={appConfig.emails[0]} />;
-}

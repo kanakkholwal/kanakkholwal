@@ -1,6 +1,6 @@
-import { projectBody } from "@/lib/content";
 import { createFileRoute } from "@tanstack/react-router";
 import { Suspense } from "react";
+import { projectBody } from "@/lib/content";
 import ProjectPageClient from "~/features/projects/detail/client";
 import { getProjectPage } from "~/server/content";
 import { seo } from "~/utils/seo";

@@ -1,8 +1,8 @@
 import dayjs from "dayjs";
 import isoWeek from "dayjs/plugin/isoWeek";
 import minMax from "dayjs/plugin/minMax";
-import { memo } from "~/lib/cache";
 import { z } from "zod";
+import { memo } from "~/lib/cache";
 
 dayjs.extend(isoWeek);
 dayjs.extend(minMax);
@@ -30,15 +30,6 @@ export type NpmPackageStatsData =
       last30Days: MultiDatum[];
       last90Days: MultiDatum[];
     };
-
-// const regexp = /https:\/\/npmjs\.com\/package\/([\w.-]+|@[\w.-]+\/[\w.-]+)/gm
-
-type RangeResponse = {
-  downloads: Array<{
-    downloads: number;
-    day: string;
-  }>;
-};
 
 const rangeResponseSchema = z.object({
   downloads: z.array(
@@ -85,10 +76,9 @@ async function getPackageCreationDate(pkg: string): Promise<dayjs.Dayjs> {
     const { time } = packageResponseSchema.parse(await get(url));
     return dayjs.max(npmStatsEpoch, dayjs(time.created));
   } catch (cause) {
-    const error = new Error(
-      `error: getPackageCreationDate(${pkg}) - url: ${url}, falling back to npm stats epoch`,
-      { cause },
-    );
+    const error = new Error(`error: getPackageCreationDate(${pkg}) - url: ${url}, falling back to npm stats epoch`, {
+      cause,
+    });
     console.error(error);
     return npmStatsEpoch;
   }
@@ -119,25 +109,22 @@ async function getAllTime(pkg: string): Promise<number> {
   return downloads;
 }
 
-export const fetchNpmPackage = memo(
-  async (pkg: string): Promise<NpmPackageStatsData> => {
-    // Ensure we cover 90 days + a full first week
-    const startOfFirstWeek = dayjs().subtract(90, "day").startOf("isoWeek");
-    const ninetyOrSoDays = dayjs().diff(startOfFirstWeek, "day");
-    const [allTime, last30Days, last90Days] = await Promise.all([
-      getAllTime(pkg),
-      getLastNDays(pkg, 30),
-      getLastNDays(pkg, ninetyOrSoDays),
-    ]);
-    return {
-      withKeys: false,
-      allTime,
-      last30Days,
-      last90Days: groupByWeek(last90Days),
-    };
-  },
-  86_400,
-);
+export const fetchNpmPackage = memo(async (pkg: string): Promise<NpmPackageStatsData> => {
+  // Ensure we cover 90 days + a full first week
+  const startOfFirstWeek = dayjs().subtract(90, "day").startOf("isoWeek");
+  const ninetyOrSoDays = dayjs().diff(startOfFirstWeek, "day");
+  const [allTime, last30Days, last90Days] = await Promise.all([
+    getAllTime(pkg),
+    getLastNDays(pkg, 30),
+    getLastNDays(pkg, ninetyOrSoDays),
+  ]);
+  return {
+    withKeys: false,
+    allTime,
+    last30Days,
+    last90Days: groupByWeek(last90Days),
+  };
+}, 86_400);
 
 async function get(url: string): Promise<unknown> {
   const res = await fetch(url);
@@ -148,10 +135,7 @@ function groupByWeek(data: Datum[]): Datum[] {
   const weeks = new Map<string, number>();
   for (const d of data) {
     const date = dayjs(d.date);
-    const key = [
-      "'" + (date.year() - 2000),
-      date.isoWeek().toFixed().padStart(2, "0"),
-    ].join("W");
+    const key = [`'${date.year() - 2000}`, date.isoWeek().toFixed().padStart(2, "0")].join("W");
     weeks.set(key, (weeks.get(key) ?? 0) + d.downloads);
   }
   return Array.from(weeks.entries()).map(([date, downloads]) => ({
@@ -160,10 +144,7 @@ function groupByWeek(data: Datum[]): Datum[] {
   }));
 }
 
-export function combineStats(
-  args: Record<string, NpmPackageStatsData>,
-  withKeys = true,
-): NpmPackageStatsData {
+export function combineStats(args: Record<string, NpmPackageStatsData>, withKeys = true): NpmPackageStatsData {
   function getCombined(key: "last30Days" | "last90Days"): Datum[] {
     const dateMap: Record<string, number> = {};
     for (const pkg of Object.values(args)) {
@@ -234,8 +215,7 @@ export function getPartialPreviousWeekDownloads(data: Datum[]) {
     const date = dayjs(d.date);
     return (
       date.isSame(startOfLastWeek) ||
-      (date.isAfter(startOfLastWeek) &&
-        date.isBefore(startOfLastWeek.add(numDaysInCurrentWeek, "day")))
+      (date.isAfter(startOfLastWeek) && date.isBefore(startOfLastWeek.add(numDaysInCurrentWeek, "day")))
     );
   });
   return filtered.reduce((sum, d) => sum + d.downloads, 0);

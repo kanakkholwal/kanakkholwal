@@ -1,14 +1,17 @@
 import { parseISO } from "date-fns";
 import { appConfig } from "root/project.config";
-import { getHeroOrbitDataSafe, type HeroOrbitActivityItem } from "~/api/github";
 import { getProjectList } from "@/lib/project.source";
 import { getWorkExperienceList } from "@/lib/work.source";
-import type { HeroOrbitPayload } from "@/components/application/hero.orbit.shared";
+import { getHeroOrbitDataSafe, type HeroOrbitActivityItem } from "~/api/github";
 
 const MS_PER_DAY = 86_400_000;
 const DAYS_PER_YEAR = 365.25;
 
-export type { HeroOrbitPayload };
+export type HeroOrbitPayload = {
+  stats: { projects: number; ossRepos: number; yearsExp: number };
+  activity: HeroOrbitActivityItem[];
+  fallback: boolean;
+};
 
 function computeYearsOfExperience(): number {
   const experiences = getWorkExperienceList();
@@ -29,9 +32,7 @@ function computeYearsOfExperience(): number {
 
   // Merge overlapping/adjacent ranges so gaps (e.g. college years) don't
   // inflate the total. Use a 1-day overlap tolerance for inclusive ranges.
-  const sorted = [...ranges].sort(
-    (a, b) => a.start.getTime() - b.start.getTime(),
-  );
+  const sorted = [...ranges].sort((a, b) => a.start.getTime() - b.start.getTime());
   const merged: Array<{ start: Date; end: Date }> = [{ ...sorted[0] }];
   for (let i = 1; i < sorted.length; i++) {
     const current = sorted[i];

@@ -1,10 +1,12 @@
-import { docBody } from "@/lib/content";
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { Suspense } from "react";
 import { appConfig } from "root/project.config";
-import ArticlePage from "~/features/docs/article/handler.article";
-import CategoryPage from "~/features/docs/article/handler.category";
-import { getDocPage, getDocsCategory } from "~/server/content";
+import { Page } from "@/components/site/page";
+import { docBody } from "@/lib/content";
+import ArticlePage from "~/features/docs/article";
+import WritingIndex, { categoryNote } from "~/features/docs/client";
+import { getWriting } from "~/features/docs/server";
+import { getDocPage } from "~/server/content";
 import { seo } from "~/utils/seo";
 
 export const Route = createFileRoute("/_plain/docs/$")({
@@ -12,22 +14,32 @@ export const Route = createFileRoute("/_plain/docs/$")({
     const slugs = (params._splat ?? "").split("/").filter(Boolean);
     if (slugs.length === 0) throw notFound();
     if (slugs.length === 1) {
-      return {
-        kind: "category" as const,
-        category: slugs[0],
-        pages: await getDocsCategory({ data: slugs[0] }),
-      };
+      const posts = await getWriting();
+      if (!posts.some((p) => p.category === slugs[0])) throw notFound();
+      return { kind: "category" as const, category: slugs[0], posts };
     }
-    const article = await getDocPage({ data: slugs });
+    const [article, posts] = await Promise.all([getDocPage({ data: slugs }), getWriting()]);
     await docBody.preload(article.doc.path);
-    return { kind: "article" as const, ...article };
+    return {
+      kind: "article" as const,
+      doc: article.doc,
+      readTime: article.readTime,
+      others: posts.filter((p) => p.url !== article.doc.url),
+    };
   },
   staleTime: Number.POSITIVE_INFINITY,
   head: ({ loaderData }) => {
+    if (loaderData?.kind === "category") {
+      return seo({
+        title: `${loaderData.category} | Writing`,
+        description: categoryNote(loaderData.category),
+        path: `/docs/${loaderData.category}`,
+      });
+    }
     if (loaderData?.kind !== "article") return {};
     const { doc } = loaderData;
     return seo({
-      title: `${doc.title} | Engineering Blog`,
+      title: `${doc.title} | Writing`,
       description: doc.description ?? appConfig.description,
       path: doc.url,
       image: `/og/docs/${doc.slugs.join("/")}`,
@@ -39,10 +51,15 @@ export const Route = createFileRoute("/_plain/docs/$")({
 
 function DocsSplatPage() {
   const data = Route.useLoaderData();
-  if (data.kind === "category") return <CategoryPage category={data.category} pages={data.pages} />;
   return (
-    <Suspense fallback={null}>
-      <ArticlePage doc={data.doc} readTime={data.readTime} others={data.others} />
-    </Suspense>
+    <Page>
+      {data.kind === "category" ? (
+        <WritingIndex posts={data.posts} category={data.category} />
+      ) : (
+        <Suspense fallback={null}>
+          <ArticlePage doc={data.doc} readTime={data.readTime} others={data.others} />
+        </Suspense>
+      )}
+    </Page>
   );
 }

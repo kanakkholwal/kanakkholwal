@@ -1,107 +1,114 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { cn } from "@/lib/utils";
-import * as React from "react";
-import type { AnalyticsResult, RangeKey } from "~/lib/analytics/types";
-import { AreaSpark } from "~/features/analytics/_components/area-spark";
-import { BarList } from "~/features/analytics/_components/bar-list";
-import { CountUp } from "~/features/analytics/_components/count-up";
-import { RangeTabs } from "~/features/analytics/_components/range-tabs";
-import { fmtDuration, full, ratePct } from "~/features/analytics/_components/utils";
+import { useState } from "react";
+import { Area, AreaChart } from "@/components/charts/area-chart";
+import {
+  CartesianGrid,
+  type ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  XAxis,
+  YAxis,
+} from "@/components/charts/chart";
+import { Section } from "@/components/site/page";
+import { RollingDigits } from "@/components/text/rolling-digits";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group/toggle-group";
+import { cn } from "@/lib/cn";
+import { type AnalyticsResult, RANGES, type RangeKey } from "~/lib/analytics/types";
 
-type ProjectContentProps = {
+const compact = new Intl.NumberFormat("en-US", { notation: "compact", maximumFractionDigits: 1 });
+const day = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", timeZone: "UTC" });
+const duration = (s: number) => (s < 60 ? `${Math.round(s)}s` : `${Math.floor(s / 60)}m ${Math.round(s % 60)}s`);
+const config: ChartConfig = { users: { label: "Visitors", color: "var(--chart-1)" } };
+
+/** Live traffic for the project's own site; renders nothing until analytics is connected. */
+export function ProjectAnalytics({
+  result,
+  number,
+  index,
+}: {
   result: AnalyticsResult | null;
-  proseClassName?: string;
-  children: React.ReactNode;
-};
+  number?: number;
+  index?: number;
+}) {
+  const [range, setRange] = useState<RangeKey>("30d");
+  if (!result?.ok) return null;
 
-// Wraps project MDX in an Overview/Analytics tab pair; Analytics only when the project has GA.
-export function ProjectContent({ result, proseClassName, children }: ProjectContentProps) {
-  if (!result) return <div className={proseClassName}>{children}</div>;
-
-  return (
-    <Tabs defaultValue="overview" className="w-full">
-      <TabsList className="mb-6">
-        <TabsTrigger value="overview">Overview</TabsTrigger>
-        <TabsTrigger value="analytics" className="gap-1.5">
-          Analytics
-          <span
-            className={cn(
-              "inline-flex size-1.5 rounded-full",
-              result.ok ? "bg-emerald-500" : "bg-amber-500",
-            )}
-          />
-        </TabsTrigger>
-      </TabsList>
-      <TabsContent value="overview">
-        <div className={proseClassName}>{children}</div>
-      </TabsContent>
-      <TabsContent value="analytics">
-        <ProjectAnalyticsPanel result={result} />
-      </TabsContent>
-    </Tabs>
-  );
-}
-
-function ProjectAnalyticsPanel({ result }: { result: AnalyticsResult }) {
-  const [rangeKey, setRangeKey] = React.useState<RangeKey>("30d");
-  const snapshot = result.ranges[rangeKey];
-  const users = snapshot.series.map((p) => p.users);
-  const labels = snapshot.series.map((p) =>
-    p.date ? new Date(p.date).toLocaleDateString("en-GB", { day: "numeric", month: "short" }) : "",
-  );
-  const stats = [
-    { label: "Visitors", value: snapshot.totals.users, format: full },
-    { label: "Sessions", value: snapshot.totals.sessions, format: full },
-    { label: "Page Views", value: snapshot.totals.pageViews, format: full },
-    { label: "Engagement", value: snapshot.totals.avgEngagementSeconds, format: fmtDuration },
+  const snapshot = result.ranges[range];
+  const rows = snapshot.series.filter((p) => p.date).map((p) => ({ date: new Date(p.date), users: p.users }));
+  const cells = [
+    { label: "Visitors", value: snapshot.totals.users },
+    { label: "Sessions", value: snapshot.totals.sessions },
+    { label: "Page views", value: snapshot.totals.pageViews },
+    { label: "Avg. engagement", value: snapshot.totals.avgEngagementSeconds, format: duration },
   ];
 
   return (
-    <div className="space-y-6">
-      {!result.ok && result.error && (
-        <p className="rounded-lg border border-amber-500/20 bg-amber-500/[0.06] px-3 py-2 text-xs text-amber-600 dark:text-amber-400">
-          {result.error}
-        </p>
-      )}
-
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <p className="font-mono text-2xs uppercase tracking-widest text-muted-foreground">
-          {snapshot.label} · last {snapshot.range.days} days
-        </p>
-        <RangeTabs value={rangeKey} onChange={setRangeKey} />
-      </div>
-
-      <React.Fragment key={rangeKey}>
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-          {stats.map((s) => (
-            <div key={s.label} className="rounded-xl border border-border bg-card/50 p-4">
-              <p className="font-mono text-2xs uppercase tracking-widest text-muted-foreground">
-                {s.label}
-              </p>
-              <p className="mt-1.5 text-xl font-semibold tabular-nums text-foreground">
-                <CountUp value={s.value} format={s.format} />
-              </p>
+    <Section
+      id="traffic"
+      title="traffic."
+      number={number}
+      description="Visitors to the live site."
+      index={index}
+      action={
+        <ToggleGroup
+          label="Range"
+          variant="outline"
+          size="sm"
+          value={range}
+          onValueChange={(v) => v && setRange(v as RangeKey)}
+        >
+          {RANGES.map((r) => (
+            <ToggleGroupItem key={r.key} value={r.key}>
+              {r.short}
+            </ToggleGroupItem>
+          ))}
+        </ToggleGroup>
+      }
+    >
+      <div className="overflow-hidden rounded-xl border border-border">
+        <dl className="grid grid-cols-2 sm:grid-cols-4">
+          {cells.map((c, i) => (
+            <div
+              key={c.label}
+              className={cn(
+                "flex flex-col gap-1 p-4",
+                i % 2 === 1 && "border-border border-l",
+                i >= 2 && "border-border border-t sm:border-t-0",
+                i === 2 && "sm:border-l",
+              )}
+            >
+              <dt className="text-muted-foreground text-xs">{c.label}</dt>
+              <dd className="font-medium text-2xl tabular-nums">
+                <RollingDigits value={c.value} startOnView locale="en-US" format={c.format} />
+              </dd>
             </div>
           ))}
+        </dl>
+        <div className="border-border border-t p-4">
+          <ChartContainer
+            config={config}
+            title={`Visitors, last ${snapshot.range.days} days`}
+            locale="en-GB"
+            aspect="auto"
+            className="h-56"
+          >
+            <AreaChart data={rows} xKey="date">
+              <CartesianGrid />
+              <YAxis tickFormatter={(v) => compact.format(v)} />
+              <XAxis tickFormatter={(d) => day.format(d)} />
+              <Area dataKey="users" curve="monotone" fillOpacity={0.24} />
+              <ChartTooltip
+                content={
+                  <ChartTooltipContent
+                    formatter={(v) => compact.format(v)}
+                    labelFormatter={(_, d) => (d.date instanceof Date ? day.format(d.date) : "")}
+                  />
+                }
+              />
+            </AreaChart>
+          </ChartContainer>
         </div>
-
-        <div className="rounded-xl border border-border bg-card/50 p-5" style={{ color: "var(--chart-1)" }}>
-          <p className="mb-3 font-mono text-2xs uppercase tracking-widest text-muted-foreground">
-            Visitors over time
-          </p>
-          <AreaSpark data={users} labels={labels} height={200} interactive formatValue={full} />
-        </div>
-
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <BarList title="Top Pages" items={snapshot.topPages} color="var(--chart-1)" />
-          <BarList title="Referrers" items={snapshot.topReferrers} color="var(--chart-3)" />
-        </div>
-      </React.Fragment>
-
-      <p className="text-xs text-muted-foreground">
-        Bounce rate {ratePct(snapshot.totals.bounceRate)}. Numbers come straight from{" "}
-        {snapshot.source === "ga" ? "Google Analytics" : snapshot.source === "posthog" ? "PostHog" : "analytics"}.
-      </p>
-    </div>
+      </div>
+    </Section>
   );
 }

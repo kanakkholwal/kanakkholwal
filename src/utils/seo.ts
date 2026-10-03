@@ -19,9 +19,7 @@ export function seo({
   type?: "website" | "article";
 }) {
   const trimmed = title.trim();
-  const fullTitle = trimmed.includes(appConfig.displayName)
-    ? trimmed
-    : `${trimmed} | ${appConfig.displayName}`;
+  const fullTitle = trimmed.includes(appConfig.displayName) ? trimmed : `${trimmed} | ${appConfig.displayName}`;
   const url = appConfig.url + path;
   const imageUrl = image && (image.startsWith("http") ? image : appConfig.url + image);
 
@@ -39,10 +37,7 @@ export function seo({
     { name: "robots", content: "index,follow" },
   ];
   if (imageUrl) {
-    meta.push(
-      { property: "og:image", content: imageUrl },
-      { name: "twitter:image", content: imageUrl },
-    );
+    meta.push({ property: "og:image", content: imageUrl }, { name: "twitter:image", content: imageUrl });
   }
   if (keywords?.length) meta.push({ name: "keywords", content: keywords.join(", ") });
 

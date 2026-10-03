@@ -5,23 +5,11 @@ import { seo } from "~/utils/seo";
 export const Route = createFileRoute("/_pages/journey")({
   head: () =>
     seo({
-      title: "My Developer Journey",
+      title: "Journey",
       description:
-        "Explore Kanak’s journey as a software engineer, from early coding days to mastering full-stack development with Next.js, AWS, Docker, and AI integration. A story of growth, challenges, and innovation.",
+        "How Kanak Kholwal got here: internships at Textify AI and KoinX, then open source and independent products.",
       path: "/journey",
-      keywords: [
-        "developer journey",
-        "software engineer",
-        "full-stack development",
-        "Next.js",
-        "AWS",
-        "Docker",
-        "AI integration",
-        "career growth",
-        "tech challenges",
-        "innovation",
-        "Kanak Kholwal",
-      ],
+      keywords: ["developer journey", "software engineer", "product engineer", "career", "Kanak Kholwal"],
     }),
   component: JourneyPageClient,
 });

@@ -1,7 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { getServerEnv } from "~/server/env.server";
 import { insightConfig, statsConfig } from "./config";
-import { getStarHistory, type GitHubStarHistory } from "./lib/github";
+import { type GitHubStarHistory, getStarHistory } from "./lib/github";
 import { getProjectInsight } from "./lib/insight";
 import { fetchNpmPackage } from "./lib/npm";
 import { getVersions, sumVersions } from "./lib/versions";

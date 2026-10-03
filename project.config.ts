@@ -1,6 +1,5 @@
 import type { ProfilePage as ProfilePageSchema, WithContext } from "schema-dts";
 
-
 const appConfig = {
   displayName: "Kanak Kholwal",
   shortName: "Kanak",
@@ -8,8 +7,7 @@ const appConfig = {
   role: "Product Engineer",
   avatar: "https://github.com/kanakkholwal.png",
   location: "India",
-  description:
-    "Product Engineer | Passionate about building scalable solutions, automation, and AI-driven products.",
+  description: "Product Engineer | Passionate about building scalable solutions, automation, and AI-driven products.",
   summary: `I thrive on solving complex problems and building impactful products. From developing scalable architectures to integrating AI solutions, my goal is to create software that makes a real difference. Always eager to learn, contribute to open source, and collaborate with like-minded developers. Check out my work below, and feel free to reach out.`,
   applicableRoles: [
     "Product Engineer",
@@ -18,17 +16,13 @@ const appConfig = {
     "Tech Blogger",
     "Indie Hacker",
     "Design Engineer",
-    "Creating with code. Small details matter."
+    "Creating with code. Small details matter.",
   ],
   // site related
   siteName: "Kanak Kholwal Portfolio",
   siteUrl: "kanakkholwal.eu.org",
   url: "https://kanakkholwal.eu.org",
-  emails: [
-    "contact@kanak.eu.org",
-    "me@kanak.eu.org",
-    "contact@kanakkholwal.eu.org",
-  ],
+  emails: ["contact@kanak.eu.org", "me@kanak.eu.org", "contact@kanakkholwal.eu.org"],
   creator: "Kanak Kholwal",
   authors: [
     { name: "Kanak Kholwal", url: "https://kanakkholwal.eu.org" },
@@ -37,8 +31,22 @@ const appConfig = {
   ],
 
   skills: {
-
-    frontend: Array.from(new Set(["react", "nextjs", "svelte", "typescript", "tailwindcss", "vite", "tauri", "sass", "bootstrap", "html", "css", "svg"])),
+    frontend: Array.from(
+      new Set([
+        "react",
+        "nextjs",
+        "svelte",
+        "typescript",
+        "tailwindcss",
+        "vite",
+        "tauri",
+        "sass",
+        "bootstrap",
+        "html",
+        "css",
+        "svg",
+      ]),
+    ),
     backend: Array.from(new Set(["nodejs", "go", "rust", "python", "express", "graphql", "bun"])),
     database: Array.from(new Set(["postgres", "mongodb", "redis", "firebase"])),
     devops: Array.from(new Set(["docker", "gcp", "azure", "vercel", "cloudflare", "git", "github"])),
@@ -140,8 +148,7 @@ const appConfig = {
   ],
   seo: {
     title: "Kanak Kholwal - Software Developer",
-    description:
-      "Personal Portfolio of Kanak Kholwal - Software Developer, Tech Enthusiast, and Lifelong Learner.",
+    description: "Personal Portfolio of Kanak Kholwal - Software Developer, Tech Enthusiast, and Lifelong Learner.",
     locale: "en_US",
     category: "Portfolio",
     type: "website",
@@ -163,12 +170,8 @@ const appConfig = {
         image: "https://github.com/kanakkholwal.png",
       },
 
-      description:
-        "Personal Portfolio of Kanak Kholwal - Product Engineer.",
-      sameAs: [
-        "https://www.linkedin.com/in/kanak-kholwal/",
-        "https://github.com/kanakkholwal",
-      ],
+      description: "Personal Portfolio of Kanak Kholwal - Product Engineer.",
+      sameAs: ["https://www.linkedin.com/in/kanak-kholwal/", "https://github.com/kanakkholwal"],
       jobTitle: "Product Engineer",
       worksFor: { "@type": "Organization", name: "Self-Employed" },
     } as WithContext<ProfilePageSchema>,
@@ -210,50 +213,53 @@ const appConfig = {
     ],
   },
   statsConfig: {
-    npmPackages: ["custom-domain-sdk", "nexo-editor", "nexo-mdx","remark-plugins","pdf-tables-parser","barcode-react","mailer-easy","nexo-html2jsx","nexo-deck-swiper"],
+    npmPackages: [
+      "custom-domain-sdk",
+      "nexo-editor",
+      "nexo-mdx",
+      "remark-plugins",
+      "pdf-tables-parser",
+      "barcode-react",
+      "mailer-easy",
+      "nexo-html2jsx",
+      "nexo-deck-swiper",
+    ],
     repositories: [
       {
         name: "orbit",
         repo: "kanakkholwal/orbit",
-        repoBeatsUri:
-          "https://repobeats.axiom.co/api/embed/7428b9d86909d3ebe378193443428b47e901c5b3.svg",
+        repoBeatsUri: "https://repobeats.axiom.co/api/embed/7428b9d86909d3ebe378193443428b47e901c5b3.svg",
       },
       {
         name: "college-ecosystem",
         repo: "kanakkholwal/college-ecosystem",
-        repoBeatsUri:
-          "https://repobeats.axiom.co/api/embed/5c24e4ec8193c618a748a6339fb9eae49ad645ee.svg",
+        repoBeatsUri: "https://repobeats.axiom.co/api/embed/5c24e4ec8193c618a748a6339fb9eae49ad645ee.svg",
       },
-       {
+      {
         name: "recast",
         repo: "kanakkholwal/recast",
-        repoBeatsUri:
-          "https://repobeats.axiom.co/api/embed/48a0fbae00fde61a7b572ede300674e3c5ea4f68.svg",
+        repoBeatsUri: "https://repobeats.axiom.co/api/embed/48a0fbae00fde61a7b572ede300674e3c5ea4f68.svg",
       },
-         {
+      {
         name: "docvia",
         repo: "kanakkholwal/docvia",
-        repoBeatsUri:
-          "https://repobeats.axiom.co/api/embed/f7838bfc240cbade0730ee9f752d9d96f7701769.svg",
+        repoBeatsUri: "https://repobeats.axiom.co/api/embed/f7838bfc240cbade0730ee9f752d9d96f7701769.svg",
       },
       {
         name: "nexo-mdx",
         repo: "kanakkholwal/nexo-mdx",
-        repoBeatsUri:
-          "https://repobeats.axiom.co/api/embed/e66720ef5fadf321ae59f5a9ae917ff738d6653d.svg",
+        repoBeatsUri: "https://repobeats.axiom.co/api/embed/e66720ef5fadf321ae59f5a9ae917ff738d6653d.svg",
       },
 
       {
         name: "nexonauts",
         repo: "kanakkholwal/nexonauts",
-        repoBeatsUri:
-          "https://repobeats.axiom.co/api/embed/5c24e4ec8193c618a748a6339fb9eae49ad645ee.svg",
+        repoBeatsUri: "https://repobeats.axiom.co/api/embed/5c24e4ec8193c618a748a6339fb9eae49ad645ee.svg",
       },
       {
         name: "nexo-editor",
         repo: "kanakkholwal/nexo-editor",
-        repoBeatsUri:
-          "https://repobeats.axiom.co/api/embed/cf1b65e0830b9fc55bc538fdff36a7d416a53976.svg",
+        repoBeatsUri: "https://repobeats.axiom.co/api/embed/cf1b65e0830b9fc55bc538fdff36a7d416a53976.svg",
       },
     ],
     flags: {
@@ -290,10 +296,6 @@ const appConfig = {
       },
     ],
     specifics: [
-      // {
-      //   label: "Tech Stack",
-      //   href: "/tech-stack",
-      // },
       {
         label: "Bucket List",
         href: "/bucket-list",
@@ -324,5 +326,4 @@ const appConfig = {
 Object.freeze(appConfig);
 
 export { appConfig };
-export const resume_link =
-  "https://drive.google.com/drive/folders/1dgEd1npDuh08nUtgmc1E4T2QvpeKYpA1?usp=sharing";
+export const resume_link = "https://drive.google.com/drive/folders/1dgEd1npDuh08nUtgmc1E4T2QvpeKYpA1?usp=sharing";
