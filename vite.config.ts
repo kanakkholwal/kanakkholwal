@@ -18,6 +18,18 @@ export default defineConfig({
       { find: /^root\//, replacement: root("./") },
     ],
   },
+  // These are only imported from .mdx content, which Vite's dep scanner can't read. Left undeclared, dev finds
+  // them mid-session, re-bundles and reloads, and any in-flight lazy import() fails.
+  optimizeDeps: { include: ["mermaid"] },
+  environments: {
+    ssr: {
+      optimizeDeps: {
+        include: ["fumadocs-ui/components/github-info", "fumadocs-ui/components/tabs"],
+        // Client-only (see components/mdx/mermaid.tsx); never loaded in the Worker.
+        exclude: ["mermaid"],
+      },
+    },
+  },
   plugins: [
     mdx(),
     tailwindcss(),
