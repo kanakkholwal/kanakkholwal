@@ -205,7 +205,12 @@ async function fetchSnapshots(token: string, propertyId: string, label: string):
   const hourRows = new Map((hourly?.rows ?? []).map((row) => [row.dimensionValues?.[0]?.value ?? "", row]));
   const hours = current.map((dh) => {
     const m = hourRows.get(dh)?.metricValues ?? [];
-    return { date: hourKey(dh), users: +(m[0]?.value ?? 0), pageViews: +(m[1]?.value ?? 0), sessions: +(m[2]?.value ?? 0) };
+    return {
+      date: hourKey(dh),
+      users: +(m[0]?.value ?? 0),
+      pageViews: +(m[1]?.value ?? 0),
+      sessions: +(m[2]?.value ?? 0),
+    };
   });
 
   const generatedAt = new Date().toISOString();

@@ -6,12 +6,14 @@ import { ThemeProvider } from "next-themes";
 import { NuqsAdapter } from "nuqs/adapters/tanstack-router";
 import type { ReactNode } from "react";
 import { appConfig } from "root/project.config";
+import { ACCENT_BOOT_SCRIPT, DEFAULT_ACCENT } from "@/components/site/accent";
 import { CommandMenuProvider } from "@/components/site/command-menu";
 import { SiteShell } from "@/components/site/shell";
 import { Toaster } from "@/components/ui/toast";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import ErrorPageClient from "@/components/utils/error-page.view";
 import NotFound from "~/features/not-found";
+import { OG_VERSION } from "~/og/version";
 import { getContentIndex } from "~/server/content";
 import appCss from "~/styles/global.css?url";
 
@@ -46,14 +48,14 @@ export const Route = createRootRoute({
       { property: "og:title", content: appConfig.displayName },
       { property: "og:description", content: appConfig.description },
       { property: "og:site_name", content: appConfig.displayName },
-      { property: "og:image", content: `${appConfig.url}/opengraph-image` },
+      { property: "og:image", content: `${appConfig.url}/opengraph-image?v=${OG_VERSION}` },
       { property: "og:image:width", content: "1200" },
       { property: "og:image:height", content: "630" },
       { property: "og:image:alt", content: imageAlt },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: appConfig.displayName },
       { name: "twitter:description", content: appConfig.description },
-      { name: "twitter:image", content: `${appConfig.url}/twitter-image` },
+      { name: "twitter:image", content: `${appConfig.url}/twitter-image?v=${OG_VERSION}` },
       { name: "twitter:creator", content: `@${appConfig.usernames.twitter}` },
       ...(adsense ? [{ name: "google-adsense-account", content: adsense }] : []),
     ],
@@ -83,8 +85,10 @@ export const Route = createRootRoute({
 
 function RootDocument({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" data-accent={DEFAULT_ACCENT} suppressHydrationWarning>
       <head>
+        {/* biome-ignore lint/security/noDangerouslySetInnerHtml: a fixed inline script, no user input. */}
+        <script dangerouslySetInnerHTML={{ __html: ACCENT_BOOT_SCRIPT }} />
         <HeadContent />
       </head>
       <body className="min-h-dvh">

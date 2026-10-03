@@ -1,8 +1,9 @@
 import { useLocation } from "@tanstack/react-router";
 import { useTheme } from "next-themes";
 import { type CSSProperties, useLayoutEffect, useRef, useState, useSyncExternalStore } from "react";
-import { Icon } from "@/components/icons";
+import { Icon, type IconType } from "@/components/icons";
 import Link from "@/components/link";
+import { RollText } from "@/components/text/roll-text";
 import { button } from "@/components/ui/button/variants";
 import {
   DropdownMenu,
@@ -23,11 +24,13 @@ import {
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip/tooltip";
 import { cn } from "@/lib/cn";
+import { AccentPicker } from "./accent";
 import { useCommandMenu } from "./command-menu";
-import { isActive, isGroup, NAV, type NavLink, SOCIALS } from "./nav";
+import { IconRoll } from "./icon-roll";
+import { isActive, isGroup, NAV, type NavLink, SOCIALS, X_URL } from "./nav";
 
 const ITEM =
-  "relative z-10 h-8 rounded-lg px-2.5 text-sm font-normal text-muted-foreground transition-colors hover:bg-transparent hoverable:text-foreground data-[popup-open]:bg-transparent data-[popup-open]:text-foreground aria-[current=page]:text-foreground aria-[current=page]:bg-transparent data-[active]:bg-transparent";
+  "group/roll relative z-10 h-8 rounded-lg px-2.5 text-sm font-normal text-muted-foreground transition-colors hover:bg-transparent hoverable:text-foreground data-[popup-open]:bg-transparent data-[popup-open]:text-foreground aria-[current=page]:text-foreground aria-[current=page]:bg-transparent data-[active]:bg-transparent";
 
 /** A hover pill that glides between top-level items instead of each item repainting. */
 function useHoverPill() {
@@ -92,7 +95,7 @@ export function SiteHeader() {
                     className={ITEM}
                     aria-current={entry.items.some((i) => isActive(pathname, i.href)) ? "page" : undefined}
                   >
-                    {entry.label}
+                    <RollText text={entry.label} groupHover size="sm" className="cursor-[inherit]" />
                   </NavigationMenuTrigger>
                   <NavigationMenuContent>
                     <ul className="grid w-72 gap-0.5">
@@ -111,7 +114,7 @@ export function SiteHeader() {
                     aria-current={isActive(pathname, entry.href) ? "page" : undefined}
                     render={<Link href={entry.href} />}
                   >
-                    {entry.label}
+                    <RollText text={entry.label} groupHover size="sm" className="cursor-[inherit]" />
                   </NavigationMenuLink>
                 </NavigationMenuItem>
               ),
@@ -123,7 +126,9 @@ export function SiteHeader() {
 
         <div className="-mr-2 flex items-center gap-0.5">
           <IconAction label="GitHub" href={SOCIALS[0].href} icon="brand-github" />
+          <IconAction label="X" href={X_URL} icon="brand-x" />
           <SearchAction />
+          <AccentPicker />
           <ThemeAction />
         </div>
       </div>
@@ -151,6 +156,19 @@ function MenuLink({ item, active }: { item: NavLink; active: boolean }) {
   );
 }
 
+// The phone menu groups top-level pages first; every row carries an icon so labels line up.
+const MOBILE_GROUPS: { label: string; items: NavLink[] }[] = [
+  {
+    label: "Pages",
+    items: [
+      { label: "Home", href: "/", icon: "home" },
+      { label: "Writing", href: "/docs", icon: "pen" },
+      { label: "Contact", href: "/contact", icon: "mail" },
+    ],
+  },
+  ...NAV.filter(isGroup).map((g) => ({ label: g.label[0].toUpperCase() + g.label.slice(1), items: g.items })),
+];
+
 function MobileNav({ pathname }: { pathname: string }) {
   return (
     <div className="flex items-center gap-1 sm:hidden">
@@ -159,35 +177,40 @@ function MobileNav({ pathname }: { pathname: string }) {
         className={cn(ITEM, "-ml-2.5 inline-flex items-center")}
         aria-current={pathname === "/" ? "page" : undefined}
       >
-        home
+        <RollText text="home" groupHover size="sm" className="cursor-[inherit]" />
       </Link>
       <DropdownMenu>
         <DropdownMenuTrigger className={cn(ITEM, "inline-flex items-center gap-1")}>
-          menu
+          <RollText text="menu" groupHover size="sm" className="cursor-[inherit]" />
           <Icon
             name="chevron-down"
             className="size-3 transition-transform duration-(--duration-overlay) ease-(--ease-out) in-data-[popup-open]:rotate-180"
           />
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-60" align="start">
-          {NAV.map((entry, i) =>
-            isGroup(entry) ? (
-              <div key={entry.label}>
-                {i > 0 ? <DropdownMenuSeparator /> : null}
-                <DropdownMenuLabel>{entry.label}</DropdownMenuLabel>
-                {entry.items.map((item) => (
-                  <DropdownMenuItem key={item.href} render={<Link href={item.href} />}>
-                    {item.icon ? <Icon name={item.icon} className="size-4 text-muted-foreground" /> : null}
-                    {item.label}
+        <DropdownMenuContent className="w-64" align="start">
+          {MOBILE_GROUPS.map((group, i) => (
+            <div key={group.label}>
+              {i > 0 ? <DropdownMenuSeparator /> : null}
+              <DropdownMenuLabel>{group.label}</DropdownMenuLabel>
+              {group.items.map((item) => {
+                const current = isActive(pathname, item.href);
+                return (
+                  <DropdownMenuItem
+                    key={item.href}
+                    render={<Link href={item.href} aria-current={current ? "page" : undefined} />}
+                    className="h-9 justify-start gap-3"
+                  >
+                    <Icon
+                      name={item.icon ?? "document"}
+                      className={cn("size-4 shrink-0", current ? "text-accent-ink" : "text-muted-foreground")}
+                    />
+                    <span className="min-w-0 flex-1 truncate">{item.label}</span>
+                    {current ? <span aria-hidden className="size-1.5 shrink-0 rounded-full bg-primary" /> : null}
                   </DropdownMenuItem>
-                ))}
-              </div>
-            ) : entry.href === "/" ? null : (
-              <DropdownMenuItem key={entry.href} render={<Link href={entry.href} />} className="capitalize">
-                {entry.label}
-              </DropdownMenuItem>
-            ),
-          )}
+                );
+              })}
+            </div>
+          ))}
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
@@ -196,13 +219,14 @@ function MobileNav({ pathname }: { pathname: string }) {
 
 const ICON_BUTTON = cn(button({ variant: "ghost", size: "icon-sm" }), "text-foreground");
 
-export function IconAction({ label, href, icon }: { label: string; href: string; icon: "brand-github" }) {
+export function IconAction({ label, href, icon }: { label: string; href: string; icon: IconType }) {
   return (
     <Tooltip>
       <TooltipTrigger
-        render={<a href={href} target="_blank" rel="noopener noreferrer" aria-label={label} className={ICON_BUTTON} />}
+        className={cn(ICON_BUTTON, "group/roll")}
+        render={<a href={href} target="_blank" rel="noopener noreferrer" aria-label={label} />}
       >
-        <Icon name={icon} className="size-4" />
+        <IconRoll name={icon} className="size-4" />
       </TooltipTrigger>
       <TooltipContent>{label}</TooltipContent>
     </Tooltip>
@@ -214,11 +238,10 @@ export function SearchAction() {
   return (
     <Tooltip>
       <TooltipTrigger
-        render={
-          <button type="button" aria-label="Search and jump" className={ICON_BUTTON} onClick={() => setOpen(true)} />
-        }
+        className={cn(ICON_BUTTON, "group/roll")}
+        render={<button type="button" aria-label="Search and jump" onClick={() => setOpen(true)} />}
       >
-        <Icon name="command" className="size-4" />
+        <IconRoll name="command" className="size-4" />
       </TooltipTrigger>
       <TooltipContent>
         Search <kbd className="ml-1 font-mono text-muted-foreground">Ctrl K</kbd>

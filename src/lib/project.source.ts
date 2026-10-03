@@ -2,6 +2,7 @@ import "@tanstack/react-start/server-only";
 import { projects } from "fumadocs-mdx:collections/server";
 import { loader } from "fumadocs-core/source";
 import { lucideIconsPlugin } from "fumadocs-core/source/lucide-icons";
+import { OG_VERSION } from "~/og/version";
 import { type ProjectType, toMeta } from "./content.types";
 
 export type { ProjectType };
@@ -26,5 +27,5 @@ export function getProjectList(): ProjectType[] {
 }
 
 export function getPageImage(id: string) {
-  return `/projects/og?slug=${id}`;
+  return `/projects/og?slug=${id}&v=${OG_VERSION}`;
 }

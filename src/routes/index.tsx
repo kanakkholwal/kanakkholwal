@@ -7,6 +7,7 @@ import { OpenSource } from "@/components/home/open-source";
 import { ProjectList } from "@/components/projects/project-list";
 import { ArrowLink } from "@/components/site/link";
 import { Page, Section } from "@/components/site/page";
+import { ErrorBoundary } from "@/components/utils/error-boundary";
 import { PostList } from "@/components/writing/post-list";
 import { useProjects } from "@/lib/content";
 import { getDocsIndex } from "~/server/content";
@@ -29,7 +30,9 @@ function HomePage() {
     <Page className="flex flex-col gap-16 lg:gap-12">
       <div className="flex flex-col gap-10">
         <Hero />
-        <Activity days={home.calendar} />
+        <ErrorBoundary>
+          <Activity days={home.calendar} />
+        </ErrorBoundary>
       </div>
 
       <Section
@@ -55,7 +58,9 @@ function HomePage() {
         description="Where I've worked and what I owned."
         index={4}
       >
-        <Experience />
+        <ErrorBoundary>
+          <Experience />
+        </ErrorBoundary>
       </Section>
 
       {docs.length ? (

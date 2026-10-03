@@ -98,9 +98,7 @@ function TrafficChart({ snapshot }: { snapshot: AnalyticsSnapshot }) {
                 <ChartTooltipContent
                   formatter={(v) => number.format(Number(v))}
                   labelFormatter={(_, datum) =>
-                    datum.date instanceof Date
-                      ? pointLabel(datum.date, hourly, hourly ? {} : { weekday: "short" })
-                      : ""
+                    datum.date instanceof Date ? pointLabel(datum.date, hourly, hourly ? {} : { weekday: "short" }) : ""
                   }
                 />
               }

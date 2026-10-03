@@ -4,8 +4,10 @@ import Link from "@/components/link";
 import { Meta } from "@/components/site/page";
 import { cn } from "@/lib/cn";
 import type { ProjectType } from "@/lib/content";
+import { OG_VERSION } from "~/og/version";
 
-export const projectPreview = (p: Pick<ProjectType, "id" | "image">) => p.image ?? `/projects/og?slug=${p.id}`;
+export const projectPreview = (p: Pick<ProjectType, "id" | "image">) =>
+  p.image ?? `/projects/og?slug=${p.id}&v=${OG_VERSION}`;
 
 /** Shared with the detail page so the title travels between them as one element. */
 export const projectTitleTransition = (id: string) => ({ "--vt-name": `project-${id}` }) as CSSProperties;

@@ -13,7 +13,7 @@ export const NAV: NavEntry[] = [
     label: "work",
     items: [
       { label: "Projects", href: "/projects", description: "Things I've built and shipped", icon: "rocket" },
-      { label: "Open source", href: "/stats", description: "Stars, downloads, releases", icon: "brand-github" },
+      { label: "Stats", href: "/stats", description: "Open source: npm downloads and stars", icon: "graph-up" },
       { label: "Analytics", href: "/analytics", description: "Live traffic for this site", icon: "chart" },
     ],
   },
@@ -51,6 +51,7 @@ export const SOCIALS: { label: string; handle: string; href: string; icon: IconT
 
 export const EMAIL = appConfig.emails[0];
 export const CAL_URL = appConfig.social["cal.com"];
+export const X_URL = appConfig.social.twitter;
 
 /** True when `href` is the current route or an ancestor of it (home only matches itself). */
 export function isActive(pathname: string, href: string) {

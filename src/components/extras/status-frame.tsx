@@ -1,7 +1,8 @@
 import type { ReactNode } from "react";
+import { useCommandMenu } from "@/components/site/command-menu";
 import { Page, PixelHeading } from "@/components/site/page";
 import { RevealText } from "@/components/text/reveal-text";
-import { Shortcut } from "@/components/ui/shortcut";
+import { shortcutCap } from "@/components/ui/shortcut/variants";
 
 /** Shared frame for 404 and error pages: a big pixel code, one line, a few ways out. */
 export function StatusFrame({ code, children, actions }: { code: string; children: ReactNode; actions: ReactNode }) {
@@ -13,10 +14,25 @@ export function StatusFrame({ code, children, actions }: { code: string; childre
         </PixelHeading>
         <div className="flex flex-col gap-3 text-base text-muted-foreground text-pretty">{children}</div>
         <div className="mt-1 flex flex-wrap justify-center gap-2">{actions}</div>
-        <p className="inline-flex items-center gap-1.5 text-muted-foreground text-sm">
-          or press <Shortcut shortcut="mod+k" size="sm" /> to search
-        </p>
+        <SearchHint />
       </div>
     </Page>
+  );
+}
+
+/** Opens the palette; the key itself is already bound globally, so this only shows it. */
+function SearchHint() {
+  const { setOpen } = useCommandMenu();
+  return (
+    <button
+      type="button"
+      onClick={() => setOpen(true)}
+      className="inline-flex items-center gap-1.5 rounded-md text-muted-foreground text-sm transition-colors hoverable:text-foreground"
+    >
+      or press
+      <kbd className={shortcutCap({ size: "sm" })}>Ctrl</kbd>
+      <kbd className={shortcutCap({ size: "sm" })}>K</kbd>
+      to search
+    </button>
   );
 }

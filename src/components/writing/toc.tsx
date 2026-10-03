@@ -23,7 +23,7 @@ export function ArticleToc({ toc }: { toc: TOCItemType[] }) {
     <aside className="sticky top-24 hidden w-40 shrink-0 xl:block">
       <p className="mb-3 font-mono text-muted-foreground text-xs">on this page</p>
       {/* Accent is reserved for focus rings, so the active rail uses the foreground. */}
-      <TableOfContents items={items} scrollOffset={80} className="[--primary:var(--foreground)]" />
+      <TableOfContents items={items} scrollOffset={80} className="[--primary:var(--accent-ink)]" />
     </aside>
   );
 }

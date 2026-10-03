@@ -1,6 +1,7 @@
 import type { CSSProperties, ReactNode } from "react";
 import { SiteFooter } from "./footer";
 import { SiteHeader } from "./header";
+import { NavProgress } from "./nav-progress";
 import { Sidebar } from "./sidebar";
 import { TopBar } from "./topbar";
 
@@ -13,6 +14,7 @@ const HATCH =
 export function SiteShell({ children }: { children: ReactNode }) {
   return (
     <div className="relative mx-auto min-h-dvh w-full lg:max-w-[76rem] lg:border-border lg:border-x lg:border-dashed">
+      <NavProgress />
       <div aria-hidden className={`absolute inset-y-0 right-full hidden w-6 border-l xl:block ${HATCH}`} />
       <div aria-hidden className={`absolute inset-y-0 left-full hidden w-6 border-r xl:block ${HATCH}`} />
 

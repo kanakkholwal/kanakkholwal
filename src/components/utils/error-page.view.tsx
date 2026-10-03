@@ -17,7 +17,7 @@ export default function ErrorPageClient({ error, reset }: ErrorPageClientProps) 
       code="error."
       actions={
         <>
-          <Button variant="dark" onClick={reset}>
+          <Button variant="default" onClick={reset}>
             <Icon name="refresh" />
             Retry
           </Button>
@@ -29,7 +29,8 @@ export default function ErrorPageClient({ error, reset }: ErrorPageClientProps) 
       }
     >
       <p>Something broke while loading this page. Retrying usually fixes it.</p>
-      {error.message ? (
+      {/* The raw message helps while building; visitors get the plain sentence above. */}
+      {import.meta.env.DEV && error.message ? (
         <p className="break-words rounded-xl border border-border bg-card px-3 py-2 text-left font-mono text-foreground text-xs">
           {error.message}
           {error.digest ? <span className="block text-muted-foreground">digest: {error.digest}</span> : null}

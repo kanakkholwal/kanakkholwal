@@ -2,7 +2,9 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "portfolio",
   "compatibility_date": "2026-09-24",
-  "compatibility_flags": ["nodejs_compat"],
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
   "main": "@tanstack/react-start/server-entry",
   "observability": {
     "enabled": true
@@ -14,6 +16,25 @@
   // Locally these come from the .env files TanStack Start loads; declaring them here passes them into the Worker.
   // Production: `wrangler secret put <NAME>` or `wrangler deploy --secrets-file .env.production`; deploy fails if unset.
   "secrets": {
-    "required": ["GITHUB_TOKEN", "PROJECTS_CE_TOKEN", "GA_SERVICE_ACCOUNT_KEY", "POSTHOG_PERSONAL_API_KEY"]
-  }
+    "required": [
+      "GITHUB_TOKEN",
+      "PROJECTS_CE_TOKEN",
+      "GA_SERVICE_ACCOUNT_KEY",
+      "POSTHOG_PERSONAL_API_KEY"
+    ]
+  },
+  "routes": [
+    {
+      "pattern": "kanak.eu.org",
+      "custom_domain": true
+    },
+    {
+      "pattern": "kanakkholwal.eu.org",
+      "custom_domain": true
+    },
+    {
+      "pattern": "kanak-kholwal.eu.org",
+      "custom_domain": true
+    }
+  ]
 }

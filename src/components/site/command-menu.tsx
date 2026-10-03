@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/command/command";
 import { toast } from "@/components/ui/toast";
 import { useProjects } from "@/lib/content";
+import { ACCENTS, setAccent, useAccent } from "./accent";
 import { EMAIL, isGroup, NAV, SOCIALS } from "./nav";
 
 const Ctx = createContext<{ open: boolean; setOpen: (open: boolean) => void } | null>(null);
@@ -78,6 +79,7 @@ function CommandMenu({ open, setOpen }: { open: boolean; setOpen: (open: boolean
   const navigate = useNavigate();
   const projects = useProjects();
   const { resolvedTheme, setTheme } = useTheme();
+  const accent = useAccent();
   const [scope, setScope] = useState<Scope>("all");
   const shows = (s: Scope) => scope === "all" || scope === s;
 
@@ -156,6 +158,22 @@ function CommandMenu({ open, setOpen }: { open: boolean; setOpen: (open: boolean
                 <Icon name="download" className="size-4 text-muted-foreground" />
                 Open resume
               </CommandItem>
+            </CommandGroup>
+          ) : null}
+          {shows("actions") ? (
+            <CommandGroup heading="Accent">
+              {ACCENTS.map((a) => (
+                <CommandItem
+                  key={a.id}
+                  value={`accent ${a.name}`}
+                  keywords="theme colour color"
+                  onSelect={run(() => setAccent(a.id))}
+                >
+                  <span aria-hidden className="size-3.5 rounded-full" style={{ backgroundColor: a.swatch }} />
+                  <span className="min-w-0 flex-1">{a.name}</span>
+                  {a.id === accent ? <CommandShortcut>Current</CommandShortcut> : null}
+                </CommandItem>
+              ))}
             </CommandGroup>
           ) : null}
           {shows("links") ? (

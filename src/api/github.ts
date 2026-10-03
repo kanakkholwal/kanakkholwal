@@ -763,7 +763,7 @@ function aggregateActivity(items: HeroOrbitActivityItem[]): HeroOrbitActivityIte
       const latest = recent[0];
       const repo = extractRepoSlug(latest);
       const noun = pluralizeNoun(latest);
-      // Stars are about the *target* repos — saying "in {repo}" reads
+      // Stars are about the *target* repos; saying "in {repo}" reads
       // weirdly, so drop the suffix for that kind.
       const value =
         latest.kind === "star"
@@ -780,7 +780,7 @@ function aggregateActivity(items: HeroOrbitActivityItem[]): HeroOrbitActivityIte
         url: latest.url,
       });
     } else if (group[0]) {
-      // Either one recent item or older items only — show the freshest one.
+      // Either one recent item or older items only: show the freshest one.
       out.push(group[0]);
     }
   }

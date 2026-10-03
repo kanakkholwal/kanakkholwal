@@ -1,2 +1,2 @@
-// The page has no accent to spend, so the lead series is a foreground grey.
-export const MONO_SERIES = "[--chart-1:color-mix(in_oklab,var(--foreground)_72%,transparent)]";
+// The lead series follows the accent; ink, not fill, so amber stays legible as a stroke.
+export const MONO_SERIES = "[--chart-1:var(--accent-ink)]";

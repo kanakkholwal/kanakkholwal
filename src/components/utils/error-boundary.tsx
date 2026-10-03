@@ -1,76 +1,51 @@
-import type React from "react";
 import { Component, type ErrorInfo, type ReactNode, Suspense } from "react";
 import ErrorBanner from "@/components/utils/error";
 
-// Shared interfaces
 interface ErrorBoundaryProps {
   children: ReactNode;
   fallback?: ReactNode;
   onError?: (error: Error, errorInfo: ErrorInfo) => void;
 }
 
-interface ErrorBoundaryState {
-  hasError: boolean;
-}
+/** Contains a render failure to one part of the page; the rest keeps working. */
+export class GracefullyDegradingErrorBoundary extends Component<ErrorBoundaryProps, { error: Error | null }> {
+  state = { error: null as Error | null };
 
-// Class-based Error Boundary
-export class GracefullyDegradingErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
-  constructor(props: ErrorBoundaryProps) {
-    super(props);
-    this.state = { hasError: false };
-  }
-
-  static getDerivedStateFromError(_: Error): ErrorBoundaryState {
-    return { hasError: true };
+  static getDerivedStateFromError(error: Error) {
+    return { error };
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    if (this.props.onError) {
-      this.props.onError(error, errorInfo);
-    }
+    this.props.onError?.(error, errorInfo);
   }
 
   render() {
-    if (this.state.hasError) {
-      return (
-        this.props.fallback ?? (
-          <ErrorBanner
-            title="Something went wrong"
-            description="An error occurred while rendering this component. Please try again later."
-          />
-        )
-      );
-    }
-
-    return this.props.children;
+    if (!this.state.error) return this.props.children;
+    return (
+      this.props.fallback ?? (
+        <ErrorBanner
+          error={this.state.error}
+          title="This part didn't load"
+          description="The rest of the page is fine. Retry, or reload if it keeps failing."
+          reset={() => this.setState({ error: null })}
+        />
+      )
+    );
   }
 }
 
-// ErrorBoundary (Wrapper around the class-based version)
-export const ErrorBoundary: React.FC<ErrorBoundaryProps> = ({ children, fallback, onError }) => {
-  return (
-    <GracefullyDegradingErrorBoundary fallback={fallback} onError={onError}>
-      {children}
-    </GracefullyDegradingErrorBoundary>
-  );
-};
-
-// ErrorBoundary with Suspense support
-interface ErrorBoundaryWithSuspenseProps extends ErrorBoundaryProps {
-  loadingFallback: ReactNode;
+export function ErrorBoundary(props: ErrorBoundaryProps) {
+  return <GracefullyDegradingErrorBoundary {...props} />;
 }
 
-export const ErrorBoundaryWithSuspense: React.FC<ErrorBoundaryWithSuspenseProps> = ({
-  children,
-  fallback,
-  onError,
+/** Suspense outside, so a component that throws while loading still lands on the error fallback. */
+export function ErrorBoundaryWithSuspense({
   loadingFallback,
-}) => {
+  ...props
+}: ErrorBoundaryProps & { loadingFallback: ReactNode }) {
   return (
     <Suspense fallback={loadingFallback}>
-      <GracefullyDegradingErrorBoundary fallback={fallback} onError={onError}>
-        {children}
-      </GracefullyDegradingErrorBoundary>
+      <GracefullyDegradingErrorBoundary {...props} />
     </Suspense>
   );
-};
+}

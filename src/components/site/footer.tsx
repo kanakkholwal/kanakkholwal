@@ -2,6 +2,7 @@ import { useSyncExternalStore } from "react";
 import { appConfig } from "root/project.config";
 import { Icon } from "@/components/icons";
 import Link from "@/components/link";
+import { RollText } from "@/components/text/roll-text";
 import { TextTransition } from "@/components/text/text-transition";
 import { SOCIALS } from "./nav";
 
@@ -33,7 +34,7 @@ const COLUMNS = [
       { label: "Home", href: "/" },
       { label: "Projects", href: "/projects" },
       { label: "Writing", href: "/docs" },
-      { label: "Open source", href: "/stats" },
+      { label: "Stats", href: "/stats" },
       { label: "Analytics", href: "/analytics" },
       { label: "Contact", href: "/contact" },
     ],
@@ -77,10 +78,10 @@ export function SiteFooter() {
               <Link
                 key={l.href}
                 href={l.href}
-                className="w-fit text-muted-foreground transition-colors hoverable:text-foreground"
+                className="group/roll w-fit text-muted-foreground transition-colors hoverable:text-foreground"
                 {...(l.href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
               >
-                {l.label}
+                <RollText text={l.label} groupHover size="sm" className="cursor-[inherit]" />
               </Link>
             ))}
           </nav>
@@ -92,7 +93,7 @@ export function SiteFooter() {
         </span>
         <button
           type="button"
-          className="group inline-flex items-center gap-1 transition-colors hoverable:text-foreground"
+          className="group/roll inline-flex items-center gap-1 transition-colors hoverable:text-foreground"
           onClick={() => {
             window.scrollTo({
               top: 0,
@@ -101,10 +102,10 @@ export function SiteFooter() {
             document.getElementById("main")?.focus({ preventScroll: true });
           }}
         >
-          Back to top
+          <RollText text="Back to top" groupHover size="sm" className="cursor-[inherit] text-xs" />
           <Icon
             name="arrow-up"
-            className="size-3.5 transition-transform duration-(--duration-fast) ease-(--ease-out) group-hover:-translate-y-0.5"
+            className="size-3.5 transition-transform duration-(--duration-fast) ease-(--ease-out) group-hover/roll:-translate-y-0.5"
           />
         </button>
       </div>

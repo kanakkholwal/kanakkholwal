@@ -21,8 +21,8 @@ export default function StatsPage({ data }: { data: StatsPageData }) {
     <Page className="flex flex-col gap-20">
       <PageHeader
         className="mb-0"
-        title="open source."
-        eyebrow="npm / GitHub"
+        title="stats."
+        eyebrow="open source · npm / GitHub"
         description="Downloads and stars for the packages and repos I maintain, pulled live from the registries."
       />
 

@@ -7,12 +7,13 @@ import { Well } from "@/components/site/page";
 import { RollText } from "@/components/text/roll-text";
 import { cn } from "@/lib/cn";
 
-// Monochrome ramp: the page has no accent to spend on a decorative graph.
-const NEUTRAL_RAMP =
-  "[--chart-scale-2:color-mix(in_oklab,var(--foreground)_16%,transparent)] [--chart-scale-3:color-mix(in_oklab,var(--foreground)_32%,transparent)] [--chart-scale-4:color-mix(in_oklab,var(--foreground)_52%,transparent)] [--chart-scale-5:color-mix(in_oklab,var(--foreground)_78%,transparent)]";
+// The ramp is the accent at rising strength, so the graph follows the picked theme.
+const ACCENT_RAMP =
+  "[--chart-scale-2:color-mix(in_oklab,var(--primary)_22%,transparent)] [--chart-scale-3:color-mix(in_oklab,var(--primary)_42%,transparent)] [--chart-scale-4:color-mix(in_oklab,var(--primary)_68%,transparent)] [--chart-scale-5:var(--primary)]";
 
-// The year is wider than the column; fade the scrolled-off edge instead of clipping a column in half.
-const EDGE_FADE = "max-lg:[&>div:has(>[role=toolbar])]:[mask-image:linear-gradient(to_right,transparent,black_28px)]";
+// The year can be wider than the pane: it still scrolls, without a bar, and the clipped edge fades.
+const EDGE_FADE =
+  "max-xl:[&>div:has(>[role=toolbar])]:[mask-image:linear-gradient(to_right,transparent,black_28px)] [&>div:has(>[role=toolbar])]:[scrollbar-width:none] [&>div:has(>[role=toolbar])::-webkit-scrollbar]:hidden";
 
 export function Activity({ days }: { days: { date: string; count: number }[] }) {
   return (
@@ -21,13 +22,13 @@ export function Activity({ days }: { days: { date: string; count: number }[] }) 
       footer={
         <div className="flex flex-col gap-3">
           <p className="text-sm text-muted-foreground">
-            Software engineer at Zoven AI. Happy to talk about side projects and collaborations.{" "}
+            Product engineer, open to founding engineer roles at early-stage teams.{" "}
             <ArrowLink href={resume_link} className="text-foreground">
               Resume
             </ArrowLink>
           </p>
           <div className="flex flex-wrap gap-2">
-            <ButtonLink href={CAL_URL} variant="dark" size="md" className="group/roll">
+            <ButtonLink href={CAL_URL} variant="default" size="md" className="group/roll">
               <Icon name="calendar" />
               <RollText text="Book an intro call" groupHover size="sm" />
             </ButtonLink>
@@ -48,7 +49,7 @@ export function Activity({ days }: { days: { date: string; count: number }[] }) 
           showLegend
           locale="en-US"
           labels={{ grid: "GitHub contributions, last 12 months" }}
-          className={cn(NEUTRAL_RAMP, EDGE_FADE)}
+          className={cn(ACCENT_RAMP, EDGE_FADE)}
         />
       ) : (
         <p className="py-6 text-center text-muted-foreground text-sm">

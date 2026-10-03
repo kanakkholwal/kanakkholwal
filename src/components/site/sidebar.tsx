@@ -8,6 +8,7 @@ import { RollText } from "@/components/text/roll-text";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip/tooltip";
 import { cn } from "@/lib/cn";
 import { useDocsCount, useProjects } from "@/lib/content";
+import { IconRoll } from "./icon-roll";
 import { isActive, SOCIALS } from "./nav";
 import { PixelAvatar } from "./pixel-avatar";
 
@@ -28,7 +29,7 @@ export function Sidebar() {
         { label: "Home", href: "/", icon: "home" },
         { label: "Projects", href: "/projects", icon: "rocket", count: projects },
         { label: "Writing", href: "/docs", icon: "pen", count: docs },
-        { label: "Open source", href: "/stats", icon: "code" },
+        { label: "Stats", href: "/stats", icon: "graph-up" },
         { label: "Analytics", href: "/analytics", icon: "chart" },
         { label: "Contact", href: "/contact", icon: "mail" },
       ],
@@ -67,10 +68,10 @@ export function Sidebar() {
           {SOCIALS.slice(0, 4).map((s) => (
             <Tooltip key={s.href}>
               <TooltipTrigger
-                className="size-8 shrink-0 items-center justify-center rounded-lg bg-background text-muted-foreground shadow-(--surface-shadow) transition-[color,scale] duration-(--duration-fast) hoverable:text-foreground active:scale-(--press-scale-icon) dark:bg-card"
+                className="group/roll size-8 shrink-0 items-center justify-center rounded-lg bg-background text-muted-foreground shadow-(--surface-shadow) transition-[color,scale] duration-(--duration-fast) hoverable:text-foreground active:scale-(--press-scale-icon) dark:bg-card"
                 render={<a href={s.href} target="_blank" rel="noopener noreferrer" aria-label={s.label} />}
               >
-                <Icon name={s.icon} className="size-3.5" />
+                <IconRoll name={s.icon} className="size-3.5" />
               </TooltipTrigger>
               <TooltipContent>{s.handle}</TooltipContent>
             </Tooltip>
@@ -80,9 +81,9 @@ export function Sidebar() {
           href={resume_link}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-muted-foreground text-sm transition-colors hoverable:text-foreground"
+          className="group/roll text-muted-foreground text-sm transition-colors hoverable:text-foreground"
         >
-          Resume
+          <RollText text="Resume" groupHover size="sm" className="cursor-[inherit]" />
         </a>
       </div>
     </div>
@@ -141,8 +142,14 @@ function NavGroup({ title, items, pathname }: { title: string; items: Item[]; pa
                   active ? "font-medium text-foreground" : "hoverable:bg-foreground/[0.03]",
                 )}
               >
-                <Icon name={item.icon} className="size-4 shrink-0" />
-                <RollText text={item.label} groupHover disabled={active} size="sm" className="flex-1 truncate" />
+                <Icon name={item.icon} className={cn("size-4 shrink-0", active && "text-accent-ink")} />
+                <RollText
+                  text={item.label}
+                  groupHover
+                  disabled={active}
+                  size="sm"
+                  className="flex-1 cursor-[inherit] truncate"
+                />
                 {item.count !== undefined ? (
                   <span className="font-mono text-muted-foreground text-xs tabular-nums">{item.count}</span>
                 ) : null}

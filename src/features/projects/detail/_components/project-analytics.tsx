@@ -17,7 +17,7 @@ import { type AnalyticsResult, pointDate, pointLabel, RANGES, type RangeKey } fr
 
 const compact = new Intl.NumberFormat("en-US", { notation: "compact", maximumFractionDigits: 1 });
 const duration = (s: number) => (s < 60 ? `${Math.round(s)}s` : `${Math.floor(s / 60)}m ${Math.round(s % 60)}s`);
-const config: ChartConfig = { users: { label: "Visitors", color: "var(--chart-1)" } };
+const config: ChartConfig = { users: { label: "Visitors", color: "var(--accent-ink)" } };
 
 /** Live traffic for the project's own site; renders nothing until analytics is connected. */
 export function ProjectAnalytics({

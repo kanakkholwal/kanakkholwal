@@ -89,9 +89,7 @@ export function Section({
       <div className="mb-5 flex min-h-8 items-center justify-between gap-4">
         <div className="flex min-w-0 items-baseline gap-2.5">
           {number !== undefined ? (
-            <span className="font-mono text-muted-foreground text-xs tabular-nums">
-              {String(number).padStart(2, "0")}
-            </span>
+            <span className="font-mono text-accent-ink text-xs tabular-nums">{String(number).padStart(2, "0")}</span>
           ) : null}
           <PixelHeading id={id ? `${id}-title` : undefined} className="shrink-0 text-2xl">
             {title}

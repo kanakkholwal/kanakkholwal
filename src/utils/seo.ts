@@ -1,4 +1,5 @@
 import { appConfig } from "root/project.config";
+import { OG_VERSION } from "~/og/version";
 
 type Meta = Record<string, string>;
 
@@ -22,7 +23,8 @@ export function seo({
   const fullTitle = trimmed.includes(appConfig.displayName) ? trimmed : `${trimmed} | ${appConfig.displayName}`;
   const url = appConfig.url + path;
   // Pages without their own card get the generic page card, titled without the name suffix.
-  const card = image ?? `/og/page?${new URLSearchParams({ title: trimmed.split(" | ")[0], description, path })}`;
+  const card =
+    image ?? `/og/page?${new URLSearchParams({ title: trimmed.split(" | ")[0], description, path, v: OG_VERSION })}`;
   const imageUrl = card.startsWith("http") ? card : appConfig.url + card;
 
   const meta: Meta[] = [

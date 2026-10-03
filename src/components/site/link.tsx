@@ -71,7 +71,7 @@ export function TextLink({ href, className, ...props }: Omit<ComponentProps<type
     <Link
       href={href}
       className={cn(
-        "font-medium text-foreground underline decoration-border-strong underline-offset-[3px] transition-[text-decoration-color] hoverable:decoration-current",
+        "font-medium text-foreground underline decoration-border-strong underline-offset-[3px] transition-[text-decoration-color] hoverable:decoration-accent-ink",
         className,
       )}
       {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}

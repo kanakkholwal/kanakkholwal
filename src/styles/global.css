@@ -360,6 +360,28 @@ html[data-theme-reveal="accent"]::view-transition-new(root) {
   }
 }
 
+/* --- Navigation progress --- */
+.nav-sweep {
+  animation: nav-sweep 1.1s var(--ease-in-out) infinite;
+}
+
+@keyframes nav-sweep {
+  from {
+    translate: -100% 0;
+  }
+  to {
+    translate: 250% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-sweep {
+    width: 100%;
+    animation: none;
+    opacity: 0.6;
+  }
+}
+
 /* --- Entrance --- */
 /* Sections rise once on first paint; --i staggers siblings. */
 .rise {

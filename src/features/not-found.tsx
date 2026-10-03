@@ -8,7 +8,7 @@ export default function NotFound() {
       code="404."
       actions={
         <>
-          <ButtonLink href="/" variant="dark">
+          <ButtonLink href="/" variant="default">
             <Icon name="home" />
             Home
           </ButtonLink>

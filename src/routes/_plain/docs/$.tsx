@@ -2,10 +2,12 @@ import { createFileRoute, notFound } from "@tanstack/react-router";
 import { Suspense } from "react";
 import { appConfig } from "root/project.config";
 import { Page } from "@/components/site/page";
+import { ProseSkeleton } from "@/components/site/skeletons";
 import { docBody } from "@/lib/content";
 import ArticlePage from "~/features/docs/article";
 import WritingIndex, { categoryNote } from "~/features/docs/client";
 import { getWriting } from "~/features/docs/server";
+import { OG_VERSION } from "~/og/version";
 import { getDocPage } from "~/server/content";
 import { seo } from "~/utils/seo";
 
@@ -42,7 +44,7 @@ export const Route = createFileRoute("/_plain/docs/$")({
       title: `${doc.title} | Writing`,
       description: doc.description ?? appConfig.description,
       path: doc.url,
-      image: `/og/docs/${doc.slugs.join("/")}`,
+      image: `/og/docs/${doc.slugs.join("/")}?v=${OG_VERSION}`,
       type: "article",
     });
   },
@@ -56,7 +58,7 @@ function DocsSplatPage() {
       {data.kind === "category" ? (
         <WritingIndex posts={data.posts} category={data.category} />
       ) : (
-        <Suspense fallback={null}>
+        <Suspense fallback={<ProseSkeleton />}>
           <ArticlePage doc={data.doc} readTime={data.readTime} others={data.others} />
         </Suspense>
       )}

@@ -31,7 +31,7 @@ export const Route = createFileRoute("/_pages/stats")({
   staleTime: 5 * 60_000,
   head: () =>
     seo({
-      title: "Open source",
+      title: "Open source stats",
       description: "npm downloads and GitHub stars for the packages and repos Kanak Kholwal maintains, pulled live.",
       path: "/stats",
       keywords: ["open source", "npm downloads", "github stars", "npm stats"],

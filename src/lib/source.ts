@@ -2,6 +2,7 @@ import "@tanstack/react-start/server-only";
 import { docs } from "fumadocs-mdx:collections/server";
 import { type InferPageType, loader } from "fumadocs-core/source";
 import { lucideIconsPlugin } from "fumadocs-core/source/lucide-icons";
+import { OG_VERSION } from "~/og/version";
 import { type DocMeta, toMeta } from "./content.types";
 
 export const source = loader({
@@ -17,7 +18,7 @@ export function toDocMeta(page: DocPage): DocMeta {
 }
 
 export function getPageImage(page: DocPage) {
-  return `/og/docs/${[...page.slugs, "image.png"].join("/")}`;
+  return `/og/docs/${[...page.slugs, "image.png"].join("/")}?v=${OG_VERSION}`;
 }
 
 /** Minutes at 200 wpm over the processed markdown. */

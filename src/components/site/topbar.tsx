@@ -1,13 +1,15 @@
 import { useLocation } from "@tanstack/react-router";
 import { type CSSProperties, useSyncExternalStore } from "react";
-import { Icon } from "@/components/icons";
 import Link from "@/components/link";
+import { RollText } from "@/components/text/roll-text";
 import { TextTransition } from "@/components/text/text-transition";
 import { shortcutCap } from "@/components/ui/shortcut/variants";
 import { cn } from "@/lib/cn";
+import { AccentPicker } from "./accent";
 import { useCommandMenu } from "./command-menu";
 import { IconAction, ThemeAction } from "./header";
-import { SOCIALS } from "./nav";
+import { IconRoll } from "./icon-roll";
+import { SOCIALS, X_URL } from "./nav";
 
 const noop = () => () => {};
 const isApple = () => /Mac|iPhone|iPad/.test(navigator.platform);
@@ -54,6 +56,8 @@ export function TopBar() {
         <SearchButton />
         <span aria-hidden className="mx-2 h-4 w-px bg-border" />
         <IconAction label="GitHub" href={SOCIALS[0].href} icon="brand-github" />
+        <IconAction label="X" href={X_URL} icon="brand-x" />
+        <AccentPicker />
         <ThemeAction />
       </div>
     </div>
@@ -71,10 +75,10 @@ function SearchButton() {
     <button
       type="button"
       onClick={() => setOpen(true)}
-      className="group flex h-8 items-center gap-2 rounded-lg px-2 text-muted-foreground text-sm transition-[color,background-color,scale] duration-(--duration-fast) hoverable:bg-foreground/[0.06] hoverable:text-foreground active:scale-(--press-scale-sm)"
+      className="group/roll flex h-8 items-center gap-2 rounded-lg px-2 text-muted-foreground text-sm transition-[color,background-color,scale] duration-(--duration-fast) hoverable:bg-foreground/[0.06] hoverable:text-foreground active:scale-(--press-scale-sm)"
     >
-      <Icon name="search" className="size-4" />
-      <span>Search</span>
+      <IconRoll name="search" className="size-4" />
+      <RollText text="Search" groupHover size="sm" className="cursor-[inherit]" />
       <span className="flex items-center gap-1" aria-hidden>
         <kbd className={cn(shortcutCap({ size: "md" }))} suppressHydrationWarning>
           {mod}
