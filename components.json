@@ -5,20 +5,20 @@
   "tsx": true,
   "tailwind": {
     "config": "",
-    "css": "src/styles/global.css",
+    "css": "src/styles/registry.css",
     "baseColor": "neutral",
     "cssVariables": true,
     "prefix": ""
   },
-  "iconLibrary": "radix",
+  "iconLibrary": "lucide",
   "aliases": {
     "components": "@/components",
-    "utils": "@/lib/utils"
+    "ui": "@/components/ui",
+    "utils": "@/lib/cn",
+    "lib": "@/lib",
+    "hooks": "@/hooks"
   },
   "registries": {
-    "@kokonutui": "https://kokonutui.com/r/{name}.json",
-    "@animate-ui": "https://animate-ui.com/r/{name}.json",
-    "@magicui": "https://magicui.design/r/{name}.json",
-    "@kibo-ui": "https://www.kibo-ui.com/r/{name}.json"
+    "@baby-ui": "https://baby-ui.pages.dev/r/{name}.json"
   }
 }

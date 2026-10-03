@@ -1,9 +1,10 @@
 import { notFound } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
 import { getProjectList, source as projectSource } from "@/lib/project.source";
-import { getReadTime, source as docsSource, toDocMeta } from "@/lib/source";
+import { source as docsSource, getReadTime, toDocMeta } from "@/lib/source";
 import { getWorkExperienceList } from "@/lib/work.source";
 import { getProjectResult } from "~/lib/analytics/service";
+import { cacheResponse } from "./http-cache";
 
 const slugsValidator = (slugs: unknown) => {
   if (!Array.isArray(slugs) || !slugs.every((s) => typeof s === "string")) {
@@ -16,11 +17,13 @@ const slugsValidator = (slugs: unknown) => {
 export const getContentIndex = createServerFn({ method: "GET" }).handler(async () => ({
   projects: getProjectList(),
   work: getWorkExperienceList(),
+  docsCount: docsSource.getPages().length,
 }));
 
 export const getProjectPage = createServerFn({ method: "GET" })
   .validator((slug: string) => slug)
   .handler(async ({ data: slug }) => {
+    cacheResponse(300);
     const page = projectSource.getPage([slug]);
     if (!page) throw notFound();
     const project = getProjectList().find((p) => p.path === page.path);
@@ -31,24 +34,17 @@ export const getProjectPage = createServerFn({ method: "GET" })
 function sortedDocs() {
   return docsSource
     .getPages()
-    .toSorted(
-      (a, b) =>
-        new Date(b.data.lastModified ?? 0).getTime() - new Date(a.data.lastModified ?? 0).getTime(),
-    );
+    .toSorted((a, b) => new Date(b.data.lastModified ?? 0).getTime() - new Date(a.data.lastModified ?? 0).getTime());
 }
 
-export const getDocsIndex = createServerFn({ method: "GET" }).handler(async () =>
-  sortedDocs().map(toDocMeta),
-);
+export const getDocsIndex = createServerFn({ method: "GET" }).handler(async () => sortedDocs().map(toDocMeta));
 
 export const getDocsCategory = createServerFn({ method: "GET" })
   .validator((category: string) => category)
   .handler(async ({ data: category }) => {
     const pages = sortedDocs().filter((p) => p.slugs[0] === category);
     if (!pages.length) throw notFound();
-    return Promise.all(
-      pages.map(async (p) => ({ ...toDocMeta(p), readTime: await getReadTime(p) })),
-    );
+    return Promise.all(pages.map(async (p) => ({ ...toDocMeta(p), readTime: await getReadTime(p) })));
   });
 
 export const getDocPage = createServerFn({ method: "GET" })

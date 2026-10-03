@@ -20,27 +20,21 @@ export const Route = createFileRoute("/_pages/stats")({
     repo: typeof search.repo === "string" ? search.repo : undefined,
   }),
   loaderDeps: ({ search }) => ({ pkg: search.pkg ?? "both", beta: search.beta ?? false }),
-  // Unawaited promises stream into <Await> boundaries, like the old Suspense'd server components.
+  // Unawaited promises stream into the page's <Await> boundaries.
   loader: ({ deps }) => ({
     stars: getStarHistories(),
     npm: getNpmStats(),
     insights: getInsights(),
     versions: statsConfig.flags.versionAdoptionGraph ? getVersionData({ data: deps }) : null,
   }),
+  // `repo` isn't a dep; without this every repo switch refetches npm and GitHub.
+  staleTime: 5 * 60_000,
   head: () =>
     seo({
-      title: "Metrics & Telemetry",
-      description:
-        "Real-time visual analytics of open-source impact: GitHub star velocity, NPM download aggregation, and version distribution.",
+      title: "Open source stats",
+      description: "npm downloads and GitHub stars for the packages and repos Kanak Kholwal maintains, pulled live.",
       path: "/stats",
-      keywords: [
-        "metrics",
-        "telemetry",
-        "github analytics",
-        "npm stats",
-        "data visualization",
-        "engineering dashboard",
-      ],
+      keywords: ["open source", "npm downloads", "github stars", "npm stats"],
     }),
   component: StatsRoute,
 });

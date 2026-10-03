@@ -1,163 +1,90 @@
 import {
+  CartesianGrid,
+  type ChartConfig,
   ChartContainer,
   ChartLegend,
-  ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
-} from "@/components/ui/chart";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Boxes } from "lucide-react";
-import { inferParserType, useQueryStates } from "nuqs";
-import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
-import { statsConfig } from "../config";
-import { formatDate, formatStatNumber } from "../lib/format";
-import { pkgParser, searchParams } from "../searchParams";
-import { Widget } from "./widget";
+  XAxis,
+  YAxis,
+} from "@/components/charts/chart";
+import { Line, LineChart } from "@/components/charts/line-chart";
+import { Well } from "@/components/site/page";
+import { StatsEmpty } from "@/components/stats/stats-empty";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Skeleton } from "@/components/ui/skeleton";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { useStatsSearch } from "../client";
+import { type PkgOption, pkgOptions } from "../searchParams";
 
-type VersionProps = {
-  records: Array<
-    Record<
-      | `${number}.${number}.${number}`
-      | `${number}.${number}.${number}-beta.${number}`,
-      number
-    > & {
-      date: string;
-    }
-  >;
-  versions: string[];
-};
+const compact = new Intl.NumberFormat("en-US", { notation: "compact", maximumFractionDigits: 1 });
+const pkgItems = pkgOptions.map((p) => ({ value: p, label: p === "both" ? "all packages" : p }));
+const day = (d: Date) => d.toLocaleDateString("en-GB", { day: "numeric", month: "short", timeZone: "UTC" });
 
-// stroke-red-500 fill-red-500 bg-red-500 text-red-500
-// stroke-amber-500 fill-amber-500 bg-amber-500 text-amber-500
-// stroke-green-500 fill-green-500 bg-green-500 text-green-500
-// stroke-primary fill-primary bg-primary text-primary
-// stroke-purple-500 fill-purple-500 bg-purple-500 text-purple-500
+type VersionData = { records: Array<Record<string, number | string>>; versions: string[] };
 
-const lineColors = [
-  "green-500",
-  "amber-500",
-  "red-500",
-  "blue-500",
-  "purple-500",
-];
-
-export function Versions({ records, versions }: VersionProps) {
-  const [{ pkg: activeTab, beta }, setSearchParams] = useQueryStates(
-    searchParams,
-    { shallow: false },
+export function Versions({ data }: { data: VersionData }) {
+  const { pkg, beta, set } = useStatsSearch();
+  // Version strings have dots, which CSS custom property names can't hold, so series get index keys.
+  const keys = data.versions.map((_, i) => `v${i}`);
+  const config: ChartConfig = Object.fromEntries(
+    data.versions.map((v, i) => [keys[i], { label: v, color: `var(--chart-${(i % 5) + 1})` }]),
   );
+  const rows = data.records.map((r) => ({
+    date: new Date(`${r.date}T00:00:00Z`),
+    ...Object.fromEntries(data.versions.map((v, i) => [keys[i], Number(r[v] ?? 0)])),
+  }));
+
   return (
-    <Widget
-      className="lg:col-span-2"
-      title={
-        <>
-          <Boxes size={24} strokeWidth={1.5} />
-          Version adoption
-          <Label className="ml-auto flex items-center gap-2">
-            <Checkbox
-              id="beta"
-              checked={beta}
-              onCheckedChange={(checked) =>
-                setSearchParams({ beta: checked === true })
-              }
-            />
-            Beta
-          </Label>
-          <Tabs
-            className="ml-1 w-auto"
-            value={activeTab}
-            onValueChange={(value) =>
-              setSearchParams({
-                pkg: value as inferParserType<typeof pkgParser>,
-              })
-            }
-          >
-            <TabsList>
-              {statsConfig.npmPackages.map((pkg) => {
-                return (
-                  <TabsTrigger
-                    key={pkg}
-                    value={pkg}
-                    className="data-[state=active]:text-blue-700 dark:data-[state=active]:text-blue-400"
-                  >
-                    {pkg}
-                  </TabsTrigger>
-                );
-              })}
-
-              <TabsTrigger
-                value="both"
-                className="data-[state=active]:text-green-700 dark:data-[state=active]:text-green-300"
-              >
-                combined
-              </TabsTrigger>
-            </TabsList>
-          </Tabs>
-        </>
-      }
-    >
-      <ChartContainer
-        className="mt-1 h-82 w-full pr-1"
-        config={versions.reduce(
-          (config, version) => ({ ...config, [version]: { label: version } }),
-          {},
-        )}
-      >
-        <LineChart
-          // accessibilityLayer // note: Causes a bug with Recharts 2.15.4 where a click on the chart moves the cursor to the first data point.
-          data={records}
-          margin={{ top: 5, right: 0, bottom: 5, left: 5 }}
+    <Well>
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+        <Select value={pkg} onValueChange={(v) => set({ pkg: v as PkgOption })} items={pkgItems}>
+          <SelectTrigger variant="ghost" size="sm" className="-ml-2.5 font-mono text-foreground">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent size="sm" align="start">
+            {pkgItems.map((p) => (
+              <SelectItem key={p.value} value={p.value} className="font-mono">
+                {p.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <ToggleGroup
+          label="Release channel"
+          variant="outline"
+          size="sm"
+          value={beta ? "beta" : "stable"}
+          onValueChange={(v) => v && set({ beta: v === "beta" || undefined })}
         >
-          <ChartLegend
-            align="right"
-            verticalAlign="top"
-            content={<ChartLegendContent />}
-          />
-          <YAxis
-            width={30}
-            fillOpacity={0.75}
-            axisLine={false}
-            tickLine={false}
-            tickFormatter={(value) => formatStatNumber(value)}
-            allowDataOverflow
-          />
-          <CartesianGrid vertical={false} />
-          <XAxis
-            dataKey="date"
-            padding={{ left: 20, right: 20 }}
-            axisLine={false}
-            tickLine={false}
-            minTickGap={40}
-            tickMargin={10}
-            fillOpacity={0.75}
-            tickFormatter={(value) =>
-              formatDate(value, "", { day: "2-digit", month: "short" })
-            }
-          />
-          <ChartTooltip
-            content={
-              <ChartTooltipContent
-                formatter={(value) => formatStatNumber(value as number)}
-              />
-            }
-            isAnimationActive={false}
-            position={{ y: 20 }}
-          />
-          {versions.map((version, index) => (
-            <Line
-              isAnimationActive={false}
-              key={version}
-              dataKey={version}
-              type="monotone"
-              stroke={`var(--color-${lineColors[index]})`}
-              dot={false}
-              strokeWidth={2}
-            />
-          ))}
-        </LineChart>
-      </ChartContainer>
-    </Widget>
+          <ToggleGroupItem value="stable">Stable</ToggleGroupItem>
+          <ToggleGroupItem value="beta">Beta</ToggleGroupItem>
+        </ToggleGroup>
+      </div>
+      {rows.length && keys.length ? (
+        <ChartContainer config={config} title="Daily downloads per version" locale="en-US" aspect="wide">
+          <ChartLegend interactive={false} />
+          <LineChart data={rows} xKey="date">
+            <CartesianGrid variant="dashed" className="stroke-border/70" />
+            <YAxis tickFormatter={(v) => compact.format(v)} />
+            <XAxis tickFormatter={day} />
+            {keys.map((k) => (
+              <Line key={k} dataKey={k} curve="monotone" strokeWidth={1.5} />
+            ))}
+            <ChartTooltip content={<ChartTooltipContent formatter={(v) => compact.format(Number(v))} />} />
+          </LineChart>
+        </ChartContainer>
+      ) : (
+        <StatsEmpty
+          icon="layers"
+          title="No releases to compare"
+          description="Nothing on this channel in the last month."
+        />
+      )}
+    </Well>
   );
+}
+
+export function VersionsSkeleton() {
+  return <Skeleton shape="block" className="aspect-[2/1] h-auto rounded-2xl" />;
 }

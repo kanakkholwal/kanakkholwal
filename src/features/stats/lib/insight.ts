@@ -1,3 +1,4 @@
+import "@tanstack/react-start/server-only";
 import { memo } from "~/lib/cache";
 import type { ProjectConfig } from "../config";
 
@@ -34,12 +35,7 @@ export interface SessionCountAndGrowthResult {
   uniqueUsers: number;
   avgSessionsPerUser: number;
 }
-export type TimeInterval =
-  | "last_hour"
-  | "last_24_hours"
-  | "last_week"
-  | "last_month"
-  | "last_year";
+export type TimeInterval = "last_hour" | "last_24_hours" | "last_week" | "last_month" | "last_year";
 export interface DateRange {
   start: Date;
   end: Date;
@@ -131,35 +127,18 @@ export const getProjectInsight = memo(
   },
 );
 
-export function cumulateStats(
-  usersStats: UserCountAndGrowthResult,
-  sessionsStats: SessionCountAndGrowthResult,
-) {
+export function cumulateStats(usersStats: UserCountAndGrowthResult, sessionsStats: SessionCountAndGrowthResult) {
   const allTimestamps = new Set([
     ...usersStats.graphData.map((d: any) => new Date(d.timestamp).getTime()),
     ...sessionsStats.graphData.map((d: any) => new Date(d.timestamp).getTime()),
   ]);
-  const userMap = new Map(
-    usersStats.graphData.map((d: any) => [
-      new Date(d.timestamp).getTime(),
-      d.count,
-    ]),
-  );
-  const sessionMap = new Map(
-    sessionsStats.graphData.map((d: any) => [
-      new Date(d.timestamp).getTime(),
-      d.count,
-    ]),
-  );
+  const userMap = new Map(usersStats.graphData.map((d: any) => [new Date(d.timestamp).getTime(), d.count]));
+  const sessionMap = new Map(sessionsStats.graphData.map((d: any) => [new Date(d.timestamp).getTime(), d.count]));
   return Array.from(allTimestamps)
     .sort((a, b) => a - b)
     .map((timestamp) => ({
       timestamp: new Date(timestamp),
-      // `?? null`, not `|| 0`. The two sources are merged on a union of their
-      // timestamps, so any bucket present in one and absent from the other used
-      // to become a hard zero — a fabricated reading that plots as a real dip
-      // and is indistinguishable from a genuine quiet hour. `0` also swallowed
-      // legitimate zero counts into the same branch.
+      // Null, not 0: a bucket missing from one source would otherwise plot as a fake dip.
       users: userMap.get(timestamp) ?? null,
       sessions: sessionMap.get(timestamp) ?? null,
     }));

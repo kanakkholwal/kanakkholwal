@@ -1,7 +1,7 @@
-import { getProjectList } from "@/lib/project.source";
-import { source } from "@/lib/source";
 import { createFileRoute } from "@tanstack/react-router";
 import { appConfig } from "root/project.config";
+import { getProjectList } from "@/lib/project.source";
+import { source } from "@/lib/source";
 
 type Entry = { path: string; lastModified?: Date | string; changefreq: string; priority: number };
 

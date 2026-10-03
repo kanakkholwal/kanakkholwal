@@ -1,5 +1,6 @@
-import { getReadTime, source } from "@/lib/source";
 import { createFileRoute } from "@tanstack/react-router";
+import { appConfig } from "root/project.config";
+import { getReadTime, source } from "@/lib/source";
 import { generateOgImage } from "~/og/generator";
 import { ArticleOgTemplate } from "~/og/og-templates";
 
@@ -15,9 +16,9 @@ export const Route = createFileRoute("/og/docs/$")({
         return generateOgImage(
           <ArticleOgTemplate
             title={page.data.title}
-            meta={`${await getReadTime(page)} min read`}
-            tags={page.data.tags}
-            isDark={new URL(request.url).searchParams.get("dark") === "true"}
+            meta={[`${await getReadTime(page)} min read`, ...(page.data.tags ?? []).slice(0, 2)].join(" · ")}
+            url={`${appConfig.siteUrl}/docs`}
+            dark={new URL(request.url).searchParams.get("dark") === "true"}
           />,
         );
       },

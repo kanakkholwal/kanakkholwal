@@ -1,0 +1,52 @@
+---
+id: "baby-ui"
+title: "Baby UI"
+href: "https://baby-ui.nexonauts.com"
+dates: "Sep 2026 - Present"
+active: true
+order: 2
+status: "In Progress"
+description: "Animated, accessible components for React and Svelte. One spec, two hand-written ports, installed with the shadcn CLI as source you own."
+technologies:
+  - "React"
+  - "Svelte 5"
+  - "TypeScript"
+  - "Tailwind CSS v4"
+  - "Base UI"
+  - "bits-ui"
+  - "d3"
+  - "Cloudflare"
+tags:
+  - "Component Library"
+  - "Design System"
+  - "Open Source"
+  - "React"
+  - "Svelte"
+  - "shadcn"
+links:
+  - label: "Source"
+    url: "https://github.com/kanakkholwal/baby-ui"
+    icon: "github"
+  - label: "Website"
+    url: "https://baby-ui.nexonauts.com"
+    icon: "globe"
+---
+
+Baby UI is a component library I build for React and Svelte at the same time. Every component starts as one spec, then gets two real ports, written by hand, with the same props, the same motion and the same accessibility. You install it the way you install shadcn/ui: the CLI copies the source into your project and you own it from there.
+
+This site runs on it. Every button, menu, chart and the command palette you open with Ctrl K comes from the Baby UI registry.
+
+## What makes it different
+
+- **Two ports, not a wrapper.** The React port sits on Base UI and the Svelte port on bits-ui, the same primitives shadcn itself uses, so focus, keyboard and screen reader behaviour come from a tested engine instead of a hand-rolled one.
+- **A motion contract.** Motion is CSS only and lives in tokens: four speeds, a handful of easing curves and press scales. Popovers zoom from their trigger, exits are faster than entrances, panels grow instead of popping, and reduced motion keeps the fades while dropping the travel.
+- **A shadcn drop-in.** Part names, `data-slot` values and `variant` / `size` props match shadcn, so an existing project can swap components one at a time.
+- **More than primitives.** Over 230 components across base UI, blocks, text effects, backgrounds and agent UI, about twenty d3 and SVG charts, OG image templates rendered with takumi, and email templates.
+
+## How it's built
+
+A pnpm and Turborepo monorepo: the two UI packages, a shared token package, a registry builder that turns each component into a shadcn registry item, and a SvelteKit docs site. Shared logic like variant classes has one source in the React package and the Svelte copies are generated from it, so the ports can't drift. The registry is served from Cloudflare, and PostHog counts installs with a daily hashed id, so I can see what people use without storing who they are.
+
+## Where it is
+
+The base set is done and going through a design refresh. Next up is a compact inspector kit for settings panels and more email templates. A Pro tier with around forty extra components lives in a separate package.

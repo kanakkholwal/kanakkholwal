@@ -1,51 +1,57 @@
 import { createServerFn } from "@tanstack/react-start";
+import { edgeMemo } from "~/lib/cache";
 import { getServerEnv } from "~/server/env.server";
+import { cacheResponse } from "~/server/http-cache";
 import { insightConfig, statsConfig } from "./config";
-import { getStarHistory, type GitHubStarHistory } from "./lib/github";
+import { type GitHubStarHistory, getStarHistoriesBatch } from "./lib/github";
 import { getProjectInsight } from "./lib/insight";
-import { fetchNpmPackage } from "./lib/npm";
+import { fetchNpmStats } from "./lib/npm";
 import { getVersions, sumVersions } from "./lib/versions";
 import { pkgOptions } from "./searchParams";
 
 export const getStarHistories = createServerFn({ method: "GET" }).handler(async () => {
-  const stars = await Promise.all(
-    statsConfig.repositories.map((r) =>
-      getStarHistory(r.repo).catch((err): GitHubStarHistory => {
-        console.error(`[stats] star history ${r.repo} failed`, err);
-        return { count: 0, bins: [] };
-      }),
-    ),
-  );
-  const byRepo: Record<string, GitHubStarHistory> = {};
-  statsConfig.repositories.forEach((r, i) => {
-    byRepo[r.repo] = stars[i];
-  });
-  return byRepo;
+  cacheResponse(600);
+  try {
+    return await getStarHistoriesBatch(statsConfig.repositories.map((r) => r.repo));
+  } catch (err) {
+    console.error("[stats] star histories failed", err);
+    const empty: GitHubStarHistory = { count: 0, bins: [] };
+    return Object.fromEntries(statsConfig.repositories.map((r) => [r.repo, empty]));
+  }
 });
 
 /** One entry per `statsConfig.npmPackages`, same order. */
-export const getNpmStats = createServerFn({ method: "GET" }).handler(() =>
-  Promise.all(statsConfig.npmPackages.map((pkg) => fetchNpmPackage(pkg))),
-);
+export const getNpmStats = createServerFn({ method: "GET" }).handler(() => {
+  cacheResponse(3600);
+  return fetchNpmStats([...statsConfig.npmPackages]);
+});
 
 const INSIGHT_HEADERS: Record<string, () => Record<string, string>> = {
   "college-ecosystem": () => ({ "X-Authorization": getServerEnv().PROJECTS_CE_TOKEN ?? "" }),
 };
 
-export const getInsights = createServerFn({ method: "GET" }).handler(() =>
-  Promise.all(
-    insightConfig.map(async (project) => {
-      try {
-        return {
-          project,
-          insight: await getProjectInsight(project, INSIGHT_HEADERS[project.id]?.()),
-        };
-      } catch (err) {
-        console.error(`[stats] insight ${project.id} failed`, err);
-        return { project, insight: null };
-      }
-    }),
-  ),
+export const getInsights = createServerFn({ method: "GET" }).handler(() => {
+  cacheResponse(600);
+  return cachedInsights();
+});
+
+const cachedInsights = edgeMemo(
+  "insights",
+  () =>
+    Promise.all(
+      insightConfig.map(async (project) => {
+        try {
+          return {
+            project,
+            insight: await getProjectInsight(project, INSIGHT_HEADERS[project.id]?.()),
+          };
+        } catch (err) {
+          console.error(`[stats] insight ${project.id} failed`, err);
+          return { project, insight: null };
+        }
+      }),
+    ),
+  600,
 );
 
 export type VersionsInput = { pkg: (typeof pkgOptions)[number]; beta: boolean };
@@ -56,6 +62,7 @@ export const getVersionData = createServerFn({ method: "GET" })
     beta: input.beta === true,
   }))
   .handler(async ({ data: { pkg, beta } }) => {
+    cacheResponse(3600);
     const allVersions = await getVersions(beta);
     const pkgVersions = pkg === "both" ? sumVersions(allVersions) : allVersions;
     const latest = (pkgVersions.at(-1) as Record<string, unknown> | undefined)?.[pkg];

@@ -1,127 +1,82 @@
 import { appConfig } from "root/project.config";
+import { LegalPage } from "./layout";
 
-const PrivacyPolicyPage: React.FC = () => {
+const email = appConfig.emails[0];
+
+export default function PrivacyPolicyPage() {
   return (
-    <main title="Privacy Policy" className="mx-auto max-w-5xl px-6 py-12">
-      <h1 className="text-3xl font-semibold mb-6">Privacy Policy</h1>
-      <article className="prose prose-lg dark:prose-invert">
-        <section>
-          <h2>1. Data We Collect</h2>
-          <ul>
-            <li>
-              <strong>Automatically collected:</strong> anonymized analytics
-              (page views, referrers, device info).
-            </li>
-            <li>
-              <strong>Cookies & similar:</strong> session cookies, persistent
-              cookies used for analytics and ads.
-            </li>
-            <li>
-              <strong>User-provided:</strong> contact form submissions (name,
-              email, message), stored only to reply.
-            </li>
-            <li>
-              <strong>Third-party:</strong> data collected by third-party
-              services you access on this Site (Google Analytics, Google
-              AdSense).
-            </li>
-          </ul>
-        </section>
+    <LegalPage title="privacy." description="What this site collects, why, and how to ask for it to be removed.">
+      <p>
+        This policy explains how <strong>{appConfig.displayName}'s portfolio</strong> ("we", "us") collects, uses and
+        shares information through this website (the "Site"). By using the Site you agree to the terms below.
+      </p>
 
-        <section>
-          <h2>2. How We Use Data</h2>
-          <ul>
-            <li>Operate and maintain the Site.</li>
-            <li>
-              Improve site performance and user experience via anonymized
-              analytics.
-            </li>
-            <li>
-              Deliver advertisements via Google AdSense (if enabled), see the
-              Ads section below.
-            </li>
-            <li>Respond to contact requests.</li>
-          </ul>
-        </section>
+      <h2>1. Data we collect</h2>
+      <ul>
+        <li>
+          <strong>Automatically collected:</strong> anonymized analytics (page views, referrers, device info).
+        </li>
+        <li>
+          <strong>Cookies and similar:</strong> session cookies and persistent cookies used for analytics and ads.
+        </li>
+        <li>
+          <strong>User provided:</strong> messages you send by email (name, email, message), kept only to reply.
+        </li>
+        <li>
+          <strong>Third party:</strong> data collected by third party services on the Site (Google Analytics, Google
+          AdSense).
+        </li>
+      </ul>
 
-        <section>
-          <h2>3. Cookies & Tracking</h2>
-          <p>
-            We use cookies and similar technologies. You can disable cookies in
-            your browser, but some features may not work correctly. Third-party
-            services used on the Site may also set cookies (for example, Google
-            services).
-          </p>
-        </section>
+      <h2>2. How we use data</h2>
+      <ul>
+        <li>Operate and maintain the Site.</li>
+        <li>Improve performance and experience through anonymized analytics.</li>
+        <li>Deliver advertisements through Google AdSense (if enabled), see section 4.</li>
+        <li>Respond to contact requests.</li>
+      </ul>
 
-        <section>
-          <h2>4. Google AdSense & Third-Party Ads</h2>
-          <p>
-            If Google AdSense is enabled, Google may use cookies to serve ads
-            based on past visits to this Site and other sites. To use AdSense,
-            we include Google scripts which are governed by Google{"'"}s privacy
-            policy. You can opt out of personalized ads via Google Ad Settings.
-          </p>
-        </section>
+      <h2>3. Cookies and tracking</h2>
+      <p>
+        We use cookies and similar technologies. You can disable cookies in your browser, but some features may not work
+        correctly. Third party services used on the Site may also set cookies (for example, Google services).
+      </p>
 
-        <section>
-          <h2>5. Data Security</h2>
-          <p>
-            We take reasonable measures to protect data. However, no method of
-            transmission over the internet is 100% secure, so we cannot guarantee
-            absolute security.
-          </p>
-        </section>
+      <h2>4. Google AdSense and third party ads</h2>
+      <p>
+        If Google AdSense is enabled, Google may use cookies to serve ads based on past visits to this Site and other
+        sites. Those scripts are governed by Google's privacy policy. You can opt out of personalized ads in Google Ad
+        Settings.
+      </p>
 
-        <section>
-          <h2>6. Retention</h2>
-          <p>
-            Contact form data is retained only as long as necessary to respond
-            or as required by law (default: 24 months).
-          </p>
-        </section>
+      <h2>5. Data security</h2>
+      <p>
+        We take reasonable measures to protect data. No method of transmission over the internet is fully secure, so we
+        cannot guarantee absolute security.
+      </p>
 
-        <section>
-          <h2>7. Your Rights</h2>
-          <p>
-            You can request access, correction, or deletion of personal data
-            collected via the Site by contacting us at
-            <a href={`mailto:${appConfig.emails[0]}`}>{appConfig.emails[0]}</a>.
-            We will respond per applicable law.
-          </p>
-        </section>
+      <h2>6. Retention</h2>
+      <p>Contact messages are kept only as long as needed to respond, or as required by law (default: 24 months).</p>
 
-        <section>
-          <h2>8. International Transfers</h2>
-          <p>
-            Data may be stored or processed in countries other than your own. By
-            using this Site you consent to such transfers.
-          </p>
-        </section>
+      <h2>7. Your rights</h2>
+      <p>
+        You can request access to, correction of, or deletion of personal data collected through the Site by writing to{" "}
+        <a href={`mailto:${email}`}>{email}</a>. We will respond as applicable law requires.
+      </p>
 
-        <section>
-          <h2>9. Changes</h2>
-          <p>
-            We may update this Policy. We will post the updated Policy on this
-            page with a revised effective date.
-          </p>
-        </section>
+      <h2>8. International transfers</h2>
+      <p>
+        Data may be stored or processed in countries other than your own. By using the Site you consent to such
+        transfers.
+      </p>
 
-        <section>
-          <h2>10. Contact</h2>
-          <p>
-            For questions:{" "}
-            <a href={`mailto:${appConfig.emails[0]}`}>{appConfig.emails[0]}</a>
-          </p>
+      <h2>9. Changes</h2>
+      <p>We may update this policy. The updated policy will be posted on this page with a new date.</p>
 
-          <hr />
-          <p className="text-sm">
-            Effective date: {new Date().toLocaleDateString()}
-          </p>
-        </section>
-      </article>
-    </main>
+      <h2>10. Contact</h2>
+      <p>
+        Questions: <a href={`mailto:${email}`}>{email}</a>
+      </p>
+    </LegalPage>
   );
-};
-
-export default PrivacyPolicyPage;
+}

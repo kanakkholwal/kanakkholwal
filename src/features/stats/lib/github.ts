@@ -1,78 +1,11 @@
-import { getServerEnv } from "~/server/env.server";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
-import { memo } from "~/lib/cache";
+import { edgeMemo, memo } from "~/lib/cache";
+import { getServerEnv } from "~/server/env.server";
 import "@tanstack/react-start/server-only";
 import { z } from "zod";
 
 dayjs.extend(utc);
-
-export type GitHubRepositoryData = {
-  version?: string;
-  stars: number;
-  issues: number;
-  prs: number;
-  updatedAt: Date;
-};
-
-const repositoryQuerySchema = z.object({
-  data: z.object({
-    repository: z.object({
-      latestRelease: z
-        .object({
-          tagName: z.string().nullish(),
-        })
-        .nullish(),
-      issues: z.object({
-        totalCount: z.number(),
-      }),
-      pullRequests: z.object({
-        totalCount: z.number(),
-      }),
-      stargazerCount: z.number(),
-    }),
-  }),
-});
-
-export async function fetchRepository(
-  slug = "kanakkholwal/college-ecosystem",
-): Promise<GitHubRepositoryData> {
-  const [owner, repo] = slug.split("/");
-  const query = `query {
-  repository(owner: "${owner}", name: "${repo}") {
-    latestRelease {
-      tagName
-    }
-    issues(states: OPEN) {
-      totalCount
-    }
-    pullRequests(states: OPEN) {
-      totalCount
-    }
-    stargazerCount
-  }
-}`.replace(/\s+/g, " "); // Minify
-  // The querystring is not necessary but it helps tagging cache entries in Cache Explorer
-  const res = await fetch(`https://api.github.com/graphql?repo=${slug}`, {
-    method: "POST",
-    headers: {
-      Authorization: `bearer ${getServerEnv().GITHUB_TOKEN}`,
-      // GitHub rejects requests without a User-Agent, and Workers fetch sends none.
-      "User-Agent": "kanakkholwal.eu.org",
-    },
-    body: JSON.stringify({ query }),
-  });
-  const {
-    data: { repository },
-  } = repositoryQuerySchema.parse(await res.json());
-  return {
-    issues: repository.issues.totalCount,
-    prs: repository.pullRequests.totalCount,
-    stars: repository.stargazerCount,
-    version: repository.latestRelease?.tagName?.replace(/^v/, "") ?? undefined,
-    updatedAt: new Date(),
-  };
-}
 
 // --
 
@@ -129,9 +62,7 @@ export const getStarHistory = memo(
 
     // Compute the 12-day window [today .. today-11d] in UTC
     const todayStart = dayjs().utc().startOf("day");
-    const days = Array.from({ length: 12 }, (_, i) =>
-      todayStart.clone().subtract(i, "day").format("YYYY-MM-DD"),
-    );
+    const days = Array.from({ length: 12 }, (_, i) => todayStart.clone().subtract(i, "day").format("YYYY-MM-DD"));
     const windowStart = todayStart.clone().subtract(11, "day"); // already startOf('day')
 
     // Pre-initialize bins for consecutive days (including empty days), most recent first
@@ -249,3 +180,67 @@ export const getStarHistory = memo(
     };
   },
 );
+
+const STARGAZER_FIELDS = `stargazers(first: 100, orderBy: {field: STARRED_AT, direction: DESC}) {
+  totalCount pageInfo { hasNextPage endCursor }
+  edges { starredAt node { login name avatarUrl company followers { totalCount } } }
+}`;
+
+/** Bins one repo's first page; null when it needs more pages than one (handled one repo at a time). */
+function binFirstPage(repository: unknown): GitHubStarHistory | null {
+  const parsed = starHistoryQuerySchema.shape.data.shape.repository.safeParse(repository);
+  if (!parsed.success) return null;
+  const { totalCount, pageInfo, edges } = parsed.data.stargazers;
+  const todayStart = dayjs().utc().startOf("day");
+  const windowStart = todayStart.subtract(11, "day");
+  const oldest = edges.at(-1);
+  if (pageInfo.hasNextPage && oldest && !dayjs.utc(oldest.starredAt).isBefore(windowStart)) return null;
+
+  const days = Array.from({ length: 12 }, (_, i) => todayStart.subtract(i, "day").format("YYYY-MM-DD"));
+  const bins: GitHubStarHistory["bins"] = days.map((date) => ({ stars: 0, diff: 0, date, stargarzers: [] }));
+  for (const { starredAt, node } of edges) {
+    const idx = days.indexOf(dayjs.utc(starredAt).format("YYYY-MM-DD"));
+    if (idx === -1) continue;
+    bins[idx].stars++;
+    bins[idx].stargarzers.push({
+      login: node.login,
+      name: node.name ?? null,
+      avatarUrl: node.avatarUrl,
+      company: node.company ?? null,
+      followers: node.followers.totalCount,
+    });
+  }
+  bins[0].diff = bins[0].stars;
+  bins[0].stars = totalCount;
+  for (let i = 1; i < bins.length; ++i) {
+    bins[i].diff = bins[i].stars;
+    bins[i].stars = bins[i - 1].stars - bins[i - 1].diff;
+  }
+  return { count: totalCount, bins };
+}
+
+/** Every repo's recent stars in one GraphQL request; only a repo past 100 stars in the window pages further. */
+async function fetchStarHistories(slugs: string[]): Promise<Record<string, GitHubStarHistory>> {
+  const fields = slugs.map((slug, i) => {
+    const [owner, name] = slug.split("/");
+    return `r${i}: repository(owner: ${JSON.stringify(owner)}, name: ${JSON.stringify(name)}) { ${STARGAZER_FIELDS} }`;
+  });
+  const res = await fetch("https://api.github.com/graphql?stars=batch", {
+    method: "POST",
+    headers: { Authorization: `bearer ${getServerEnv().GITHUB_TOKEN}`, "User-Agent": "kanakkholwal.eu.org" },
+    body: JSON.stringify({ query: `query { ${fields.join(" ")} }`.replace(/\s+/g, " ") }),
+  });
+  if (!res.ok) throw new Error(`GitHub ${res.status}`);
+  const json = (await res.json()) as { data?: Record<string, unknown> };
+
+  const out: Record<string, GitHubStarHistory> = {};
+  await Promise.all(
+    slugs.map(async (slug, i) => {
+      out[slug] =
+        binFirstPage(json.data?.[`r${i}`]) ?? (await getStarHistory(slug).catch(() => ({ count: 0, bins: [] })));
+    }),
+  );
+  return out;
+}
+
+export const getStarHistoriesBatch = edgeMemo("star-histories", fetchStarHistories, 3600);

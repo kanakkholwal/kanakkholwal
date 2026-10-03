@@ -1,4 +1,5 @@
 import { appConfig } from "root/project.config";
+import { OG_VERSION } from "~/og/version";
 
 type Meta = Record<string, string>;
 
@@ -19,11 +20,12 @@ export function seo({
   type?: "website" | "article";
 }) {
   const trimmed = title.trim();
-  const fullTitle = trimmed.includes(appConfig.displayName)
-    ? trimmed
-    : `${trimmed} | ${appConfig.displayName}`;
+  const fullTitle = trimmed.includes(appConfig.displayName) ? trimmed : `${trimmed} | ${appConfig.displayName}`;
   const url = appConfig.url + path;
-  const imageUrl = image && (image.startsWith("http") ? image : appConfig.url + image);
+  // Pages without their own card get the generic page card, titled without the name suffix.
+  const card =
+    image ?? `/og/page?${new URLSearchParams({ title: trimmed.split(" | ")[0], description, path, v: OG_VERSION })}`;
+  const imageUrl = card.startsWith("http") ? card : appConfig.url + card;
 
   const meta: Meta[] = [
     { title: fullTitle },
@@ -38,12 +40,12 @@ export function seo({
     { name: "twitter:description", content: description },
     { name: "robots", content: "index,follow" },
   ];
-  if (imageUrl) {
-    meta.push(
-      { property: "og:image", content: imageUrl },
-      { name: "twitter:image", content: imageUrl },
-    );
-  }
+  meta.push(
+    { property: "og:image", content: imageUrl },
+    { property: "og:image:width", content: "1200" },
+    { property: "og:image:height", content: "630" },
+    { name: "twitter:image", content: imageUrl },
+  );
   if (keywords?.length) meta.push({ name: "keywords", content: keywords.join(", ") });
 
   return { meta, links: [{ rel: "canonical", href: url }] };

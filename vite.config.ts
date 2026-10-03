@@ -13,7 +13,7 @@ export default defineConfig({
     tsconfigPaths: true,
     // Explicit too: tsconfigPaths only covers files tsconfig includes, and .mdx imports `@/` components.
     alias: [
-      { find: /^@\//, replacement: root("./@/") },
+      { find: /^@\//, replacement: root("./src/") },
       { find: /^~\//, replacement: root("./src/") },
       { find: /^root\//, replacement: root("./") },
     ],
@@ -30,11 +30,5 @@ export default defineConfig({
       },
     },
   },
-  plugins: [
-    mdx(),
-    tailwindcss(),
-    cloudflare({ viteEnvironment: { name: "ssr" } }),
-    tanstackStart(),
-    viteReact(),
-  ],
+  plugins: [mdx(), tailwindcss(), cloudflare({ viteEnvironment: { name: "ssr" } }), tanstackStart(), viteReact()],
 });

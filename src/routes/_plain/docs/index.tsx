@@ -1,26 +1,25 @@
 import { createFileRoute } from "@tanstack/react-router";
-import DocsPageClient, { type DocPost } from "~/features/docs/client";
-import { getDocsIndex } from "~/server/content";
+import { Page } from "@/components/site/page";
+import WritingIndex from "~/features/docs/client";
+import { getWriting } from "~/features/docs/server";
+import { seo } from "~/utils/seo";
 
 export const Route = createFileRoute("/_plain/docs/")({
-  loader: () => getDocsIndex(),
+  loader: () => getWriting(),
   staleTime: Number.POSITIVE_INFINITY,
+  head: () =>
+    seo({
+      title: "Writing",
+      description: "Write-ups on things Kanak built or broke: systems, deploys and product engineering.",
+      path: "/docs",
+    }),
   component: DocsIndexPage,
 });
 
 function DocsIndexPage() {
-  const docs = Route.useLoaderData();
-  const posts: DocPost[] = docs.map((doc) => ({
-    url: doc.url,
-    data: {
-      title: doc.title,
-      description: doc.description,
-      lastModified: doc.lastModified,
-      category: doc.category,
-      tags: doc.tags,
-    },
-  }));
-  const latest = posts[0]?.data.lastModified;
-  const latestPostDate = latest ? new Date(latest).toLocaleDateString() : "N/A";
-  return <DocsPageClient posts={posts} latestPostDate={latestPostDate} />;
+  return (
+    <Page>
+      <WritingIndex posts={Route.useLoaderData()} />
+    </Page>
+  );
 }

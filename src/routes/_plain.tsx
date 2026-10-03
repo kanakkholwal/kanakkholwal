@@ -1,10 +1,3 @@
-import PageWrapper from "@/components/wrapper";
 import { createFileRoute, Outlet } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/_plain")({
-  component: () => (
-    <PageWrapper>
-      <Outlet />
-    </PageWrapper>
-  ),
-});
+export const Route = createFileRoute("/_plain")({ component: Outlet });

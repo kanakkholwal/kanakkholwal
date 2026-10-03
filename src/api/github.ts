@@ -1,6 +1,7 @@
-import { getServerEnv } from "~/server/env.server";
-import { memo } from "~/lib/cache";
+import "@tanstack/react-start/server-only";
 import { formatDistanceToNowStrict } from "date-fns";
+import { memo } from "~/lib/cache";
+import { getServerEnv } from "~/server/env.server";
 
 export type HeroOrbitActivityKind =
   | "rocket"
@@ -105,9 +106,8 @@ export type ContributedRepository = {
   updatedAt: string;
 };
 
-export const getContributedOrganizations = memo(
-  async (username: string): Promise<ContributedOrganization[]> => {
-    const query = `
+export const getContributedOrganizations = memo(async (username: string): Promise<ContributedOrganization[]> => {
+  const query = `
       query($login: String!) {
         user(login: $login) {
           repositoriesContributedTo(
@@ -130,65 +130,62 @@ export const getContributedOrganizations = memo(
       }
     `;
 
-    const response = await fetch("https://api.github.com/graphql", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${getServerEnv().GITHUB_TOKEN}`,
-        // GitHub rejects requests without a User-Agent, and Workers fetch sends none.
-        "User-Agent": "kanakkholwal.eu.org",
-      },
-      body: JSON.stringify({
-        query,
-        variables: { login: username },
-      }),
-    });
+  const response = await fetch("https://api.github.com/graphql", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${getServerEnv().GITHUB_TOKEN}`,
+      // GitHub rejects requests without a User-Agent, and Workers fetch sends none.
+      "User-Agent": "kanakkholwal.eu.org",
+    },
+    body: JSON.stringify({
+      query,
+      variables: { login: username },
+    }),
+  });
 
-    if (!response.ok) {
-      throw new Error("Failed to fetch contributed organizations");
+  if (!response.ok) {
+    throw new Error("Failed to fetch contributed organizations");
+  }
+
+  const json = await response.json();
+
+  if (json.errors) {
+    throw new Error(json.errors[0].message);
+  }
+
+  const repos = json.data.user.repositoriesContributedTo.nodes;
+
+  // Group by organization and count contributions
+  const orgMap = new Map<string, ContributedOrganization>();
+
+  repos.forEach((repo: any) => {
+    const owner = repo.owner;
+
+    // Skip if it's a personal repository (user account, not organization)
+    // Organizations have the 'name' field
+    if (!owner.name && owner.login === username) {
+      return; // Skip user's own repos
     }
 
-    const json = await response.json();
+    const existing = orgMap.get(owner.login);
 
-    if (json.errors) {
-      throw new Error(json.errors[0].message);
+    if (existing) {
+      existing.repositoriesContributedTo++;
+    } else {
+      orgMap.set(owner.login, {
+        login: owner.login,
+        name: owner.name || owner.login,
+        avatarUrl: owner.avatarUrl,
+        url: owner.url,
+        repositoriesContributedTo: 1,
+      });
     }
+  });
 
-    const repos = json.data.user.repositoriesContributedTo.nodes;
-
-    // Group by organization and count contributions
-    const orgMap = new Map<string, ContributedOrganization>();
-
-    repos.forEach((repo: any) => {
-      const owner = repo.owner;
-
-      // Skip if it's a personal repository (user account, not organization)
-      // Organizations have the 'name' field
-      if (!owner.name && owner.login === username) {
-        return; // Skip user's own repos
-      }
-
-      const existing = orgMap.get(owner.login);
-
-      if (existing) {
-        existing.repositoriesContributedTo++;
-      } else {
-        orgMap.set(owner.login, {
-          login: owner.login,
-          name: owner.name || owner.login,
-          avatarUrl: owner.avatarUrl,
-          url: owner.url,
-          repositoriesContributedTo: 1,
-        });
-      }
-    });
-
-    // Convert to array and sort by number of repos contributed to
-    return Array.from(orgMap.values()).sort(
-      (a, b) => b.repositoriesContributedTo - a.repositoriesContributedTo,
-    );
-  },
-);
+  // Convert to array and sort by number of repos contributed to
+  return Array.from(orgMap.values()).sort((a, b) => b.repositoriesContributedTo - a.repositoriesContributedTo);
+});
 
 export type DetailedActivity = {
   activityOverview: ActivityOverview;
@@ -197,33 +194,9 @@ export type DetailedActivity = {
   organizations: Organization[];
 };
 
-/**
- * Fetches a detailed activity summary for a user over the past year.
- *
- * This function:
- * - Queries GitHub's GraphQL API for repositories the user has contributed to (most-recent first) and
- *   the user's contributionsCollection for the past year (commits, issues, PRs, reviews).
- * - Builds an ActivityOverview listing repositories contributed to (with basic repo metadata).
- * - Computes a CodeReviewDistribution that summarizes counts of commits, issues, PRs, and code reviews.
- * - Gathers and counts organizations (only when owner type is Organization) the user contributed to.
- *
- * Notes:
- * - Uses the GITHUB_TOKEN environment variable for authentication.
- * - The time window is approximately one year from "now" (from = today - 1 year).
- * - Uses in-memory caching via `cache`.
- *
- * @param username - GitHub username to fetch detailed activity for.
- * @returns A Promise that resolves to a DetailedActivity object containing:
- *   - activityOverview: repositories contributed to and total count,
- *   - codeReviewDistribution: counts of contribution types,
- *   - contributedOrganizations: organization list with repo counts,
- *   - organizations: (currently returned as an empty array, reserved for future use).
- *
- * @throws {Error} If the network request fails or the GraphQL API returns an error.
- */
-export const getDetailedActivity = memo(
-  async (username: string): Promise<DetailedActivity> => {
-    const query = `
+/** Past-year activity: repos contributed to, contribution-type counts and organizations. */
+export const getDetailedActivity = memo(async (username: string): Promise<DetailedActivity> => {
+  const query = `
       query($login: String!) {
         user(login: $login) {
           repositoriesContributedTo(
@@ -266,120 +239,98 @@ export const getDetailedActivity = memo(
       }
     `;
 
-    const response = await fetch("https://api.github.com/graphql", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${getServerEnv().GITHUB_TOKEN}`,
-        "User-Agent": "kanakkholwal.eu.org",
+  const response = await fetch("https://api.github.com/graphql", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${getServerEnv().GITHUB_TOKEN}`,
+      "User-Agent": "kanakkholwal.eu.org",
+    },
+    body: JSON.stringify({
+      query,
+      variables: {
+        login: username,
       },
-      body: JSON.stringify({
-        query,
-        variables: {
-          login: username,
-        },
-      }),
-    });
+    }),
+  });
 
-    if (!response.ok) {
-      throw new Error("Failed to fetch detailed activity");
+  if (!response.ok) {
+    throw new Error("Failed to fetch detailed activity");
+  }
+
+  const json = await response.json();
+
+  if (json.errors) {
+    throw new Error(json.errors[0].message);
+  }
+
+  const userData = json.data.user;
+  const contributions = userData.contributionsCollection;
+  const repos = userData.repositoriesContributedTo.nodes;
+
+  // Extract organizations from contributed repos
+  const orgMap = new Map<string, ContributedOrganization>();
+
+  repos.forEach((repo: any) => {
+    const owner = repo.owner;
+
+    // Only include Organizations
+    if (owner.__typename !== "Organization") {
+      return;
     }
 
-    const json = await response.json();
+    const existing = orgMap.get(owner.login);
 
-    if (json.errors) {
-      throw new Error(json.errors[0].message);
+    if (existing) {
+      existing.repositoriesContributedTo++;
+    } else {
+      orgMap.set(owner.login, {
+        login: owner.login,
+        name: owner.name || owner.login,
+        avatarUrl: owner.avatarUrl,
+        url: owner.url,
+        repositoriesContributedTo: 1,
+      });
     }
+  });
 
-    const userData = json.data.user;
-    const contributions = userData.contributionsCollection;
-    const repos = userData.repositoriesContributedTo.nodes;
+  // Calculate totals
+  const totalCommits = contributions.totalCommitContributions;
+  const totalIssues = contributions.totalIssueContributions;
+  const totalPRs = contributions.totalPullRequestContributions;
+  const totalReviews = contributions.totalPullRequestReviewContributions;
+  const totalContributions = totalCommits + totalIssues + totalPRs + totalReviews;
 
-    // Extract organizations from contributed repos
-    const orgMap = new Map<string, ContributedOrganization>();
+  return {
+    activityOverview: {
+      repositoriesContributedTo: repos.map((repo: any) => ({
+        name: repo.name,
+        owner: repo.owner.login,
+        url: repo.url,
+        description: repo.description,
+        stargazerCount: repo.stargazerCount,
+        forkCount: repo.forkCount,
+        primaryLanguage: repo.primaryLanguage,
+        isPrivate: repo.isPrivate,
+        updatedAt: repo.updatedAt,
+      })),
+      totalRepositoriesContributedTo: userData.repositoriesContributedTo.totalCount,
+    },
+    codeReviewDistribution: {
+      commits: totalCommits,
+      issues: totalIssues,
+      pullRequests: totalPRs,
+      codeReviews: totalReviews,
+      totalContributions,
+    },
+    contributedOrganizations: Array.from(orgMap.values()).sort(
+      (a, b) => b.repositoriesContributedTo - a.repositoriesContributedTo,
+    ),
+    organizations: [], // You can populate this if needed
+  };
+});
 
-    repos.forEach((repo: any) => {
-      const owner = repo.owner;
-
-      // Only include Organizations
-      if (owner.__typename !== "Organization") {
-        return;
-      }
-
-      const existing = orgMap.get(owner.login);
-
-      if (existing) {
-        existing.repositoriesContributedTo++;
-      } else {
-        orgMap.set(owner.login, {
-          login: owner.login,
-          name: owner.name || owner.login,
-          avatarUrl: owner.avatarUrl,
-          url: owner.url,
-          repositoriesContributedTo: 1,
-        });
-      }
-    });
-
-    // Calculate totals
-    const totalCommits = contributions.totalCommitContributions;
-    const totalIssues = contributions.totalIssueContributions;
-    const totalPRs = contributions.totalPullRequestContributions;
-    const totalReviews = contributions.totalPullRequestReviewContributions;
-    const totalContributions =
-      totalCommits + totalIssues + totalPRs + totalReviews;
-
-    return {
-      activityOverview: {
-        repositoriesContributedTo: repos.map((repo: any) => ({
-          name: repo.name,
-          owner: repo.owner.login,
-          url: repo.url,
-          description: repo.description,
-          stargazerCount: repo.stargazerCount,
-          forkCount: repo.forkCount,
-          primaryLanguage: repo.primaryLanguage,
-          isPrivate: repo.isPrivate,
-          updatedAt: repo.updatedAt,
-        })),
-        totalRepositoriesContributedTo:
-          userData.repositoriesContributedTo.totalCount,
-      },
-      codeReviewDistribution: {
-        commits: totalCommits,
-        issues: totalIssues,
-        pullRequests: totalPRs,
-        codeReviews: totalReviews,
-        totalContributions,
-      },
-      contributedOrganizations: Array.from(orgMap.values()).sort(
-        (a, b) => b.repositoriesContributedTo - a.repositoriesContributedTo,
-      ),
-      organizations: [], // You can populate this if needed
-    };
-  },
-);
-
-/**
- * Combines profile stats and detailed activity into a single API call.
- *
- * This convenience function concurrently fetches:
- * - getProfile(username)  -> contributions and stats,
- * - getDetailedActivity(username) -> detailed activity overview and distributions.
- *
- * Behavior:
- * - Requires GITHUB_TOKEN; will early-throw if token is not defined.
- * - Uses Promise.allSettled to run both fetches concurrently and returns a combined result if both succeed.
- * - Logs detailed errors and throws a generic error if either fetch fails.
- * - Uses in-memory caching via `cache`.
- *
- * @param username - GitHub username to fetch combined stats and activity for.
- * @returns A Promise that resolves to an object with:
- *   - stats: Contributions (profile & calendar),
- *   - activity: DetailedActivity (activity overview & distributions).
- *
- * @throws {Error} If GITHUB_TOKEN is not defined, or if either underlying fetch fails.
- */
+/** Contributions plus detailed activity in one call; throws if either fetch fails. */
 
 export const getGithubStats = memo(
   async (
@@ -411,66 +362,19 @@ export const getGithubStats = memo(
   },
 );
 
-/**
- * Maps GitHub contribution level strings to a numeric 0-4 scale.
- *
- * This helper converts GitHub's named contribution intensity levels
- * ("FIRST_QUARTILE", "SECOND_QUARTILE", "THIRD_QUARTILE", "FOURTH_QUARTILE")
- * into numeric values (1..4). Any unknown or empty value maps to 0.
- *
- * @param level - The contribution level string from the GitHub API.
- * @returns A number in the range 0-4 representing the intensity/level.
- */
-
-const getLevel = (level: string): number => {
-  switch (level) {
-    case "FIRST_QUARTILE":
-      return 1;
-    case "SECOND_QUARTILE":
-      return 2;
-    case "THIRD_QUARTILE":
-      return 3;
-    case "FOURTH_QUARTILE":
-      return 4;
-    default:
-      return 0;
-  }
-};
-
 export type WeeklyContribution = {
   weekStart: string; // ISO string date of the Sunday for that week
   count: number;
   averageLevel: number; // Useful for coloring the graph
 };
 
-/**
- * Aggregates daily contributions into weekly buckets.
- *
- * Given an array of daily ContributionActivity entries, this function:
- * - Sorts the input by date,
- * - Determines the week-start (Sunday) for each date and groups days into that week,
- * - Sums counts per week and computes an average/representative level (currently the max level in the week).
- *
- * The returned array contains WeeklyContribution objects with:
- * - weekStart: ISO date string of the Sunday of that week,
- * - count: total contributions in that week,
- * - averageLevel: aggregated weekly level (useful for coloring or intensity).
- *
- * This function is synchronous and pure.
- *
- * @param dailyContributions - Array of ContributionActivity (daily entries) to aggregate.
- * @returns An array of WeeklyContribution objects ordered by week start (iteration order of the map).
- */
+/** Daily contributions grouped into Sunday-start weeks; a week takes its busiest day level. */
 
-export const getWeeklyContributions = (
-  dailyContributions: ContributionActivity[],
-): WeeklyContribution[] => {
+export const getWeeklyContributions = (dailyContributions: ContributionActivity[]): WeeklyContribution[] => {
   const weeklyMap = new Map<string, WeeklyContribution>();
 
   // Sort daily contributions by date first to ensure order
-  const sorted = [...dailyContributions].sort(
-    (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
-  );
+  const sorted = [...dailyContributions].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
   for (const day of sorted) {
     const dateObj = new Date(day.date);
@@ -501,34 +405,13 @@ export const getWeeklyContributions = (
   return Array.from(weeklyMap.values());
 };
 
-/**
- * Fetches contributions from a public contributions API and supplements with GitHub GraphQL stats.
- *
- * This function:
- * - Calls an external cached contributions endpoint (github-contributions-api.jogruber.de) for raw daily contributions.
- * - Calls GitHub GraphQL to get followers, owned repositories, and repository counts to compute stars/forks.
- * - Validates both responses are JSON and successful, then combines data into the Contributions shape.
- *
- * Notes:
- * - Uses Promise.allSettled to parallelize the external and GitHub requests and errors when either fails.
- * - Requires GITHUB_TOKEN for the GitHub GraphQL request.
- * - Uses in-memory caching via `cache`.
- *
- * @param username - GitHub username to fetch cached contributions and stats for.
- * @returns A Promise that resolves to a Contributions object containing:
- *   - contributions: map of year -> ContributionActivity[] (from the external contributions service),
- *   - total: total contributions object as returned by the external API,
- *   - stats: aggregated GithubStats from GraphQL data.
- *
- * @throws {Error} If any network request fails, responses are non-JSON, or the GraphQL API returns an error.
- */
-export const getCachedContributions = memo(
-  async (username: string): Promise<Contributions> => {
-    // 1️⃣ Contributions API
-    const contributionsUrl = `https://github-contributions-api.jogruber.de/v4/${username}`;
+/** Daily counts from github-contributions-api.jogruber.de, plus followers, stars and forks from GraphQL. */
+export const getCachedContributions = memo(async (username: string): Promise<Contributions> => {
+  // 1️⃣ Contributions API
+  const contributionsUrl = `https://github-contributions-api.jogruber.de/v4/${username}`;
 
-    // 2️⃣ GitHub GraphQL API for followers, stars, repos, forks
-    const githubQuery = `
+  // 2️⃣ GitHub GraphQL API for followers, stars, repos, forks
+  const githubQuery = `
       query($login: String!) {
         user(login: $login) {
           followers {
@@ -545,82 +428,69 @@ export const getCachedContributions = memo(
       }
     `;
 
-    const [contribRes, githubRes] = await Promise.allSettled([
-      fetch(contributionsUrl),
-      fetch("https://api.github.com/graphql", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${getServerEnv().GITHUB_TOKEN}`,
-          "User-Agent": "kanakkholwal.eu.org",
-        },
-        body: JSON.stringify({
-          query: githubQuery,
-          variables: { login: username },
-        }),
-      }),
-    ]);
-    if (contribRes.status !== "fulfilled" || githubRes.status !== "fulfilled") {
-      throw new Error("Failed to fetch contributions or GitHub data");
-    }
-
-    // Parse responses
-    if (!contribRes.value.ok || !githubRes.value.ok) {
-      throw new Error("Failed to fetch contributions or GitHub data");
-    }
-    // Type assertion for contributions response
-    if (
-      !contribRes.value.headers
-        .get("content-type")
-        ?.includes("application/json")
-    ) {
-      throw new Error("Invalid contributions response format");
-    }
-    if (
-      !githubRes.value.headers.get("content-type")?.includes("application/json")
-    ) {
-      throw new Error("Invalid GitHub response format");
-    }
-    // Parse JSON responses
-    const contribData = (await contribRes.value.json()) as ContributionResponse;
-    const githubData = await githubRes.value.json();
-
-    // Map contributions year-wise
-    const contributionByYear = contribData.contributions.reduce(
-      (mapping, item) => {
-        const year = new Date(item.date).getFullYear().toString();
-        if (!mapping[year]) mapping[year] = [];
-        mapping[year].push(item);
-        return mapping;
+  const [contribRes, githubRes] = await Promise.allSettled([
+    fetch(contributionsUrl),
+    fetch("https://api.github.com/graphql", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getServerEnv().GITHUB_TOKEN}`,
+        "User-Agent": "kanakkholwal.eu.org",
       },
-      {} as Record<string, ContributionActivity[]>,
-    );
+      body: JSON.stringify({
+        query: githubQuery,
+        variables: { login: username },
+      }),
+    }),
+  ]);
+  if (contribRes.status !== "fulfilled" || githubRes.status !== "fulfilled") {
+    throw new Error("Failed to fetch contributions or GitHub data");
+  }
 
-    // Aggregate stars and forks
-    const repos = githubData.data.user.repositories.nodes;
-    const totalStars = repos.reduce(
-      (acc: number, r: any) => acc + r.stargazerCount,
-      0,
-    );
-    const totalForks = repos.reduce(
-      (acc: number, r: any) => acc + r.forkCount,
-      0,
-    );
+  // Parse responses
+  if (!contribRes.value.ok || !githubRes.value.ok) {
+    throw new Error("Failed to fetch contributions or GitHub data");
+  }
+  // Type assertion for contributions response
+  if (!contribRes.value.headers.get("content-type")?.includes("application/json")) {
+    throw new Error("Invalid contributions response format");
+  }
+  if (!githubRes.value.headers.get("content-type")?.includes("application/json")) {
+    throw new Error("Invalid GitHub response format");
+  }
+  // Parse JSON responses
+  const contribData = (await contribRes.value.json()) as ContributionResponse;
+  const githubData = await githubRes.value.json();
 
-    const stats: GithubStats = {
-      followers: githubData.data.user.followers.totalCount,
-      stars: totalStars,
-      forks: totalForks,
-      repos: githubData.data.user.repositories.totalCount,
-    };
+  // Map contributions year-wise
+  const contributionByYear = contribData.contributions.reduce(
+    (mapping, item) => {
+      const year = new Date(item.date).getFullYear().toString();
+      if (!mapping[year]) mapping[year] = [];
+      mapping[year].push(item);
+      return mapping;
+    },
+    {} as Record<string, ContributionActivity[]>,
+  );
 
-    return {
-      contributions: contributionByYear,
-      total: contribData.total,
-      stats,
-    };
-  },
-);
+  // Aggregate stars and forks
+  const repos = githubData.data.user.repositories.nodes;
+  const totalStars = repos.reduce((acc: number, r: any) => acc + r.stargazerCount, 0);
+  const totalForks = repos.reduce((acc: number, r: any) => acc + r.forkCount, 0);
+
+  const stats: GithubStats = {
+    followers: githubData.data.user.followers.totalCount,
+    stars: totalStars,
+    forks: totalForks,
+    repos: githubData.data.user.repositories.totalCount,
+  };
+
+  return {
+    contributions: contributionByYear,
+    total: contribData.total,
+    stats,
+  };
+});
 
 const HERO_ORBIT_QUERY = `
   query($login: String!) {
@@ -755,12 +625,8 @@ type RawStarredRepo = {
   url: string;
 };
 
-function pushRelease(
-  repos: RawRepoNode[],
-  bucket: HeroOrbitActivityItem[],
-): void {
-  let best: { repo: string; tag: string; url: string; date: Date } | null =
-    null;
+function pushRelease(repos: RawRepoNode[], bucket: HeroOrbitActivityItem[]): void {
+  let best: { repo: string; tag: string; url: string; date: Date } | null = null;
   for (const r of repos) {
     for (const rel of r.releases.nodes) {
       if (!rel.publishedAt) continue;
@@ -787,10 +653,7 @@ function pushRelease(
   }
 }
 
-function pushPullRequestActivity(
-  prs: RawPRContribution[],
-  bucket: HeroOrbitActivityItem[],
-): void {
+function pushPullRequestActivity(prs: RawPRContribution[], bucket: HeroOrbitActivityItem[]): void {
   for (const node of prs) {
     const pr = node.pullRequest;
     if (!pr || !node.occurredAt) continue;
@@ -807,10 +670,7 @@ function pushPullRequestActivity(
   }
 }
 
-function pushReviewActivity(
-  reviews: RawReviewContribution[],
-  bucket: HeroOrbitActivityItem[],
-): void {
+function pushReviewActivity(reviews: RawReviewContribution[], bucket: HeroOrbitActivityItem[]): void {
   for (const node of reviews) {
     const pr = node.pullRequest;
     if (!pr || !node.occurredAt) continue;
@@ -826,10 +686,7 @@ function pushReviewActivity(
   }
 }
 
-function pushStarredActivity(
-  stars: RawStarredRepo[],
-  bucket: HeroOrbitActivityItem[],
-): void {
+function pushStarredActivity(stars: RawStarredRepo[], bucket: HeroOrbitActivityItem[]): void {
   for (const repo of stars) {
     bucket.push({
       kind: "star",
@@ -866,23 +723,10 @@ function extractRepoSlug(item: HeroOrbitActivityItem): string {
 }
 
 /**
- * Coalesces duplicate-style activity into a single summary row when several
- * items share the same action and the same repository within a rolling
- * 7-day window. Items without a clear repo (e.g. starred repos) group only
- * by action. The output is capped at 4 entries and always preserves the
- * rolling stars-earned summary at the tail.
- *
- * Examples (recent → displayed):
- *  - 6 PR merges in `orbit` this week
- *      → `Merged · 6 PRs merged in orbit · this week`
- *  - 4 starred repos within the window
- *      → `Starred · 4 repos · this week`
- *  - 1 merge + 2 reviews in different repos
- *      → shown individually as separate rows
+ * Folds same-action, same-repo items within 7 days into one summary row ("6 PRs merged in orbit").
+ * Capped at 4 rows; the stars-earned row always stays last.
  */
-function aggregateActivity(
-  items: HeroOrbitActivityItem[],
-): HeroOrbitActivityItem[] {
+function aggregateActivity(items: HeroOrbitActivityItem[]): HeroOrbitActivityItem[] {
   const summary = items.find((item) => item.kind === "stars:bs");
   const timeBound = items.filter((item) => item.kind !== "stars:bs");
 
@@ -919,7 +763,7 @@ function aggregateActivity(
       const latest = recent[0];
       const repo = extractRepoSlug(latest);
       const noun = pluralizeNoun(latest);
-      // Stars are about the *target* repos — saying "in {repo}" reads
+      // Stars are about the *target* repos; saying "in {repo}" reads
       // weirdly, so drop the suffix for that kind.
       const value =
         latest.kind === "star"
@@ -936,7 +780,7 @@ function aggregateActivity(
         url: latest.url,
       });
     } else if (group[0]) {
-      // Either one recent item or older items only — show the freshest one.
+      // Either one recent item or older items only: show the freshest one.
       out.push(group[0]);
     }
   }
@@ -952,22 +796,7 @@ function aggregateActivity(
   return out.slice(0, 4);
 }
 
-/**
- * Issues a single GraphQL query against the GitHub API and merges the
- * following signals into a unified, time-sorted activity feed:
- *  - Releases from the user's own non-fork repos (most recent).
- *  - Pull requests the user opened or got merged (via contributionsCollection).
- *  - Pull request reviews the user submitted.
- *  - Repos the user recently starred.
- *  - A rolling total-stars-earned row that anchors the feed.
- *
- * Logs and rethrows on failure so callers can decide how to recover. Cache
- * lifetimes and dedup are handled by {@link fetchHeroOrbitPayload}.
- *
- * Designed to run server-side; never expose GITHUB_TOKEN to the client.
- *
- * @throws {Error} If GITHUB_TOKEN is missing or the GraphQL request fails.
- */
+/** One GraphQL query merged into a time-sorted feed: releases, PRs, reviews, stars. Server only. */
 async function fetchHeroOrbitPayload(username: string): Promise<HeroOrbitData> {
   if (!getServerEnv().GITHUB_TOKEN) {
     throw new Error("GitHub token is not defined");
@@ -988,17 +817,18 @@ async function fetchHeroOrbitPayload(username: string): Promise<HeroOrbitData> {
       }),
     });
   } catch (err) {
-    const wrapped = new Error(
-      `Network error while contacting GitHub: ${(err as Error).message}`,
-    ) as Error & { cause?: unknown };
+    const wrapped = new Error(`Network error while contacting GitHub: ${(err as Error).message}`) as Error & {
+      cause?: unknown;
+    };
     wrapped.cause = err;
     throw wrapped;
   }
 
   if (!response.ok) {
-    const err = new Error(
-      `GitHub GraphQL returned ${response.status} ${response.statusText}`,
-    ) as Error & { status?: number; rateLimited?: boolean };
+    const err = new Error(`GitHub GraphQL returned ${response.status} ${response.statusText}`) as Error & {
+      status?: number;
+      rateLimited?: boolean;
+    };
     err.status = response.status;
     err.rateLimited = response.status === 429 || response.status === 403;
     throw err;
@@ -1008,9 +838,7 @@ async function fetchHeroOrbitPayload(username: string): Promise<HeroOrbitData> {
   try {
     json = await response.json();
   } catch (err) {
-    throw new Error(
-      `Invalid JSON from GitHub GraphQL: ${(err as Error).message}`,
-    );
+    throw new Error(`Invalid JSON from GitHub GraphQL: ${(err as Error).message}`);
   }
 
   if (json?.errors?.length) {
@@ -1032,14 +860,8 @@ async function fetchHeroOrbitPayload(username: string): Promise<HeroOrbitData> {
 
   const bucket: HeroOrbitActivityItem[] = [];
   pushRelease(repos, bucket);
-  pushPullRequestActivity(
-    collection.pullRequestContributions?.nodes ?? [],
-    bucket,
-  );
-  pushReviewActivity(
-    collection.pullRequestReviewContributions?.nodes ?? [],
-    bucket,
-  );
+  pushPullRequestActivity(collection.pullRequestContributions?.nodes ?? [], bucket);
+  pushReviewActivity(collection.pullRequestReviewContributions?.nodes ?? [], bucket);
   pushStarredActivity(starred, bucket);
 
   bucket.push({
@@ -1065,11 +887,7 @@ const EMPTY_HERO_ORBIT: HeroOrbitData = {
   activity: [],
 };
 
-/**
- * Structured log entry for hero-orbit failures. Always printed so server
- * operators can spot rate-limit / auth / network errors in the logs even
- * when the page degrades gracefully to the fallback state.
- */
+/** Always logged, so rate-limit and auth failures show even when the page falls back quietly. */
 function logHeroOrbitFailure(
   stage: "fetch" | "cache" | "rate-limit",
   err: unknown,
@@ -1096,15 +914,12 @@ const cachedHeroOrbitFetch = memo(fetchHeroOrbitPayload, 3600);
  * Compact payload for the hero orbit panel, or `null` on failure (logged with stage context).
  * Failures are not cached, so the next request retries.
  */
-export async function getHeroOrbitData(
-  username: string,
-): Promise<HeroOrbitData | null> {
+export async function getHeroOrbitData(username: string): Promise<HeroOrbitData | null> {
   try {
     return await cachedHeroOrbitFetch(username);
   } catch (err) {
     const status = (err as { status?: number })?.status;
-    const stage: "fetch" | "cache" | "rate-limit" =
-      status === 429 || status === 403 ? "rate-limit" : "fetch";
+    const stage: "fetch" | "cache" | "rate-limit" = status === 429 || status === 403 ? "rate-limit" : "fetch";
     logHeroOrbitFailure(stage, err, {
       username,
       status,
@@ -1115,8 +930,6 @@ export async function getHeroOrbitData(
 }
 
 /** {@link getHeroOrbitData} with {@link EMPTY_HERO_ORBIT} substituted on failure. */
-export async function getHeroOrbitDataSafe(
-  username: string,
-): Promise<HeroOrbitData> {
+export async function getHeroOrbitDataSafe(username: string): Promise<HeroOrbitData> {
   return (await getHeroOrbitData(username)) ?? EMPTY_HERO_ORBIT;
 }

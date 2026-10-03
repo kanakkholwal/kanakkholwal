@@ -1,18 +1,8 @@
-import { iconZodSchema } from "./@/components/icons";
-import {
-  remarkImage,
-  remarkMdxMermaid,
-  remarkNpm,
-  remarkStructure,
-} from "fumadocs-core/mdx-plugins";
-import {
-  defineConfig,
-  defineDocs,
-  frontmatterSchema,
-  metaSchema,
-} from "fumadocs-mdx/config";
+import { remarkImage, remarkMdxMermaid, remarkNpm, remarkStructure } from "fumadocs-core/mdx-plugins";
+import { defineConfig, defineDocs, frontmatterSchema, metaSchema } from "fumadocs-mdx/config";
 import lastModified from "fumadocs-mdx/plugins/last-modified";
 import z from "zod";
+import { iconZodSchema } from "./src/components/icons/schema";
 
 // You can customise Zod schemas for frontmatter and `meta.json` here
 // see https://fumadocs.dev/docs/mdx/collections
@@ -49,14 +39,7 @@ export const workExperiences = defineDocs({
       endDate: z.string().optional(),
       isCurrentEmployer: z.boolean().default(false).optional(),
       isOngoing: z.boolean().default(false).optional(),
-      employmentType: z.enum([
-        "Full-time",
-        "Part-time",
-        "Contract",
-        "Internship",
-        "Freelance",
-        "Volunteer",
-      ]).optional(),
+      employmentType: z.enum(["Full-time", "Part-time", "Contract", "Internship", "Freelance", "Volunteer"]).optional(),
     }),
     postprocess: {
       includeProcessedMarkdown: true,
@@ -73,10 +56,7 @@ export const projects = defineDocs({
       href: z.url(),
       dates: z.string(),
       active: z.boolean(),
-      status: z.union([
-        z.enum(["Active", "Completed", "Archived"]),
-        z.string(),
-      ]),
+      status: z.union([z.enum(["Active", "Completed", "Archived"]), z.string()]),
       description: z.string(),
       technologies: z.array(z.string()),
       links: z

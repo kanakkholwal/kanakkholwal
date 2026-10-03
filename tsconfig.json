@@ -15,7 +15,7 @@
     "jsx": "react-jsx",
     "target": "ES2024",
     "paths": {
-      "@/*": ["./@/*"],
+      "@/*": ["./src/*"],
       "~/*": ["./src/*"],
       "root/*": ["./*"],
       "fumadocs-mdx:collections/*": ["./.source/*"]

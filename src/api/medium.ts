@@ -1,3 +1,4 @@
+import "@tanstack/react-start/server-only";
 import { appConfig } from "root/project.config";
 import { parseStringPromise } from "xml2js";
 import { calculateReadingTime } from "~/utils/string";
@@ -22,24 +23,19 @@ export async function getMediumPosts(): Promise<PostType[]> {
     const content = item["content:encoded"]?.[0] || item.description[0];
 
     // Strip HTML tags for snippet
-    const snippet =
-      content
-        .replace(/<[^>]+>/g, "")
-        .trim()
-        .split(/\s+/)
-        .slice(0, 50)
-        .join(" ") + "...";
+    const snippet = `${content
+      .replace(/<[^>]+>/g, "")
+      .trim()
+      .split(/\s+/)
+      .slice(0, 50)
+      .join(" ")}...`;
 
     // Extract first image if it matches cdn or common extensions
-    const imgMatch = content.match(
-      /<img[^>]+src="([^">]*(cdn-images|\.png|\.jpe?g|\.webp|\.gif))"[^>]*>/i,
-    );
+    const imgMatch = content.match(/<img[^>]+src="([^">]*(cdn-images|\.png|\.jpe?g|\.webp|\.gif))"[^>]*>/i);
     const thumbnail = imgMatch ? imgMatch[1] : null;
 
     // Extract categories/tags
-    const tags = (item.category || []).map((c: any) =>
-      typeof c === "string" ? c : c._,
-    );
+    const tags = (item.category || []).map((c: any) => (typeof c === "string" ? c : c._));
 
     return {
       title: item.title[0],
