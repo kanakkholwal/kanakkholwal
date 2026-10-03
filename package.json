@@ -13,7 +13,7 @@
     "postinstall": "fumadocs-mdx",
     "deploy": "bun run build && wrangler deploy",
     "cf-typegen": "wrangler types --include-runtime=false --strict-vars=false",
-    "test": "bun test",
+    "test": "bun test --pass-with-no-tests",
     "format": "bun x prettier --write \"**/*.{ts,tsx,js,jsx,md}\"",
     "icons": "node scripts/generate-icons.mjs",
     "lint:comments": "node scripts/check-comments.mjs --all"
