@@ -11,7 +11,7 @@
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "deploy": "bun run build && wrangler deploy",
-    "cf-typegen": "wrangler types",
+    "cf-typegen": "wrangler types --include-runtime=false --strict-vars=false",
     "test": "bun test",
     "audit:design": "node scripts/audit-design-tokens.mjs",
     "format": "bun x prettier --write \"**/*.{ts,tsx,js,jsx,md}\""

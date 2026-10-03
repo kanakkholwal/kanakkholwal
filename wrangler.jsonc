@@ -6,7 +6,14 @@
   "main": "@tanstack/react-start/server-entry",
   "observability": {
     "enabled": true
+  },
+  // Optional; empty falls back to project.config.ts. A value in the .env files overrides it locally.
+  "vars": {
+    "GA_SITE_PROPERTY_ID": ""
+  },
+  // Locally these come from the .env files TanStack Start loads; declaring them here passes them into the Worker.
+  // Production: `wrangler secret put <NAME>` or `wrangler deploy --secrets-file .env.production`; deploy fails if unset.
+  "secrets": {
+    "required": ["GITHUB_TOKEN", "PROJECTS_CE_TOKEN", "GA_SERVICE_ACCOUNT_KEY"]
   }
-  // Secrets (GITHUB_TOKEN, PROJECTS_CE_TOKEN, GA_SERVICE_ACCOUNT_KEY, GA_SITE_PROPERTY_ID):
-  // `wrangler secret put <NAME>`. nodejs_compat exposes them on process.env.
 }

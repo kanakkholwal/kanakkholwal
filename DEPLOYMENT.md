@@ -11,17 +11,15 @@ bun run dev:app  # plain `vite dev` on a port, no portless
 bun run preview  # production build running in workerd
 ```
 
-Secrets for local dev go in `.dev.vars` (dotenv format, git-ignored). Names are in `.env.example`; `cp .env.development .dev.vars` works if you still have the Vercel-pulled file. Without them, GitHub and GA sections degrade to fallbacks.
+Env loads like the Next.js build did: TanStack Start reads `.env`, `.env.local`, `.env.[mode]`, `.env.[mode].local` into `process.env` (`.env.development` for dev, `.env.production` for build/preview). Server keys must be declared in `wrangler.jsonc` (`secrets`/`vars`) to reach the Worker; after changing them run `bun run cf-typegen`. Names are in `.env.example`.
 
 ## Deploy
 
 ```bash
 bunx wrangler login
-bunx wrangler secret put GITHUB_TOKEN
-bunx wrangler secret put PROJECTS_CE_TOKEN
-bunx wrangler secret put GA_SERVICE_ACCOUNT_KEY
-bunx wrangler secret put GA_SITE_PROPERTY_ID   # optional, overrides project.config.ts
-bun run deploy
+bun run build
+bunx wrangler deploy --secrets-file .env.production   # first deploy: uploads the required secrets
+bun run deploy                                       # later deploys; rotate with `wrangler secret put <NAME>`
 ```
 
 CI (`.github/workflows/cd-deploy.yml`) needs `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` repo secrets. PRs upload a preview version; `workflow_dispatch` on `main` deploys.
@@ -32,4 +30,4 @@ Point the custom domain (`kanakkholwal.eu.org`) at the Worker under Workers & Pa
 
 - Worker upload is ~3.0 MB gzipped (recharts SSR and the takumi OG-image wasm are the bulk). Fits Workers Paid (10 MB); right at the Free plan's 3 MB cap.
 - Data caching is per-isolate memory (`src/lib/cache.ts`), replacing Next's `unstable_cache`. There is no ISR; pages render on request.
-- `next/image` is now a plain `<img>` (`@/components/image`); there is no image optimizer.
+- Images use Unpic (`@/components/image`). Set `VITE_CF_IMAGE_DOMAIN` at build time once Image Transformations are enabled on the zone to get resized `srcset`s.

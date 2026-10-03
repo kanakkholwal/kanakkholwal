@@ -10,7 +10,6 @@
 # generated content
 .source
 src/routeTree.gen.ts
-worker-configuration.d.ts
 
 # build output
 /dist
