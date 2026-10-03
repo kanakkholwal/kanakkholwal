@@ -1,0 +1,788 @@
+@import "tailwindcss";
+@import 'tw-animate-css';
+@import 'fumadocs-ui/css/neutral.css';
+@import 'fumadocs-ui/css/preset.css';
+@import '@fontsource-variable/geist';
+@import '@fontsource-variable/geist-mono';
+@import '@fontsource-variable/quicksand/wght.css';
+@import '@fontsource/instrument-serif';
+
+@plugin "@tailwindcss/typography";
+
+/* Self-hosted replacements for the vars next/font used to set on <body>. */
+:root {
+  --font-geist-sans: 'Geist Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-geist-mono: 'Geist Mono Variable', ui-monospace, monospace;
+  --font-instrument-serif: 'Instrument Serif', serif;
+  --font-logo: 'Quicksand Variable', 'Helvetica', 'Arial', sans-serif;
+}
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* Hover styling belongs behind this, not behind bare `hover:`. Touch devices
+   fire :hover on tap and leave it stuck until the next tap elsewhere. */
+@custom-variant hoverable {
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      @slot;
+    }
+  }
+}
+
+/* Every colour pair below is measured. Text tokens clear 4.5:1 on the surfaces
+   they are used on; --input, --ring and the chart series clear 3:1. Don't
+   re-tune one side of a pair without re-measuring the other. */
+:root,
+[data-theme="light"] {
+  --background: hsl(0 0% 98%);
+  --foreground: hsl(0 0% 9.8%);
+  --card: hsl(0 0% 100%);
+  --card-foreground: hsl(0 0% 9.8%);
+  --popover: hsl(0 0% 100%);
+  --popover-foreground: hsl(0 0% 9.8%);
+
+  /* 35% L, not 39.22% — white on it is 4.95:1 and it is 4.74:1 as link text.
+     At the old value both were under 4.5. */
+  --primary: hsl(200.21 100% 35%);
+  --primary-foreground: hsl(0 0% 100%);
+
+  --secondary: hsl(240 4.8% 95.9%);
+  --secondary-foreground: hsl(240 5.9% 10%);
+
+  --tertiary: hsl(200.21 100% 35%);
+  --tertiary-foreground: hsl(0 0% 100%);
+
+  --muted: hsl(0 0% 94%);
+  --muted-foreground: hsl(215 12% 40%);
+  /* Third text tier. Exists so nobody reaches for `text-muted-foreground/50`,
+     which lands anywhere between 1.4:1 and 3:1 depending on the surface. */
+  --subtle-foreground: hsl(215 9% 46%);
+
+  --accent: hsl(240 5% 94%);
+  --accent-foreground: hsl(240 6% 10%);
+
+  --destructive: hsl(354 70% 44%);
+  --destructive-foreground: hsl(0 0% 100%);
+  --success: hsl(158 78% 27%);
+  --success-foreground: hsl(0 0% 100%);
+  --warning: hsl(36 100% 30%);
+  --warning-foreground: hsl(0 0% 100%);
+  --info: hsl(200.21 100% 35%);
+  --info-foreground: hsl(0 0% 100%);
+
+  --max-app-width: clamp(1024px, 92vw, 1600px);
+  --spotlight-color: rgb(0 0 0 / 0.05);
+
+  /* Two jobs, two tokens. --border draws decorative dividers (exempt from
+     1.4.11); --input draws control boundaries and must clear 3:1. */
+  --border: hsl(220 13% 89%);
+  --input: hsl(215 8% 57%);
+
+  --ring: var(--primary);
+  --radius: 0.75rem;
+  --edge: color-mix(in oklab, var(--border) 64%, var(--background));
+
+  --sidebar: var(--card);
+  --sidebar-background: var(--card);
+  --sidebar-foreground: var(--card-foreground);
+  --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: var(--primary-foreground);
+  --sidebar-accent: var(--accent);
+  --sidebar-accent-foreground: var(--accent-foreground);
+  --sidebar-border: var(--border);
+  --sidebar-ring: var(--ring);
+
+  /* Every series clears 3:1 on the card, and every adjacent pair separates
+     under protanopia, deuteranopia and tritanopia. Lightness alternates on
+     purpose — hue distance alone is not colour-blind distance, which is how
+     the old set ended up with chart-11/12 identical at 0.047 dE. */
+  --chart-1: hsl(200.21 100% 35%);
+  --chart-2: hsl(35 80% 40%);
+  --chart-3: hsl(340 80% 28%);
+  --chart-4: hsl(255 80% 48%);
+  --chart-5: hsl(190 68% 38%);
+  --chart-6: hsl(20 88% 32%);
+  --chart-7: hsl(275 72% 36%);
+  --chart-8: hsl(225 65% 56%);
+}
+
+.dark,
+[data-theme="dark"] {
+  /* Elevation ramp. The old set spanned 0.9% lightness across background,
+     card and muted, so every surface read as the same surface. */
+  --background: hsl(0 0% 4.3%);
+  --foreground: hsl(0 0% 93%);
+  --card: hsl(0 0% 8.6%);
+  --card-foreground: hsl(0 0% 93%);
+  --popover: hsl(0 0% 11%);
+  --popover-foreground: hsl(0 0% 93%);
+
+  /* Light enough to be readable text on the dark ground (8.2:1); the label on
+     top flips to near-black rather than the near-white it used to be. */
+  --primary: hsl(200.21 90% 58%);
+  --primary-foreground: hsl(203 55% 6%);
+
+  --secondary: hsl(240 4% 16%);
+  --secondary-foreground: hsl(0 0% 98%);
+
+  --tertiary: hsl(200.21 90% 58%);
+  --tertiary-foreground: hsl(203 55% 6%);
+
+  --muted: hsl(0 0% 13.7%);
+  --muted-foreground: hsl(240 5% 66%);
+  --subtle-foreground: hsl(240 4% 56%);
+
+  --accent: hsl(240 4% 16%);
+  --accent-foreground: hsl(0 0% 93%);
+
+  --destructive: hsl(354 82% 70%);
+  --destructive-foreground: hsl(354 60% 8%);
+  --success: hsl(157 65% 58%);
+  --success-foreground: hsl(157 60% 7%);
+  --warning: hsl(41 87% 55%);
+  --warning-foreground: hsl(41 70% 7%);
+  --info: hsl(200.21 90% 58%);
+  --info-foreground: hsl(203 55% 6%);
+
+  --spotlight-color: rgb(255 255 255 / 0.08);
+
+  --border: hsl(0 0% 15%);
+  --input: hsl(0 0% 42%);
+  --ring: var(--primary);
+
+  --chart-1: hsl(200.21 90% 58%);
+  --chart-2: hsl(55 85% 58%);
+  --chart-3: hsl(340 88% 62%);
+  --chart-4: hsl(275 85% 66%);
+  --chart-5: hsl(190 80% 76%);
+  --chart-6: hsl(35 78% 60%);
+  --chart-7: hsl(225 72% 64%);
+  --chart-8: hsl(150 62% 58%);
+
+  --sidebar: var(--card);
+  --sidebar-background: var(--card);
+  --sidebar-foreground: var(--card-foreground);
+  --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: var(--primary-foreground);
+  --sidebar-accent: var(--accent);
+  --sidebar-accent-foreground: var(--accent-foreground);
+  --sidebar-border: var(--border);
+  --sidebar-ring: var(--ring);
+
+  /* fumadocs surfaces, tracked to the ramp above */
+  --color-fd-background: var(--background);
+  --color-fd-foreground: var(--foreground);
+  --color-fd-muted: var(--muted);
+  --color-fd-muted-foreground: var(--muted-foreground);
+  --color-fd-popover: var(--popover);
+  --color-fd-popover-foreground: var(--popover-foreground);
+  --color-fd-card: var(--card);
+  --color-fd-card-foreground: var(--card-foreground);
+  --color-fd-border: var(--border);
+  --color-fd-primary: var(--foreground);
+  --color-fd-primary-foreground: var(--background);
+  --color-fd-secondary: var(--secondary);
+  --color-fd-secondary-foreground: var(--secondary-foreground);
+  --color-fd-accent: var(--accent);
+  --color-fd-accent-foreground: var(--accent-foreground);
+  --color-fd-ring: var(--ring);
+}
+
+
+
+@theme inline {
+  --font-sans: var(--font-geist-sans, 'GeistSans', 'Inter', 'Poppins', 'Helvetica', 'Arial', sans-serif);
+  --font-mono: var(--font-geist-mono, 'Space Mono', 'Fira Code', 'Courier New', 'Courier', 'monospace');
+  --font-serif: var(--font-instrument-serif);
+  --font-logo: var(--font-logo, 'Quicksand', 'Helvetica', 'Arial', sans-serif);
+
+  /* Type scale. Tracking is a function of size — negative as display type
+     grows, ~0 at body, positive at caption — so `tracking-*` utilities are for
+     genuine exceptions, not for every label. Nothing below 12px exists. */
+  --text-2xs: 0.75rem;
+  --text-2xs--line-height: 1.4;
+  --text-2xs--letter-spacing: 0.02em;
+  --text-xs: 0.8125rem;
+  --text-xs--line-height: 1.45;
+  --text-xs--letter-spacing: 0.01em;
+  --text-sm: 0.875rem;
+  --text-sm--line-height: 1.55;
+  --text-sm--letter-spacing: 0em;
+  --text-base: 1rem;
+  --text-base--line-height: 1.65;
+  --text-base--letter-spacing: 0em;
+  --text-lg: 1.125rem;
+  --text-lg--line-height: 1.55;
+  --text-lg--letter-spacing: -0.005em;
+  --text-xl: 1.375rem;
+  --text-xl--line-height: 1.4;
+  --text-xl--letter-spacing: -0.012em;
+  --text-2xl: 1.75rem;
+  --text-2xl--line-height: 1.25;
+  --text-2xl--letter-spacing: -0.018em;
+  --text-3xl: 2.25rem;
+  --text-3xl--line-height: 1.15;
+  --text-3xl--letter-spacing: -0.024em;
+  --text-4xl: 3rem;
+  --text-4xl--line-height: 1.06;
+  --text-4xl--letter-spacing: -0.03em;
+  --text-5xl: 3.75rem;
+  --text-5xl--line-height: 1.02;
+  --text-5xl--letter-spacing: -0.034em;
+  --text-6xl: 4.5rem;
+  --text-6xl--line-height: 1;
+  --text-6xl--letter-spacing: -0.038em;
+  --text-7xl: 5.5rem;
+  --text-7xl--line-height: 0.98;
+  --text-7xl--letter-spacing: -0.042em;
+
+  /* Motion. `ease-out` for enters, `ease-in-out` for on-screen movement.
+     The built-in CSS curves are too weak to read as intentional. */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-transparent: transparent;
+  --color-current: currentColor;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-subtle-foreground: var(--subtle-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+  --color-tertiary: var(--tertiary);
+  --color-tertiary-foreground: var(--tertiary-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-chart-6: var(--chart-6);
+  --color-chart-7: var(--chart-7);
+  --color-chart-8: var(--chart-8);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  --color-edge: var(--edge);
+  /* Quiet hover surface for cards/rows. Derived from the neutral tokens so it
+     tracks both themes — `--accent` is tinted in light mode and would read as
+     a colour wash here. */
+  --color-accent-muted: color-mix(in oklab, var(--muted) 60%, var(--background));
+  --width-app: var(--max-app-width);
+
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+  --animate-accordion-fade-in: accordion-fade-in 0.2s ease-out;
+  --animate-accordion-fade-out: accordion-fade-out 0.2s ease-out;
+  --animate-border-beam: border-beam calc(var(--duration)*1s) infinite linear;
+  --animate-collapsible-down: collapsible-down 0.2s ease-out;
+  --animate-collapsible-up: collapsible-up 0.2s ease-out;
+  --animate-gradient: gradient 8s linear infinite;
+  --animate-spin-slow: spin-slow 20s linear infinite;
+  --animate-spin-reverse: spin-slow 20s linear infinite reverse;
+  --animate-orbit: orbit calc(var(--duration) * 1s) linear infinite;
+
+  @keyframes orbit {
+    0% {
+      transform: rotate(calc(var(--angle) * 1deg)) translateY(calc(var(--radius) * 1px)) rotate(calc(var(--angle) * -1deg));
+    }
+
+    100% {
+      transform: rotate(calc(var(--angle) * 1deg + 360deg)) translateY(calc(var(--radius) * 1px)) rotate(calc((var(--angle) * -1deg) - 360deg));
+    }
+  }
+
+  @keyframes gradient {
+    to {
+      background-position: var(--bg-size, 300%) 0;
+    }
+  }
+
+  @keyframes spin-slow {
+    from {
+      transform: rotate(0deg);
+    }
+
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes spin-reverse {
+    from {
+      transform: rotate(0deg);
+    }
+
+    to {
+      transform: rotate(-360deg);
+    }
+  }
+
+  @keyframes accordion-down {
+    0% {
+      height: 0;
+    }
+
+    100% {
+      height: var(--radix-accordion-content-height);
+    }
+  }
+
+  @keyframes accordion-up {
+    0% {
+      height: var(--radix-accordion-content-height);
+    }
+
+    100% {
+      height: 0;
+    }
+  }
+
+  @keyframes accordion-fade-in {
+    0% {
+      opacity: 0;
+    }
+
+    100% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes accordion-fade-out {
+    0% {
+      opacity: 1;
+    }
+
+    100% {
+      opacity: 0;
+    }
+  }
+
+  @keyframes border-beam {
+    100% {
+      offset-distance: 100%;
+    }
+  }
+
+  @keyframes collapsible-down {
+    0% {
+      height: 0;
+      opacity: 0;
+    }
+
+    100% {
+      height: var(--radix-collapsible-content-height);
+      opacity: 1;
+    }
+  }
+
+  @keyframes collapsible-up {
+    0% {
+      height: var(--radix-collapsible-content-height);
+      opacity: 1;
+    }
+
+    100% {
+      height: 0;
+      opacity: 0;
+    }
+  }
+
+  --animate-meteor: meteor 5s linear infinite;
+
+  @keyframes loading-sweep {
+    0% {
+      transform: translateX(-100%);
+    }
+
+    100% {
+      transform: translateX(300%);
+    }
+  }
+
+  @keyframes meteor {
+    0% {
+      transform: rotate(215deg) translateX(0);
+      opacity: 1;
+    }
+
+    70% {
+      opacity: 1;
+    }
+
+    100% {
+      transform: rotate(215deg) translateX(-500px);
+      opacity: 0;
+    }
+  }
+
+
+
+}
+
+@utility screen-line-before {
+  @apply relative before:absolute before:top-0 before:-left-[100vw] before:-z-1 before:h-px before:w-[200vw] before:bg-edge;
+}
+
+@utility screen-line-after {
+  @apply relative after:absolute after:bottom-0 after:-left-[100vw] after:-z-1 after:h-px after:w-[200vw] after:bg-edge;
+}
+
+@utility step {
+  counter-increment: step;
+
+  &::before {
+    @apply mr-2 inline-flex size-7 items-center justify-center rounded-full border border-muted-foreground/15 bg-muted text-center -indent-px text-sm font-medium text-muted-foreground ring-1 ring-edge ring-offset-1 ring-offset-background md:absolute md:-mt-0.5 md:-ml-11.5 md:size-8;
+    content: counter(step);
+  }
+}
+
+@layer base {
+
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground selection:bg-primary/20 selection:text-foreground;
+  }
+
+  /* 14px wide with a 3px inset leaves 8px of grabbable thumb. A solid colour,
+     not a gradient — background-image doesn't interpolate, so the old
+     `transition: background` on a gradient never animated. */
+  html::-webkit-scrollbar {
+    width: 14px;
+    height: 14px;
+  }
+
+  html::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  html::-webkit-scrollbar-thumb {
+    background-color: color-mix(in oklab, var(--foreground) 22%, transparent);
+    border-radius: 999px;
+    border: 3px solid transparent;
+    background-clip: content-box;
+    transition: background-color 150ms var(--ease-out);
+  }
+
+  html::-webkit-scrollbar-thumb:hover {
+    background-color: color-mix(in oklab, var(--foreground) 38%, transparent);
+  }
+
+  html::-webkit-scrollbar-thumb:active {
+    background-color: color-mix(in oklab, var(--foreground) 52%, transparent);
+  }
+
+  html::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in oklab, var(--foreground) 22%, transparent) transparent;
+    /* Reserves the scrollbar track permanently, so hiding it during a scroll
+       lock changes nothing about the layout. */
+    scrollbar-gutter: stable;
+  }
+
+  /* Radix locks scroll through react-remove-scroll-bar, which rewrites the
+     body's box to compensate for a scrollbar it hid. Its default `margin` gap
+     mode emits, among other things:
+
+       margin-left: 0;  margin-right: <gap>px !important;  padding-right: <gap>px;
+
+     `margin-left: 0` cancels this page's `margin-inline: auto`, so the whole
+     centred layout slams to the left edge the moment a select or dialog opens.
+     `scrollbar-gutter: stable` above means none of that compensation is needed
+     in the first place — the gutter was never given up. Undo all of it and keep
+     only the scroll lock itself. */
+  body[data-scroll-locked] {
+    overflow: hidden !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    padding-right: 0 !important;
+  }
+
+  button:not(:disabled),
+  [role="button"]:not(:disabled),
+  a {
+    cursor: pointer;
+    text-decoration: none;
+  }
+
+  /* Never blanket `outline: none` here — it strips the focus ring from every
+     raw <a>/<button> on the site. Suppress the ring for pointer input only,
+     and always keep it for keyboard focus. */
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  /* No `border-radius` here — setting it would square off every rounded-full
+     control the moment it takes focus. `outline` already follows the element's
+     own radius. */
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+
+  button:disabled,
+  [role="button"]:disabled {
+    cursor: not-allowed;
+  }
+
+  a,
+  button,
+  input,
+  textarea {
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    color: inherit;
+  }
+
+  *:autofill,
+  *:-webkit-autofill {
+    font: inherit;
+    font-size: inherit;
+    font-family: inherit;
+    -webkit-box-shadow: 0 0 0 1000px var(--background) inset !important;
+    box-shadow: 0 0 0 1000px var(--background) inset !important;
+    -webkit-text-fill-color: var(--foreground) !important;
+  }
+
+
+}
+
+
+body {
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  position: relative;
+  font-family: var(--font-sans, 'GeistSans', 'Inter', 'Poppins', 'Helvetica', 'Arial', sans-serif);
+
+  /* `margin-inline: auto` is what makes the clamp visible. Without it the page
+     pinned to the left edge on anything wider than the max. */
+  max-width: var(--max-app-width);
+  margin-inline: auto;
+
+  /* Two jobs. It clips any stray horizontal overflow — and, because `clip`
+     establishes a block formatting context, it keeps body's formatting context
+     *stable* when Radix sets `overflow: hidden` during a scroll lock. Without
+     it body flips from no-BFC to BFC as a select opens, which re-resolves
+     margin collapsing and shifts the page. `clip` is exempt from the rule that
+     coerces a `visible` sibling axis to `auto`, so this creates no scroll
+     container and leaves vertical scrolling alone.
+
+     This is a stabiliser, not a mask: the 11 grid tracks and the `min-w-screen`
+     that actually overflowed are fixed (findings 34, 45). */
+  overflow-x: clip;
+}
+
+::view-transition-group(root) {
+  z-index: auto !important;
+}
+
+::view-transition-image-pair(root) {
+  isolation: isolate;
+  z-index: 1;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 200ms;
+  animation-timing-function: var(--ease-out);
+}
+
+::view-transition-new(root) {
+  z-index: 2;
+}
+
+::view-transition-old(root) {
+  z-index: 1;
+}
+
+/* Derived from --foreground so the glow reads in both themes. Hard-coded white
+   was invisible on a light ground. */
+.text-shadow-glow {
+  text-shadow: 0 4px 8px color-mix(in oklab, var(--foreground) 6%, transparent),
+    0 8px 30px color-mix(in oklab, var(--foreground) 22%, transparent);
+}
+
+.box-shadow-glow {
+  box-shadow: 0 4px 8px color-mix(in oklab, var(--foreground) 6%, transparent),
+    0 8px 30px color-mix(in oklab, var(--foreground) 22%, transparent);
+}
+
+
+
+.pattern_feed {
+  background-size: calc(20px + 0.7vw);
+  background-repeat: repeat;
+  -webkit-mask-image: linear-gradient(to top, var(--color-primary), transparent);
+  mask-image: linear-gradient(to top, var(--color-primary), transparent);
+  background-image: url(/assets/backgrounds/square.svg);
+}
+
+
+
+
+@layer utilities {
+
+  .popup {
+    opacity: 0;
+    animation: pop 220ms var(--ease-out) forwards;
+  }
+
+  @keyframes pop {
+    0% {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+  }
+
+  @keyframes gradient-x {
+
+    0%,
+    100% {
+      background-position: 0;
+    }
+
+    50% {
+      background-position: 100%;
+    }
+  }
+
+}
+
+.animate-gradient-x {
+  animation: gradient-x 6s infinite;
+  background-size: 200% 200%;
+}
+
+.text-colorful {
+  -webkit-text-fill-color: transparent;
+  background: linear-gradient(288deg, var(--color-primary), var(--color-chart-2));
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+@layer utilities {
+  .text-metallic {
+    color: transparent;
+    background: linear-gradient(180deg,
+        var(--color-foreground) 0%,
+        var(--color-muted-foreground) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+}
+
+/* Was `rgb(var(--gray-100) / .5)` — --gray-100 is not defined anywhere, so
+   inline code rendered with padding and no background. */
+:not(pre)>code {
+  overflow-wrap: break-word;
+  border-radius: var(--radius-sm);
+  background-color: var(--muted);
+  border: 1px solid var(--border);
+  padding: .1em .35em;
+  font-size: 0.9em;
+}
+
+/* Reduced motion means gentler, not absent. Opacity and colour survive because
+   they carry meaning; movement, looping and parallax do not. Components that
+   need more than this branch on useReducedMotion() in JS. */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Opacity-only transitions still read as intentional at a short duration and
+     never move anything, so they stay. */
+  [data-motion-safe-fade] {
+    transition-property: opacity !important;
+    transition-duration: 150ms !important;
+  }
+
+  .animate-gradient-x,
+  .pattern_feed {
+    animation: none !important;
+    background-position: 0 0 !important;
+  }
+}
+
+/* Vestibular safety without stripping the effect for everyone else. */
+@media (prefers-reduced-transparency: reduce) {
+
+  [class*="backdrop-blur"] {
+    backdrop-filter: none !important;
+    background-color: var(--background) !important;
+  }
+}
+
+/* Without backdrop-filter, a 70% translucent navbar is unreadable over live
+   content. Fall back to the solid surface. */
+@supports not (backdrop-filter: blur(1px)) {
+
+  [class*="backdrop-blur"] {
+    background-color: var(--background);
+  }
+}

@@ -1,7 +1,5 @@
-"use client";
-
 import { motion, useMotionValueEvent, useScroll } from "framer-motion";
-import Link from "next/link";
+import Link from "@/components/link";
 import { useRef, useState } from "react";
 import type { StoryChapter as Chapter } from "~/data/story/story.types";
 import { pad } from "./motion";

@@ -1,5 +1,3 @@
-"use client";
-
 /**
  * Stands in for a project screenshot. Reads as a poster: the project name set as
  * the artwork itself, anchored bottom-left over a dot field.

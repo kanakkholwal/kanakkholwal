@@ -1,5 +1,3 @@
-"use client";
-
 import { motion } from "framer-motion";
 import type { StoryChapter } from "~/data/story";
 import { CaseStudyCard } from "./case-study-card";

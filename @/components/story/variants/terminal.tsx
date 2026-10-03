@@ -1,5 +1,3 @@
-"use client";
-
 import { motion } from "framer-motion";
 import { chapterFacets } from "@/components/story/story-facets";
 import type { StoryChapter } from "~/data/story/story.types";

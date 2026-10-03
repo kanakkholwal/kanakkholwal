@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Reads the real token values out of app/global.css and asserts every contrast
+// Reads the real token values out of src/styles/global.css and asserts every contrast
 // gate the design system claims to meet. Exits non-zero on the first failure so
 // it can gate CI. Run: `node scripts/audit-design-tokens.mjs`
 //
@@ -17,7 +17,7 @@ const read = (p) => readFileSync(join(ROOT, p), "utf8");
 // checks unless stripped first.
 const stripComments = (src) => src.replace(/\/\*[\s\S]*?\*\//g, "").replace(/^\s*\/\/.*$/gm, "");
 
-const CSS = read("app/global.css");
+const CSS = read("src/styles/global.css");
 const BUTTON = stripComments(read("@/components/ui/button.tsx"));
 const TOOLTIP = stripComments(read("@/components/ui/tooltip.tsx"));
 const POPOVER = stripComments(read("@/components/ui/popover.tsx"));

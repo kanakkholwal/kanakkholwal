@@ -1,41 +1,30 @@
-import { type InferPageType, loader } from "fumadocs-core/source";
+import "@tanstack/react-start/server-only";
+import { loader } from "fumadocs-core/source";
 import { lucideIconsPlugin } from "fumadocs-core/source/lucide-icons";
 import { projects } from "fumadocs-mdx:collections/server";
+import { type ProjectType, toMeta } from "./content.types";
 
-// See https://fumadocs.dev/docs/headless/source-api for more info
+export type { ProjectType };
+
 export const source = loader({
   baseUrl: "/projects",
   source: projects.toFumadocsSource(),
   plugins: [lucideIconsPlugin()],
 });
 
-export type ProjectType = InferPageType<typeof source>["data"];
-
+/** Sorted by `order`, then newest `lastModified`. */
 export function getProjectList(): ProjectType[] {
-  // Sort by order (lowest first), then by last modified date (newest first)
-  return source.getPages().map((page) => page.data).toSorted((a, b) => {
-    if ((a.order ?? 99) !== (b.order ?? 99)) {
-      return (a.order ?? 99) - (b.order ?? 99);
-    }
-    return new Date(b.lastModified ?? 0).getTime() - new Date(a.lastModified ?? 0).getTime();
-  });
-}
-export function getOtherProjects(currentProjectId: string): Omit<ProjectType, "body">[] {
   return source
     .getPages()
-    .filter((page) => page.data.id !== currentProjectId)
-    .map((page) => page.data)
-    .map(({body,...rest}) => rest);
+    .map(toMeta)
+    .toSorted((a, b) => {
+      if ((a.order ?? 99) !== (b.order ?? 99)) {
+        return (a.order ?? 99) - (b.order ?? 99);
+      }
+      return new Date(b.lastModified ?? 0).getTime() - new Date(a.lastModified ?? 0).getTime();
+    });
 }
 
-export function getPageImage(page: InferPageType<typeof source>) {
-  return `/api/og?gen_type=project&slug=${page.data.id}`;
-}
-
-export async function getLLMText(page: InferPageType<typeof source>) {
-  const processed = await page.data.getText("processed");
-
-  return `# ${page.data.title}
-
-${processed}`;
+export function getPageImage(id: string) {
+  return `/api/og?gen_type=project&slug=${id}`;
 }

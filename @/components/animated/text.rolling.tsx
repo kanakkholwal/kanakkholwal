@@ -1,5 +1,3 @@
-"use client";
-
 import { motion, type Transition } from "framer-motion";
 import * as React from "react";
 

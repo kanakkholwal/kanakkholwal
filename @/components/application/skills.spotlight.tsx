@@ -1,7 +1,6 @@
-"use client";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
-import Image from "next/image";
+import Image from "@/components/image";
 
 import { useMotionTemplate, useMotionValue } from "framer-motion";
 import { MouseEvent } from "react";
@@ -73,7 +72,6 @@ export function SpotLightSkillSection({
                 width={64}
                 height={64}
                 className="size-10 md:size-12 object-contain grayscale opacity-70 transition-all duration-500 group-hover:grayscale-0 group-hover:opacity-100"
-                unoptimized
               />
             </div>
 

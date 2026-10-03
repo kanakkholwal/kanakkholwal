@@ -1,4 +1,3 @@
-"use client";
 import { Icon } from "@/components/icons";
 import { cn } from "@/lib/utils";
 import { useDocsSearch } from "fumadocs-core/search/client";

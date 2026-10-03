@@ -14,7 +14,7 @@ export type PostType = {
 
 export async function getMediumPosts(): Promise<PostType[]> {
   const rssUrl = `https://medium.com/feed/@${appConfig.usernames.medium}`;
-  const res = await fetch(rssUrl, { next: { revalidate: 3600 } });
+  const res = await fetch(rssUrl);
   const xml = await res.text();
   const json = await parseStringPromise(xml);
 

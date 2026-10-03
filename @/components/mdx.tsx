@@ -1,5 +1,5 @@
-import Image from "next/image";
-import Link from "next/link";
+import Image from "@/components/image";
+import Link from "@/components/link";
 import React from "react";
 
 function Table({ data }: { data: { headers: string[]; rows: string[][] } }) {
@@ -42,8 +42,13 @@ function CustomLink(props: any) {
   return <a target="_blank" rel="noopener noreferrer" {...props} />;
 }
 
-function RoundedImage(props: any) {
-  return <Image alt={props.alt} className="rounded-lg" {...props} />;
+function RoundedImage({ width, height, ...props }: any) {
+  // Markdown images often lack dimensions; unpic needs them, or a full-width layout.
+  return width && height ? (
+    <Image className="rounded-lg" width={Number(width)} height={Number(height)} {...props} />
+  ) : (
+    <Image className="rounded-lg" layout="fullWidth" {...props} />
+  );
 }
 
 // This replaces rehype-slug

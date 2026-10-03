@@ -1,10 +1,8 @@
-"use client";
-
 import { IconComponent } from "@/components/icons";
 import { cn } from "@/lib/utils";
 import { motion, useMotionTemplate, useMotionValue } from "framer-motion";
 import { Globe } from "lucide-react";
-import Image from "next/image";
+import Image from "@/components/image";
 import { SkillCategory } from "./sections.skills";
 
 export function BentoSkillsSection({
@@ -156,9 +154,8 @@ function SkillPill({ icon }: { icon: string }) {
         <Image
           src={`https://skillicons.dev/icons?i=${icon}`}
           alt={icon}
-          fill
-          className="object-cover"
-          unoptimized
+          layout="fullWidth"
+          className="absolute inset-0 size-full object-cover"
         />
       </div>
       <span className="capitalize">{icon}</span>

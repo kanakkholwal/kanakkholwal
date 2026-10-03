@@ -1,4 +1,5 @@
-import { unstable_cache } from "next/cache";
+import { getServerEnv } from "~/server/env.server";
+import { memo } from "~/lib/cache";
 import { appConfig } from "root/project.config";
 import { fetchGaResult, type ServiceAccount } from "./ga";
 import {
@@ -13,7 +14,7 @@ import {
 const REVALIDATE = 3600; // 1h; GA data isn't real-time
 
 function serviceAccount(): ServiceAccount | null {
-  const raw = process.env.GA_SERVICE_ACCOUNT_KEY;
+  const raw = getServerEnv().GA_SERVICE_ACCOUNT_KEY;
   if (!raw) return null;
   try {
     return JSON.parse(raw) as ServiceAccount;
@@ -59,7 +60,7 @@ function zeroResult(label: string, error: string): AnalyticsResult {
 async function buildSiteData(): Promise<AnalyticsResult> {
   const sa = serviceAccount();
   const cfg = appConfig.analytics.site;
-  const propertyId = process.env.GA_SITE_PROPERTY_ID || cfg.propertyId;
+  const propertyId = getServerEnv().GA_SITE_PROPERTY_ID || cfg.propertyId;
   if (!sa) return zeroResult(cfg.label, "Analytics isn't connected yet.");
   if (!propertyId) return zeroResult(cfg.label, "Analytics property isn't set yet.");
   try {
@@ -83,10 +84,7 @@ async function buildProjectData(id: string): Promise<AnalyticsResult | null> {
   }
 }
 
-const fetchSiteData = unstable_cache(buildSiteData, ["analytics", "site", "v2"], {
-  revalidate: REVALIDATE,
-  tags: ["analytics:site"],
-});
+const fetchSiteData = memo(buildSiteData, REVALIDATE);
 
 // Label applied after caching so multiple domains share one cached GA fetch.
 export async function getSiteResult(label: string): Promise<AnalyticsResult> {
@@ -97,12 +95,7 @@ export async function getSiteResult(label: string): Promise<AnalyticsResult> {
   return { ...data, label, ranges };
 }
 
-export function getProjectResult(id: string): Promise<AnalyticsResult | null> {
-  return unstable_cache(() => buildProjectData(id), ["analytics", "project", "v2", id], {
-    revalidate: REVALIDATE,
-    tags: [`analytics:project:${id}`],
-  })();
-}
+export const getProjectResult = memo(buildProjectData, REVALIDATE);
 
 export function computeGrowth(current: number, previous: number): Growth {
   if (!previous) return { delta: current, percent: current ? 100 : 0, trend: current > 0 ? 1 : 0 };

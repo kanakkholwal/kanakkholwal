@@ -1,19 +1,15 @@
-"use client";
-
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import { WorkExperienceType } from "@/lib/work.source";
-import defaultMdxComponents from "fumadocs-ui/mdx";
+import { WorkBody, type WorkExperienceType } from "@/lib/content";
 import { ArrowUpRight } from "lucide-react";
-import Link from "next/link";
+import Link from "@/components/link";
 
 interface WorkExperienceCardProps {
   work: WorkExperienceType;
 }
 
 export function WorkExperienceCard({ work }: WorkExperienceCardProps) {
-  const Mdx = work.body;
   const domain = work.href
     ?.replace(/(^\w+:|^)\/\//, "")
     .replace(/www\./, "")
@@ -90,7 +86,7 @@ export function WorkExperienceCard({ work }: WorkExperienceCardProps) {
             "[&_a[data-card].peer]:no-underline",
           )}
         >
-          <Mdx components={defaultMdxComponents} />
+          <WorkBody path={work.path} />
         </div>
 
         {/* Badges */}

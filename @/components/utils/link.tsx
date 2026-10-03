@@ -1,10 +1,7 @@
-"use client";
-
 import { Button, ButtonProps } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
-import { useTransitionRouter } from "next-view-transitions";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import Link from "@/components/link";
+import { useLocation, useRouter } from "@tanstack/react-router";
 
 // --- 1. FORWARD ANIMATION (Slide New Page In From Right) ---
 const pushAnimation = () => {
@@ -94,6 +91,27 @@ const backAnimation = () => {
 
 
 
+type TransitionRouter = {
+  push: (href: string, opts?: { onTransitionReady?: () => void }) => void;
+  back: () => void;
+};
+
+/** next-view-transitions' router API on TanStack Router: navigates inside `document.startViewTransition`. */
+function useTransitionRouter(): TransitionRouter {
+  const router = useRouter();
+  return {
+    push(href, opts) {
+      if (typeof document === "undefined" || !("startViewTransition" in document)) {
+        void router.navigate({ href });
+        return;
+      }
+      const transition = document.startViewTransition(() => router.navigate({ href }));
+      if (opts?.onTransitionReady) transition.ready.then(opts.onTransitionReady).catch(() => {});
+    },
+    back: () => router.history.back(),
+  };
+}
+
 export const TransitionLink = (props: React.ComponentProps<typeof Link>) => {
   const router = useTransitionRouter();
 
@@ -114,7 +132,7 @@ export const TransitionLink = (props: React.ComponentProps<typeof Link>) => {
 
 export function PreviousPageLink(props: ButtonProps) {
   const router = useTransitionRouter();
-  const pathname = usePathname();
+  const pathname = useLocation({ select: (l) => l.pathname });
 
   return (
     <Button

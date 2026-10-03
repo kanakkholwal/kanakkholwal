@@ -1,5 +1,3 @@
-"use client";
-
 import { chartColor } from "@/lib/chart-palette";
 
 import {
@@ -24,7 +22,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useLocation, useRouter } from "@tanstack/react-router";
 import * as React from "react";
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import { TIME_INTERVALS } from "~/utils/process";
@@ -111,8 +109,7 @@ export function GenericAreaChart({
 }: GenericAreaChartProps) {
   const [timeRange, setTimeRange] = React.useState<string>(defaultTimeRange);
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const pathname = usePathname();
+  const location = useLocation();
   // Generate chart config from series
   const chartConfig = React.useMemo(() => {
     const config: ChartConfig = {};
@@ -130,9 +127,9 @@ export function GenericAreaChart({
     setTimeRange(value);
     onTimeRangeChange?.(value);
     // Update URL search params
-    const params = new URLSearchParams(searchParams.toString());
+    const params = new URLSearchParams(location.searchStr);
     params.set("period", value);
-    router.replace(`${pathname}?${params.toString()}`);
+    void router.navigate({ href: `${location.pathname}?${params.toString()}`, replace: true });
   };
 
   // Default formatters

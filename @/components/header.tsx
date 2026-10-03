@@ -1,5 +1,3 @@
-"use client";
-
 import { Icon } from "@/components/icons";
 import { Logo } from "@/components/logo";
 import { ModeToggle } from "@/components/mode-toggle";
@@ -26,7 +24,7 @@ import useStorage from "@/hooks/use-storage";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, LinkIcon, Menu, Palette, X } from "lucide-react";
-import { usePathname } from "next/navigation";
+import { useLocation } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 
 export type NavbarType = "static" | "dynamic" | "minimal";
@@ -36,7 +34,7 @@ export type NavbarType = "static" | "dynamic" | "minimal";
  * are never "current" — the route alone can't tell us which section is in view.
  */
 function useIsCurrent() {
-  const pathname = usePathname();
+  const pathname = useLocation({ select: (l) => l.pathname });
 
   return function isCurrent(href: string) {
     if (href.startsWith("/#") || href === "/") return false;

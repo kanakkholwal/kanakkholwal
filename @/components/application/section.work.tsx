@@ -1,5 +1,3 @@
-"use client";
-
 import { DynamicHeading } from "@/components/application/dynamic.heading";
 
 import { WorkExperienceCard } from "@/components/card.work";
@@ -11,13 +9,12 @@ import { motion } from "framer-motion";
 import { StyleSwap } from "@/components/animated/style-swap";
 import { Serif, StoryChapter, StoryReveal } from "@/components/application/story.frame";
 import { ArrowUpRight, Briefcase, BriefcaseBusinessIcon, InfinityIcon } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
+import Image from "@/components/image";
+import Link from "@/components/link";
 
 import useStorage from "@/hooks/use-storage";
 import { cn } from "@/lib/utils";
-import { getWorkExperienceList, WorkExperienceType } from "@/lib/work.source";
-import defaultMdxComponents from "fumadocs-ui/mdx";
+import { WorkBody, type WorkExperienceType, useWorkExperiences } from "@/lib/content";
 import { useMemo } from "react";
 import { Button } from "../ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleIcon, CollapsibleTrigger } from "../ui/collapsible";
@@ -158,12 +155,13 @@ function DynamicWork({ experiences }: { experiences: WorkExperienceType[] }) {
 
 export default function WorkSection() {
   // Latest experience first, oldest last (source order isn't chronological).
+  const work = useWorkExperiences();
   const workExperiences = useMemo(
     () =>
-      [...getWorkExperienceList()].sort(
+      [...work].sort(
         (a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime(),
       ),
-    [],
+    [work],
   );
   const [selectedStyle] = useStorage<StylingModel>(
     "styling.model",
@@ -186,7 +184,6 @@ export default function WorkSection() {
 }
 
 export function ExperienceItem({ experience }: { experience: WorkExperienceType }) {
-  const Mdx = experience.body;
   return (
     <Collapsible className="screen-line-after space-y-4 py-4 relative">
       <div
@@ -211,9 +208,7 @@ export function ExperienceItem({ experience }: { experience: WorkExperienceType 
                 alt={`${experience.company} logo`}
                 width={36}
                 height={36}
-                quality={100}
                 className="rounded-full"
-                unoptimized
                 aria-hidden
               />
             ) : (
@@ -301,7 +296,7 @@ export function ExperienceItem({ experience }: { experience: WorkExperienceType 
           // "prose-code:px-1 prose-code:py-0.5 prose-code:rounded-sm prose-code:font-mono prose-code:text-sm prose-code:before:content-none prose-code:after:content-none"
         )}
       >
-        <Mdx components={defaultMdxComponents} />
+        <WorkBody path={experience.path} />
       </CollapsibleContent>
 
       {Array.isArray(experience.badges) && experience.badges.length > 0 && (
@@ -317,7 +312,6 @@ export function ExperienceItem({ experience }: { experience: WorkExperienceType 
   )
 }
 function WorkCard({ work }: { work: WorkExperienceType }) {
-  const Mdx = work.body;
 
   return (
     <div className="group relative flex gap-6 md:gap-10 py-10 border-b border-border/40 last:border-0">
@@ -385,7 +379,7 @@ function WorkCard({ work }: { work: WorkExperienceType }) {
           "prose-ul:my-1 prose-ul:pl-4",
           "[&_a[data-card].peer]:no-underline",
         )}>
-          <Mdx components={defaultMdxComponents} />
+          <WorkBody path={work.path} />
         </div>
 
         {/* Badges */}

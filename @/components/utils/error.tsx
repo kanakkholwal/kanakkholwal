@@ -1,8 +1,7 @@
-"use client";
 import { Button } from "@/components/ui/button";
 import { AlertCircle, Copy, Home, MoveLeft, RefreshCcw } from "lucide-react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import Link from "@/components/link";
+import { useRouter } from "@tanstack/react-router";
 
 type Props = {
   error?: Error & {
@@ -98,7 +97,7 @@ export function ErrorActions() {
         variant="outline"
         className="w-full sm:w-auto px-8 h-12 gap-2 border-border/60 hover:bg-muted/50"
         size="lg"
-        onClick={() => router.back()}
+        onClick={() => router.history.back()}
       >
         <MoveLeft className="w-4 h-4" />
         Go Back

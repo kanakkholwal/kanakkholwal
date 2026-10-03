@@ -1,5 +1,3 @@
-"use client";
-
 import { useCallback, useEffect, useRef } from "react";
 
 // Narration is isolated behind this hook so the engine never touches the speech

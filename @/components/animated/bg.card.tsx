@@ -1,5 +1,3 @@
-"use client";
-
 import { motion, useMotionTemplate, useMotionValue } from "framer-motion";
 import React, { useCallback, useEffect, useRef } from "react";
 

@@ -1,5 +1,3 @@
-"use client";
-
 import { DynamicHeading } from "@/components/application/dynamic.heading";
 
 import { StyleSwap } from "@/components/animated/style-swap";
@@ -8,7 +6,7 @@ import { StyleModels, StylingModel } from "@/constants/ui";
 import useStorage from "@/hooks/use-storage";
 import { motion } from "framer-motion";
 import { Cloud, Database, Layout, Server, Terminal, Wrench } from "lucide-react";
-import Image from "next/image";
+import Image from "@/components/image";
 import { appConfig } from "root/project.config";
 
 import BlurFade from "@/components/magicui/blur-fade";
@@ -126,7 +124,6 @@ function MinimalSkills() {
                     width={64}
                     height={64}
                     className="size-10 md:size-12 object-contain grayscale opacity-70 transition-all duration-500 group-hover:grayscale-0 group-hover:opacity-100"
-                    unoptimized
                   />
                 </TooltipTrigger>
                 <TooltipContent>
@@ -187,7 +184,6 @@ function StaticSkills() {
                       width={32}
                       height={32}
                       className="size-6 object-contain grayscale opacity-60 group-hover/skill:grayscale-0 group-hover/skill:opacity-100 transition-all duration-300"
-                      unoptimized
                     />
                     <span className="text-xs font-mono text-muted-foreground group-hover/skill:text-foreground transition-colors capitalize">
                       {skill}

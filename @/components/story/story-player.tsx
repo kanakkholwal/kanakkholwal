@@ -1,5 +1,3 @@
-"use client";
-
 import { motion, useReducedMotion } from "framer-motion";
 import { useLenis } from "lenis/react";
 import { Pause, Play, Volume2, VolumeX, X } from "lucide-react";
