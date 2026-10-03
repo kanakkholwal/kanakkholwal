@@ -1,7 +1,7 @@
 import { appConfig } from "root/project.config";
 import { RowLink, RowList } from "@/components/extras/rows";
-import { Page, PageHeader, Section } from "@/components/site/page";
 import { TextLink } from "@/components/site/link";
+import { Page, PageHeader, Section } from "@/components/site/page";
 
 const BUILT_WITH = [
   { name: "Baby UI", role: "Components and motion", href: "https://github.com/kanakkholwal/baby-ui" },

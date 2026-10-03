@@ -10,6 +10,7 @@ import { getWriting } from "~/features/docs/server";
 import { OG_VERSION } from "~/og/version";
 import { getDocPage } from "~/server/content";
 import { seo } from "~/utils/seo";
+import { articleLd, breadcrumbs } from "~/utils/structured-data";
 
 export const Route = createFileRoute("/_plain/docs/$")({
   loader: async ({ params }) => {
@@ -36,16 +37,29 @@ export const Route = createFileRoute("/_plain/docs/$")({
         title: `${loaderData.category} | Writing`,
         description: categoryNote(loaderData.category),
         path: `/docs/${loaderData.category}`,
+        jsonLd: [breadcrumbs(["Writing", "/docs"], [loaderData.category, `/docs/${loaderData.category}`])],
       });
     }
     if (loaderData?.kind !== "article") return {};
     const { doc } = loaderData;
+    const image = `/og/docs/${doc.slugs.join("/")}?v=${OG_VERSION}`;
+    const category = doc.slugs[0];
     return seo({
-      title: `${doc.title} | Writing`,
+      title: doc.title,
       description: doc.description ?? appConfig.description,
       path: doc.url,
-      image: `/og/docs/${doc.slugs.join("/")}?v=${OG_VERSION}`,
+      image,
       type: "article",
+      jsonLd: [
+        articleLd({
+          title: doc.title,
+          description: doc.description,
+          path: doc.url,
+          image,
+          modified: doc.lastModified ? new Date(doc.lastModified).toISOString() : undefined,
+        }),
+        breadcrumbs(["Writing", "/docs"], [category, `/docs/${category}`], [doc.title, doc.url]),
+      ],
     });
   },
   component: DocsSplatPage,

@@ -1,9 +1,9 @@
 import { type CSSProperties, useEffect, useState } from "react";
 import { appConfig } from "root/project.config";
-import { PixelAvatar } from "./pixel-avatar";
 
 const GREETINGS = ["Hello", "नमस्ते", "Bonjour", "Hola", "こんにちは", "Ciao", "Hallo"];
-const AVATAR = `https://avatars.githubusercontent.com/${appConfig.usernames.github}?s=160`;
+// A 20px avatar scaled up with pixelated rendering: the dot-matrix look with no script, so it shows at first paint.
+const AVATAR = `https://avatars.githubusercontent.com/${appConfig.usernames.github}?s=20`;
 
 // One timeline, shared with CSS through custom properties so it runs from first paint, before hydration.
 const WORD_MS = 190;
@@ -82,7 +82,7 @@ export function Intro() {
         </span>
       </p>
       <div className="intro-name col-start-1 row-start-1 flex items-center gap-3">
-        <PixelAvatar src={AVATAR} alt="" size={48} />
+        <img src={AVATAR} alt="" width={48} height={48} className="size-12 rounded-full [image-rendering:pixelated]" />
         <span className="pixel text-4xl">kanak.</span>
       </div>
     </div>

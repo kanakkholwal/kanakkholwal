@@ -10,7 +10,8 @@ export const Route = createFileRoute("/_plain/docs/")({
   head: () =>
     seo({
       title: "Writing",
-      description: "Write-ups on things Kanak built or broke: systems, deploys and product engineering.",
+      description:
+        "Write-ups on things Kanak built, broke or researched: systems, deploys, product engineering and an M.Tech thesis on ECG models.",
       path: "/docs",
     }),
   component: DocsIndexPage,

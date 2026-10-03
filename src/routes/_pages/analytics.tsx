@@ -11,7 +11,7 @@ export const Route = createFileRoute("/_pages/analytics")({
     seo({
       title: "Analytics",
       description:
-        "Live web analytics for this portfolio: real visitors, sessions, top pages, and traffic sources across the last 7, 30, or 90 days.",
+        "Live web analytics for this portfolio: real visitors, sessions, top pages, and traffic sources from the last 24 hours to the last 90 days.",
       path: "/analytics",
       keywords: [
         "web analytics",

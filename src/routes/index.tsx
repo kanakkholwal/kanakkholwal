@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { appConfig } from "root/project.config";
 import { Activity } from "@/components/home/activity";
 import { Experience } from "@/components/home/experience";
 import { Hero } from "@/components/home/hero";
@@ -10,8 +11,11 @@ import { Page, Section } from "@/components/site/page";
 import { ErrorBoundary } from "@/components/utils/error-boundary";
 import { PostList } from "@/components/writing/post-list";
 import { useProjects } from "@/lib/content";
+import { OG_VERSION } from "~/og/version";
 import { getDocsIndex } from "~/server/content";
 import { getHomeData } from "~/server/home";
+import { seo } from "~/utils/seo";
+import { profilePage } from "~/utils/structured-data";
 
 export const Route = createFileRoute("/")({
   loader: async () => {
@@ -19,6 +23,16 @@ export const Route = createFileRoute("/")({
     return { home, docs: docs.slice(0, 4) };
   },
   staleTime: 5 * 60_000,
+  head: () => ({
+    ...seo({
+      title: `${appConfig.displayName} | ${appConfig.role}`,
+      description: appConfig.description,
+      path: "/",
+      image: `/opengraph-image?v=${OG_VERSION}`,
+      keywords: appConfig.keywords,
+      jsonLd: [profilePage],
+    }),
+  }),
   component: HomePage,
 });
 

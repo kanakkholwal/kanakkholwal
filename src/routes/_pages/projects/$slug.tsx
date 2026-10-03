@@ -6,6 +6,7 @@ import ProjectPageClient from "~/features/projects/detail/client";
 import { OG_VERSION } from "~/og/version";
 import { getProjectPage } from "~/server/content";
 import { seo } from "~/utils/seo";
+import { breadcrumbs, projectLd } from "~/utils/structured-data";
 
 export const Route = createFileRoute("/_pages/projects/$slug")({
   loader: async ({ params }) => {
@@ -14,16 +15,25 @@ export const Route = createFileRoute("/_pages/projects/$slug")({
     return data;
   },
   staleTime: 60 * 60_000,
-  head: ({ loaderData }) =>
-    loaderData
-      ? seo({
-          title: `${loaderData.project.title} | Projects`,
-          description: loaderData.project.description,
-          path: `/projects/${loaderData.project.id}`,
-          image: `/projects/og?slug=${loaderData.project.id}&v=${OG_VERSION}`,
-          type: "article",
-        })
-      : {},
+  head: ({ loaderData }) => {
+    if (!loaderData) return {};
+    const { project } = loaderData;
+    const path = `/projects/${project.id}`;
+    const image = `/projects/og?slug=${project.id}&v=${OG_VERSION}`;
+    const code = project.links?.find((l) => l.url.startsWith("https://github.com/"))?.url;
+    return seo({
+      title: `${project.title} | Projects`,
+      description: project.description,
+      path,
+      image,
+      type: "article",
+      keywords: [project.title, ...project.technologies],
+      jsonLd: [
+        projectLd({ ...project, path, image, code, keywords: project.technologies }),
+        breadcrumbs(["Projects", "/projects"], [project.title, path]),
+      ],
+    });
+  },
   component: ProjectPage,
 });
 

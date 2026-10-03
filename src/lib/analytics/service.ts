@@ -65,7 +65,7 @@ function zeroResult(label: string, error: string, source: AnalyticsSource = "ga"
 async function buildSiteData(): Promise<AnalyticsResult> {
   const sa = serviceAccount();
   const cfg = appConfig.analytics.site;
-  const propertyId = getServerEnv().GA_SITE_PROPERTY_ID || cfg.propertyId;
+  const propertyId = cfg.propertyId;
   if (!sa) return zeroResult(cfg.label, "Analytics isn't connected yet.");
   if (!propertyId) return zeroResult(cfg.label, "Analytics property isn't set yet.");
   try {

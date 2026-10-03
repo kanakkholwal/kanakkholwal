@@ -1,0 +1,67 @@
+---
+title: "Detecting Heart Attacks in ECG Signals: Notes From My M.Tech Thesis"
+description: "Patient-wise heart attack detection from 12-lead ECGs on PTB-XL: an honest 0.979 AUC, ten models compared, and why the evaluation protocol mattered more than the architecture."
+category: research
+tags:
+  - machine-learning
+  - deep-learning
+  - ecg
+  - healthcare
+  - research
+author: 'Kanak Kholwal'
+---
+
+My M.Tech dissertation at NIT Hamirpur asked one question: can a model look at a 10-second, 12-lead ECG and tell whether the heart behind it has had a myocardial infarction (a heart attack)? I worked on it from July 2025 to May 2026 under Dr. Aman Kumar. All the code is open in [better-detection](https://github.com/kanakkholwal/better-detection), including the experiments that went nowhere.
+
+## Why the 99% papers bothered me
+
+Read enough MI detection papers and you'll see accuracy above 99% again and again. Look closer and most of them split the data by heartbeat or by segment, not by patient. Beats from the same person end up in both training and test, so the model learns that person's ECG shape instead of the disease. Add heavy SMOTE oversampling on top and the number looks great and means very little.
+
+So the whole thesis was built around one rule: no patient ever appears on both sides of a split.
+
+## The setup
+
+- **Data:** PTB-XL. A record counts as MI if any of its SCP-ECG diagnostic codes maps to MI, and as normal only if every code maps to NORM. Everything else is dropped. That left 15,013 recordings from 13,453 patients.
+- **Split:** a deterministic, two-stage GroupShuffleSplit on patient id. The test cohort is 2,269 records from 2,018 patients nobody trained on.
+- **What I left out on purpose:** no synthetic oversampling, no bandpass filtering, no beat segmentation, and no tuning on the test set. Each record gets z-score normalisation and that's about it.
+
+## TITAN
+
+The model I proposed is a heterogeneous ensemble I called TITAN. Three convolutional networks that see the signal differently (a shallow SimpleCNN, a multi-scale InceptionNet and a deep ResNet1D), plus an XGBoost classifier trained on the Inception network's penultimate-layer embeddings. The four predictions are blended with weights proportional to each model's validation AUC.
+
+On the held-out patients:
+
+| Metric | TITAN |
+| --- | --- |
+| AUC | 0.979 |
+| Accuracy | 92.3% |
+| Sensitivity | 90.2% |
+| Specificity | 93.5% |
+| F1 | 0.898 |
+
+Tuning the decision threshold on the validation set (never the test set) took accuracy to 92.9%. A five-fold patient-wise version, with fifteen CNN checkpoints and five XGBoost models, reached 0.982 AUC and 94.4% accuracy.
+
+## What the comparison taught me
+
+I tested nine other pipelines under the same rules: a compact convolutional transformer on spectrograms, LGS-Net (a dual-stream time and frequency network), ResNets with attention, InceptionTime at 250 Hz, and a few bigger ensembles.
+
+- Plain convolutional networks won. The transformer came last at 0.934 AUC; without large-scale pretraining it just didn't have enough data.
+- Adding attention to the ResNet made it slightly worse.
+- The top four ensembles all landed within 0.004 AUC of each other. Past a point, more ensemble engineering bought almost nothing.
+- The most useful number in the thesis isn't TITAN's AUC. On the same data, changing the evaluation protocol moved results by about two points of AUC, more than the gap between most of the architectures I compared.
+
+## Where it still gets it wrong
+
+I went through all 83 missed heart attacks and 91 false alarms by hand. Most misses were inferior and posterior infarctions, where the changes on a surface ECG are small. Most false alarms were early repolarization or left ventricular hypertrophy, patterns that look a lot like ischaemia. A better architecture won't fix either; extra inputs like troponin levels or an older ECG for comparison would.
+
+## What I'd be careful about
+
+Everything here is from one dataset, one population and one era of hardware. The labels come from cardiologist annotations, not angiography. It's binary, while real ECGs carry dozens of conditions at once. Nothing has been tested on an outside cohort yet; Chapman, CPSC-2018 and CODE are the obvious next steps, and I expect the numbers to drop.
+
+The original plan was bigger: fuse ECG with PPG (the pulse signal a smartwatch reads). I had to cut it, because no public dataset has synchronised 12-lead ECG, continuous PPG and reliable MI labels. Deciding to narrow the scope instead of faking the data was one of the better calls I made.
+
+This is research code. It is not validated for clinical use and shouldn't go near a real diagnosis.
+
+## Why I'm glad I did it
+
+It taught me to distrust a good number until I know how it was measured, to keep the failed experiments, and to write down why they failed. That habit has been more useful in product work than any model I trained.

@@ -1,5 +1,3 @@
-import type { ProfilePage as ProfilePageSchema, WithContext } from "schema-dts";
-
 const appConfig = {
   displayName: "Kanak Kholwal",
   shortName: "Kanak",
@@ -7,7 +5,8 @@ const appConfig = {
   role: "Product Engineer",
   avatar: "https://github.com/kanakkholwal.png",
   location: "India",
-  description: "Product Engineer | Passionate about building scalable solutions, automation, and AI-driven products.",
+  description:
+    "Product engineer in India. I build products end to end, from Baby UI and Recast to GlyphTeX and Docvia. Open to founding engineer roles.",
   summary: `I thrive on solving complex problems and building impactful products. From developing scalable architectures to integrating AI solutions, my goal is to create software that makes a real difference. Always eager to learn, contribute to open source, and collaborate with like-minded developers. Check out my work below, and feel free to reach out.`,
   applicableRoles: [
     "Product Engineer",
@@ -145,21 +144,24 @@ const appConfig = {
   ],
   keywords: [
     "Kanak Kholwal",
-    "Software Developer",
-    "Tech Enthusiast",
-    "Lifelong Learner",
-    "Portfolio",
-    "Software Engineer",
-    "Web Developer",
-    "Frontend Developer",
-    "Backend Developer",
-    "Full Stack Developer",
-    "Open Source",
-    "Indie Hacker",
+    "Kanak",
+    "product engineer",
+    "design engineer",
+    "founding engineer",
+    "full stack engineer",
+    "React",
+    "TypeScript",
+    "Rust",
+    "Baby UI",
+    "Recast",
+    "GlyphTeX",
+    "Docvia",
+    "open source",
+    "India",
   ],
   seo: {
-    title: "Kanak Kholwal - Software Developer",
-    description: "Personal Portfolio of Kanak Kholwal - Software Developer, Tech Enthusiast, and Lifelong Learner.",
+    title: "Kanak Kholwal | Product Engineer",
+    description: "Projects, writing and open source work by Kanak Kholwal, a product engineer in India.",
     locale: "en_US",
     category: "Portfolio",
     type: "website",
@@ -169,23 +171,6 @@ const appConfig = {
       placename: "Rajasthan, India",
       region: "IN",
     },
-    jsonLd: {
-      "@context": "https://schema.org",
-      "@type": "ProfilePage",
-      dateCreated: new Date("2025-01-05").toISOString(), // YYYY-MM-DD
-      dateModified: new Date().toISOString(),
-      mainEntity: {
-        "@type": "Person",
-        name: "Kanak Kholwal",
-        identifier: "kanakkholwal",
-        image: "https://github.com/kanakkholwal.png",
-      },
-
-      description: "Personal Portfolio of Kanak Kholwal - Product Engineer.",
-      sameAs: ["https://www.linkedin.com/in/kanak-kholwal/", "https://github.com/kanakkholwal"],
-      jobTitle: "Product Engineer",
-      worksFor: { "@type": "Organization", name: "Zoven AI", url: "https://www.zoven.ai" },
-    } as WithContext<ProfilePageSchema>,
   },
   social: {
     github: "https://github.com/kanakkholwal",

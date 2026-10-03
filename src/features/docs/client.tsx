@@ -11,6 +11,7 @@ const CATEGORY_NOTES: Record<string, string> = {
   ai: "Notes from building products on top of language models.",
   architecture: "Design decisions, the trade-offs behind them and the diagrams that explain them.",
   performance: "Benchmarks, latency and what it took to make things faster.",
+  research: "Academic work, written up plainly: what I tried, what held up and what did not.",
 };
 
 export const categoryNote = (category: string) => CATEGORY_NOTES[category] ?? `Everything filed under ${category}.`;

@@ -1,0 +1,52 @@
+---
+id: "muse"
+title: "Muse"
+href: "https://github.com/kanakkholwal/muse-mvp"
+dates: "Nov 2025 - Apr 2026"
+active: false
+order: 8
+status: "MVP"
+description: "A mobile-first fashion discovery app: swipe through outfits, keep a digital closet, and get recommendations shaped by Gemini's read of each piece."
+technologies:
+  - "React Native"
+  - "Expo"
+  - "Hono"
+  - "MongoDB"
+  - "Redis"
+  - "Gemini"
+  - "Better Auth"
+  - "Turborepo"
+tags:
+  - "Mobile App"
+  - "AI"
+  - "Recommendations"
+  - "Monorepo"
+links:
+  - label: "Source"
+    url: "https://github.com/kanakkholwal/muse-mvp"
+    icon: "github"
+---
+
+## Overview
+
+Muse is a fashion discovery app for your phone. You swipe through outfits the way you'd swipe through a dating app, save what you like into a digital closet, and the feed gets closer to your taste as it learns your style, colours and fit.
+
+## The problem
+
+Shopping for clothes online means scrolling endless grids that know nothing about you. Muse starts from your preferences instead: a short onboarding asks about style, colours and fit, and every outfit after that is picked and explained against them.
+
+## Wins
+
+**A swipe deck for outfits.** The main screen is a card deck you swipe through, with each outfit's colour palette on the card and a small pill explaining why the AI picked it.
+
+**AI that reads the clothes.** Gemini 2.5 Flash analyses every product image and returns structured attributes (who it's for, style, colours) validated with Zod, so recommendations work from real data instead of free text.
+
+**A closet, not just a feed.** You can keep a personal wardrobe in the app, and outfit pages show the full preview, the AI's confidence score and direct links to buy from the retailer.
+
+## How it's built
+
+A Turborepo monorepo with three apps: the React Native and Expo mobile app (Expo Router, React Query, Dripsy), a Hono API on Node with MongoDB, Redis for caching and Cloudinary for images, and a small Next.js site for admin and marketing. Auth runs on Better Auth with email and Google sign-in.
+
+## What's next
+
+It's an MVP. The core loop works end to end: onboarding, the swipe feed, the closet and AI analysis of imported products.

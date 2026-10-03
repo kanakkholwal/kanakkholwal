@@ -7,7 +7,7 @@ export const Route = createFileRoute("/_pages/journey")({
     seo({
       title: "Journey",
       description:
-        "How Kanak Kholwal got here: internships at Textify AI and KoinX, then open source and independent products.",
+        "How Kanak Kholwal got here: KoinX, Textify AI and ViralLens, open source and independent products, now Zoven AI.",
       path: "/journey",
       keywords: ["developer journey", "software engineer", "product engineer", "career", "Kanak Kholwal"],
     }),

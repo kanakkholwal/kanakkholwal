@@ -3,7 +3,7 @@ import { OG_VERSION } from "~/og/version";
 
 type Meta = Record<string, string>;
 
-/** Route `head()` payload replacing Next's metadata API: title template, canonical, Open Graph and Twitter tags. */
+/** Route `head()` payload: title template, canonical, Open Graph, Twitter tags and JSON-LD. */
 export function seo({
   title,
   description,
@@ -11,6 +11,7 @@ export function seo({
   image,
   keywords,
   type = "website",
+  jsonLd = [],
 }: {
   title: string;
   description: string;
@@ -18,6 +19,7 @@ export function seo({
   image?: string;
   keywords?: string[];
   type?: "website" | "article";
+  jsonLd?: object[];
 }) {
   const trimmed = title.trim();
   const fullTitle = trimmed.includes(appConfig.displayName) ? trimmed : `${trimmed} | ${appConfig.displayName}`;
@@ -44,9 +46,14 @@ export function seo({
     { property: "og:image", content: imageUrl },
     { property: "og:image:width", content: "1200" },
     { property: "og:image:height", content: "630" },
+    { property: "og:image:alt", content: fullTitle },
     { name: "twitter:image", content: imageUrl },
   );
   if (keywords?.length) meta.push({ name: "keywords", content: keywords.join(", ") });
 
-  return { meta, links: [{ rel: "canonical", href: url }] };
+  return {
+    meta,
+    links: [{ rel: "canonical", href: url }],
+    scripts: jsonLd.map((ld) => ({ type: "application/ld+json", children: JSON.stringify(ld) })),
+  };
 }

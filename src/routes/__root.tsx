@@ -17,9 +17,10 @@ import NotFound from "~/features/not-found";
 import { OG_VERSION } from "~/og/version";
 import { getContentIndex } from "~/server/content";
 import appCss from "~/styles/global.css?url";
+import { siteGraph } from "~/utils/structured-data";
 
 const title = `${appConfig.displayName} | ${appConfig.role}`;
-const imageAlt = `${appConfig.displayName} - UI/UX & Full Stack Engineer`;
+const imageAlt = title;
 const gaId = appConfig.verifications["google.analytics"];
 const adsense = appConfig.verifications["google.adsense"];
 
@@ -68,7 +69,7 @@ export const Route = createRootRoute({
       { rel: "manifest", href: "/manifest.webmanifest" },
     ],
     scripts: [
-      { type: "application/ld+json", children: JSON.stringify(appConfig.seo.jsonLd) },
+      { type: "application/ld+json", children: JSON.stringify(siteGraph) },
       ...(import.meta.env.PROD && gaId
         ? [
             { src: `https://www.googletagmanager.com/gtag/js?id=${gaId}`, async: true },
