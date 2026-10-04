@@ -78,15 +78,14 @@ export function AccordionTrigger({ className, children, ...props }: ComponentPro
 
 export function AccordionContent({ className, children, ...props }: ComponentProps<typeof AccordionPrimitive.Panel>) {
   return (
+    // A closed panel is `hidden`, so a 0fr→1fr grid has no start frame on open. Base UI's measured height plus
+    // starting/ending styles animates both ways.
     <AccordionPrimitive.Panel
       data-slot="accordion-content"
-      className="grid grid-rows-[0fr] transition-[grid-template-rows] duration-[var(--duration-dropdown)] ease-[var(--ease-out-quad)] data-[open]:grid-rows-[1fr] data-[open]:duration-[var(--duration-collapse)] motion-reduce:transition-none"
-      render={(renderProps, state) => <div {...renderProps} inert={!state.open} />}
+      className="h-(--accordion-panel-height) overflow-hidden transition-[height] duration-(--duration-dropdown) ease-(--ease-out-quad) data-[open]:duration-(--duration-collapse) data-[ending-style]:h-0 data-[starting-style]:h-0 motion-reduce:transition-none"
       {...props}
     >
-      <div className="overflow-hidden">
-        <div className={cn("px-4 pb-3 text-muted-foreground text-sm leading-relaxed", className)}>{children}</div>
-      </div>
+      <div className={cn("px-4 pb-3 text-muted-foreground text-sm leading-relaxed", className)}>{children}</div>
     </AccordionPrimitive.Panel>
   );
 }

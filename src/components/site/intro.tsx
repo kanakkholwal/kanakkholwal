@@ -1,9 +1,10 @@
+import { Image } from "@unpic/react";
 import { type CSSProperties, useEffect, useState } from "react";
 import { appConfig } from "root/project.config";
 
 const GREETINGS = ["Hello", "नमस्ते", "Bonjour", "Hola", "こんにちは", "Ciao", "Hallo"];
-// A 20px avatar scaled up with pixelated rendering: the dot-matrix look with no script, so it shows at first paint.
-const AVATAR = `https://avatars.githubusercontent.com/${appConfig.usernames.github}?s=20`;
+// 3x the rendered 48px so it stays sharp on high-density screens.
+const AVATAR = `https://avatars.githubusercontent.com/${appConfig.usernames.github}?s=256`;
 
 // One timeline, shared with CSS through custom properties so it runs from first paint, before hydration.
 const WORD_MS = 190;
@@ -82,7 +83,7 @@ export function Intro() {
         </span>
       </p>
       <div className="intro-name col-start-1 row-start-1 flex items-center gap-3">
-        <img src={AVATAR} alt="" width={48} height={48} className="size-12 rounded-full [image-rendering:pixelated]" />
+        <Image src={AVATAR} alt="avatar" width={48} height={48} className="size-12 rounded-full object-cover" />
         <span className="pixel text-4xl">kanak.</span>
       </div>
     </div>
