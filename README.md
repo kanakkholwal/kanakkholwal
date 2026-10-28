@@ -70,7 +70,7 @@ TypeScript and React or Svelte on the front, Node, Bun, Go or Rust behind it, Po
 ## Recent activity
 
 <!--START_SECTION:activity-->
-1. 🎉 Merged PR [#4](https://github.com/kanakkholwal/baby-ui/pull/4) in [kanakkholwal/baby-ui](https://github.com/kanakkholwal/baby-ui)
+1. ℹ️ Labeled issue [#6](https://github.com/kanakkholwal/baby-ui/issues/6) in [kanakkholwal/baby-ui](https://github.com/kanakkholwal/baby-ui)
 <!--END_SECTION:activity-->
 
 [![Activity graph](https://github-readme-activity-graph.vercel.app/graph?username=kanakkholwal&theme=github-dark-dimmed&custom_title=Kanak%20Activity%20Graph&hide_border=true)](https://github.com/ashutosh00710/github-readme-activity-graph)
