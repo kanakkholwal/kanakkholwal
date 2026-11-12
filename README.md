@@ -70,7 +70,7 @@ TypeScript and React or Svelte on the front, Node, Bun, Go or Rust behind it, Po
 ## Recent activity
 
 <!--START_SECTION:activity-->
-1. ❌ Closed PR [#81](https://github.com/kanakkholwal/glyphtex/pull/81) in [kanakkholwal/glyphtex](https://github.com/kanakkholwal/glyphtex)
+1. ℹ️ Labeled PR [#12](https://github.com/kanakkholwal/orbit/pull/12) in [kanakkholwal/orbit](https://github.com/kanakkholwal/orbit)
 <!--END_SECTION:activity-->
 
 [![Activity graph](https://github-readme-activity-graph.vercel.app/graph?username=kanakkholwal&theme=github-dark-dimmed&custom_title=Kanak%20Activity%20Graph&hide_border=true)](https://github.com/ashutosh00710/github-readme-activity-graph)
