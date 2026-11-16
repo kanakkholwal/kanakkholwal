@@ -1,12 +1,12 @@
 ---
 id: "orbit"
-title: "Orbit"
+title: "Orbit Files"
 href: "https://orbit.nexonauts.com"
 dates: "Feb 2026 - Present"
 active: true
 order: 3
 status: "Shipped"
-description: "A free, offline PDF toolkit that runs entirely on your device with WASM. Merge, split, and compress without uploading a thing."
+description: "Free, private tools for PDFs, photos, video, audio and documents. Everything runs on your device with WASM, so nothing is ever uploaded."
 technologies:
   - "TypeScript"
   - "Svelte"
@@ -19,6 +19,9 @@ tags:
   - "Desktop App"
   - "Open Source"
   - "PDF"
+  - "Photo"
+  - "Video"
+  - "Audio"
   - "WASM"
   - "PWA"
   - "TypeScript"
@@ -36,7 +39,7 @@ links:
 
 ## Overview
 
-Orbit is a PDF toolkit that does everything on your own device and never uploads a thing. It works in the browser, installs as a PWA on mobile with offline caching, and ships as a Tauri desktop app for anyone who would rather have it as a real app.
+Orbit Files started as a PDF toolkit and is now a full set of file tools for PDFs, photos, video, audio and documents. It does everything on your own device and never uploads a thing. It works in the browser, installs as a PWA on mobile with offline caching, and ships as a Tauri desktop app for anyone who would rather have it as a real app.
 
 ## The problem
 
@@ -49,10 +52,14 @@ I built Orbit because I did not trust the web for something as simple as merging
 - **Works offline.** Fully functional with no connection. Install it as a PWA on mobile, or grab the Tauri desktop build.
 - **No limits.** No daily quotas, no file size caps, and no subscriptions. Batch as much as your machine can handle.
 
-It covers the everyday jobs: merge (drag and drop to reorder), split (extract pages, split ranges, or divide into multiple documents), compress while keeping quality, and convert JPG, PNG and HEIC images to PDF.
+It began with the everyday PDF jobs (merge, split, compress, image to PDF) and has grown well past them:
+
+- **PDF:** edit, sign (eSign and real PAdES digital signatures), OCR, encrypt, redact metadata, fill forms, compare, and convert to and from Word, Excel, PowerPoint and Markdown.
+- **Beyond PDF:** background remover, photo resize and convert, video and audio editors, QR code generator, file hash, favicon and colour palette tools.
+- **Everywhere:** website, installable PWA, and a desktop app for Windows, macOS and Linux.
 
 Nothing here is groundbreaking. It is convenience done properly: a clean UI, sane defaults, and your files staying yours.
 
 ## How it's built
 
-The constraints were simple from day one: lightweight, private, and offline. Page work runs on [`pdf-lib`](https://pdf-lib.js.org/) and [`pdfjs-dist`](https://mozilla.github.io/pdf.js/), and heavy operations like compression run on [`qpdf-wasm`](https://github.com/neslinesli93/qpdf-wasm), so they are fast without a server.
+The constraints were simple from day one: lightweight, private, and offline. Each tool is a route in one SvelteKit app, and everything runs client side. PDF page work runs on [`pdf-lib`](https://pdf-lib.js.org/) and [`pdfjs-dist`](https://mozilla.github.io/pdf.js/), and heavy operations like compression run on [`qpdf-wasm`](https://github.com/neslinesli93/qpdf-wasm), so they are fast without a server.

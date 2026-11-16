@@ -34,7 +34,7 @@ Open to founding engineer roles at early-stage teams.
 | [**Recast**](https://github.com/kanakkholwal/recast) · [site](https://recast.li) | An agentic screen recorder and editor: real cursor smoothing, automatic zoom, Rust and FFmpeg under a Tauri app. |
 | [**GlyphTeX**](https://github.com/kanakkholwal/glyphtex) · [site](https://glyphtex.nexonauts.com) | The LaTeX editor Overleaf should have been. The engine runs as WebAssembly in your browser, so your papers never leave your machine. |
 | [**Docvia**](https://github.com/kanakkholwal/docvia) · [site](https://docvia.dev) | A framework-agnostic documentation engine. Parse markdown once, then render it with React, Svelte or anything else. |
-| [**Orbit**](https://github.com/kanakkholwal/orbit) · [site](https://orbit.nexonauts.com) | A free, offline PDF toolkit that runs on your device with WASM. Merge, split and compress without uploading a thing. |
+| [**Orbit Files**](https://github.com/kanakkholwal/orbit) · [site](https://orbit.nexonauts.com) | Free, private tools for PDFs, photos, video, audio and documents. Runs on your device with WASM, nothing uploaded. |
 | [**College Ecosystem**](https://github.com/kanakkholwal/college-ecosystem) · [site](https://nith.eu.org) | An open-source platform for NIT Hamirpur: results and rankings, campus tools, polls and communities. 1.8M+ visits. |
 
 ## On npm
