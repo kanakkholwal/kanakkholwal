@@ -51,8 +51,8 @@ function HomePage() {
 
       <Section
         id="projects"
+        icon="rocket"
         title="projects."
-        number={1}
         description="Things I've built and shipped."
         meta={projects.length}
         index={3}
@@ -67,8 +67,8 @@ function HomePage() {
 
       <Section
         id="experience"
+        icon="briefcase"
         title="experience."
-        number={2}
         description="Where I've worked and what I owned."
         index={4}
       >
@@ -80,8 +80,8 @@ function HomePage() {
       {docs.length ? (
         <Section
           id="writing"
+          icon="pen"
           title="writing."
-          number={3}
           description="Notes on systems I've had to figure out."
           index={5}
           action={
@@ -99,8 +99,8 @@ function HomePage() {
       {home.github ? (
         <Section
           id="open-source"
+          icon="brand-github"
           title="open source."
-          number={4}
           description="Public work, counted."
           index={6}
           action={

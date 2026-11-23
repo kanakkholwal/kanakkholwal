@@ -82,5 +82,14 @@
   "trophy": "solar:cup-star-line-duotone",
   "user": "solar:user-rounded-line-duotone",
   "users": "solar:users-group-rounded-line-duotone",
-  "warning": "solar:danger-triangle-line-duotone"
+  "warning": "solar:danger-triangle-line-duotone",
+  "users-group": "solar:users-group-rounded-line-duotone",
+  "cursor": "solar:cursor-line-duotone",
+  "repeat": "solar:repeat-line-duotone",
+  "pulse": "solar:pulse-line-duotone",
+  "arrow-down-right": "solar:arrow-right-down-linear",
+  "user-plus": "solar:user-plus-rounded-line-duotone",
+  "stopwatch": "solar:stopwatch-line-duotone",
+  "logout": "solar:logout-3-line-duotone",
+  "fire": "solar:fire-line-duotone"
 }

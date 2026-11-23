@@ -77,6 +77,7 @@ export function Versions({ data }: { data: VersionData }) {
       ) : (
         <StatsEmpty
           icon="layers"
+          ghost="chart"
           title="No releases to compare"
           description="Nothing on this channel in the last month."
         />

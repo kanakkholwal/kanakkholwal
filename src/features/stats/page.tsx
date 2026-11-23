@@ -1,6 +1,7 @@
 import { Await } from "@tanstack/react-router";
 import { Page, PageHeader, Section } from "@/components/site/page";
 import { Skeleton } from "@/components/ui/skeleton";
+import { SectionBoundary } from "@/components/utils/section-boundary";
 import { GithubOverview, GithubSkeleton } from "./_components/github";
 import { Insights } from "./_components/insight";
 import { NpmDownloads, NpmSkeleton } from "./_components/npm";
@@ -28,54 +29,64 @@ export default function StatsPage({ data }: { data: StatsPageData }) {
         description="Downloads and stars for the packages and repos I maintain, pulled live from the registries."
       />
 
-      <Section id="npm" title="npm." number={1} description="Downloads across every published package" index={1}>
-        <Await promise={data.npm} fallback={<NpmSkeleton />}>
-          {(npm) => <NpmDownloads stats={npm} />}
-        </Await>
-      </Section>
-
       <Section
         id="github"
+        icon="brand-github"
         title="github."
-        number={2}
         description="A year of contributions and where the work went"
-        index={2}
+        index={1}
       >
-        <Await promise={data.github} fallback={<GithubSkeleton />}>
-          {(github) => <GithubOverview data={github} />}
-        </Await>
+        <SectionBoundary name="GitHub" icon="brand-github" ghost="calendar">
+          <Await promise={data.github} fallback={<GithubSkeleton />}>
+            {(github) => <GithubOverview data={github} />}
+          </Await>
+        </SectionBoundary>
+      </Section>
+
+      <Section id="npm" icon="brand-npm" title="npm." description="Downloads across every published package" index={2}>
+        <SectionBoundary name="npm" icon="brand-npm" ghost="chart">
+          <Await promise={data.npm} fallback={<NpmSkeleton />}>
+            {(npm) => <NpmDownloads stats={npm} />}
+          </Await>
+        </SectionBoundary>
       </Section>
 
       {data.versions ? (
-        <Section id="versions" title="versions." number={3} description="Which releases people actually run" index={3}>
-          <Await promise={data.versions} fallback={<VersionsSkeleton />}>
-            {(v) => <Versions data={v} />}
-          </Await>
+        <Section
+          id="versions"
+          icon="layers"
+          title="versions."
+          description="Which releases people actually run"
+          index={3}
+        >
+          <SectionBoundary name="Versions" icon="layers" ghost="chart">
+            <Await promise={data.versions} fallback={<VersionsSkeleton />}>
+              {(v) => <Versions data={v} />}
+            </Await>
+          </SectionBoundary>
         </Section>
       ) : null}
 
-      <Section
-        id="stars"
-        title="stars."
-        number={data.versions ? 4 : 3}
-        description="New stars over the last 12 days"
-        index={4}
-      >
-        <Await promise={data.stars} fallback={<StarsSkeleton />}>
-          {(stars) => <Stars data={stars} />}
-        </Await>
+      <Section id="stars" icon="star" title="stars." description="New stars over the last 12 days" index={4}>
+        <SectionBoundary name="Stars" icon="star" ghost="chart">
+          <Await promise={data.stars} fallback={<StarsSkeleton />}>
+            {(stars) => <Stars data={stars} />}
+          </Await>
+        </SectionBoundary>
       </Section>
 
       <Section
         id="usage"
+        icon="users-group"
         title="in use."
-        number={data.versions ? 5 : 4}
         description="Live usage from projects built on this work"
         index={5}
       >
-        <Await promise={data.insights} fallback={<Skeleton shape="block" className="h-24 rounded-xl" />}>
-          {(items) => <Insights items={items} />}
-        </Await>
+        <SectionBoundary name="Usage" icon="users-group" ghost="grid">
+          <Await promise={data.insights} fallback={<Skeleton shape="block" className="h-24 rounded-xl" />}>
+            {(items) => <Insights items={items} />}
+          </Await>
+        </SectionBoundary>
       </Section>
     </Page>
   );

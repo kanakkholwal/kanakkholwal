@@ -4,6 +4,7 @@ import { Icon } from "@/components/icons";
 import { ArrowLink, ButtonLink } from "@/components/site/link";
 import { CAL_URL, EMAIL } from "@/components/site/nav";
 import { Well } from "@/components/site/page";
+import { StatsEmpty } from "@/components/stats/stats-empty";
 import { RollText } from "@/components/text/roll-text";
 import { cn } from "@/lib/cn";
 
@@ -52,9 +53,14 @@ export function Activity({ days }: { days: { date: string; count: number }[] }) 
           className={cn(ACCENT_RAMP, EDGE_FADE)}
         />
       ) : (
-        <p className="py-6 text-center text-muted-foreground text-sm">
-          Contribution graph is resting. GitHub didn't answer.
-        </p>
+        <StatsEmpty
+          ghost="calendar"
+          icon="brand-github"
+          retry
+          title="Contribution graph is resting"
+          description="GitHub didn't answer this time. It comes back on the next refresh."
+          className="min-h-52 border-0"
+        />
       )}
     </Well>
   );

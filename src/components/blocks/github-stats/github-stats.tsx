@@ -1,6 +1,7 @@
 "use client";
 
 import { type ReactNode, useState } from "react";
+import { Icon, type IconType } from "@/components/icons";
 import { GithubCalendar } from "@/components/blocks/github-calendar/github-calendar";
 import { Bar, BarChart, BarTooltip, BarXAxis, BarYAxis } from "@/components/charts/bar-chart";
 import { ChartContainer, ChartTooltipContent } from "@/components/charts/chart";
@@ -49,6 +50,22 @@ export interface GithubStatsProps {
 }
 
 const REPO_LIMIT = 5;
+
+const COUNT_ICON: Record<(typeof GITHUB_COUNT_KEYS)[number], IconType> = {
+  followers: "users-group",
+  stars: "star",
+  repos: "folder",
+  forks: "git-fork",
+};
+
+const MIX_ICON = {
+  commits: "git-commit",
+  pullRequests: "git-pull-request",
+  codeReviews: "eye",
+  issues: "flag",
+} as const;
+
+const Lead = ({ name }: { name: IconType }) => <Icon name={name} className="mr-1.5 inline size-3.5 align-[-0.15em]" />;
 
 /** A year on GitHub: the total and its trend, the facts behind it, the calendar, and where it went. */
 export function GithubStats({
@@ -164,13 +181,13 @@ export function GithubStats({
         </header>
 
         <dl className={styles.insights()}>
-          <Fact label={labels.longestStreak} styles={styles}>
+          <Fact icon="fire" label={labels.longestStreak} styles={styles}>
             {labels.dayCount(facts.longestStreak)}
           </Fact>
-          <Fact label={labels.currentStreak} styles={styles}>
+          <Fact icon="pulse" label={labels.currentStreak} styles={styles}>
             {labels.dayCount(facts.currentStreak)}
           </Fact>
-          <Fact label={labels.bestDay} styles={styles}>
+          <Fact icon="trophy" label={labels.bestDay} styles={styles}>
             {facts.best ? (
               <>
                 {formatCount(facts.best.count, locale)}{" "}
@@ -180,7 +197,7 @@ export function GithubStats({
               "–"
             )}
           </Fact>
-          <Fact label={labels.activeDays} styles={styles}>
+          <Fact icon="calendar" label={labels.activeDays} styles={styles}>
             {formatCount(facts.activeDays, locale)} <span className={styles.insightNote()}>/ {days.length}</span>
           </Fact>
         </dl>
@@ -205,7 +222,10 @@ export function GithubStats({
       <dl className={styles.counts()}>
         {GITHUB_COUNT_KEYS.map((key) => (
           <div key={key} className={styles.count()}>
-            <dt className={styles.countLabel()}>{labels[key]}</dt>
+            <dt className={styles.countLabel()}>
+              <Lead name={COUNT_ICON[key]} />
+              {labels[key]}
+            </dt>
             <dd className="order-first">
               {layout.animate ? (
                 <RollingDigits
@@ -236,10 +256,23 @@ export function GithubStats({
 
 type Styles = ReturnType<typeof githubStats>;
 
-function Fact({ label, styles, children }: { label: string; styles: Styles; children: ReactNode }) {
+function Fact({
+  icon,
+  label,
+  styles,
+  children,
+}: {
+  icon: IconType;
+  label: string;
+  styles: Styles;
+  children: ReactNode;
+}) {
   return (
     <div className={styles.insight()}>
-      <dt className={styles.insightLabel()}>{label}</dt>
+      <dt className={styles.insightLabel()}>
+        <Lead name={icon} />
+        {label}
+      </dt>
       <dd className={styles.insightValue()}>{children}</dd>
     </div>
   );
@@ -261,7 +294,10 @@ function Mix({
   const shares = mixShares(data.mix);
   return (
     <section className={styles.mix()}>
-      <h3 className={styles.sectionTitle()}>{labels.mixTitle}</h3>
+      <h3 className={styles.sectionTitle()}>
+        <Lead name="pie-chart" />
+        {labels.mixTitle}
+      </h3>
       <div className={styles.mixBar()} aria-hidden="true">
         {shares.map(({ key, share }) =>
           share > 0 ? (
@@ -277,7 +313,10 @@ function Mix({
         {shares.map(({ key, share }) => (
           <li key={key} className={styles.mixItem()}>
             <span aria-hidden="true" className={styles.mixSwatch()} style={{ background: GITHUB_MIX_FILL[key] }} />
-            <span className={styles.mixLabel()}>{labels[key]}</span>
+            <span className={styles.mixLabel()}>
+              <Lead name={MIX_ICON[key]} />
+              {labels[key]}
+            </span>
             <span className={styles.mixValue()}>{formatPercent(share, locale)}</span>
           </li>
         ))}
@@ -291,7 +330,10 @@ function Where({ data, labels, styles }: { data: GithubStatsData; labels: Github
   const hidden = repositories.length - REPO_LIMIT;
   return (
     <section className={styles.where()}>
-      <h3 className={styles.sectionTitle()}>{labels.contributedTo}</h3>
+      <h3 className={styles.sectionTitle()}>
+        <Lead name="git-branch" />
+        {labels.contributedTo}
+      </h3>
       <ul className={styles.repoList()}>
         {repositories.slice(0, REPO_LIMIT).map((repo) => (
           <li key={repo.url} className="min-w-0">

@@ -6,10 +6,10 @@ export function OpenSource({ github, projects }: { github: NonNullable<HomeData[
   return (
     <StatGrid
       cells={[
-        { label: "Contributions", value: github.contributions },
-        { label: "Stars earned", value: github.stars },
-        { label: "Public repos", value: github.repos },
-        { label: "Projects shipped", value: projects },
+        { label: "Contributions", icon: "git-commit", value: github.contributions },
+        { label: "Stars earned", icon: "star", value: github.stars },
+        { label: "Public repos", icon: "folder", value: github.repos },
+        { label: "Projects shipped", icon: "rocket", value: projects },
       ]}
     />
   );

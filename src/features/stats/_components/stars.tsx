@@ -27,6 +27,7 @@ export function Stars({ data }: { data: Record<string, GitHubStarHistory> }) {
     return (
       <StatsEmpty
         icon="star"
+        retry
         title="Star history is resting"
         description="GitHub didn't answer this time. Counts come back on the next refresh."
       >
@@ -67,9 +68,9 @@ export function Stars({ data }: { data: Record<string, GitHubStarHistory> }) {
           <StatGrid
             className="grid-cols-3 sm:grid-cols-3"
             cells={[
-              { label: "Stars", value: history?.count ?? 0 },
-              { label: "Last 12 days", value: gained, format: (v) => `+${v}` },
-              { label: "Best day", value: best, format: (v) => `+${v}` },
+              { label: "Stars", icon: "star", value: history?.count ?? 0 },
+              { label: "Last 12 days", icon: "graph-up", value: gained, format: (v) => `+${v}` },
+              { label: "Best day", icon: "trophy", value: best, format: (v) => `+${v}` },
             ]}
           />
           {gained > 0 ? (
@@ -106,7 +107,12 @@ export function Stars({ data }: { data: Record<string, GitHubStarHistory> }) {
           <Stargazers gazers={gazers} />
         </>
       ) : (
-        <StatsEmpty icon="star" title="No history for this repo" description="GitHub skipped this one. Try another." />
+        <StatsEmpty
+          ghost="grid"
+          icon="star"
+          title="No history for this repo"
+          description="GitHub skipped this one. Try another."
+        />
       )}
     </div>
   );
@@ -116,7 +122,14 @@ type Gazer = GitHubStarHistory["bins"][number]["stargarzers"][number] & { date: 
 
 function Stargazers({ gazers }: { gazers: Gazer[] }) {
   if (!gazers.length) {
-    return <p className="text-muted-foreground text-sm">No new stars in the last 12 days.</p>;
+    return (
+      <StatsEmpty
+        ghost="list"
+        icon="star"
+        title="No new stars lately"
+        description="Nobody starred this repo in the last 12 days. New stargazers show up here."
+      />
+    );
   }
   return (
     <div>

@@ -9,6 +9,8 @@ export function GithubOverview({ data }: { data: GithubStatsData | null }) {
     return (
       <StatsEmpty
         icon="brand-github"
+        ghost="calendar"
+        retry
         title="GitHub is quiet right now"
         description="The API didn't answer. The year view comes back on the next refresh."
       />

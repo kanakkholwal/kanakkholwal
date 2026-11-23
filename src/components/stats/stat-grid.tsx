@@ -1,9 +1,12 @@
 import type { ReactNode } from "react";
+import type { IconType } from "@/components/icons";
 import { RollingDigits } from "@/components/text/rolling-digits";
 import { cn } from "@/lib/cn";
+import { IconChip } from "./icon-chip";
 
 export type StatCell = {
   label: string;
+  icon?: IconType;
   value: number;
   format?: (value: number) => string;
   note?: ReactNode;
@@ -24,7 +27,10 @@ export function StatGrid({ cells, className }: { cells: StatCell[]; className?: 
     >
       {cells.map((c) => (
         <div key={c.label} className="flex min-w-0 flex-col gap-1 bg-background p-4">
-          <dt className="truncate text-muted-foreground text-xs">{c.label}</dt>
+          <dt className="flex items-center gap-2 text-muted-foreground text-xs">
+            {c.icon ? <IconChip name={c.icon} /> : null}
+            <span className="truncate">{c.label}</span>
+          </dt>
           <dd className="font-medium text-2xl tabular-nums">
             <Figure cell={c} />
           </dd>
@@ -44,7 +50,10 @@ export function StatTiles({ cells, className }: { cells: StatCell[]; className?:
           key={c.label}
           className="flex min-w-0 flex-col gap-1 rounded-xl bg-background p-4 shadow-(--surface-shadow) dark:bg-popover"
         >
-          <dt className="truncate text-muted-foreground text-xs">{c.label}</dt>
+          <dt className="flex items-center gap-2 text-muted-foreground text-xs">
+            {c.icon ? <IconChip name={c.icon} /> : null}
+            <span className="truncate">{c.label}</span>
+          </dt>
           <dd className="font-medium text-2xl tabular-nums">
             <Figure cell={c} />
           </dd>

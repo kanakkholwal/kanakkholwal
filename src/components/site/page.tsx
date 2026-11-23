@@ -1,4 +1,6 @@
 import type { ComponentProps, CSSProperties, ReactNode } from "react";
+import type { IconType } from "@/components/icons";
+import { IconChip } from "@/components/stats/icon-chip";
 import { cn } from "@/lib/cn";
 
 /** The one content column every page shares. */
@@ -59,6 +61,7 @@ export function Section({
   id,
   title,
   number,
+  icon,
   description,
   meta,
   action,
@@ -69,6 +72,7 @@ export function Section({
   id?: string;
   title: string;
   number?: number;
+  icon?: IconType;
   description?: string;
   meta?: ReactNode;
   action?: ReactNode;
@@ -88,6 +92,7 @@ export function Section({
     >
       <div className="mb-5 flex min-h-8 items-center justify-between gap-4">
         <div className="flex min-w-0 items-baseline gap-2.5">
+          {icon ? <IconChip name={icon} className="self-center" /> : null}
           {number !== undefined ? (
             <span className="font-mono text-accent-ink text-xs tabular-nums">{String(number).padStart(2, "0")}</span>
           ) : null}

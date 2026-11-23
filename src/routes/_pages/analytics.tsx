@@ -1,4 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { Page, PageHeader } from "@/components/site/page";
+import { StatsEmpty } from "@/components/stats/stats-empty";
 import AnalyticsClient from "~/features/analytics/client";
 import AnalyticsLoading from "~/features/analytics/loading";
 import { getSiteAnalytics } from "~/server/home";
@@ -23,9 +25,25 @@ export const Route = createFileRoute("/_pages/analytics")({
       ],
     }),
   pendingComponent: AnalyticsLoading,
+  // Google Analytics is third-party: keep the site chrome and show a retryable blank instead of the error page.
+  errorComponent: AnalyticsError,
   component: AnalyticsPage,
 });
 
 function AnalyticsPage() {
   return <AnalyticsClient result={Route.useLoaderData()} />;
+}
+
+function AnalyticsError() {
+  return (
+    <Page>
+      <PageHeader title="analytics." description="Live web analytics for this portfolio." />
+      <StatsEmpty
+        icon="chart"
+        retry
+        title="Analytics couldn't load"
+        description="The analytics provider didn't answer. Try again in a moment."
+      />
+    </Page>
+  );
 }

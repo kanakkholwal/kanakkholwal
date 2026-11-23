@@ -43,11 +43,12 @@ function tiles(s: AnalyticsSnapshot): StatCell[] {
   const span = rangeShort(s.range);
   const perSession = (x: typeof t) => (x.sessions ? x.pageViews / x.sessions : 0);
   return [
-    { label: "Unique visitors", value: t.users, note: change(t.users, p.users, span) },
-    { label: "Sessions", value: t.sessions, note: change(t.sessions, p.sessions, span) },
-    { label: "Page views", value: t.pageViews, note: change(t.pageViews, p.pageViews, span) },
+    { label: "Unique visitors", icon: "users-group", value: t.users, note: change(t.users, p.users, span) },
+    { label: "Sessions", icon: "cursor", value: t.sessions, note: change(t.sessions, p.sessions, span) },
+    { label: "Page views", icon: "eye", value: t.pageViews, note: change(t.pageViews, p.pageViews, span) },
     {
       label: "Pages / session",
+      icon: "layers",
       // RollingDigits rounds to an integer, so tenths ride in the value.
       value: Math.round(perSession(t) * 10),
       format: (v) => (v / 10).toFixed(1),
@@ -55,12 +56,14 @@ function tiles(s: AnalyticsSnapshot): StatCell[] {
     },
     {
       label: "Avg. session",
+      icon: "stopwatch",
       value: t.avgEngagementSeconds,
       format: fmtDuration,
       note: change(t.avgEngagementSeconds, p.avgEngagementSeconds, span),
     },
     {
       label: "Bounce rate",
+      icon: "logout",
       value: Math.round(t.bounceRate * 100),
       format: (v) => `${v}%`,
       note: change(t.bounceRate, p.bounceRate, span),
@@ -132,8 +135,8 @@ export default function AnalyticsClient({ result }: { result: AnalyticsResult })
 
       <Section
         id="traffic"
+        icon="chart"
         title="site traffic."
-        number={1}
         index={1}
         action={
           <ToggleGroup
@@ -177,6 +180,7 @@ export default function AnalyticsClient({ result }: { result: AnalyticsResult })
         ) : (
           <StatsEmpty
             icon="chart"
+            retry
             title="No traffic to show"
             description={result.error ?? `Google Analytics returned nothing for the ${span}.`}
           />
@@ -186,16 +190,16 @@ export default function AnalyticsClient({ result }: { result: AnalyticsResult })
       {live ? (
         <Section
           id="breakdown"
+          icon="globe"
           title="where from."
-          number={2}
           description={`${snapshot.range.hourly ? "Last 24 hours" : `Last ${snapshot.range.days} days`}, top five each`}
           index={2}
         >
           <div className="grid gap-x-8 gap-y-10 sm:grid-cols-2">
-            <RankedTable title="Top pages" unit="Visitors" items={snapshot.topPages} />
-            <RankedTable title="Countries" unit="Visitors" items={snapshot.topCountries} />
-            <RankedTable title="Channels" unit="Visitors" items={snapshot.topReferrers} />
-            <RankedTable title="Devices" unit="Visitors" items={snapshot.devices} />
+            <RankedTable title="Top pages" icon="document" unit="Visitors" items={snapshot.topPages} />
+            <RankedTable title="Countries" icon="earth" unit="Visitors" items={snapshot.topCountries} />
+            <RankedTable title="Channels" icon="route" unit="Visitors" items={snapshot.topReferrers} />
+            <RankedTable title="Devices" icon="monitor" unit="Visitors" items={snapshot.devices} />
           </div>
         </Section>
       ) : null}

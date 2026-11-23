@@ -41,6 +41,7 @@ export function NpmDownloads({ stats }: { stats: NpmPackageStatsData[] }) {
     return (
       <StatsEmpty
         icon="brand-npm"
+        retry
         title="npm is quiet right now"
         description="The registry didn't answer. Download counts come back on the next refresh."
       />
@@ -59,10 +60,10 @@ export function NpmDownloads({ stats }: { stats: NpmPackageStatsData[] }) {
       <StatGrid
         cells={[
           // A failed all-time walk returns a partial sum; the 90-day window is a floor it can't be under.
-          { label: "All time", value: packages.reduce((n, p) => n + weight(p), 0) },
-          { label: "Last 30 days", value: trailingSum(totals.last30Days, 30) },
-          { label: "Last 7 days", value: trailingSum(totals.last30Days, 7) },
-          { label: "Packages", value: packages.length },
+          { label: "All time", icon: "download", value: packages.reduce((n, p) => n + weight(p), 0) },
+          { label: "Last 30 days", icon: "calendar", value: trailingSum(totals.last30Days, 30) },
+          { label: "Last 7 days", icon: "clock", value: trailingSum(totals.last30Days, 7) },
+          { label: "Packages", icon: "box", value: packages.length },
         ]}
       />
 

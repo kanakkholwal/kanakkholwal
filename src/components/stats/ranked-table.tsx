@@ -1,5 +1,7 @@
+import type { IconType } from "@/components/icons";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { cn } from "@/lib/cn";
+import { IconChip } from "./icon-chip";
 
 export type RankedItem = { label: string; value: number };
 
@@ -8,12 +10,14 @@ const number = new Intl.NumberFormat("en-US");
 /** Quiet ranked rows: label left, mono count right, a faint bar for the share. */
 export function RankedTable({
   title,
+  icon,
   unit,
   items,
   empty = "Nothing yet",
   className,
 }: {
   title: string;
+  icon?: IconType;
   unit: string;
   items: RankedItem[];
   empty?: string;
@@ -28,7 +32,12 @@ export function RankedTable({
     >
       <TableHeader className="bg-transparent">
         <TableRow className="hover:bg-transparent">
-          <TableHead className="px-2 pb-2 font-normal text-xs">{title}</TableHead>
+          <TableHead className="px-2 pb-2 font-normal text-xs">
+            <span className="flex items-center gap-2">
+              {icon ? <IconChip name={icon} /> : null}
+              {title}
+            </span>
+          </TableHead>
           <TableHead className="w-20 px-2 pb-2 text-right font-normal text-xs">{unit}</TableHead>
         </TableRow>
       </TableHeader>

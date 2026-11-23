@@ -119,6 +119,12 @@ const appConfig = {
     },
     {
       name: "Get 100+ followers on Github",
+      completed: true,
+      description: null,
+      images: [],
+    },
+    {
+      name: "Get 1000+ followers on Github",
       completed: false,
       description: null,
       images: [],
