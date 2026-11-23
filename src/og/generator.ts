@@ -6,6 +6,7 @@ export type OgImageOptions = {
   width?: number;
   height?: number;
   headers?: HeadersInit;
+  css?: string;
 };
 
 // Rendered once per URL; let browsers and the CDN keep them for a day.
@@ -17,6 +18,7 @@ export async function generateOgImage(element: ReactElement, options: OgImageOpt
     width: options.width ?? 1200,
     height: options.height ?? 630,
     fonts,
+    css: options.css,
     emoji: "twemoji",
     headers: { "Cache-Control": OG_CACHE, ...options.headers },
   });

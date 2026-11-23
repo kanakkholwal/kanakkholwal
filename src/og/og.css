@@ -1,0 +1,9 @@
+@import "../styles/registry.css";
+@source "./templates";
+
+/* takumi registers one family, "Geist"; every font token has to resolve to it. */
+:root {
+  --font-sans: "Geist";
+  --font-heading: "Geist";
+  --font-body: "Geist";
+}

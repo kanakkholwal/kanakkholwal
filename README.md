@@ -43,7 +43,7 @@ Open to founding engineer roles at early-stage teams.
 - [`nexo-editor`](https://www.npmjs.com/package/nexo-editor): a lightweight rich text editor for React on TipTap.
 - [`custom-domain-sdk`](https://www.npmjs.com/package/custom-domain-sdk): bring-your-own-domain for multi-tenant apps, on Cloudflare Custom Hostnames with a strict lifecycle.
 - [`remark-plugins`](https://www.npmjs.com/package/remark-plugins): a collection of remark plugins for markdown processing.
-- [`@docvia/*`](https://www.npmjs.com/org/docvia): the Docvia compiler, renderers and plugins, plus the [`docvia`](https://www.npmjs.com/package/docvia) CLI.
+- [`@docvia/*`](https://www.npmjs.com/org/docvia): the Docvia CLI, compiler, renderers and plugins.
 
 Download and star counts are live on [kanakkholwal.eu.org/stats](https://kanakkholwal.eu.org/stats).
 

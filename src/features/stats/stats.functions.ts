@@ -1,7 +1,10 @@
 import { createServerFn } from "@tanstack/react-start";
+import { appConfig } from "root/project.config";
+import { getGithubStats } from "~/api/github";
 import { edgeMemo } from "~/lib/cache";
 import { getServerEnv } from "~/server/env.server";
 import { cacheResponse } from "~/server/http-cache";
+import type { GithubStatsData } from "@/components/blocks/github-stats";
 import { insightConfig, statsConfig } from "./config";
 import { type GitHubStarHistory, getStarHistoriesBatch } from "./lib/github";
 import { getProjectInsight } from "./lib/insight";
@@ -73,3 +76,44 @@ export const getVersionData = createServerFn({ method: "GET" })
     }));
     return { records, versions };
   });
+
+const percent = (part: number, total: number) => (total ? (part / total) * 100 : 0);
+
+/** Past-year GitHub activity shaped for the GithubStats block; null when the token or API is down. */
+async function buildGithubOverview(): Promise<GithubStatsData | null> {
+  const username = appConfig.usernames.github;
+  try {
+    const { stats, activity } = await getGithubStats(username);
+    const mix = activity.codeReviewDistribution;
+    return {
+      counts: stats.stats,
+      contributions: Object.fromEntries(
+        Object.entries(stats.contributions).map(([year, days]) => [
+          year,
+          days.map((d) => ({ date: d.date, count: d.count })),
+        ]),
+      ),
+      mix: {
+        commits: percent(mix.commits, mix.totalContributions),
+        pullRequests: percent(mix.pullRequests, mix.totalContributions),
+        codeReviews: percent(mix.codeReviews, mix.totalContributions),
+        issues: percent(mix.issues, mix.totalContributions),
+      },
+      organizations: activity.organizations.map((o) => ({ name: o.name, url: o.url, avatarUrl: o.avatarUrl })),
+      repositories: activity.activityOverview.repositoriesContributedTo
+        .filter((r) => !r.isPrivate)
+        .map((r) => ({ owner: r.owner, name: r.name, url: r.url })),
+      profileUrl: `https://github.com/${username}`,
+    };
+  } catch (err) {
+    console.error("[stats] github overview failed", err);
+    return null;
+  }
+}
+
+const cachedGithubOverview = edgeMemo("github-overview", buildGithubOverview, 900, (d) => d !== null);
+
+export const getGithubOverview = createServerFn({ method: "GET" }).handler(() => {
+  cacheResponse(900);
+  return cachedGithubOverview();
+});

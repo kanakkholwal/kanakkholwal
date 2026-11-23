@@ -91,8 +91,8 @@ function SoftCard({
   );
 }
 
-function IconTile({ name }: { name: IconName }) {
-  return <img src={iconSrc(name)} width={84} height={84} alt="" />;
+function IconTile({ name, dark = false }: { name: IconName; dark?: boolean }) {
+  return <img src={iconSrc(name, dark ? "#e4e4e7" : "#3f3f46")} width={84} height={84} alt="" />;
 }
 
 const [SITE, ...TLD] = appConfig.siteUrl.split(".");
@@ -141,57 +141,6 @@ export function PageOgTemplate({ title, description, path }: { title: string; de
       nameSize={title.length > 28 ? 64 : 84}
       description={description}
       footer={`${appConfig.siteUrl}${path === "/" ? "" : path}`}
-    />
-  );
-}
-
-const PROJECT_ICON: Record<string, IconName> = {
-  "baby-ui": "layers",
-  glyphtex: "notebook",
-  recast: "play",
-  orbit: "document",
-  docvia: "book",
-  "college-ecosystem": "users",
-  "nexo-editor": "pen",
-  "custom-domain-sdk": "globe",
-  "crawler-llms": "code",
-};
-
-/** Splits "Recast" + "recast.li" into a wordmark and a muted domain suffix when they match. */
-function domainSuffix(title: string, href?: string) {
-  if (!href) return undefined;
-  try {
-    const [first, ...rest] = new URL(href).hostname.replace(/^www\./, "").split(".");
-    const slug = title.toLowerCase().replace(/[^a-z0-9]/g, "");
-    const tail = `.${rest.join(".")}`;
-    // Only a short TLD reads as part of the name ("Recast.li"); a parent domain is noise.
-    return first.replace(/[^a-z0-9]/g, "") === slug && rest.length === 1 && tail.length <= 5 ? tail : undefined;
-  } catch {
-    return undefined;
-  }
-}
-
-export function ProjectOgTemplate({
-  id,
-  title,
-  description,
-  href,
-  dark,
-}: {
-  id: string;
-  title: string;
-  description: string;
-  href?: string;
-  dark?: boolean;
-}) {
-  return (
-    <SoftCard
-      tile={<IconTile name={PROJECT_ICON[id] ?? "rocket"} />}
-      name={title}
-      suffix={domainSuffix(title, href)}
-      description={description}
-      footer={`${appConfig.siteUrl}/projects/${id}`}
-      dark={dark}
     />
   );
 }

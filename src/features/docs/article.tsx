@@ -24,7 +24,7 @@ export default function ArticlePage({ doc, readTime, others }: ArticlePageProps)
     children: ({ body, toc }) => (
       <>
         <div className="xl:flex xl:items-start xl:gap-8">
-          <article className="flex min-w-0 max-w-[42rem] flex-1 flex-col">
+          <article className="flex min-w-0 flex-1 flex-col">
             <header className="mb-12 flex flex-col gap-4">
               <BackLink href="/docs" className="rise mb-6 self-start">
                 All writing

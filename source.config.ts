@@ -69,6 +69,7 @@ export const projects = defineDocs({
         )
         .optional(),
       image: z.url().optional(),
+      logo: z.url().optional(),
       video: z.url().optional(),
       tags: z.array(z.string()).optional(),
       metrics: z

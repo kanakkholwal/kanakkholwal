@@ -33,7 +33,7 @@ export function Hero() {
         <p>
           I made <TextLink href="https://github.com/kanakkholwal/baby-ui">Baby UI</TextLink>, an animated component
           library for React and Svelte, and this site runs on it. Lately I'm shipping{" "}
-          <TextLink href="/projects/recast">Recast</TextLink> and <TextLink href="/projects/orbit">Orbit</TextLink>.
+          <TextLink href="/projects/docvia">Docvia</TextLink> and <TextLink href="/projects/airlock">Airlock</TextLink>.
         </p>
       </div>
     </section>

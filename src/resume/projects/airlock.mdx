@@ -1,0 +1,51 @@
+---
+id: "airlock"
+title: "Airlock"
+href: "https://airlock.nexonauts.com"
+dates: "Nov 2026 - Present"
+active: true
+order: 1
+status: "In Progress"
+description: "A local harness studio. Bring your own model, run speech, transcription and image generation fully on-device, and automate it all without sending data anywhere."
+technologies:
+  - "Tauri"
+  - "Rust"
+  - "SvelteKit"
+  - "Svelte 5"
+  - "TypeScript"
+  - "Cloudflare"
+links:
+  - label: "Source"
+    url: "https://github.com/kanakkholwal/airlock"
+    icon: "github"
+  - label: "Website"
+    url: "https://airlock.nexonauts.com"
+    icon: "globe"
+tags:
+  - "Local AI"
+  - "Harness"
+  - "Desktop"
+  - "Privacy"
+  - "Open Source"
+---
+
+## Overview
+
+Airlock is a local harness studio: a desktop app where you bring your own model and get the tooling around it. Chat with a model (images included), dictate into any app, transcribe files with timestamps, have text read aloud and generate images. Transcription, speech-to-text, text-to-speech and image generation all run on your device.
+
+It is not tied to coding. It is a general harness with agent-style capabilities, and more integrations are on the way.
+
+## What you can do with it
+
+- **Keep everything local.** Models, speech and images never leave your machine unless you choose otherwise.
+- **Expose it when you want.** Forward a local model or tool to other apps or machines, or keep it all on one computer.
+- **Automate with workflows and schedules.** Point a lightweight model at a folder of photos and have them sorted into classified folders, for example, without uploading a single file.
+- **Manage a local gallery.** Everything you make lands in a private library that never reaches an online model.
+
+## Privacy by default
+
+The assistant sees a short preview of what you mention with `@`. Reading more needs your approval, and every read is logged locally. Online providers are planned and will follow the same rule.
+
+## How it's built
+
+A Tauri shell with a Rust core runs the engines, and a Svelte 5 interface sits on top. Model, voice and engine lists are plain JSON you can extend. The website is a SvelteKit app on Cloudflare. Pre-release, built and tested on Windows only.

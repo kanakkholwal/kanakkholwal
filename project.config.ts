@@ -230,8 +230,7 @@ const appConfig = {
       "mailer-easy",
       "nexo-html2jsx",
       "nexo-deck-swiper",
-      // Docvia: the CLI package plus every package in the @docvia org.
-      "docvia",
+      // Docvia: every package in the @docvia org (the bare `docvia` package is not mine).
       "@docvia/cli",
       "@docvia/core",
       "@docvia/build",

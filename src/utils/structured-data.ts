@@ -16,7 +16,6 @@ const person: Thing = {
   description: appConfig.description,
   email: `mailto:${appConfig.emails[0]}`,
   address: { "@type": "PostalAddress", addressCountry: "IN" },
-  worksFor: { "@type": "Organization", name: "Zoven AI", url: "https://www.zoven.ai" },
   alumniOf: {
     "@type": "CollegeOrUniversity",
     name: "National Institute of Technology, Hamirpur",

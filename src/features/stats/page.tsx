@@ -1,17 +1,19 @@
 import { Await } from "@tanstack/react-router";
 import { Page, PageHeader, Section } from "@/components/site/page";
 import { Skeleton } from "@/components/ui/skeleton";
+import { GithubOverview, GithubSkeleton } from "./_components/github";
 import { Insights } from "./_components/insight";
 import { NpmDownloads, NpmSkeleton } from "./_components/npm";
 import { Stars, StarsSkeleton } from "./_components/stars";
 import { Versions, VersionsSkeleton } from "./_components/versions";
-import type { getInsights, getNpmStats, getStarHistories, getVersionData } from "./stats.functions";
+import type { getGithubOverview, getInsights, getNpmStats, getStarHistories, getVersionData } from "./stats.functions";
 
 type Resolved<F extends (...args: never[]) => unknown> = Awaited<ReturnType<F>>;
 
 export type StatsPageData = {
   stars: Promise<Resolved<typeof getStarHistories>>;
   npm: Promise<Resolved<typeof getNpmStats>>;
+  github: Promise<Resolved<typeof getGithubOverview>>;
   insights: Promise<Resolved<typeof getInsights>>;
   versions: Promise<Resolved<typeof getVersionData>> | null;
 };
@@ -32,8 +34,20 @@ export default function StatsPage({ data }: { data: StatsPageData }) {
         </Await>
       </Section>
 
+      <Section
+        id="github"
+        title="github."
+        number={2}
+        description="A year of contributions and where the work went"
+        index={2}
+      >
+        <Await promise={data.github} fallback={<GithubSkeleton />}>
+          {(github) => <GithubOverview data={github} />}
+        </Await>
+      </Section>
+
       {data.versions ? (
-        <Section id="versions" title="versions." description="Which releases people actually run" index={2}>
+        <Section id="versions" title="versions." number={3} description="Which releases people actually run" index={3}>
           <Await promise={data.versions} fallback={<VersionsSkeleton />}>
             {(v) => <Versions data={v} />}
           </Await>
@@ -43,9 +57,9 @@ export default function StatsPage({ data }: { data: StatsPageData }) {
       <Section
         id="stars"
         title="stars."
-        number={data.versions ? 3 : 2}
+        number={data.versions ? 4 : 3}
         description="New stars over the last 12 days"
-        index={3}
+        index={4}
       >
         <Await promise={data.stars} fallback={<StarsSkeleton />}>
           {(stars) => <Stars data={stars} />}
@@ -55,9 +69,9 @@ export default function StatsPage({ data }: { data: StatsPageData }) {
       <Section
         id="usage"
         title="in use."
-        number={data.versions ? 4 : 3}
+        number={data.versions ? 5 : 4}
         description="Live usage from projects built on this work"
-        index={4}
+        index={5}
       >
         <Await promise={data.insights} fallback={<Skeleton shape="block" className="h-24 rounded-xl" />}>
           {(items) => <Insights items={items} />}

@@ -3,6 +3,7 @@ import { statsConfig } from "~/features/stats/config";
 import StatsPage from "~/features/stats/page";
 import { pkgOptions } from "~/features/stats/searchParams";
 import {
+  getGithubOverview,
   getInsights,
   getNpmStats,
   getStarHistories,
@@ -24,6 +25,7 @@ export const Route = createFileRoute("/_pages/stats")({
   loader: ({ deps }) => ({
     stars: getStarHistories(),
     npm: getNpmStats(),
+    github: getGithubOverview(),
     insights: getInsights(),
     versions: statsConfig.flags.versionAdoptionGraph ? getVersionData({ data: deps }) : null,
   }),
