@@ -3,8 +3,9 @@ import { appConfig } from "root/project.config";
 import { Activity } from "@/components/home/activity";
 import { Experience } from "@/components/home/experience";
 import { Hero } from "@/components/home/hero";
-import { Lately } from "@/components/home/lately";
 import { OpenSource } from "@/components/home/open-source";
+import { Stack } from "@/components/home/stack";
+import { WorkWithMe } from "@/components/home/work-with-me";
 import { ProjectList } from "@/components/projects/project-list";
 import { ArrowLink } from "@/components/site/link";
 import { Page, Section } from "@/components/site/page";
@@ -77,6 +78,31 @@ function HomePage() {
         </ErrorBoundary>
       </Section>
 
+      <Section
+        id="work-with-me"
+        icon="briefcase"
+        title="work with me."
+        description="Areas I have worked in, if you are hiring or building."
+        index={5}
+      >
+        <WorkWithMe />
+      </Section>
+
+      <Section
+        id="stack"
+        icon="layers"
+        title="stack."
+        description="What I reach for."
+        index={5}
+        action={
+          <ArrowLink href="/tech-stack" className="text-sm">
+            All tools
+          </ArrowLink>
+        }
+      >
+        <Stack />
+      </Section>
+
       {docs.length ? (
         <Section
           id="writing"
@@ -109,10 +135,12 @@ function HomePage() {
             </ArrowLink>
           }
         >
-          <div className="flex flex-col gap-6">
-            <OpenSource github={home.github} projects={home.stats.projects} />
-            {home.activity.length ? <Lately items={home.activity} /> : null}
-          </div>
+          <OpenSource
+            github={home.github}
+            projects={home.stats.projects}
+            calendar={home.calendar}
+            activity={home.activity}
+          />
         </Section>
       ) : null}
     </Page>

@@ -3,23 +3,15 @@ import { ArrowLink } from "@/components/site/link";
 import { Section } from "@/components/site/page";
 import { useProjects } from "@/lib/content";
 
-export function OtherProjects({
-  currentProjectId,
-  number,
-  index,
-}: {
-  currentProjectId: string;
-  number?: number;
-  index?: number;
-}) {
+export function OtherProjects({ currentProjectId, index }: { currentProjectId: string; index?: number }) {
   const others = useProjects().filter((p) => p.id !== currentProjectId);
   if (!others.length) return null;
 
   return (
     <Section
       id="more-projects"
+      icon="rocket"
       title="more projects."
-      number={number}
       description="Other things I've built."
       index={index}
       action={

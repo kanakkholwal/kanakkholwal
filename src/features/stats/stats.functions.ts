@@ -1,13 +1,16 @@
 import { createServerFn } from "@tanstack/react-start";
 import { appConfig } from "root/project.config";
 import { getGithubStats } from "~/api/github";
+import { getProjectResult } from "~/lib/analytics/service";
+import type { AnalyticsResult } from "~/lib/analytics/types";
 import { edgeMemo } from "~/lib/cache";
 import { getServerEnv } from "~/server/env.server";
 import { cacheResponse } from "~/server/http-cache";
 import type { GithubStatsData } from "@/components/blocks/github-stats";
+import { getProjectList } from "@/lib/project.source";
 import { insightConfig, statsConfig } from "./config";
 import { type GitHubStarHistory, getStarHistoriesBatch } from "./lib/github";
-import { getProjectInsight } from "./lib/insight";
+import { getProjectInsight, type InsightResponse } from "./lib/insight";
 import { fetchNpmStats } from "./lib/npm";
 import { getVersions, sumVersions } from "./lib/versions";
 import { pkgOptions } from "./searchParams";
@@ -32,11 +35,6 @@ export const getNpmStats = createServerFn({ method: "GET" }).handler(() => {
 const INSIGHT_HEADERS: Record<string, () => Record<string, string>> = {
   "college-ecosystem": () => ({ "X-Authorization": getServerEnv().PROJECTS_CE_TOKEN ?? "" }),
 };
-
-export const getInsights = createServerFn({ method: "GET" }).handler(() => {
-  cacheResponse(600);
-  return cachedInsights();
-});
 
 const cachedInsights = edgeMemo(
   "insights",
@@ -116,4 +114,34 @@ const cachedGithubOverview = edgeMemo("github-overview", buildGithubOverview, 90
 export const getGithubOverview = createServerFn({ method: "GET" }).handler(() => {
   cacheResponse(900);
   return cachedGithubOverview();
+});
+
+export type UsageProject = {
+  id: string;
+  title: string;
+  label: string;
+  result: AnalyticsResult | null;
+  /** The project's own stats endpoint, when it has one. */
+  insight: InsightResponse | null;
+};
+
+/** Every project with analytics wired (GA or PostHog), each failing on its own. */
+export const getUsage = createServerFn({ method: "GET" }).handler(async (): Promise<UsageProject[]> => {
+  cacheResponse(600);
+  const [insights, titles] = [await cachedInsights(), new Map(getProjectList().map((p) => [p.id, p.title]))];
+  return Promise.all(
+    appConfig.analytics.projects.map(async (p) => {
+      const result = await getProjectResult(p.id).catch((err) => {
+        console.error(`[stats] usage ${p.id} failed`, err);
+        return null;
+      });
+      return {
+        id: p.id,
+        title: titles.get(p.id) ?? p.id,
+        label: p.label,
+        result: result?.ok ? result : null,
+        insight: insights.find((i) => i.project.id === p.id)?.insight ?? null,
+      };
+    }),
+  );
 });

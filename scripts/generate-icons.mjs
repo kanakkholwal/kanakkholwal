@@ -8,7 +8,9 @@ const OUT = join(ROOT, "generated.ts");
 const check = process.argv.includes("--check");
 const require = createRequire(import.meta.url);
 const SOLAR = JSON.parse(readFileSync(require.resolve("@iconify-json/solar/icons.json"), "utf8"));
+const LOGOS = JSON.parse(readFileSync(require.resolve("@iconify-json/logos/icons.json"), "utf8"));
 
+// "logos:<name>" is the full-colour official-logo set (SVG Logos), kept in its own colours.
 // "solar:<name>" is Solar (CC BY 4.0), "simple:<slug>" Simple Icons (CC0), "custom:<file>" custom/<file>.svg.
 function source(ref) {
   const [set, name] = ref.split(":");
@@ -16,6 +18,12 @@ function source(ref) {
     const icon = SOLAR.icons[name];
     if (!icon) throw new Error(`icons.json: Solar has no "${name}"`);
     return `<svg viewBox="0 0 ${icon.width ?? SOLAR.width ?? 24} ${icon.height ?? SOLAR.height ?? 24}">${icon.body}</svg>`;
+  }
+  if (set === "logos") {
+    const icon = LOGOS.icons[name];
+    if (!icon) throw new Error(`icons.json: Logos has no "${name}"`);
+    // currentColor is the fill for shapes the logo leaves unpainted (single-colour black marks).
+    return `<svg viewBox="0 0 ${icon.width ?? LOGOS.width ?? 24} ${icon.height ?? LOGOS.height ?? 24}" fill="currentColor">${icon.body}</svg>`;
   }
   if (set === "simple") {
     const svg = readFileSync(require.resolve(`simple-icons/icons/${name}.svg`), "utf8");

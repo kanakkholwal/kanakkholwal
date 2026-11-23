@@ -1,13 +1,12 @@
 import { Await } from "@tanstack/react-router";
 import { Page, PageHeader, Section } from "@/components/site/page";
-import { Skeleton } from "@/components/ui/skeleton";
 import { SectionBoundary } from "@/components/utils/section-boundary";
 import { GithubOverview, GithubSkeleton } from "./_components/github";
-import { Insights } from "./_components/insight";
+import { Usage, UsageSkeleton } from "./_components/usage";
 import { NpmDownloads, NpmSkeleton } from "./_components/npm";
 import { Stars, StarsSkeleton } from "./_components/stars";
 import { Versions, VersionsSkeleton } from "./_components/versions";
-import type { getGithubOverview, getInsights, getNpmStats, getStarHistories, getVersionData } from "./stats.functions";
+import type { getGithubOverview, getUsage, getNpmStats, getStarHistories, getVersionData } from "./stats.functions";
 
 type Resolved<F extends (...args: never[]) => unknown> = Awaited<ReturnType<F>>;
 
@@ -15,7 +14,7 @@ export type StatsPageData = {
   stars: Promise<Resolved<typeof getStarHistories>>;
   npm: Promise<Resolved<typeof getNpmStats>>;
   github: Promise<Resolved<typeof getGithubOverview>>;
-  insights: Promise<Resolved<typeof getInsights>>;
+  usage: Promise<Resolved<typeof getUsage>>;
   versions: Promise<Resolved<typeof getVersionData>> | null;
 };
 
@@ -79,12 +78,12 @@ export default function StatsPage({ data }: { data: StatsPageData }) {
         id="usage"
         icon="users-group"
         title="in use."
-        description="Live usage from projects built on this work"
+        description="Live traffic to the projects built on this work"
         index={5}
       >
         <SectionBoundary name="Usage" icon="users-group" ghost="grid">
-          <Await promise={data.insights} fallback={<Skeleton shape="block" className="h-24 rounded-xl" />}>
-            {(items) => <Insights items={items} />}
+          <Await promise={data.usage} fallback={<UsageSkeleton />}>
+            {(items) => <Usage items={items} />}
           </Await>
         </SectionBoundary>
       </Section>

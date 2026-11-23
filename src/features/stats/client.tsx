@@ -1,9 +1,9 @@
 import { useNavigate, useSearch } from "@tanstack/react-router";
 import { defaultRepo, type PkgOption } from "./searchParams";
 
-type StatsSearchPatch = { repo?: string; pkg?: PkgOption; beta?: boolean };
+type StatsSearchPatch = { repo?: string; pkg?: PkgOption; beta?: boolean; project?: string };
 
-/** `repo`, `pkg` and `beta` live in the URL so a shared link opens the same view. */
+/** `repo`, `pkg`, `beta` and `project` live in the URL so a shared link opens the same view. */
 export function useStatsSearch() {
   const search = useSearch({ from: "/_pages/stats" });
   const navigate = useNavigate({ from: "/stats" });
@@ -13,6 +13,7 @@ export function useStatsSearch() {
     repo: search.repo ?? defaultRepo,
     pkg: search.pkg ?? "both",
     beta: search.beta ?? false,
+    project: search.project,
     set,
   };
 }

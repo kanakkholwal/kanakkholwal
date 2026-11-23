@@ -4,6 +4,7 @@ import Link from "@/components/link";
 import { projectPreview, projectTitleTransition } from "@/components/projects/project-list";
 import { ButtonLink } from "@/components/site/link";
 import { Meta, Page, PixelHeading } from "@/components/site/page";
+import { TechList, TechTile } from "@/components/site/tech-chip";
 import { RollingDigits } from "@/components/text/rolling-digits";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/cn";
@@ -111,14 +112,20 @@ export default function ProjectPageClient({
               <h2 id="tech-stack" className="mb-3 font-medium text-foreground text-lg tracking-tight">
                 Tech stack
               </h2>
-              <p className="font-mono text-muted-foreground text-sm leading-7">{project.technologies.join(" / ")}</p>
+              <TechList className="-mx-2">
+                {project.technologies.map((t) => (
+                  <li key={t}>
+                    <TechTile name={t} size="sm" />
+                  </li>
+                ))}
+              </TechList>
             </section>
           ) : null}
         </div>
       </article>
 
-      <ProjectAnalytics result={analytics} number={1} index={4} />
-      <OtherProjects currentProjectId={project.id} number={analytics?.ok ? 2 : 1} index={5} />
+      <ProjectAnalytics result={analytics} index={4} />
+      <OtherProjects currentProjectId={project.id} index={5} />
     </Page>
   );
 }

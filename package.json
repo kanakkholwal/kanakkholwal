@@ -59,6 +59,7 @@
   "devDependencies": {
     "@biomejs/biome": "^2.5.14",
     "@cloudflare/vite-plugin": "^1.62.5",
+    "@iconify-json/logos": "^1.2.20",
     "@iconify-json/solar": "^1.2.13",
     "@tailwindcss/typography": "^0.5.20",
     "@tailwindcss/vite": "^4.3.3",

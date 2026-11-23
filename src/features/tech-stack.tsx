@@ -1,6 +1,7 @@
 import { appConfig } from "root/project.config";
 import { ArrowLink } from "@/components/site/link";
 import { Page, PageHeader, Section } from "@/components/site/page";
+import { TechList, TechTile } from "@/components/site/tech-chip";
 
 const GROUPS = Object.entries(appConfig.skills) as [string, readonly string[]][];
 
@@ -18,17 +19,14 @@ export default function TechStackPage() {
       </PageHeader>
 
       {GROUPS.map(([group, tools], i) => (
-        <Section key={group} id={group} title={`${group}.`} number={i + 1} meta={tools.length} index={i + 1}>
-          <ul className="flex flex-wrap gap-2">
+        <Section key={group} id={group} title={`${group}.`} meta={tools.length} index={i + 1}>
+          <TechList>
             {tools.map((tool) => (
-              <li
-                key={tool}
-                className="rounded-lg border border-border px-2.5 py-1 font-mono text-muted-foreground text-xs"
-              >
-                {tool}
+              <li key={tool}>
+                <TechTile name={tool} />
               </li>
             ))}
-          </ul>
+          </TechList>
         </Section>
       ))}
     </Page>
